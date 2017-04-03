@@ -1,6 +1,6 @@
 # Project - Fomono
 
-Fomono is an android app that helps users to never miss an event. It pulls data from several API's including Meetup or Eventbrite, Fandango, and possibly more to aggregate event data and send user notifications based on new events and/or events happening nearby. Users can choose categories of events/movies and subcategories to cater to their interests. Users can also manually search for events and see what's going down.
+Fomono is an android app that helps users to never miss an event. It pulls data from several API's including Meetup or Eventbrite, Fandango, and possibly more to aggregate event data and send user notifications based on new events and/or events happening nearby. Users can choose categories of events/movies and subcategories to cater to their interests. Users can also manually search for events for any location and see what's going down!
 
 Time spent: XXX hours spent in total
 
