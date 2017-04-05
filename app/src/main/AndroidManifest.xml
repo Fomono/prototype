@@ -2,20 +2,55 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.fomono.fomono">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <!-- ${packageName} is substituted for the package name declared above.  -->
+    <permission android:protectionLevel="signature" android:name="${packageName}.permission.C2D_MESSAGE" />
+    <uses-permission android:name="${packageName}.permission.C2D_MESSAGE" />
+
     <application
+        android:name=".FomonoApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.fomono.com.fomono.MainActivity">
+        <activity android:name="com.fomono.fomono.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name="com.parse.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <category android:name="${packageName}" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name="com.parse.PushService" />
+        <receiver android:name="com.fomono.fomono.receivers.PushReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.parse.push.intent.RECEIVE" />
+                <action android:name="com.parse.push.intent.DELETE" />
+                <action android:name="com.parse.push.intent.OPEN" />
+            </intent-filter>
+        </receiver>
+
+        <meta-data android:name="com.parse.push.gcm_sender_id"
+            android:value="@string/gcm_sender_id"/>
     </application>
 
 </manifest>
