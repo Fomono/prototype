@@ -1,4 +1,8 @@
 <resources>
     <string name="gcm_sender_id">id:531408757318</string>
     <string name="app_name">Fomono</string>
+    <string name="title_activity_fomono">FomonoActivity</string>
+    <string name="title_activity_fomono_detail">FomonoDetailActivity</string>
+    <string name="title_activity_fomono_filter">FomonoFilterActivity</string>
+    <string name="title_activity_favorite_fragment">FavoriteFragment</string>
 </resources>

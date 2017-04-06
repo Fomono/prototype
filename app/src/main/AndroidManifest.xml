@@ -9,8 +9,11 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
-    <!-- ${packageName} is substituted for the package name declared above.  -->
-    <permission android:protectionLevel="signature" android:name="${packageName}.permission.C2D_MESSAGE" />
+    <!-- ${packageName} is substituted for the package name declared above. -->
+    <permission
+        android:name="${packageName}.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
     <uses-permission android:name="${packageName}.permission.C2D_MESSAGE" />
 
     <application
@@ -21,7 +24,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.fomono.fomono.activities.MainActivity">
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,7 +32,8 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="com.parse.GcmBroadcastReceiver"
+        <receiver
+            android:name="com.parse.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -40,7 +44,9 @@
         </receiver>
 
         <service android:name="com.parse.PushService" />
-        <receiver android:name="com.fomono.fomono.receivers.PushReceiver"
+
+        <receiver
+            android:name=".receivers.PushReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />
@@ -49,8 +55,22 @@
             </intent-filter>
         </receiver>
 
-        <meta-data android:name="com.parse.push.gcm_sender_id"
-            android:value="@string/gcm_sender_id"/>
+        <meta-data
+            android:name="com.parse.push.gcm_sender_id"
+            android:value="@string/gcm_sender_id" />
+
+        <activity
+            android:name=".activities.FomonoActivity"
+            android:label="@string/title_activity_fomono"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.FomonoDetailActivity"
+            android:label="@string/title_activity_fomono_detail"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.FomonoFilterActivity"
+            android:label="@string/title_activity_fomono_filter"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
