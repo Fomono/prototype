@@ -3,6 +3,21 @@
     <string name="app_name">Fomono</string>
     <string name="title_activity_fomono">FomonoActivity</string>
     <string name="title_activity_fomono_detail">FomonoDetailActivity</string>
-    <string name="title_activity_fomono_filter">FomonoFilterActivity</string>
+    <string name="title_activity_fomono_filter">Filters</string>
     <string name="title_activity_favorite_fragment">FavoriteFragment</string>
+    <string name="btn_discard">Discard</string>
+    <string name="btn_next">Next</string>
+    <string name="btn_done">Done</string>
+    <string name="pref_location">Location</string>
+    <string name="pref_distance">Distance</string>
+    <string name="pref_filters">Categories</string>
+    <string name="pref_curr_location">Show stuff near current location</string>
+    <string name="pref_use_other_loc">Use other location instead:</string>
+    <string name="pref_loc_hint">Address, City, or Zip Code</string>
+    <string name="pref_distance_desc">Only show stuff that are this far from the specified location:</string>
+    <string name="pref_distance_value">%1$d mi away</string>
+    <string name="pref_filters_desc">Specify the type of events and food you\'d like to see on Fomono</string>
+    <string name="pref_filters_selected">%1$d selected</string>
+    <string name="filter_title_events">Events</string>
+    <string name="filter_title_food">Food</string>
 </resources>

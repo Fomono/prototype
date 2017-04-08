@@ -3,6 +3,7 @@ package com.fomono.fomono.models.Events.Categories;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.fomono.fomono.interfaces.ICategory;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -10,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by jsaluja on 4/7/2017.
  */
 
-public class Category implements Parcelable
+public class Category implements Parcelable, ICategory
 {
 
     @SerializedName("resource_uri")
