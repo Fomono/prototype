@@ -62,7 +62,11 @@
         <activity
             android:name=".activities.FomonoActivity"
             android:label="@string/title_activity_fomono"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+
+
         <activity
             android:name=".activities.FomonoDetailActivity"
             android:label="@string/title_activity_fomono_detail"

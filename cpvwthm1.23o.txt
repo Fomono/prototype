@@ -1,0 +1,15 @@
+﻿
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch dev-jassi
+# Changes to be committed:
+#	modified:   .idea/modules.xml
+#	modified:   app/build.gradle
+#	modified:   app/src/main/java/com/fomono/fomono/activities/MainActivity.java
+#	modified:   app/src/main/java/com/fomono/fomono/network/client/EventBriteClient.java
+#	modified:   app/src/main/java/com/fomono/fomono/network/client/YelpClient.java
+#
+# Untracked files:
+#	app/src/main/java/com/fomono/fomono/models/
+#
+
