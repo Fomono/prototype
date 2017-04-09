@@ -1,20 +1,18 @@
 package com.fomono.fomono.activities;
 
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.View;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.fomono.fomono.R;
 import com.fomono.fomono.adapters.FomonoMainPagerAdapter;
-import com.fomono.fomono.fragments.MainListFragment;
+
+import retrofit2.http.HEAD;
+
 
 public class FomonoActivity extends AppCompatActivity {
     private FomonoMainPagerAdapter fomonoMainPagerAdapter;
@@ -22,6 +20,7 @@ public class FomonoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fomono);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.fomonoToolbarId);
         setSupportActionBar(toolbar);
 

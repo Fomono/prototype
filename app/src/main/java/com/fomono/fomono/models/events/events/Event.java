@@ -3,6 +3,7 @@ package com.fomono.fomono.models.events.events;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.fomono.fomono.models.FomonoEvent;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -10,9 +11,8 @@ import com.google.gson.annotations.SerializedName;
  * Created by jsaluja on 4/6/2017.
  */
 
-public class Event implements Parcelable
+public class Event implements Parcelable, FomonoEvent
 {
-
     @SerializedName("name")
     @Expose
     private Name name;
@@ -117,7 +117,8 @@ public class Event implements Parcelable
     private Logo logo;
     @SerializedName("venue")
     @Expose
-    private Venue venue;
+    private com.fomono.fomono.models.Events.Events.Venue venue;
+
     public final static Parcelable.Creator<Event> CREATOR = new Creator<Event>() {
 
 
@@ -160,7 +161,7 @@ public class Event implements Parcelable
             instance.formatId = ((String) in.readValue((String.class.getClassLoader())));
             instance.resourceUri = ((String) in.readValue((String.class.getClassLoader())));
             instance.logo = ((Logo) in.readValue((Logo.class.getClassLoader())));
-            instance.venue = ((Venue) in.readValue((Venue.class.getClassLoader())));
+            instance.venue = ((com.fomono.fomono.models.Events.Events.Venue) in.readValue((Venue.class.getClassLoader())));
             return instance;
         }
 
@@ -439,9 +440,9 @@ public class Event implements Parcelable
 
     public void setLogo(Logo logo) {this.logo = logo;}
 
-    public Venue getVenue() {return venue;}
+    public com.fomono.fomono.models.Events.Events.Venue getVenue() {return venue;}
 
-    public void setVenue(Venue venue) {this.venue = venue;}
+    public void setVenue(com.fomono.fomono.models.Events.Events.Venue venue) {this.venue = venue;}
 
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(name);

@@ -5,4 +5,5 @@ package com.fomono.fomono.properties;
  */
 
 public class Properties {
+
 }
