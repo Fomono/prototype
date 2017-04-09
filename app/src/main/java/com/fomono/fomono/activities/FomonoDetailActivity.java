@@ -1,31 +1,41 @@
 package com.fomono.fomono.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 
 import com.fomono.fomono.R;
+import com.fomono.fomono.fragments.FomonoDetailFragment;
+import com.fomono.fomono.models.Eats.Business;
+import com.fomono.fomono.models.Events.Events.Event;
+import com.fomono.fomono.models.FomonoEvent;
+import com.fomono.fomono.models.movies.Movie;
+
 
 public class FomonoDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fomono_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tbFomono);
         setSupportActionBar(toolbar);
+        setContentView(R.layout.activity_fomono_detail);
+        Intent i = getIntent();
+        FomonoEvent fEvent = i.getParcelableExtra("FOM_OBJ");
+        if (savedInstanceState == null && fEvent instanceof Event) {
+            Event e = (Event) fEvent;
+            FomonoDetailFragment fomonoDetailFragment = FomonoDetailFragment.newInstance(e);
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.fragmentEventbriteDetail, fomonoDetailFragment);
+            ft.commit();
+        }else if (savedInstanceState == null && fEvent instanceof Business) {
+            Business b = (Business) fEvent;
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        }else  if (savedInstanceState == null && fEvent instanceof Movie) {
+            Movie m = (Movie) fEvent;
+
+        }
     }
-
 }

@@ -4,13 +4,16 @@ package com.fomono.fomono.models.Eats;
  * Created by jsaluja on 4/5/2017.
  */
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-import java.util.List;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Business implements Parcelable
+import com.fomono.fomono.models.FomonoEvent;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
+public class Business implements Parcelable, FomonoEvent
 {
 
     @SerializedName("rating")

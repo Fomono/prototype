@@ -3,6 +3,7 @@ package com.fomono.fomono.models.Events.Events;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.fomono.fomono.models.FomonoEvent;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -10,9 +11,8 @@ import com.google.gson.annotations.SerializedName;
  * Created by jsaluja on 4/6/2017.
  */
 
-public class Event implements Parcelable
+public class Event implements Parcelable, FomonoEvent
 {
-
     @SerializedName("name")
     @Expose
     private Name name;
@@ -115,6 +115,18 @@ public class Event implements Parcelable
     @SerializedName("logo")
     @Expose
     private Object logo;
+
+    public Venue venue;
+
+
+    public Venue getVenue() {
+        return venue;
+    }
+
+    public void setVenue(Venue venue) {
+        this.venue = venue;
+    }
+
     public final static Parcelable.Creator<Event> CREATOR = new Creator<Event>() {
 
 
@@ -157,6 +169,7 @@ public class Event implements Parcelable
             instance.formatId = ((String) in.readValue((String.class.getClassLoader())));
             instance.resourceUri = ((String) in.readValue((String.class.getClassLoader())));
             instance.logo = ((Object) in.readValue((Object.class.getClassLoader())));
+            instance.venue = ((Venue) in.readValue((Object.class.getClassLoader())));
             return instance;
         }
 
@@ -474,6 +487,7 @@ public class Event implements Parcelable
         dest.writeValue(formatId);
         dest.writeValue(resourceUri);
         dest.writeValue(logo);
+        dest.writeValue(venue);
     }
 
     public int describeContents() {
