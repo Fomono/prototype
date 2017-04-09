@@ -76,7 +76,7 @@ public class YelpClientRetrofit {
                 "Authorization: Bearer EHbNYMHOKBBlufnp61Eb2mO4gJ-Bmt4C8NWcGKyYDdVW5wTcEX5k_yUDyaTOTw7NvJhn-ws0OCcsEEXSQJixT4Wvf4JuYiF9qlpycTmsrBVk0URaftrXzKAKplvkWHYx",
         })
         @GET("/v3/businesses/search")
-        Call<YelpResponse> getYelpBusinesssesFromServer(@Query("location") String resttautantString
+        Call<YelpResponse> getYelpBusinesssesFromServer(String query
                                                   );
 
 
@@ -84,7 +84,7 @@ public class YelpClientRetrofit {
                 "Authorization: Bearer EHbNYMHOKBBlufnp61Eb2mO4gJ-Bmt4C8NWcGKyYDdVW5wTcEX5k_yUDyaTOTw7NvJhn-ws0OCcsEEXSQJixT4Wvf4JuYiF9qlpycTmsrBVk0URaftrXzKAKplvkWHYx",
         })
         @GET("/v3/transactions/delivery/search")
-        Call<YelpResponse> getYelpDeliveryFromServer(@Query("location") String resttautantString);
+        Call<YelpResponse> getYelpDeliveryFromServer(@Query("location") String locationString);
 
 
     }
