@@ -76,10 +76,10 @@
 
         <activity
             android:name=".activities.FomonoDetailActivity"
-           />
+            />
         <activity
             android:name=".activities.FomonoFilterActivity"
-             />
+            />
     </application>
 
 </manifest>

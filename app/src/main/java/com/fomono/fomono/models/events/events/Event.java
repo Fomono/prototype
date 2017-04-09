@@ -117,7 +117,7 @@ public class Event implements Parcelable, FomonoEvent
     private Logo logo;
     @SerializedName("venue")
     @Expose
-    private com.fomono.fomono.models.Events.Events.Venue venue;
+    private Venue venue;
 
     public final static Parcelable.Creator<Event> CREATOR = new Creator<Event>() {
 
@@ -161,7 +161,7 @@ public class Event implements Parcelable, FomonoEvent
             instance.formatId = ((String) in.readValue((String.class.getClassLoader())));
             instance.resourceUri = ((String) in.readValue((String.class.getClassLoader())));
             instance.logo = ((Logo) in.readValue((Logo.class.getClassLoader())));
-            instance.venue = ((com.fomono.fomono.models.Events.Events.Venue) in.readValue((Venue.class.getClassLoader())));
+            instance.venue = ((Venue) in.readValue((Venue.class.getClassLoader())));
             return instance;
         }
 
@@ -440,9 +440,9 @@ public class Event implements Parcelable, FomonoEvent
 
     public void setLogo(Logo logo) {this.logo = logo;}
 
-    public com.fomono.fomono.models.Events.Events.Venue getVenue() {return venue;}
+    public Venue getVenue() {return venue;}
 
-    public void setVenue(com.fomono.fomono.models.Events.Events.Venue venue) {this.venue = venue;}
+    public void setVenue(Venue venue) {this.venue = venue;}
 
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(name);

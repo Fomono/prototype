@@ -1,4 +1,4 @@
-package com.fomono.fomono.models.Events.Events;
+package com.fomono.fomono.models.events.events;
 
 import android.os.Parcel;
 import android.os.Parcelable;

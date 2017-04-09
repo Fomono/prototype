@@ -3,6 +3,7 @@ package com.fomono.fomono.models.eats;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.fomono.fomono.interfaces.ICategory;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -11,7 +12,7 @@ import com.google.gson.annotations.SerializedName;
  */
 
 
-public class Category implements Parcelable
+public class Category implements Parcelable, ICategory
 {
 
     @SerializedName("alias")
@@ -63,6 +64,16 @@ public class Category implements Parcelable
 
     public int describeContents() {
         return 0;
+    }
+
+    @Override
+    public String getName() {
+        return getTitle();
+    }
+
+    @Override
+    public String getId() {
+        return getAlias();
     }
 
 }
