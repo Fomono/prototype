@@ -57,7 +57,8 @@ public class MovieDBClientRetrofit {
 
         @GET("/3/movie/now_playing")
         Call<MovieResponse> getNowPlayingMoviesFromServer(@Query("api_key") String client_credentials);
-        //@Query("token") String api_key, @Query("q") String search_string
+        //@Query("token") String api_key,
+        // @Query("q") String search_query, @Query("sort_by") String sort_string
 
         @GET("/3/movie/latest")
         Call<MovieResponse> getLatesMoviesFromServer(@Query("api_key") String client_credentials);
