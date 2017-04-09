@@ -12,25 +12,25 @@ public class Logo {
 
     @SerializedName("crop_mask")
     @Expose
-    private CropMask cropMask;
+    public CropMask cropMask;
     @SerializedName("original")
     @Expose
-    private Original original;
+    public Original original;
     @SerializedName("id")
     @Expose
-    private String id;
+    public String id;
     @SerializedName("url")
     @Expose
-    private String url;
+    public String url;
     @SerializedName("aspect_ratio")
     @Expose
-    private String aspectRatio;
+    public String aspectRatio;
     @SerializedName("edge_color")
     @Expose
-    private String edgeColor;
+    public String edgeColor;
     @SerializedName("edge_color_set")
     @Expose
-    private Boolean edgeColorSet;
+    public Boolean edgeColorSet;
 
     public CropMask getCropMask() {
         return cropMask;

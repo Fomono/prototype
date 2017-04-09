@@ -15,10 +15,10 @@ public class Description implements Parcelable
 
     @SerializedName("text")
     @Expose
-    private Object text;
+    public Object text;
     @SerializedName("html")
     @Expose
-    private Object html;
+    public Object html;
     public final static Parcelable.Creator<Description> CREATOR = new Creator<Description>() {
 
 

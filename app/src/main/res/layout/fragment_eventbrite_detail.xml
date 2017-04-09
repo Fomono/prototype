@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/tvEventDate"
-            android:text="Golden Gate Park Botanical Garden Plant SaleEvent"
+            android:text='@{event.name.text}'
             android:textSize="20dp"
             android:textStyle="bold" />
 
@@ -115,7 +115,7 @@
             android:layout_marginTop="15dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/tvFavoriteLabel"
-            android:text="Come experience the biggest plant sale in the bay area.blah blah blah blah blah blah blah blah........................................................"
+            android:text='@{event.description.text}'
             android:textSize="12dp" />
 
 
@@ -170,7 +170,7 @@
             android:layout_toRightOf="@id/ivLocationIcon"
             android:layout_below="@id/ivClockIcon"
             android:layout_alignTop="@id/ivLocationIcon"
-            android:text="Golden Gate Park, San Francisco, CA"
+            android:text='@{event.venue.address.address1 + ", "  + event.venue.address.city + ", " + event.venue.address.country}'
             android:textSize="10dp" />
 
 

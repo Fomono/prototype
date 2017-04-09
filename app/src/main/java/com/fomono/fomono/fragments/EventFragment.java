@@ -9,12 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.fomono.fomono.models.events.categories.Category;
-import com.fomono.fomono.models.events.categories.EventBriteCategories;
 import com.fomono.fomono.models.events.events.Event;
-import com.fomono.fomono.supportclasses.InternetAlertDialogue;
 import com.fomono.fomono.models.events.events.EventBriteResponse;
 import com.fomono.fomono.network.client.EventBriteClient;
+import com.fomono.fomono.network.client.EventBriteClientRetrofit;
+import com.fomono.fomono.supportclasses.InternetAlertDialogue;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -24,11 +23,14 @@ import com.loopj.android.http.RequestParams;
 
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.concurrent.Future;
+import java.util.HashMap;
+import java.util.Map;
 
 import cz.msebera.android.httpclient.Header;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Saranu on 4/6/17.
@@ -39,6 +41,7 @@ public class EventFragment extends MainListFragment {
     public static final String USER_KEY = "IMWD66EDBK2PQIUKRK4K";
     private final static String TAG = "Event fragment";
     private int eventsLoaded = 0;
+    private EventBriteClientRetrofit eventBriteClientRetrofit;
 /*
     public EventFragment newInstance(int localscreenWidth) {
         EventFragment eventFragment = new EventFragment();
@@ -61,11 +64,45 @@ public class EventFragment extends MainListFragment {
 
     public void populateEvents() {
         smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
-        getLocalEventBriteEventList(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+        callEBRetrofitAPI(0,null);
+       // getLocalEventBriteEventList(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
         Handler handlerTimer = new Handler();
         handlerTimer.postDelayed(() -> {//Just to show the progress bar
             smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
         }, 500);
+    }
+
+
+
+    public void callEBRetrofitAPI(int page, String strQuery) {
+
+        eventBriteClientRetrofit = EventBriteClientRetrofit.getNewInstance();
+        Map<String, String> data = new HashMap<>();
+        data.put("token", USER_KEY);
+        data.put("q", "holi");
+        Call<EventBriteResponse> call = eventBriteClientRetrofit.EBRetrofitClientFactory().
+                getEventsFromServer(data);
+
+        call.enqueue(new Callback<EventBriteResponse>() {
+            @Override
+            public void onResponse(Call<EventBriteResponse> call, Response<EventBriteResponse> response) {
+                ArrayList<Event> events = response.body().getEvents();
+                if (events == null || events.isEmpty()) {
+                    Log.d(TAG, "MO MATCH ");
+                } else {
+                    eventBriteEvents.addAll(events);
+                    fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), eventBriteEvents.size());
+                    eventsLoaded = 1;
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<EventBriteResponse> call, Throwable t) {
+                Log.d(TAG, "REQUEST Failed " + t.getMessage());
+
+            }
+        });
     }
 
     public void getLocalEventBriteEventList(String query, String sortBy, String locationAddress, String locationRadius, String locationLat,

@@ -67,7 +67,7 @@ public class Business implements Parcelable, FomonoEvent
         })
         public Business createFromParcel(Parcel in) {
             Business instance = new Business();
-            instance.rating = ((Integer) in.readValue((Integer.class.getClassLoader())));
+            instance.rating = ((Double) in.readValue((Double.class.getClassLoader())));
             instance.price = ((String) in.readValue((String.class.getClassLoader())));
             instance.phone = ((String) in.readValue((String.class.getClassLoader())));
             instance.id = ((String) in.readValue((String.class.getClassLoader())));
