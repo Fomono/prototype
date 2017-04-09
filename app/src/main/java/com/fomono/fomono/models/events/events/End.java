@@ -16,13 +16,13 @@ public class End implements Parcelable
 
     @SerializedName("timezone")
     @Expose
-    private String timezone;
+    public String timezone;
     @SerializedName("local")
     @Expose
-    private String local;
+    public String local;
     @SerializedName("utc")
     @Expose
-    private String utc;
+    public String utc;
     public final static Parcelable.Creator<End> CREATOR = new Creator<End>() {
 
 

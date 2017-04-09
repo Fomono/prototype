@@ -15,109 +15,109 @@ public class Event implements Parcelable, FomonoEvent
 {
     @SerializedName("name")
     @Expose
-    private Name name;
+    public Name name;
     @SerializedName("description")
     @Expose
-    private Description description;
+    public Description description;
     @SerializedName("id")
     @Expose
-    private String id;
+    public String id;
     @SerializedName("url")
     @Expose
-    private String url;
+    public String url;
     @SerializedName("start")
     @Expose
-    private Start start;
+    public Start start;
     @SerializedName("end")
     @Expose
-    private End end;
+    public End end;
     @SerializedName("created")
     @Expose
-    private String created;
+    public String created;
     @SerializedName("changed")
     @Expose
-    private String changed;
+    public String changed;
     @SerializedName("capacity")
     @Expose
-    private Integer capacity;
+    public Integer capacity;
     @SerializedName("capacity_is_custom")
     @Expose
-    private Boolean capacityIsCustom;
+    public Boolean capacityIsCustom;
     @SerializedName("status")
     @Expose
-    private String status;
+    public String status;
     @SerializedName("currency")
     @Expose
-    private String currency;
+    public String currency;
     @SerializedName("listed")
     @Expose
-    private Boolean listed;
+    public Boolean listed;
     @SerializedName("shareable")
     @Expose
-    private Boolean shareable;
+    public Boolean shareable;
     @SerializedName("online_event")
     @Expose
-    private Boolean onlineEvent;
+    public Boolean onlineEvent;
     @SerializedName("tx_time_limit")
     @Expose
-    private Integer txTimeLimit;
+    public Integer txTimeLimit;
     @SerializedName("hide_start_date")
     @Expose
-    private Boolean hideStartDate;
+    public Boolean hideStartDate;
     @SerializedName("hide_end_date")
     @Expose
-    private Boolean hideEndDate;
+    public Boolean hideEndDate;
     @SerializedName("locale")
     @Expose
-    private String locale;
+    public String locale;
     @SerializedName("is_locked")
     @Expose
-    private Boolean isLocked;
+    public Boolean isLocked;
     @SerializedName("privacy_setting")
     @Expose
-    private String privacySetting;
+    public String privacySetting;
     @SerializedName("is_series")
     @Expose
-    private Boolean isSeries;
+    public Boolean isSeries;
     @SerializedName("is_series_parent")
     @Expose
-    private Boolean isSeriesParent;
+    public Boolean isSeriesParent;
     @SerializedName("is_reserved_seating")
     @Expose
-    private Boolean isReservedSeating;
+    public Boolean isReservedSeating;
     @SerializedName("source")
     @Expose
-    private String source;
+    public String source;
     @SerializedName("is_free")
     @Expose
-    private Boolean isFree;
+    public Boolean isFree;
     @SerializedName("logo_id")
     @Expose
-    private Object logoId;
+    public Object logoId;
     @SerializedName("organizer_id")
     @Expose
-    private String organizerId;
+    public String organizerId;
     @SerializedName("venue_id")
     @Expose
-    private String venueId;
+    public String venueId;
     @SerializedName("category_id")
     @Expose
-    private String categoryId;
+    public String categoryId;
     @SerializedName("subcategory_id")
     @Expose
-    private String subcategoryId;
+    public String subcategoryId;
     @SerializedName("format_id")
     @Expose
-    private String formatId;
+    public String formatId;
     @SerializedName("resource_uri")
     @Expose
-    private String resourceUri;
+    public String resourceUri;
     @SerializedName("logo")
     @Expose
-    private Logo logo;
+    public Logo logo;
     @SerializedName("venue")
     @Expose
-    private Venue venue;
+    public Venue venue;
 
     public final static Parcelable.Creator<Event> CREATOR = new Creator<Event>() {
 

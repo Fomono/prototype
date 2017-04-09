@@ -15,10 +15,10 @@ public class Name implements Parcelable
 
     @SerializedName("text")
     @Expose
-    private String text;
+    public String text;
     @SerializedName("html")
     @Expose
-    private String html;
+    public String html;
     public final static Parcelable.Creator<Name> CREATOR = new Creator<Name>() {
 
 

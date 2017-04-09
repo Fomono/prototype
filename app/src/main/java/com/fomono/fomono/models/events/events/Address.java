@@ -16,37 +16,37 @@ public class Address implements Parcelable{
 
         @SerializedName("address_1")
         @Expose
-        private String address1;
+        public String address1;
         @SerializedName("address_2")
         @Expose
-        private String address2;
+        public String address2;
         @SerializedName("city")
         @Expose
-        private String city;
+        public String city;
         @SerializedName("region")
         @Expose
-        private String region;
+        public String region;
         @SerializedName("postal_code")
         @Expose
-        private String postalCode;
+        public String postalCode;
         @SerializedName("country")
         @Expose
-        private String country;
+        public String country;
         @SerializedName("latitude")
         @Expose
-        private String latitude;
+        public String latitude;
         @SerializedName("longitude")
         @Expose
-        private String longitude;
+        public String longitude;
         @SerializedName("localized_address_display")
         @Expose
-        private String localizedAddressDisplay;
+        public String localizedAddressDisplay;
         @SerializedName("localized_area_display")
         @Expose
-        private String localizedAreaDisplay;
+        public String localizedAreaDisplay;
         @SerializedName("localized_multi_line_address_display")
         @Expose
-        private List<String> localizedMultiLineAddressDisplay = null;
+        public List<String> localizedMultiLineAddressDisplay = null;
 
     protected Address(Parcel in) {
         address1 = in.readString();

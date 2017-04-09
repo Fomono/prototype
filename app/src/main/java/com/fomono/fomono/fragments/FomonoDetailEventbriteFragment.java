@@ -6,13 +6,13 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
-import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +23,10 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.fomono.fomono.R;
 import com.fomono.fomono.databinding.FragmentEventbriteDetailBinding;
+import com.fomono.fomono.models.events.events.Address;
 import com.fomono.fomono.models.events.events.Event;
+import com.fomono.fomono.models.events.events.Venue;
+import com.fomono.fomono.network.client.EventBriteClientRetrofit;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -36,6 +39,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by Saranu on 4/6/17.
@@ -50,11 +61,17 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
     public ImageView ivMessageShareIcon;
     private GoogleMap googleMap;
     MapView mMapView;
+    EventBriteClientRetrofit eventBriteClientRetrofit;
+    Event event;
+
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        event = getArguments().getParcelable("event_obj");
+        getAddressFromAPI(event);
+
     }
 
     public static FomonoDetailEventbriteFragment newInstance(Event event) {
@@ -68,8 +85,38 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Event e = getArguments().getParcelable("event_obj");
-        populateDetail(e);
+    }
+
+    private void getAddressFromAPI(Event e) {
+
+        eventBriteClientRetrofit = EventBriteClientRetrofit.getNewInstance();
+        Map<String, String> data = new HashMap<>();
+        data.put("token", getResources().getString(R.string.eventbrite_api_key));
+        Call<Venue> call = eventBriteClientRetrofit.EBRetrofitClientFactory().
+                getVenueFromServer(e.getVenueId(),data);
+
+        call.enqueue(new Callback<Venue>() {
+            @Override
+            public void onResponse(Call<Venue> call, Response<Venue> response) {
+               Address address = response.body().getAddress();
+                if (address == null) {
+                    Log.d(TAG, "MO MATCH ");
+                } else {
+                   e.setVenue(response.body());
+                    populateDetail(e);
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Venue> call, Throwable t) {
+                Log.d(TAG, "REQUEST Failed " + t.getMessage());
+
+            }
+        });
+
+
     }
 
     //  @BindingAdapter({"imageUrl"})
@@ -115,11 +162,18 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
                 }else {
                     googleMap.setMyLocationEnabled(true);
                 }
-
+                LatLng latlng;
                 // For dropping a marker at a point on the Map
-                LatLng latlng = getLocationFromAddress("121 Albright Way, Los Gatos, CA 95032");
-                googleMap.addMarker(new MarkerOptions().position(latlng).title("Marker Title").
-                        snippet("Marker Description"));
+                if(event.getVenue() != null) {
+                     latlng = new LatLng(Double.parseDouble(event.getVenue().getAddress().getLatitude()),
+                            Double.parseDouble(event.getVenue().getAddress().getLongitude()));
+                }else {
+                     latlng = getLocationFromAddress("121 Albright Way, Los Gatos, CA 95032");
+                }
+                googleMap.addMarker(new MarkerOptions().position(latlng).title(event.getName().getText()).snippet("Marker Desc"));
+                       // snippet(event.getVenue().getAddress().getAddress1() + event.getVenue().getAddress().getCity() +
+                             //   event.getVenue().getAddress().getCountry()  ));
+
 
                 // For zooming automatically to the location of the marker
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(latlng).zoom(12).build();
@@ -222,8 +276,8 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
 
         Geocoder coder = new Geocoder(getContext());
         try {
-            ArrayList<Address> adresses = (ArrayList<Address>) coder.getFromLocationName(strAddress, 50);
-            for (Address add : adresses) {
+            ArrayList<android.location.Address> adresses = (ArrayList<android.location.Address>) coder.getFromLocationName(strAddress, 50);
+            for (android.location.Address add : adresses) {
                 if (add.getCountryCode().equals("US") || add.getCountryCode().equals("USA") ) {//Controls to ensure it is right address such as country etc.
                     double longitude = add.getLongitude();
                     double latitude = add.getLatitude();
