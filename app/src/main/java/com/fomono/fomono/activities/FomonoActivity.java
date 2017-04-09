@@ -1,31 +1,47 @@
 package com.fomono.fomono.activities;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.fomono.fomono.R;
+import com.fomono.fomono.adapters.FomonoMainPagerAdapter;
+import com.fomono.fomono.fragments.MainListFragment;
 
 public class FomonoActivity extends AppCompatActivity {
-
-    @Override
+    private FomonoMainPagerAdapter fomonoMainPagerAdapter;
+    private final static String TAG = "Fomono Activity";
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fomono);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.fomonoToolbarId);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int screenWidthPixels = metrics.widthPixels;
+        int screenWidth = (int) (screenWidthPixels / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT));
+        int screenHeightPixels = metrics.heightPixels;
+        int screenHeight = (int) (screenHeightPixels / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT));
+
+        Log.d(TAG, "Screen width is "+screenWidth+" and screen height is "+screenHeight);
+        fomonoMainPagerAdapter = new FomonoMainPagerAdapter(getSupportFragmentManager());
+        fomonoMainPagerAdapter.setScreenWidth(screenWidth);
+        fomonoMainPagerAdapter.setScreenHeight(screenHeight);
+
+        ViewPager fomonoPager = (ViewPager)findViewById(R.id.fomonoViewpagerId);
+        fomonoPager.setAdapter(fomonoMainPagerAdapter);
+        PagerSlidingTabStrip fomonoTabStrip = (PagerSlidingTabStrip)findViewById(R.id.fomonoTabsId);
+        fomonoTabStrip.setViewPager(fomonoPager);
+
     }
 
 }

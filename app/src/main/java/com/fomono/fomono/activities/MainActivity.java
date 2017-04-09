@@ -1,5 +1,6 @@
 package com.fomono.fomono.activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -17,7 +18,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //Setup APIs
-        setupAPIs();
+      //  setupAPIs();
+
+        Intent i = new Intent(MainActivity.this, FomonoActivity.class);
+        startActivity(i);
     }
 
 
@@ -31,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         //There is also an autocomplete endpoint. I will add it if we want to get auto complete in search
 
         //Get all the events in the area
-        eventBriteClient.getEventBriteEventList(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+       // eventBriteClient.getEventBriteEventList(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
         //Get all the event categories provided by event brite(For filters)
         eventBriteClient.getEventCategories();
         //Get the current user's credentials. Just in case
