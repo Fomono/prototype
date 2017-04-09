@@ -38,16 +38,16 @@ public class MainActivity extends AppCompatActivity {
         n.setText("Some Ramndom Event for Testing");
         event.setName(n); */
         i.putExtra("FOM_OBJ", fEvent);
-        startActivity(i);
+       // startActivity(i);
         //Setup APIs
-      //  setupAPIs();
+        setupAPIs();
     }
 
     public void setupAPIs() {
 
         //   yelpClient.getYelpToken();
         //Get all the businesses in the area
-      /*  yelpClient.getYelpBusinesses(null, null, -1, -1, -1, null, null, false, null);
+       yelpClient.getYelpBusinesses(null, null, -1, -1, -1, null, null, false, null);
         //Get all the places which deliver
         yelpClient.getYelpFoodDeliveryBusinesses(null, -1, -1);
         //There is also an autocomplete endpoint. I will add it if we want to get auto complete in search
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         //Get all the event categories provided by event brite(For filters)
         eventBriteClient.getEventCategories();
         //Get the current user's credentials. Just in case
-        eventBriteClient.getUserCredentials();*/
+        eventBriteClient.getUserCredentials();
 
         String tokenString =null;
        // YelpClientRetrofit.getNewInstance().callRetrofitGetYelpDeliveryBusinesses(MainActivity.this, tokenString);
