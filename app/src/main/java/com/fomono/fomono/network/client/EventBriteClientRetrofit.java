@@ -8,9 +8,9 @@ import android.content.Context;
 import android.util.Log;
 
 import com.fomono.fomono.R;
-import com.fomono.fomono.models.Events.Events.Event;
-import com.fomono.fomono.models.Events.Events.EventBriteResponse;
-import com.fomono.fomono.models.Events.Events.Venue;
+import com.fomono.fomono.models.events.events.Event;
+import com.fomono.fomono.models.events.events.EventBriteResponse;
+import com.fomono.fomono.models.events.events.Venue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

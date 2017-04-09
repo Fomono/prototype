@@ -3,9 +3,9 @@ package com.fomono.fomono.network.client;
 import android.content.Context;
 import android.util.Log;
 
-import com.fomono.fomono.models.Eats.Business;
-import com.fomono.fomono.models.Eats.YelpResponse;
-import com.fomono.fomono.models.Eats.YelpTokenClass;
+import com.fomono.fomono.models.eats.Business;
+import com.fomono.fomono.models.eats.YelpResponse;
+import com.fomono.fomono.models.eats.YelpTokenClass;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -83,22 +83,13 @@ public class YelpClient {
                 params.put("latitude", lat);
                 params.put("longitude", lon);
             }
-        } else {
-            params.put("location", location);
-        }
-        if (radius != -1) {
-            params.put("radius", radius);
-        }
-        if (sortBy != null) {
-            params.put("sort_by", sortBy);
-        }
-        if (price != null) {
-            params.put("price", price);
-        }
+        } else {params.put("location", location);}
+
+        if (radius != -1) {params.put("radius", radius);}
+        if (sortBy != null) {params.put("sort_by", sortBy);}
+        if (price != null) {params.put("price", price);}
         params.put("open_now", openNow);
-        if (attributes != null) {
-            params.put("attributes", attributes);
-        }
+        if (attributes != null) {params.put("attributes", attributes);}
 
         client.get(Url, params, new JsonHttpResponseHandler() {
             @Override

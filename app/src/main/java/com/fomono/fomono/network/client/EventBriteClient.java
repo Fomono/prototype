@@ -3,15 +3,16 @@ package com.fomono.fomono.network.client;
 import android.content.Context;
 import android.util.Log;
 
-import com.fomono.fomono.models.Events.Categories.Category;
-import com.fomono.fomono.models.Events.Categories.EventBriteCategories;
-import com.fomono.fomono.models.Events.Events.Event;
-import com.fomono.fomono.models.Events.Events.EventBriteResponse;
-import com.fomono.fomono.models.Events.UserCredentials.EventBriteUser;
+import com.fomono.fomono.models.events.categories.Category;
+import com.fomono.fomono.models.events.categories.EventBriteCategories;
+import com.fomono.fomono.models.events.events.Event;
+import com.fomono.fomono.models.events.events.EventBriteResponse;
+import com.fomono.fomono.models.events.usercredentials.EventBriteUser;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -28,6 +29,7 @@ import cz.msebera.android.httpclient.Header;
 public class EventBriteClient {
 
 
+    ArrayList<Event> events = null;
     Context mContext;
     public EventBriteClient(Context context) {
         mContext = context;
@@ -36,8 +38,8 @@ public class EventBriteClient {
     public static final String USER_KEY = "IMWD66EDBK2PQIUKRK4K";
     final static String TAG = "EventBriteClient";
 
-    public void getEventBriteEventList(String query, String sortBy, String locationAddress, String locationRadius, String locationLat,
-                                       String locationLon, String categories,String subCategories, String price, String startDateRangeStart,
+    public ArrayList<Event> getEventBriteEventList(AsyncHttpResponseHandler handler, String query, String sortBy, String locationAddress, String locationRadius, String locationLat,
+                                       String locationLon, String categories, String subCategories, String price, String startDateRangeStart,
                                        String startDateRangeEnd, String startDateKeyword, String dateModifiedRangeStart, String dateModifiedRangeEnd,
                                        String dateModifiedDateKeyword) {
         String Url = "https://www.eventbriteapi.com/v3/events";
@@ -62,14 +64,16 @@ public class EventBriteClient {
         if(dateModifiedDateKeyword != null) {params.put("date_modified.keyword", startDateKeyword);}
 
         client.get(Url, params, new JsonHttpResponseHandler() {
+
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 EventBriteResponse eventBriteResponse;
                 Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
                 Log.d(TAG, "response is " + response);
                 eventBriteResponse = gson.fromJson(response.toString(), EventBriteResponse.class);
-                ArrayList<Event> events = eventBriteResponse.getEvents();
+                events = eventBriteResponse.getEvents();
 
+                Log.d(TAG, "event name is " + events.get(0).getName().getText().toString());
                 Log.d(TAG, "event name is " + events.get(0).getName().getText().toString());
             }
 
@@ -79,6 +83,31 @@ public class EventBriteClient {
             }
         });
 
+        return events;
+    }
+    public void getEventCategoryName(String categoryId) {
+        String Url = "https://www.eventbriteapi.com/v3/categories"+categoryId+"/";
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        params.put("token", USER_KEY);
+
+        client.get(Url, params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                EventBriteCategories eventBriteCategories;
+                Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
+                Log.d(TAG, "response is " + response);
+                eventBriteCategories = gson.fromJson(response.toString(), EventBriteCategories.class);
+                ArrayList<Category> categories = eventBriteCategories.getCategories();
+
+                Log.d(TAG, "categories name is " + categories.get(0).getName().toString());
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("onFailure", "There is an error, status_code " + statusCode);
+            }
+        });
     }
 
     public void getEventCategories() {

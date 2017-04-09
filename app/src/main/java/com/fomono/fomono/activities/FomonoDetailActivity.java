@@ -10,9 +10,9 @@ import com.fomono.fomono.R;
 import com.fomono.fomono.fragments.FomonoDetailEventbriteFragment;
 import com.fomono.fomono.fragments.FomonoDetailMoviedbFragment;
 import com.fomono.fomono.fragments.FomonoDetailYelpFragment;
-import com.fomono.fomono.models.Eats.Business;
-import com.fomono.fomono.models.Events.Events.Event;
 import com.fomono.fomono.models.FomonoEvent;
+import com.fomono.fomono.models.eats.Business;
+import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.movies.Movie;
 
 

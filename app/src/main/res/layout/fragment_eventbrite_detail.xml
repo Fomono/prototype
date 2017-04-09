@@ -7,7 +7,7 @@
 
         <variable
             name="event"
-            type="com.fomono.fomono.models.Events.Events.Event" />
+            type="com.fomono.fomono.models.events.events.Event" />
     </data>
 
     <RelativeLayout

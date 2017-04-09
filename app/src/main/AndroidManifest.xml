@@ -71,13 +71,15 @@
 
         <activity
             android:name=".activities.FomonoActivity"
-          />
+            android:label="@string/title_activity_fomono"
+            />
+
         <activity
             android:name=".activities.FomonoDetailActivity"
-           />
+            />
         <activity
             android:name=".activities.FomonoFilterActivity"
-             />
+            />
     </application>
 
 </manifest>

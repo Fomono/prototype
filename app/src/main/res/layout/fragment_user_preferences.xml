@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent" android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:text="@string/pref_location" />
+
+        <TextView
+            android:id="@+id/tvLocationCurr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvLocation"
+            android:layout_marginTop="10dp"
+            android:text="@string/pref_curr_location" />
+
+        <TextView
+            android:id="@+id/tvLocationOther"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvLocationCurr"
+            android:layout_marginTop="10dp"
+            android:text="@string/pref_use_other_loc" />
+
+        <Switch
+            android:id="@+id/swLocationCurr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignBaseline="@+id/tvLocationCurr" />
+
+        <EditText
+            android:id="@+id/etLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvLocationOther"
+            android:layout_marginTop="10dp"
+            android:hint="@string/pref_loc_hint" />
+
+        <TextView
+            android:id="@+id/tvDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etLocation"
+            android:layout_marginTop="10dp"
+            android:text="@string/pref_distance" />
+
+        <TextView
+            android:id="@+id/tvDistanceDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvDistance"
+            android:layout_marginTop="10dp"
+            android:text="@string/pref_distance_desc" />
+
+        <Spinner
+            android:id="@+id/spDistance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/tvDistanceDesc" />
+
+        <LinearLayout
+            android:id="@+id/llFilters"
+            android:layout_below="@+id/spDistance"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvFilters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/pref_filters" />
+
+            <TextView
+                android:id="@+id/tvFiltersDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/pref_filters_desc" />
+
+            <TextView
+                android:id="@+id/tvFiltersSelected"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/hintColor"
+                android:layout_marginTop="10dp"
+                tools:text="{num} selected" />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+</layout>

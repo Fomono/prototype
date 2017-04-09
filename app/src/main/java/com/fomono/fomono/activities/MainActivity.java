@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         i.putExtra("FOM_OBJ", fEvent);
         startActivity(i);
         //Setup APIs
-        setupAPIs();
+      //  setupAPIs();
     }
 
     public void setupAPIs() {
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         //There is also an autocomplete endpoint. I will add it if we want to get auto complete in search
 
         //Get all the events in the area
-        eventBriteClient.getEventBriteEventList(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+       // eventBriteClient.getEventBriteEventList(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
         //Get all the event categories provided by event brite(For filters)
         eventBriteClient.getEventCategories();
         //Get the current user's credentials. Just in case
