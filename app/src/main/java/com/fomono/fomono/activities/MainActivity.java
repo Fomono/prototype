@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.fomono.fomono.R;
-import com.fomono.fomono.models.Events.Events.Event;
 import com.fomono.fomono.models.FomonoEvent;
+import com.fomono.fomono.models.movies.Movie;
 import com.fomono.fomono.network.client.EventBriteClient;
 import com.fomono.fomono.network.client.YelpClient;
 import com.fomono.fomono.utils.ConfigUtil;
@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent i = new Intent(this, FomonoDetailActivity.class);
-        FomonoEvent fEvent = new Event();
+        FomonoEvent fEvent = new Movie();
         //Sample Read test property file entries
         try {
             testPropValue = ConfigUtil.getProperty("115",getApplicationContext());

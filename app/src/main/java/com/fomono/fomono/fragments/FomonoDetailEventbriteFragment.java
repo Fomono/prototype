@@ -41,7 +41,7 @@ import java.util.Calendar;
  * Created by Saranu on 4/6/17.
  */
 
-public class FomonoDetailFragment extends android.support.v4.app.Fragment {
+public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragment {
     FragmentEventbriteDetailBinding fragmentEventbriteDetailBinding;
     public TextView tvClockCalendar;
     public ImageView ivFBShareIcon;
@@ -57,12 +57,12 @@ public class FomonoDetailFragment extends android.support.v4.app.Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    public static FomonoDetailFragment newInstance(Event event) {
-        FomonoDetailFragment fomonoDetailFragment = new FomonoDetailFragment();
+    public static FomonoDetailEventbriteFragment newInstance(Event event) {
+        FomonoDetailEventbriteFragment fomonoDetailEventbriteFragment = new FomonoDetailEventbriteFragment();
         Bundle args = new Bundle();
         args.putParcelable("event_obj", event);
-        fomonoDetailFragment.setArguments(args);
-        return fomonoDetailFragment;
+        fomonoDetailEventbriteFragment.setArguments(args);
+        return fomonoDetailEventbriteFragment;
     }
 
     @Override

@@ -58,6 +58,9 @@ public class Movie implements Parcelable, FomonoEvent{
         @Expose
         private double voteAverage;
 
+    public  Movie(){
+    }
+
     protected Movie(Parcel in) {
         posterPath = in.readString();
         adult = in.readByte() != 0;

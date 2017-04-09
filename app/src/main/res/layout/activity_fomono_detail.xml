@@ -68,7 +68,7 @@
             android:background="#ffffff">
 
             <FrameLayout
-                android:id="@+id/fragmentEventbriteDetail"
+                android:id="@+id/fragmentDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
