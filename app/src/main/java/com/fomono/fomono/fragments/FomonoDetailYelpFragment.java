@@ -23,7 +23,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.fomono.fomono.R;
 import com.fomono.fomono.databinding.FragmentYelpDetailBinding;
-import com.fomono.fomono.models.Eats.Business;
+import com.fomono.fomono.models.eats.Business;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;

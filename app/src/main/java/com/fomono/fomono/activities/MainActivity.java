@@ -1,7 +1,6 @@
 package com.fomono.fomono.activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -42,9 +41,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(i);
         //Setup APIs
       //  setupAPIs();
-
-        Intent i = new Intent(MainActivity.this, FomonoActivity.class);
-        startActivity(i);
     }
 
     public void setupAPIs() {

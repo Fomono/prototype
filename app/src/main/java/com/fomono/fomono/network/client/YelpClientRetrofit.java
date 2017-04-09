@@ -7,9 +7,9 @@ package com.fomono.fomono.network.client;
 import android.content.Context;
 import android.util.Log;
 
-import com.fomono.fomono.models.Eats.Business;
-import com.fomono.fomono.models.Eats.YelpResponse;
-import com.fomono.fomono.models.Eats.YelpTokenClass;
+import com.fomono.fomono.models.eats.Business;
+import com.fomono.fomono.models.eats.YelpResponse;
+import com.fomono.fomono.models.eats.YelpTokenClass;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

@@ -8,7 +8,9 @@ import android.content.Context;
 import android.util.Log;
 
 import com.fomono.fomono.R;
+import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.events.events.EventBriteResponse;
+import com.fomono.fomono.models.events.events.Venue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -63,11 +65,11 @@ public class EventBriteClientRetrofit {
         //@Query("token") String api_key, @Query("q") String search_string
 
         @GET("/v3/venues/{venue_id}")
-        Call<com.fomono.fomono.models.events.events.Venue> getVenueFromServer(String stringQuery);
+        Call<Venue> getVenueFromServer(String stringQuery);
         //@Path("venue_id") String venue_id, @Query("token") String api_key
 
         @GET("/v3/venues/{venue_id}")
-        Call<com.fomono.fomono.models.Events.Events.Venue> getYelpEatsFromServer(String stringQuery);
+        Call<Venue> getYelpEatsFromServer(String stringQuery);
         //@Path("venue_id") String venue_id, @Query("token") String api_key
     }
 
@@ -84,13 +86,13 @@ public class EventBriteClientRetrofit {
         stringQuery = "@Path(\"venue_id\")" + venueId + "\"" +"," + "\"" +
                 context.getResources().getString(R.string.eventbrite_api_key) + "\"";
         //TODO: Incorrect string query. Write a method to generate a string
-        Call<com.fomono.fomono.models.Events.Events.Venue> callVenue = EBRetrofitClientFactory().
+        Call<Venue> callVenue = EBRetrofitClientFactory().
                 getVenueFromServer(stringQuery);
 
-        callVenue.enqueue(new Callback<com.fomono.fomono.models.Events.Events.Venue>() {
+        callVenue.enqueue(new Callback<Venue>() {
             @Override
-            public void onResponse(Call<com.fomono.fomono.models.Events.Events.Venue> call, Response<com.fomono.fomono.models.Events.Events.Venue> response) {
-                com.fomono.fomono.models.Events.Events.Venue venue = response.body();
+            public void onResponse(Call<Venue> call, Response<Venue> response) {
+                Venue venue = response.body();
                 if (venue == null) {
                     Log.d(TAG, "MO MATCH " );
 
@@ -98,7 +100,7 @@ public class EventBriteClientRetrofit {
             }
 
             @Override
-            public void onFailure(Call<com.fomono.fomono.models.Events.Events.Venue> call, Throwable t) {
+            public void onFailure(Call<Venue> call, Throwable t) {
                 Log.d(TAG, "REQUEST Failed " + t.getMessage() );
 
             }
