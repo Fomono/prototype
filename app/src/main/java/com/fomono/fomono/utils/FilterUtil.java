@@ -118,4 +118,16 @@ public class FilterUtil {
         }
         return categories;
     }
+
+    public static String buildCategoriesString(List<Filter> filters) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < filters.size(); i++) {
+            Filter f = filters.get(i);
+            sb.append(f.getValue());
+            if (i < filters.size() - 1) {
+                sb.append(",");
+            }
+        }
+        return sb.toString();
+    }
 }

@@ -1,17 +1,18 @@
 package com.fomono.fomono.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.fomono.fomono.R;
 import com.fomono.fomono.adapters.FomonoMainPagerAdapter;
-
-import retrofit2.http.HEAD;
 
 
 public class FomonoActivity extends AppCompatActivity {
@@ -41,5 +42,26 @@ public class FomonoActivity extends AppCompatActivity {
         PagerSlidingTabStrip fomonoTabStrip = (PagerSlidingTabStrip)findViewById(R.id.fomonoTabsId);
         fomonoTabStrip.setViewPager(fomonoPager);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_fomono, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.menu_filters:
+                Intent i = new Intent(this, FomonoFilterActivity.class);
+                startActivity(i);
+                break;
+        }
+
+        return true;
     }
 }

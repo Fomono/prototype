@@ -4,7 +4,9 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +40,7 @@ public class UserPreferencesFragment extends Fragment {
 
     ParseUser user;
 
-    final int[] ALLOWED_DISTANCES = {1, 2, 5, 10};
+    final int[] ALLOWED_DISTANCES = {1, 2, 5, 10, 25};
 
     public static UserPreferencesFragment newInstance() {
         UserPreferencesFragment fragment = new UserPreferencesFragment();
@@ -82,12 +84,29 @@ public class UserPreferencesFragment extends Fragment {
         //set switch
         //TODO: think about this
 
-        //set location listener
-
         String location = user.getString("location");
         if (!TextUtils.isEmpty(location)) {
             etLocation.setText(location);
         }
+
+        //set location listener
+        etLocation.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                //TODO: this is saving after every key stroke, we might wanna change this
+                String location = editable.toString();
+                user.put("location", location);
+                user.saveEventually();
+            }
+        });
 
         //initialize spinner
         String[] distanceStrs = new String[ALLOWED_DISTANCES.length];
@@ -97,12 +116,14 @@ public class UserPreferencesFragment extends Fragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, distanceStrs);
         spDistance.setAdapter(adapter);
         //get selection
-        int distanceIndex = user.getInt("distance");
+        int distance = user.getInt("distance");
+        int distanceIndex = getDistanceIndex(distance);
         spDistance.setSelection(distanceIndex);
         spDistance.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 user.put("distance", ALLOWED_DISTANCES[i]);
+                user.saveEventually();
             }
 
             @Override
@@ -122,5 +143,14 @@ public class UserPreferencesFragment extends Fragment {
         //set number of categories selected
         int numCategories = 0;  //TODO: get num categories from user
         tvFiltersSelected.setText(getString(R.string.pref_filters_selected, numCategories));
+    }
+
+    private int getDistanceIndex(int distance) {
+        for (int i = 0; i < ALLOWED_DISTANCES.length; i++) {
+            if (ALLOWED_DISTANCES[i] == distance) {
+                return i;
+            }
+        }
+        return 0;
     }
 }
