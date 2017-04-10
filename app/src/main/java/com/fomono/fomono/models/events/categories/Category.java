@@ -3,7 +3,8 @@ package com.fomono.fomono.models.events.categories;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.fomono.fomono.interfaces.ICategory;
+import com.fomono.fomono.FomonoApplication;
+import com.fomono.fomono.models.ICategory;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -117,4 +118,13 @@ public class Category implements Parcelable, ICategory
         return 0;
     }
 
+    @Override
+    public String getApiName() {
+        return FomonoApplication.API_NAME_EVENTS;
+    }
+
+    @Override
+    public String getParamName() {
+        return "categories";
+    }
 }
