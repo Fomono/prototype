@@ -2,20 +2,28 @@ package com.fomono.fomono.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.fomono.fomono.R;
 import com.fomono.fomono.activities.FomonoDetailActivity;
+import com.fomono.fomono.models.FomonoEvent;
 import com.fomono.fomono.models.eats.Business;
+import com.fomono.fomono.models.events.events.Description;
 import com.fomono.fomono.models.events.events.Event;
+import com.fomono.fomono.models.events.events.Logo;
+import com.fomono.fomono.models.events.events.Name;
+import com.fomono.fomono.models.events.events.Start;
 import com.fomono.fomono.models.movies.Movie;
+import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -29,24 +37,16 @@ import java.util.Date;
 
 public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
-    private ArrayList<Event> mEvents;
-    private ArrayList<Business> mBusinesses;
-    private ArrayList<Movie> mMovieResults;
+    private ArrayList<FomonoEvent> mFomonoEvents;
     private static final String TAG = "Fomono Adapter";
     private int screenWidth, screenHeight;
-    private boolean USE_BUSINESSES = false;
-    private boolean USE_EVENTS = false;
-    private boolean USE_MOVIES = true;
 
-    public FomonoAdapter(Context context, ArrayList<Event> events, ArrayList<Business> businesses, ArrayList<Movie> movieResults, int width, int height) {
+    public FomonoAdapter(Context context, ArrayList<FomonoEvent> fomonoEvents, int width, int height) {
         mContext = context;
-        mEvents = events;
-        mBusinesses = businesses;
-        mMovieResults = movieResults;
+        mFomonoEvents = fomonoEvents;
         screenWidth = width;
         screenHeight = height;
     }
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -67,15 +67,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public int getItemCount() {
-        if (USE_BUSINESSES) {
-            return mBusinesses.size();
-        } else if (USE_EVENTS) {
-            return mEvents.size();
-        } else if (USE_MOVIES) {
-            return mMovieResults.size();
-        } else {
-            return mMovieResults.size();
-        }
+        return mFomonoEvents.size();
     }
 
     @Override
@@ -86,18 +78,18 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     private void configureViewHolderEventsItem(ViewHolderEventsItem holder, int position) {
-        if (USE_BUSINESSES) {
+        if (mFomonoEvents.get(position) instanceof Business) {
             populateWithBusinesses(holder, position);
-        } else if (USE_MOVIES) {
+        } else if (mFomonoEvents.get(position) instanceof Movie) {
             populateWithMovies(holder, position);
         } else {
             populateWithEvents(holder, position);
-
         }
     }
 
     private void populateWithEvents(ViewHolderEventsItem holder, int position) {
-        Event event = mEvents.get(position);
+        Event event = (Event)mFomonoEvents.get(position);
+     //   Event event = mEvents.get(position);
         Log.d(TAG, "name is " + event.getName().getText());
         if (event != null) {
             if (event.getName() != null) {
@@ -123,13 +115,13 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 holder.eventDesc.setVisibility(View.GONE);
             }
 
-            Log.d(TAG, "Screen width is " + screenWidth + " and screen height is " + screenHeight);
             int imageSet = 0;
             if (event.getLogo() != null) {
                 if (event.getLogo().getOriginal() != null) {
                     if (!TextUtils.isEmpty(event.getLogo().getOriginal().getUrl())) {
-                        Glide.with(mContext).load(event.getLogo().getOriginal().getUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).override(screenWidth, screenHeight).into(holder.eventMediaImage);
-                        // Picasso.with(mContext).load(event.getLogo().getOriginal().getUrl()).placeholder(R.drawable.ic_fomono).resize(screenWidth, 0).into(holder.eventMediaImage);
+                     //   Glide.with(mContext).load(event.getLogo().getOriginal().getUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).override(200, 350).into(holder.eventMediaImage);
+                     //   Glide.with(mContext).load(event.getLogo().getOriginal().getUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).override(screenWidth, screenHeight).into(holder.eventMediaImage);
+                         Picasso.with(mContext).load(event.getLogo().getOriginal().getUrl()).placeholder(R.drawable.ic_fomono).resize(screenWidth, 0).into(holder.eventMediaImage);
                         imageSet = 1;
                     }
                 }
@@ -164,7 +156,15 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             }
 
             if (event.getUrl() != null) {
-                holder.eventUrl.setText(event.getUrl());
+                holder.eventUrl.setBackgroundResource(R.drawable.ic_eventbrite);
+                holder.eventUrl.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Uri uri = Uri.parse(event.getUrl());
+                        Intent openLink = new Intent(Intent.ACTION_VIEW, uri);
+                        mContext.startActivity(openLink);
+                    }
+                });
             } else {
                 holder.eventUrl.setVisibility(View.GONE);
             }
@@ -176,7 +176,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     private void populateWithBusinesses(ViewHolderEventsItem holder, int position) {
-        Business business = mBusinesses.get(position);
+        Business business = (Business) mFomonoEvents.get(position);
 
         if (business != null) {
             if (business.getName() != null) {
@@ -188,8 +188,8 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             holder.eventDesc.setVisibility(View.GONE);
 
             if (!TextUtils.isEmpty(business.getImageUrl())) {
-                Glide.with(mContext).load(business.getImageUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).override(screenWidth, screenHeight / 2).into(holder.eventMediaImage);
-                // Picasso.with(mContext).load(business.getImageUrl()).placeholder(R.drawable.ic_fomono).resize(screenWidth, 0).into(holder.eventMediaImage);
+               // Glide.with(mContext).load(business.getImageUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).override(screenWidth, screenHeight / 2).into(holder.eventMediaImage);
+                 Picasso.with(mContext).load(business.getImageUrl()).placeholder(R.drawable.ic_fomono).resize(screenWidth, 0).into(holder.eventMediaImage);
             } else {
                 holder.eventMediaImage.setVisibility(View.GONE);
             }
@@ -215,7 +215,15 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             holder.eventDateTime.setText("" + business.getRating() + "/5, " + business.getReviewCount() + " Reviews");
 
             if (business.getUrl() != null) {
-                holder.eventUrl.setText(business.getUrl());
+                holder.eventUrl.setBackgroundResource(R.drawable.ic_yelp);
+                holder.eventUrl.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Uri uri = Uri.parse(business.getUrl());
+                        Intent openLink = new Intent(Intent.ACTION_VIEW, uri);
+                        mContext.startActivity(openLink);
+                    }
+                });
             } else {
                 holder.eventUrl.setVisibility(View.GONE);
             }
@@ -224,6 +232,29 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public void populateWithMovies(ViewHolderEventsItem holder, int position) {
+        Movie movie = (Movie)mFomonoEvents.get(position);
+        if(movie != null) {
+            if(movie.getOriginalTitle() != null) { holder.eventName.setText(movie.getOriginalTitle());}
+            else {holder.eventName.setVisibility(View.GONE);}
 
+            if(movie.getOverview() != null) { holder.eventDesc.setText(movie.getOverview());}
+            else {holder.eventDesc.setVisibility(View.GONE);}
+
+            if(movie.getPosterPath() != null) {
+              //  Glide.with(mContext).load(movie.getPosterPath()).diskCacheStrategy(DiskCacheStrategy.ALL).override(screenWidth, screenHeight).into(holder.eventMediaImage);
+                Picasso.with(mContext).load(movie.getPosterPath()).placeholder(R.drawable.ic_fomono).resize(screenWidth, 0).into(holder.eventMediaImage);
+            } else {
+                holder.eventMediaImage.setVisibility(View.GONE);
+            }
+            //FIXME - Using distance for rating
+            double ratingString = movie.getVoteAverage()/2;
+            DecimalFormat numberFormat = new DecimalFormat("#.0");
+            holder.eventDistance.setText("" + numberFormat.format(ratingString) + "/5");
+            holder.eventPrice.setVisibility(View.GONE);
+
+            if(movie.getReleaseDate() != null) {holder.eventDateTime.setText(mContext.getString(R.string.movie_release_date_string)+movie.getReleaseDate());}
+            holder.eventType.setVisibility(View.GONE);
+
+        }
     }
 }

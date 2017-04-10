@@ -1,5 +1,6 @@
 package com.fomono.fomono.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -9,7 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.fomono.fomono.models.eats.Business;
+import com.fomono.fomono.models.movies.Movie;
 import com.fomono.fomono.models.movies.MovieResponse;
+import com.fomono.fomono.network.client.MovieDBClientRetrofit;
 import com.fomono.fomono.supportclasses.InternetAlertDialogue;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
@@ -20,7 +24,16 @@ import com.loopj.android.http.RequestParams;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import cz.msebera.android.httpclient.Header;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.fomono.fomono.network.client.MovieDBClientRetrofit.API_KEY;
 
 /**
  * Created by Saranu on 4/6/17.
@@ -30,6 +43,7 @@ public class MovieFragment extends MainListFragment {
 
 
     private final static String TAG = "Movie Fragment";
+    MovieDBClientRetrofit movieDBClientRetrofit;
 
     @Nullable
     @Override
@@ -44,13 +58,42 @@ public class MovieFragment extends MainListFragment {
 
     public void populateMovies() {
         smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
-        getRecentMovies();
+     //   getRecentMovies();
+        getMoviesNowPlaying(getActivity(), null);
         Handler handlerTimer = new Handler();
         handlerTimer.postDelayed(() -> {//Just to show the progress bar
             smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
         }, 500);
     }
 
+    public void getMoviesNowPlaying(Context context, String stringQuery) {
+        movieDBClientRetrofit = MovieDBClientRetrofit.getNewInstance();
+
+        //TODO: Incorrect string query. Write a method to generate a string
+        //Call<YelpTokenClass> callVenue = YelpRetrofitClientFactory().getYelpTokenFromServer(stringQuery);
+
+        Call<MovieResponse> callVenue = movieDBClientRetrofit.MovieDBRetrofitClientFactory().getNowPlayingMoviesFromServer(API_KEY);
+        callVenue.enqueue(new Callback<MovieResponse>() {
+            @Override
+            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+                MovieResponse movieResponse = response.body();
+                ArrayList<Movie> movies = response.body().getResults();
+                if (movies == null || movies.isEmpty()) {
+                    Log.d(TAG, "No movies fetched!!");
+                } else {
+                    fomonoEvents.addAll(movies);
+                    fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MovieResponse> call, Throwable t) {
+                Log.d(TAG, "REQUEST Failed " + t.getMessage());
+
+            }
+        });
+    }
+/*
     public void getRecentMovies() {
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
@@ -63,8 +106,8 @@ public class MovieFragment extends MainListFragment {
                 Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
                 Log.d(TAG, "response is " + response);
                 movieResponse = gson.fromJson(response.toString(), MovieResponse.class);
-                movieResults.addAll(movieResponse.getResults());
-                fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), movieResults.size());
+                fomonoEvents.addAll(movieResponse.getResults());
+                fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
             }
 
             @Override
@@ -73,4 +116,5 @@ public class MovieFragment extends MainListFragment {
             }
         });
     }
+*/
 }

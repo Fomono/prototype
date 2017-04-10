@@ -42,5 +42,4 @@ public class FomonoActivity extends AppCompatActivity {
         fomonoTabStrip.setViewPager(fomonoPager);
 
     }
-
 }
