@@ -34,6 +34,9 @@ public class FomonoApplication extends Application {
         // Register our Parse objects
         ParseObject.registerSubclass(Filter.class);
 
+        // enable local db store
+        Parse.enableLocalDatastore(getApplicationContext());
+
         // set applicationId, and server server based on the values in the Heroku settings.
         // clientKey is not needed unless explicitly configured
         // any network interceptors must be added with the Configuration Builder given this syntax
@@ -57,8 +60,15 @@ public class FomonoApplication extends Application {
                     Log.d("DEBUG", "Anonymous login failed.");
                 } else {
                     Log.d("DEBUG", "Anonymous user logged in.");
+                    try {
+                        //update user from server
+                        user.fetch();
+                    } catch (ParseException e1) {
+                        e1.printStackTrace();
+                    }
                 }
             }
         });
+
     }
 }
