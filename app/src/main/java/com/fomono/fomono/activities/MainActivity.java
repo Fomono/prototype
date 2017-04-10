@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
             testPropValue ="No Entry in prop file";
             e.printStackTrace();
         }
-        i.putExtra("FOM_OBJ", fEvent);
+//        i.putExtra("FOM_OBJ", fEvent);
         startActivity(i);
     }
 }
