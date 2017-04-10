@@ -11,8 +11,7 @@ import com.fomono.fomono.R;
 import com.fomono.fomono.databinding.ActivityFomonoFilterBinding;
 import com.fomono.fomono.fragments.FomonoFilterFragment;
 import com.fomono.fomono.fragments.UserPreferencesFragment;
-import com.fomono.fomono.interfaces.ICategory;
-import com.fomono.fomono.models.events.categories.Category;
+import com.fomono.fomono.models.ICategory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,18 +56,6 @@ public class FomonoFilterActivity extends AppCompatActivity implements FomonoFil
     public void onComplete(int resultCode) {
         if (resultCode == UserPreferencesFragment.CODE_FILTERS) {
             List<ICategory> categories = new ArrayList<>();
-            Category testCategory = new Category();
-            testCategory.setName("test1");      //TODO: get rid of this
-            categories.add(testCategory);
-            testCategory = new Category();
-            testCategory.setName("test2");
-            categories.add(testCategory);
-            testCategory = new Category();
-            testCategory.setName("test3");
-            categories.add(testCategory);
-            testCategory = new Category();
-            testCategory.setName("test4");
-            categories.add(testCategory);
             //TODO: get list of event categories
             filtersFragment = FomonoFilterFragment.newInstance(getString(R.string.filter_title_events), categories, false);
             getSupportFragmentManager().beginTransaction()

@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.fomono.fomono.R;
 import com.fomono.fomono.adapters.FiltersAdapter;
 import com.fomono.fomono.databinding.FragmentCategoryFilterBinding;
-import com.fomono.fomono.interfaces.ICategory;
+import com.fomono.fomono.models.ICategory;
 
 import java.util.ArrayList;
 import java.util.List;
