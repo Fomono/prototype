@@ -16,9 +16,13 @@ import com.fomono.fomono.R;
 import com.fomono.fomono.adapters.FiltersAdapter;
 import com.fomono.fomono.databinding.FragmentCategoryFilterBinding;
 import com.fomono.fomono.models.ICategory;
+import com.fomono.fomono.models.db.Filter;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Saranu on 4/6/17.
@@ -36,23 +40,27 @@ public class FomonoFilterFragment extends Fragment {
     Button btnNext;
     Button btnCancel;
 
-    List<ICategory> filters;
+    List<ICategory> categories;
     FiltersAdapter adptFilters;
     String title;
+    String apiName;
     boolean lastPage;
+    ParseUser user;
 
-    public static FomonoFilterFragment newInstance(String title, List<ICategory> filters, boolean lastPage) {
+    public static FomonoFilterFragment newInstance(String title, String apiName, List<ICategory> categories, boolean lastPage, List<Filter> filters) {
         FomonoFilterFragment fragment = new FomonoFilterFragment();
         Bundle args = new Bundle();
         args.putString("title", title);
-        args.putParcelableArrayList("filters", (ArrayList<ICategory>)filters);
+        args.putString("apiName", apiName);
+        args.putParcelableArrayList("categories", (ArrayList<ICategory>)categories);
         args.putBoolean("lastPage", lastPage);
+        args.putParcelableArrayList("filters", (ArrayList<Filter>)filters);
         fragment.setArguments(args);
         return fragment;
     }
 
     public interface FilterFragmentListener {
-        void onSubmit(int resultCode);    //TODO: add user or something
+        void onSubmit(int resultCode);
     }
 
     @Override
@@ -74,9 +82,17 @@ public class FomonoFilterFragment extends Fragment {
 
     private void setup() {
         title = getArguments().getString("title");
-        filters = getArguments().getParcelableArrayList("filters");
+        categories = getArguments().getParcelableArrayList("categories");
         lastPage = getArguments().getBoolean("lastPage");
-        adptFilters = new FiltersAdapter(getActivity(), filters);
+        apiName = getArguments().getString("apiName");
+        List<Filter> filters = getArguments().getParcelableArrayList("filters");
+        //build map for filters
+        Map<String, Filter> filtersMap = new HashMap<>();
+        for (Filter f : filters) {
+            filtersMap.put(f.getValue(), f);
+        }
+        adptFilters = new FiltersAdapter(getActivity(), apiName, categories, user, filtersMap);
+        user = ParseUser.getCurrentUser();
     }
 
     private void setupViews() {
