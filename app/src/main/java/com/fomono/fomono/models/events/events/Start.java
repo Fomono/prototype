@@ -15,13 +15,13 @@ public class Start implements Parcelable
 
     @SerializedName("timezone")
     @Expose
-    private String timezone;
+    public String timezone;
     @SerializedName("local")
     @Expose
-    private String local;
+    public String local;
     @SerializedName("utc")
     @Expose
-    private String utc;
+    public String utc;
     public final static Parcelable.Creator<Start> CREATOR = new Creator<Start>() {
 
 

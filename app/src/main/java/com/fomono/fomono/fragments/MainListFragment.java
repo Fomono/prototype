@@ -15,13 +15,13 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.ProgressBar;
 
 import com.fomono.fomono.R;
-import com.fomono.fomono.models.movies.Result;
-import com.fomono.fomono.supportclasses.EndlessRecyclerViewScrollListener;
-import com.fomono.fomono.supportclasses.RecyclerItemDecorator;
 import com.fomono.fomono.adapters.FomonoAdapter;
 import com.fomono.fomono.databinding.FomonoMainListFragmentBinding;
 import com.fomono.fomono.models.eats.Business;
 import com.fomono.fomono.models.events.events.Event;
+import com.fomono.fomono.models.movies.Movie;
+import com.fomono.fomono.supportclasses.EndlessRecyclerViewScrollListener;
+import com.fomono.fomono.supportclasses.RecyclerItemDecorator;
 
 import java.util.ArrayList;
 
@@ -38,7 +38,7 @@ public class MainListFragment extends Fragment {
     private final static String TAG = "MAIN_LIST_FRAGMENT_LOG";
     public ArrayList<Business> yelpBusinesses;
     public ArrayList<Event> eventBriteEvents;
-    public ArrayList<Result> movieResults;
+    public ArrayList<Movie> movieResults;
     public FomonoAdapter fomonoAdapter;
     public RecyclerView rvList;
     public StaggeredGridLayoutManager gridLayoutManager;

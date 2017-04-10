@@ -9,9 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.fomono.fomono.models.eats.YelpResponse;
-import com.fomono.fomono.models.movies.MovieDbResponse;
-import com.fomono.fomono.network.client.YelpClient;
+import com.fomono.fomono.models.movies.MovieResponse;
 import com.fomono.fomono.supportclasses.InternetAlertDialogue;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
@@ -20,21 +18,9 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-
 import cz.msebera.android.httpclient.Header;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
-import static com.loopj.android.http.AsyncHttpClient.log;
 
 /**
  * Created by Saranu on 4/6/17.
@@ -73,11 +59,11 @@ public class MovieFragment extends MainListFragment {
         client.get(Url, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                MovieDbResponse movieDbResponse;
+                MovieResponse movieResponse;
                 Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
                 Log.d(TAG, "response is " + response);
-                movieDbResponse = gson.fromJson(response.toString(), MovieDbResponse.class);
-                movieResults.addAll(movieDbResponse.getResults());
+                movieResponse = gson.fromJson(response.toString(), MovieResponse.class);
+                movieResults.addAll(movieResponse.getResults());
                 fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), movieResults.size());
             }
 
