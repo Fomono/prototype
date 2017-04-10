@@ -58,13 +58,16 @@ public class EatsFragment extends MainListFragment {
             FilterUtil.getFilters(FomonoApplication.API_NAME_EATS, new FindCallback<Filter>() {
                 @Override
                 public void done(List<Filter> filters, ParseException e) {
-                    Filter.initializeFromList(filters);
+                    String categoriesString = "";
+                    if (filters != null) {
+                        Filter.initializeFromList(filters);
+                        categoriesString = FilterUtil.buildCategoriesString(filters);
+                    }
                     ParseUser currentUser = ParseUser.getCurrentUser();
                     String location = currentUser.getString("location");
                     int distance = currentUser.getInt("distance");
                     //gotta convert distance because yelp uses meters, and maxes out at 40,000 meters.
                     int distanceInMeters = Math.min(40000, NumberUtil.convertToMeters(distance));
-                    String categoriesString = FilterUtil.buildCategoriesString(filters);
                     getYelpBusinesses(getActivity(), location, categoriesString, distanceInMeters);
                 }
             });

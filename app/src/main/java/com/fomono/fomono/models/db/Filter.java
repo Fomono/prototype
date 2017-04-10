@@ -9,6 +9,8 @@ import com.parse.ParseUser;
 
 import java.util.List;
 
+import static android.R.attr.filter;
+
 /**
  * Created by David on 4/9/2017.
  */
@@ -44,6 +46,9 @@ public class Filter extends ParseObject implements Parcelable {
     }
 
     public static void initializeFromList(List<Filter> filters) {
+        if (filters == null) {
+            return;
+        }
         for (Filter f : filters) {
             f.initialize();
         }
