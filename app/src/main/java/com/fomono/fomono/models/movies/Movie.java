@@ -90,116 +90,115 @@ public class Movie implements Parcelable, FomonoEvent{
     };
 
     public String getPosterPath() {
-            return posterPath;
-        }
+        return String.format("https://image.tmdb.org/t/p/w342/%s",posterPath);
+    }
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
+    }
 
-        public void setPosterPath(String posterPath) {
-            this.posterPath = posterPath;
-        }
+    public boolean isAdult() {
+        return adult;
+    }
 
-        public boolean isAdult() {
-            return adult;
-        }
+    public void setAdult(boolean adult) {
+        this.adult = adult;
+    }
 
-        public void setAdult(boolean adult) {
-            this.adult = adult;
-        }
+    public String getOverview() {
+        return overview;
+    }
 
-        public String getOverview() {
-            return overview;
-        }
+    public void setOverview(String overview) {
+        this.overview = overview;
+    }
 
-        public void setOverview(String overview) {
-            this.overview = overview;
-        }
+    public String getReleaseDate() {
+        return releaseDate;
+    }
 
-        public String getReleaseDate() {
-            return releaseDate;
-        }
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
 
-        public void setReleaseDate(String releaseDate) {
-            this.releaseDate = releaseDate;
-        }
+    public List<Long> getGenreIds() {
+        return genreIds;
+    }
 
-        public List<Long> getGenreIds() {
-            return genreIds;
-        }
+    public void setGenreIds(List<Long> genreIds) {
+        this.genreIds = genreIds;
+    }
 
-        public void setGenreIds(List<Long> genreIds) {
-            this.genreIds = genreIds;
-        }
+    public long getId() {
+        return id;
+    }
 
-        public long getId() {
-            return id;
-        }
+    public void setId(long id) {
+        this.id = id;
+    }
 
-        public void setId(long id) {
-            this.id = id;
-        }
+    public String getOriginalTitle() {
+        return originalTitle;
+    }
 
-        public String getOriginalTitle() {
-            return originalTitle;
-        }
+    public void setOriginalTitle(String originalTitle) {
+        this.originalTitle = originalTitle;
+    }
 
-        public void setOriginalTitle(String originalTitle) {
-            this.originalTitle = originalTitle;
-        }
+    public String getOriginalLanguage() {
+        return originalLanguage;
+    }
 
-        public String getOriginalLanguage() {
-            return originalLanguage;
-        }
+    public void setOriginalLanguage(String originalLanguage) {
+        this.originalLanguage = originalLanguage;
+    }
 
-        public void setOriginalLanguage(String originalLanguage) {
-            this.originalLanguage = originalLanguage;
-        }
+    public String getTitle() {
+        return title;
+    }
 
-        public String getTitle() {
-            return title;
-        }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-        public void setTitle(String title) {
-            this.title = title;
-        }
+    public String getBackdropPath() {
+        return String.format("https://image.tmdb.org/t/p/w342/%s",backdropPath);
+    }
 
-        public String getBackdropPath() {
-            return backdropPath;
-        }
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
+    }
 
-        public void setBackdropPath(String backdropPath) {
-            this.backdropPath = backdropPath;
-        }
+    public double getPopularity() {
+        return popularity;
+    }
 
-        public double getPopularity() {
-            return popularity;
-        }
+    public void setPopularity(double popularity) {
+        this.popularity = popularity;
+    }
 
-        public void setPopularity(double popularity) {
-            this.popularity = popularity;
-        }
+    public long getVoteCount() {
+        return voteCount;
+    }
 
-        public long getVoteCount() {
-            return voteCount;
-        }
+    public void setVoteCount(long voteCount) {
+        this.voteCount = voteCount;
+    }
 
-        public void setVoteCount(long voteCount) {
-            this.voteCount = voteCount;
-        }
+    public boolean isVideo() {
+        return video;
+    }
 
-        public boolean isVideo() {
-            return video;
-        }
+    public void setVideo(boolean video) {
+        this.video = video;
+    }
 
-        public void setVideo(boolean video) {
-            this.video = video;
-        }
+    public double getVoteAverage() {
+        return voteAverage;
+    }
 
-        public double getVoteAverage() {
-            return voteAverage;
-        }
-
-        public void setVoteAverage(double voteAverage) {
-            this.voteAverage = voteAverage;
-        }
+    public void setVoteAverage(double voteAverage) {
+        this.voteAverage = voteAverage;
+    }
 
     @Override
     public int describeContents() {

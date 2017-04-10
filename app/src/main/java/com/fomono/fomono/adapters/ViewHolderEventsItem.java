@@ -1,8 +1,10 @@
 package com.fomono.fomono.adapters;
 
+import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.fomono.fomono.R;
@@ -22,7 +24,7 @@ public class ViewHolderEventsItem extends RecyclerView.ViewHolder {
     public TextView eventDesc;
     public TextView eventDateTime;
     public TextView eventType;
-    public TextView eventUrl;
+    public ImageButton eventUrl;
 
     public ViewHolderEventsItem(View itemView) {
         super(itemView);
@@ -33,7 +35,6 @@ public class ViewHolderEventsItem extends RecyclerView.ViewHolder {
         eventDesc = (TextView)itemView.findViewById(R.id.EventDescId);
         eventDateTime = (TextView)itemView.findViewById(R.id.EventDateTimeId);
         eventType = (TextView)itemView.findViewById(R.id.EventTypeId);
-        eventUrl = (LinkifiedTextView)itemView.findViewById(R.id.EventUrlId);
-
+        eventUrl = (ImageButton) itemView.findViewById(R.id.ImageLogoButtonId);
     }
 }

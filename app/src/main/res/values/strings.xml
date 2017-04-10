@@ -24,6 +24,8 @@
     <string name="pref_distance_value">%1$d mi away</string>
     <string name="pref_filters_desc">Specify the type of events and food you\'d like to see on Fomono</string>
     <string name="pref_filters_selected">%1$d selected</string>
+    <string name="menu_filters">Filters</string>
     <string name="filter_title_events">Events</string>
     <string name="filter_title_food">Food</string>
+    <string name="movie_release_date_string">Release date:</string>
 </resources>

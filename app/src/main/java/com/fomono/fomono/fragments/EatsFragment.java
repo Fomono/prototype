@@ -1,5 +1,6 @@
 package com.fomono.fomono.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -11,20 +12,16 @@ import android.widget.ProgressBar;
 
 import com.fomono.fomono.models.eats.Business;
 import com.fomono.fomono.models.eats.YelpResponse;
-import com.fomono.fomono.network.client.YelpClient;
+import com.fomono.fomono.network.client.YelpClientRetrofit;
 import com.fomono.fomono.supportclasses.InternetAlertDialogue;
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-import cz.msebera.android.httpclient.Header;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by jsaluja on 4/8/2017.
@@ -34,6 +31,7 @@ public class EatsFragment extends MainListFragment {
     public static final String USER_KEY = "IMWD66EDBK2PQIUKRK4K";
     private final static String TAG = "Eats fragment";
     public String YelpToken = "EHbNYMHOKBBlufnp61Eb2mO4gJ-Bmt4C8NWcGKyYDdVW5wTcEX5k_yUDyaTOTw7NvJhn-ws0OCcsEEXSQJixT4Wvf4JuYiF9qlpycTmsrBVk0URaftrXzKAKplvkWHYx";
+    private YelpClientRetrofit yelpClientRetrofit;
 
     @Nullable
     @Override
@@ -48,15 +46,50 @@ public class EatsFragment extends MainListFragment {
 
     public void populateEats() {
         smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
-        getLocalYelpBusinesses(null, null, -1, -1, -1, null, null, false, null);
+        getYelpBusinesses(getActivity(), null);
         Handler handlerTimer = new Handler();
         handlerTimer.postDelayed(() -> {//Just to show the progress bar
             smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
         }, 500);
     }
+    public void getYelpBusinesses(Context context, String stringQuery){
+        yelpClientRetrofit = YelpClientRetrofit.getNewInstance();
 
+        Map<String, String> data = new HashMap<>();
+        //FIXME - Should be current location
+        if(stringQuery != null) {data.put("location", stringQuery);}
+        else  {data.put("location", "San Francisco");}
+
+        //FIXME:TODO: Incorrect string query. Write a method to generate a string
+        Call<YelpResponse> callVenue = yelpClientRetrofit.YelpRetrofitClientFactory().getYelpBusinesssesFromServer(data);
+
+        callVenue.enqueue(new Callback<YelpResponse>() {
+            @Override
+            public void onResponse(Call<YelpResponse> call, Response<YelpResponse> response) {
+
+                ArrayList<Business> businesses = response.body().getBusinesses();
+                if (businesses == null || businesses.isEmpty()) {
+                    Log.d(TAG, "No Yelp businesses fetched!!");
+                } else {
+                    fomonoEvents.addAll(businesses);
+                    fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<YelpResponse> call, Throwable t) {
+                Log.d(TAG, "REQUEST Failed " + t.getMessage() );
+
+            }
+        });
+    }
+
+
+
+
+/*
     public void getLocalYelpBusinesses(String searchItem, String location, double lat, double lon, int radius,
-                                  String sortBy/*best_match, rating, review_count, distance*/, String price,
+                                  String sortBy, String price,
                                   boolean openNow, String attributes) {
         String Url = "https://api.yelp.com/v3/businesses/search";
         AsyncHttpClient client = new AsyncHttpClient();
@@ -88,8 +121,8 @@ public class EatsFragment extends MainListFragment {
                 Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
                 Log.d(TAG, "response is " + response);
                 yelpResponse = gson.fromJson(response.toString(), YelpResponse.class);
-                yelpBusinesses.addAll(yelpResponse.getBusinesses());
-                fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), yelpBusinesses.size());
+                fomonoEvents.addAll(yelpResponse.getBusinesses());
+                fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
 
             }
 
@@ -99,6 +132,6 @@ public class EatsFragment extends MainListFragment {
             }
         });
     }
-
+*/
 
 }
