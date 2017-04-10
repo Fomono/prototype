@@ -160,7 +160,7 @@ public class Event implements Parcelable, FomonoEvent
             instance.subcategoryId = ((String) in.readValue((String.class.getClassLoader())));
             instance.formatId = ((String) in.readValue((String.class.getClassLoader())));
             instance.resourceUri = ((String) in.readValue((String.class.getClassLoader())));
-            instance.logo = ((Logo) in.readValue((Logo.class.getClassLoader())));
+          //  instance.logo = ((Logo) in.readValue((Logo.class.getClassLoader())));
             instance.venue = ((Venue) in.readValue((Venue.class.getClassLoader())));
             return instance;
         }
@@ -478,7 +478,7 @@ public class Event implements Parcelable, FomonoEvent
         dest.writeValue(subcategoryId);
         dest.writeValue(formatId);
         dest.writeValue(resourceUri);
-        dest.writeValue(logo);
+//        dest.writeValue(logo);
         dest.writeValue(venue);
     }
 

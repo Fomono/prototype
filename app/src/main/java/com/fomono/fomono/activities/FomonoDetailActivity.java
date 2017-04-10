@@ -13,6 +13,7 @@ import com.fomono.fomono.fragments.FomonoDetailYelpFragment;
 import com.fomono.fomono.models.FomonoEvent;
 import com.fomono.fomono.models.eats.Business;
 import com.fomono.fomono.models.events.events.Description;
+import com.fomono.fomono.models.events.events.End;
 import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.events.events.Logo;
 import com.fomono.fomono.models.events.events.Name;
@@ -62,7 +63,9 @@ public class FomonoDetailActivity extends AppCompatActivity {
         Event e = new Event();
 
         Start startDate = new Start();
-        startDate.setLocal("2017-05-20T14:00:00");
+        End endDate = new End();
+        startDate.setUtc("2017-05-20T12:00:00Z");
+        endDate.setUtc("2017-05-21T12:00:00Z");
         Name name = new Name();
         name.setText("Holi Montreux");
         Description d = new Description();
@@ -72,9 +75,11 @@ public class FomonoDetailActivity extends AppCompatActivity {
 
         e.setName(name);
         e.setStart(startDate);
+        e.setEnd(endDate);
         e.setDescription(d);
         e.setLogo(l);
         e.setVenueId("18800935");
+        e.setUrl("https://www.eventbrite.com/e/holi-montreux-tickets-32905167241?aff=ebapi");
         return e;
 
 
