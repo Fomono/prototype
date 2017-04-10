@@ -49,6 +49,7 @@ public class FomonoApplication extends Application {
         // Need to register GCM token
         ParseInstallation.getCurrentInstallation().saveInBackground();
 
+        ParseUser.enableAutomaticUser();
         ParseAnonymousUtils.logIn(new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
