@@ -130,7 +130,7 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
                 LatLng latlng;
                 // For dropping a marker at a point on the Map
 
-                latlng = getLocationFromAddress("121 Albright Way, Los Gatos, CA 95032");
+                latlng = new LatLng(business.getCoordinates().getLatitude(), business.getCoordinates().getLongitude());
                 googleMap.addMarker(new MarkerOptions().position(latlng).title(business.getName()).snippet("Marker Desc"));
                 // snippet(event.getVenue().getAddress().getAddress1() + event.getVenue().getAddress().getCity() +
                 //   event.getVenue().getAddress().getCountry()  ));

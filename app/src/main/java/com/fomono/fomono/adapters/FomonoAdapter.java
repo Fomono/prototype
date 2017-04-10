@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -17,11 +16,7 @@ import com.fomono.fomono.R;
 import com.fomono.fomono.activities.FomonoDetailActivity;
 import com.fomono.fomono.models.FomonoEvent;
 import com.fomono.fomono.models.eats.Business;
-import com.fomono.fomono.models.events.events.Description;
 import com.fomono.fomono.models.events.events.Event;
-import com.fomono.fomono.models.events.events.Logo;
-import com.fomono.fomono.models.events.events.Name;
-import com.fomono.fomono.models.events.events.Start;
 import com.fomono.fomono.models.movies.Movie;
 import com.squareup.picasso.Picasso;
 
@@ -188,8 +183,8 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             holder.eventDesc.setVisibility(View.GONE);
 
             if (!TextUtils.isEmpty(business.getImageUrl())) {
-               // Glide.with(mContext).load(business.getImageUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).override(screenWidth, screenHeight / 2).into(holder.eventMediaImage);
-                 Picasso.with(mContext).load(business.getImageUrl()).placeholder(R.drawable.ic_fomono).resize(screenWidth, 0).into(holder.eventMediaImage);
+                Glide.with(mContext).load(business.getImageUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).override(screenWidth, screenHeight / 2).into(holder.eventMediaImage);
+               //  Picasso.with(mContext).load(business.getImageUrl()).placeholder(R.drawable.ic_fomono).resize(screenWidth, 0).into(holder.eventMediaImage);
             } else {
                 holder.eventMediaImage.setVisibility(View.GONE);
             }
@@ -215,7 +210,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             holder.eventDateTime.setText("" + business.getRating() + "/5, " + business.getReviewCount() + " Reviews");
 
             if (business.getUrl() != null) {
-                holder.eventUrl.setBackgroundResource(R.drawable.ic_yelp);
+                holder.eventUrl.setBackgroundResource(R.drawable.ic_clock);
                 holder.eventUrl.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

@@ -12,6 +12,8 @@ import com.fomono.fomono.fragments.FomonoDetailMoviedbFragment;
 import com.fomono.fomono.fragments.FomonoDetailYelpFragment;
 import com.fomono.fomono.models.FomonoEvent;
 import com.fomono.fomono.models.eats.Business;
+import com.fomono.fomono.models.eats.Coordinates;
+import com.fomono.fomono.models.eats.Location;
 import com.fomono.fomono.models.events.events.Description;
 import com.fomono.fomono.models.events.events.End;
 import com.fomono.fomono.models.events.events.Event;
@@ -30,8 +32,8 @@ public class FomonoDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         setContentView(R.layout.activity_fomono_detail);
         Intent i = getIntent();
-        FomonoEvent fEvent = i.getParcelableExtra("FOM_OB");
-        // FomonoEvent fEvent = generateFakeEventObject();J");
+        FomonoEvent fEvent = i.getParcelableExtra("FOM_OBJ");
+        // FomonoEvent fEvent = generateFakeEventObject();
         // FomonoEvent fEvent = generateFakeEatObject();
 
         if (savedInstanceState == null && fEvent instanceof Event) {
@@ -101,6 +103,11 @@ public class FomonoDetailActivity extends AppCompatActivity {
         b.setName("Yummy Food Restaurant");
         b.setImageUrl("http://i.imgur.com/hgXLjzr.png");
         b.setUrl("https://www.yelp.com/oakland");
+        Location l = new Location();
+        Coordinates c = new Coordinates();
+        c.setLatitude(37.7980312);
+        c.setLongitude(-122.4100467);
+        b.setCoordinates(c);
         return b;
     }
 

@@ -130,6 +130,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
 
         fragmentEventbriteDetailBinding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_eventbrite_detail, parent, false);
+
         View view = fragmentEventbriteDetailBinding.getRoot();
         ButterKnife.bind(this,view);
 
