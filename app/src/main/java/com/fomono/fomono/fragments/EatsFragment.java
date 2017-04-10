@@ -88,8 +88,8 @@ public class EatsFragment extends MainListFragment {
                 Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
                 Log.d(TAG, "response is " + response);
                 yelpResponse = gson.fromJson(response.toString(), YelpResponse.class);
-                yelpBusinesses.addAll(yelpResponse.getBusinesses());
-                fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), yelpBusinesses.size());
+                fomonoEvents.addAll(yelpResponse.getBusinesses());
+                fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
 
             }
 

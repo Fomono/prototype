@@ -63,8 +63,8 @@ public class MovieFragment extends MainListFragment {
                 Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
                 Log.d(TAG, "response is " + response);
                 movieResponse = gson.fromJson(response.toString(), MovieResponse.class);
-                movieResults.addAll(movieResponse.getResults());
-                fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), movieResults.size());
+                fomonoEvents.addAll(movieResponse.getResults());
+                fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
             }
 
             @Override

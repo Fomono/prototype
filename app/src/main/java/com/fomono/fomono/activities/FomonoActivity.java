@@ -43,4 +43,8 @@ public class FomonoActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        //FIXME - Disabling back button on Fomono Activity for now
+    }
 }

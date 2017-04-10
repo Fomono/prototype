@@ -32,6 +32,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static java.util.Collections.addAll;
+
 /**
  * Created by Saranu on 4/6/17.
  */
@@ -79,7 +81,7 @@ public class EventFragment extends MainListFragment {
         eventBriteClientRetrofit = EventBriteClientRetrofit.getNewInstance();
         Map<String, String> data = new HashMap<>();
         data.put("token", USER_KEY);
-        data.put("q", "holi");
+       // data.put("q", "holi");
         Call<EventBriteResponse> call = eventBriteClientRetrofit.EBRetrofitClientFactory().
                 getEventsFromServer(data);
 
@@ -90,8 +92,8 @@ public class EventFragment extends MainListFragment {
                 if (events == null || events.isEmpty()) {
                     Log.d(TAG, "MO MATCH ");
                 } else {
-                    eventBriteEvents.addAll(events);
-                    fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), eventBriteEvents.size());
+                    fomonoEvents.addAll(events);
+                    fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
                     eventsLoaded = 1;
                 }
 
@@ -167,8 +169,9 @@ public class EventFragment extends MainListFragment {
                 Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
                 Log.d(TAG, "response is " + response);
                 eventBriteResponse = gson.fromJson(response.toString(), EventBriteResponse.class);
-                eventBriteEvents.addAll(eventBriteResponse.getEvents());
-                fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), eventBriteEvents.size());
+
+                fomonoEvents.addAll(eventBriteResponse.getEvents());
+                fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
                 eventsLoaded = 1;
             }
 
@@ -177,10 +180,6 @@ public class EventFragment extends MainListFragment {
                 Log.d("onFailure", "There is an error, status_code " + statusCode);
             }
         });
-        Handler handlerTimer = new Handler();
-        handlerTimer.postDelayed(() -> {//Just to show the progress bar
-            Log.d(TAG, "event brite size outside client" + eventBriteEvents.size());
-        }, 2000);
     }
 
 }

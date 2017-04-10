@@ -37,17 +37,17 @@ public class FomonoMainPagerAdapter extends FragmentPagerAdapter {
         mainListFragment.setScreenWidthFromFragment(screenWidth);
         mainListFragment.setScreenHeightFromFragment(screenHeight);
         if (position == 0) {
-   //         EventFragment eventFragment = new EventFragment();
-   //         return eventFragment;
+            EventFragment eventFragment = new EventFragment();
+            return eventFragment;
    //         EatsFragment eatsFragment = new EatsFragment();
    //         return eatsFragment;
-            MovieFragment movieFragment = new MovieFragment();
-            return movieFragment;
+    //        MovieFragment movieFragment = new MovieFragment();
+    //        return movieFragment;
         } else if (position == 1) {
-   //         EatsFragment eatsFragment = new EatsFragment();
-   //         return eatsFragment;
-            MovieFragment movieFragment = new MovieFragment();
-            return movieFragment;
+            EatsFragment eatsFragment = new EatsFragment();
+            return eatsFragment;
+     //       MovieFragment movieFragment = new MovieFragment();
+     //       return movieFragment;
         } else if (position == 2) {
             //         EatsFragment eatsFragment = new EatsFragment();
             //         return eatsFragment;
@@ -56,10 +56,10 @@ public class FomonoMainPagerAdapter extends FragmentPagerAdapter {
         } else {
       //      EatsFragment eatsFragment = new EatsFragment();
       //      return eatsFragment;
-      //      EventFragment eventFragment = new EventFragment();
-      //      return eventFragment;
-            MovieFragment movieFragment = new MovieFragment();
-            return movieFragment;
+            EventFragment eventFragment = new EventFragment();
+            return eventFragment;
+      //      MovieFragment movieFragment = new MovieFragment();
+       //     return movieFragment;
         }
     }
     //Return the tab title

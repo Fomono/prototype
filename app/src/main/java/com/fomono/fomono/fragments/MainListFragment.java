@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import com.fomono.fomono.R;
 import com.fomono.fomono.adapters.FomonoAdapter;
 import com.fomono.fomono.databinding.FomonoMainListFragmentBinding;
+import com.fomono.fomono.models.FomonoEvent;
 import com.fomono.fomono.models.eats.Business;
 import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.movies.Movie;
@@ -36,9 +37,7 @@ import fr.castorflex.android.smoothprogressbar.SmoothProgressDrawable;
 public class MainListFragment extends Fragment {
     final static int NUM_GRID_COLUMNS = 1;
     private final static String TAG = "MAIN_LIST_FRAGMENT_LOG";
-    public ArrayList<Business> yelpBusinesses;
-    public ArrayList<Event> eventBriteEvents;
-    public ArrayList<Movie> movieResults;
+    public ArrayList<FomonoEvent> fomonoEvents;
     public FomonoAdapter fomonoAdapter;
     public RecyclerView rvList;
     public StaggeredGridLayoutManager gridLayoutManager;
@@ -60,10 +59,8 @@ public class MainListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        yelpBusinesses = new ArrayList<>();
-        eventBriteEvents = new ArrayList<>();
-        movieResults = new ArrayList<>();
-        fomonoAdapter = new FomonoAdapter(getActivity(), eventBriteEvents, yelpBusinesses, movieResults, screenWidth, screenHeight);
+        fomonoEvents = new ArrayList<>();
+        fomonoAdapter = new FomonoAdapter(getActivity(), fomonoEvents, screenWidth, screenHeight);
 
         FomonoMainListFragmentBinding binding = DataBindingUtil.inflate(inflater, R.layout.fomono_main_list_fragment, container, false);
         View view = binding.getRoot();
