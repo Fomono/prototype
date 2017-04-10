@@ -11,51 +11,32 @@ import android.widget.ProgressBar;
 
 import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.events.events.EventBriteResponse;
-import com.fomono.fomono.network.client.EventBriteClient;
 import com.fomono.fomono.network.client.EventBriteClientRetrofit;
 import com.fomono.fomono.supportclasses.InternetAlertDialogue;
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import cz.msebera.android.httpclient.Header;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static java.util.Collections.addAll;
 
 /**
  * Created by Saranu on 4/6/17.
  */
 
 public class EventFragment extends MainListFragment {
-    private EventBriteClient client;
+  //  private EventBriteClient client;
     public static final String USER_KEY = "IMWD66EDBK2PQIUKRK4K";
     private final static String TAG = "Event fragment";
-    private int eventsLoaded = 0;
     private EventBriteClientRetrofit eventBriteClientRetrofit;
-/*
-    public EventFragment newInstance(int localscreenWidth) {
-        EventFragment eventFragment = new EventFragment();
-        super.screenWidth = localscreenWidth;
-        return eventFragment;
-    }
-*/
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
-        client = new EventBriteClient(getActivity());
+     //   client = new EventBriteClient(getActivity());
         InternetAlertDialogue internetAlertDialogue = new InternetAlertDialogue(mContext);
         if(internetAlertDialogue.checkForInternet()) {
             populateEvents();
@@ -66,22 +47,21 @@ public class EventFragment extends MainListFragment {
 
     public void populateEvents() {
         smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
-        callEBRetrofitAPI(0,null);
-       // getLocalEventBriteEventList(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+        getEventList(0,null);
         Handler handlerTimer = new Handler();
         handlerTimer.postDelayed(() -> {//Just to show the progress bar
             smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
         }, 500);
     }
 
-
-
-    public void callEBRetrofitAPI(int page, String strQuery) {
+    public void getEventList(int page, String strQuery) {
 
         eventBriteClientRetrofit = EventBriteClientRetrofit.getNewInstance();
         Map<String, String> data = new HashMap<>();
         data.put("token", USER_KEY);
-       // data.put("q", "holi");
+        if(strQuery != null) {
+            data.put("q", strQuery);
+        }
         Call<EventBriteResponse> call = eventBriteClientRetrofit.EBRetrofitClientFactory().
                 getEventsFromServer(data);
 
@@ -90,11 +70,10 @@ public class EventFragment extends MainListFragment {
             public void onResponse(Call<EventBriteResponse> call, Response<EventBriteResponse> response) {
                 ArrayList<Event> events = response.body().getEvents();
                 if (events == null || events.isEmpty()) {
-                    Log.d(TAG, "MO MATCH ");
+                    Log.d(TAG, "No events fetched!!");
                 } else {
                     fomonoEvents.addAll(events);
                     fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
-                    eventsLoaded = 1;
                 }
 
             }
@@ -107,6 +86,7 @@ public class EventFragment extends MainListFragment {
         });
     }
 
+/*
     public void getLocalEventBriteEventList(String query, String sortBy, String locationAddress, String locationRadius, String locationLat,
                                                    String locationLon, String categories, String subCategories, String price, String startDateRangeStart,
                                                    String startDateRangeEnd, String startDateKeyword, String dateModifiedRangeStart, String dateModifiedRangeEnd,
@@ -181,5 +161,5 @@ public class EventFragment extends MainListFragment {
             }
         });
     }
-
+*/
 }

@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,7 +20,7 @@ public class MovieResponse implements Parcelable{
     private long page;
     @SerializedName("results")
     @Expose
-    private List<Movie> results = null;
+    private ArrayList<Movie> results = null;
     @SerializedName("dates")
     @Expose
     private Dates dates;
@@ -57,11 +58,11 @@ public class MovieResponse implements Parcelable{
         this.page = page;
     }
 
-    public List<Movie> getResults() {
+    public ArrayList<Movie> getResults() {
         return results;
     }
 
-    public void setResults(List<Movie> results) {
+    public void setResults(ArrayList<Movie> results) {
         this.results = results;
     }
 

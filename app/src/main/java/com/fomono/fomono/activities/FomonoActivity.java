@@ -42,9 +42,4 @@ public class FomonoActivity extends AppCompatActivity {
         fomonoTabStrip.setViewPager(fomonoPager);
 
     }
-
-    @Override
-    public void onBackPressed() {
-        //FIXME - Disabling back button on Fomono Activity for now
-    }
 }

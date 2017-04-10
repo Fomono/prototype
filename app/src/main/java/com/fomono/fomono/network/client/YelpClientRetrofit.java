@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,6 +24,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 
 /**
  * Created by Saranu on 3/16/17.
@@ -36,11 +38,9 @@ public class YelpClientRetrofit {
 
 
     YelpClientRetrofit.YelpService Yservice;
-    EventBriteClientRetrofit eventBriteClientRetrofit;
-    final static String TAG = "EventBriteClient";
+    final static String TAG = "YelpClient";
     Context mcontext;
     ArrayList<Business> businesses;
-
 
 
     public YelpClientRetrofit.YelpService YelpRetrofitClientFactory(){
@@ -75,10 +75,9 @@ public class YelpClientRetrofit {
         @Headers({
                 "Authorization: Bearer EHbNYMHOKBBlufnp61Eb2mO4gJ-Bmt4C8NWcGKyYDdVW5wTcEX5k_yUDyaTOTw7NvJhn-ws0OCcsEEXSQJixT4Wvf4JuYiF9qlpycTmsrBVk0URaftrXzKAKplvkWHYx",
         })
-        @GET("/v3/businesses/search")
-        Call<YelpResponse> getYelpBusinesssesFromServer(String query
-                                                  );
 
+        @GET("/v3/businesses/search")
+        Call<YelpResponse> getYelpBusinesssesFromServer(@QueryMap Map<String, String> options);
 
         @Headers({
                 "Authorization: Bearer EHbNYMHOKBBlufnp61Eb2mO4gJ-Bmt4C8NWcGKyYDdVW5wTcEX5k_yUDyaTOTw7NvJhn-ws0OCcsEEXSQJixT4Wvf4JuYiF9qlpycTmsrBVk0URaftrXzKAKplvkWHYx",
@@ -128,7 +127,7 @@ public class YelpClientRetrofit {
         });
     }
 
-
+/*
     public void callRetrofitGetYelpBusinesses(Context context,String stringQuery){
 
         //eventBriteClientRetrofit = EventBriteClientRetrofit.getNewInstance();
@@ -161,7 +160,7 @@ public class YelpClientRetrofit {
         });
     }
 
-
+*/
     public void callRetrofitGetYelpDeliveryBusinesses(Context context,String stringQuery){
 
         //eventBriteClientRetrofit = EventBriteClientRetrofit.getNewInstance();
