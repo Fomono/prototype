@@ -30,8 +30,9 @@ public class FomonoDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         setContentView(R.layout.activity_fomono_detail);
         Intent i = getIntent();
-        //FomonoEvent fEvent = i.getParcelableExtra("FOM_OBJ");
-        FomonoEvent fEvent = generateFakeEventObject();
+        FomonoEvent fEvent = i.getParcelableExtra("FOM_OB");
+        // FomonoEvent fEvent = generateFakeEventObject();J");
+        // FomonoEvent fEvent = generateFakeEatObject();
 
         if (savedInstanceState == null && fEvent instanceof Event) {
             Event e = (Event) fEvent;
@@ -84,6 +85,23 @@ public class FomonoDetailActivity extends AppCompatActivity {
 
 
     }
+    private FomonoEvent generateFakeMovieObject() {
+        Movie m = new Movie();
 
+        m.setPosterPath("http://i.imgur.com/hgXLjzr.png");
+        m.setTitle("50 Shades of crazy");
+        m.setOverview("Some random description ...........................................");
+        m.setReleaseDate("2017-05-20T12:00:00Z");
+        return m;
+    }
+
+
+    private FomonoEvent generateFakeEatObject() {
+        Business b = new Business();
+        b.setName("Yummy Food Restaurant");
+        b.setImageUrl("http://i.imgur.com/hgXLjzr.png");
+        b.setUrl("https://www.yelp.com/oakland");
+        return b;
+    }
 
 }
