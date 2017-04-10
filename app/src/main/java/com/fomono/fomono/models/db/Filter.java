@@ -9,8 +9,6 @@ import com.parse.ParseUser;
 
 import java.util.List;
 
-import static android.R.attr.filter;
-
 /**
  * Created by David on 4/9/2017.
  */
