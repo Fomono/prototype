@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/tvEventDate"
-            android:text="Ffty shades of Crazy"
+            android:text='@{movie.title}'
             android:textSize="20dp"
             android:textStyle="bold" />
 
@@ -115,7 +115,7 @@
             android:layout_marginTop="15dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/tvFavoriteLabel"
-            android:text="Come experience the biggest plant sale in the bay area.blah blah blah blah blah blah blah blah........................................................"
+            android:text='@{movie.overview}'
             android:textSize="12dp" />
 
 
@@ -137,7 +137,7 @@
             android:layout_below="@id/tvDescription"
             android:layout_marginRight="5dp"
             android:textSize="10dp"
-            android:text=" May 6, 2017 at 10:30 PM"
+            android:text='@{movie.releaseDate}'
             />
 
         <TextView
@@ -170,12 +170,12 @@
             android:layout_toRightOf="@id/ivLocationIcon"
             android:layout_below="@id/ivClockIcon"
             android:layout_alignTop="@id/ivLocationIcon"
-            android:text="Golden Gate Park, San Francisco, CA"
+            android:text="N/A"
             android:textSize="10dp" />
 
 
         <TextView
-            android:id="@+id/tvSiteLink"
+            android:id="@+id/tvSiteLinkLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/ivLocationIcon"
@@ -186,21 +186,26 @@
             android:textSize="10dp" />
 
 
-        <ImageView
-            android:id="@+id/ivSiteLink"
-            android:layout_width="90dp"
-            android:layout_height="10dp"
-            android:layout_alignTop="@id/tvSiteLink"
+        <TextView
+            android:id="@+id/tvSiteLink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/tvSiteLinkLabel"
             android:layout_below="@id/ivLocationIcon"
-            android:layout_toRightOf="@id/tvSiteLink"
-            app:srcCompat="@drawable/event_brite_cut" />
+            android:layout_toRightOf="@id/tvSiteLinkLabel"
+            android:textSize="10dp"
+            android:textColor="@color/twitterBlue"
+            android:clickable="true"
+            android:text="CLICK HERE"
+            />
+
 
 
         <TextView
             android:id="@+id/tvShareLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/ivSiteLink"
+            android:layout_below="@id/tvSiteLinkLabel"
             android:layout_marginTop="20dp"
             android:layout_alignParentLeft="true"
             android:text="SHARE: "
@@ -212,9 +217,9 @@
             android:id="@+id/ivFBShareIcon"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_below="@id/ivSiteLink"
+            android:layout_below="@id/tvSiteLink"
             android:layout_toRightOf="@id/tvShareLabel"
-            android:layout_alignTop="@id/ivSiteLink"
+            android:layout_alignTop="@id/tvSiteLink"
             android:layout_marginRight="15dp"
             android:layout_marginTop="20dp"
             app:srcCompat="@drawable/ic_facebook" />
@@ -225,7 +230,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignTop="@id/ivFBShareIcon"
-            android:layout_below="@id/ivSiteLink"
+            android:layout_below="@id/tvSiteLink"
             android:layout_toRightOf="@id/ivFBShareIcon"
             android:layout_marginRight="15dp"
 
@@ -237,7 +242,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignTop="@id/ivFBShareIcon"
-            android:layout_below="@id/ivSiteLink"
+            android:layout_below="@id/tvSiteLink"
             app:srcCompat="@drawable/ic_email"
             android:layout_marginRight="15dp"
             android:layout_toRightOf="@id/ivTwitterShareIcon" />
@@ -246,7 +251,7 @@
             android:id="@+id/ivMessageShareIcon"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_below="@id/ivSiteLink"
+            android:layout_below="@id/tvSiteLink"
             android:layout_alignTop="@id/ivFBShareIcon"
             android:layout_toRightOf="@id/ivEmailShareIcon"
             android:layout_marginRight="15dp"

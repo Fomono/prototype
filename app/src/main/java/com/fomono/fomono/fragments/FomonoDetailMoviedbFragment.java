@@ -6,24 +6,25 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
-import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.fomono.fomono.R;
 import com.fomono.fomono.databinding.FragmentMoviedbDetailBinding;
 import com.fomono.fomono.models.movies.Movie;
+import com.fomono.fomono.utils.DateUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -35,7 +36,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
+
+import butterknife.ButterKnife;
+
+import static android.R.attr.x;
 
 /**
  * Created by Saranu on 4/6/17.
@@ -43,18 +47,17 @@ import java.util.Calendar;
 
 public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment {
     FragmentMoviedbDetailBinding fragmentMoviedbDetailBinding;
-    public TextView tvClockCalendar;
-    public ImageView ivFBShareIcon;
-    public ImageView ivEmailShareIcon;
-    public ImageView ivTwitterShareIcon;
-    public ImageView ivMessageShareIcon;
+
     private GoogleMap googleMap;
     MapView mMapView;
+    Movie movie;
+
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        movie = getArguments().getParcelable("movie_obj");
     }
 
     public static FomonoDetailMoviedbFragment newInstance(Movie movie) {
@@ -68,9 +71,10 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Movie m = getArguments().getParcelable("movie_obj");
-        populateDetail(m);
+        populateDetail(movie);
+
     }
+
 
     //  @BindingAdapter({"imageUrl"})
     private static void setImageUrl(ImageView view, String imageUrl) {
@@ -85,11 +89,18 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
         fragmentMoviedbDetailBinding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_moviedb_detail, parent, false);
         View view = fragmentMoviedbDetailBinding.getRoot();
-        //ButterKnife.bind(this,view);
-        tvClockCalendar = (TextView) view.findViewById(R.id.tvClockCalendar);
-        ivFBShareIcon = (ImageView) view.findViewById(R.id.ivFBShareIcon);
-        ivTwitterShareIcon = (ImageView) view.findViewById(R.id.ivTwitterShareIcon);
-        ivEmailShareIcon = (ImageView) view.findViewById(R.id.ivEmailShareIcon);
+        ButterKnife.bind(this,view);
+
+        fragmentMoviedbDetailBinding.tvSiteLink.setClickable(true);
+        fragmentMoviedbDetailBinding.tvSiteLink.setMovementMethod(LinkMovementMethod.getInstance());
+        String text = "<a href=" + "https://www.themoviedb.org/movie?language=en" +  ">" + "CLICK HERE" + "</a>";
+        fragmentMoviedbDetailBinding.tvSiteLink.setText(Html.fromHtml(text));
+
+
+        fragmentMoviedbDetailBinding.tvEventDate.setText(movie.getReleaseDate());
+
+        setImageUrl(fragmentMoviedbDetailBinding.ivEventImage, movie.getPosterPath());
+
         mMapView = (MapView) view.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
 
@@ -115,11 +126,14 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
                 }else {
                     googleMap.setMyLocationEnabled(true);
                 }
-
+                LatLng latlng;
                 // For dropping a marker at a point on the Map
-                LatLng latlng = getLocationFromAddress("121 Albright Way, Los Gatos, CA 95032");
-                googleMap.addMarker(new MarkerOptions().position(latlng).title("Marker Title").
-                        snippet("Marker Description"));
+
+                    latlng = getLocationFromAddress("121 Albright Way, Los Gatos, CA 95032");
+                googleMap.addMarker(new MarkerOptions().position(latlng).title(movie.getTitle()).snippet("Marker Desc"));
+                // snippet(event.getVenue().getAddress().getAddress1() + event.getVenue().getAddress().getCity() +
+                //   event.getVenue().getAddress().getCountry()  ));
+
 
                 // For zooming automatically to the location of the marker
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(latlng).zoom(12).build();
@@ -128,16 +142,26 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
         });
 
 
-        tvClockCalendar.setOnClickListener(new View.OnClickListener() {
+        fragmentMoviedbDetailBinding.tvClockCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addToCalendar();
+                addToCalendar(movie.getReleaseDate(), movie.getReleaseDate());
             }
         });
 
 
+        fragmentMoviedbDetailBinding.ivMessageShareIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+                sendIntent.setData(Uri.parse("sms:"));
+                sendIntent.putExtra(movie.getTitle(), x);
+                startActivity(sendIntent);
 
-        ivTwitterShareIcon.setOnClickListener(new View.OnClickListener() {
+            }
+        });
+
+        fragmentMoviedbDetailBinding.ivTwitterShareIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -148,7 +172,7 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
                     Intent intent = new Intent(Intent.ACTION_SEND);
                     intent.setClassName("com.twitter.android", "com.twitter.android.composer.ComposerActivity");
                     intent.setType("text/plain");
-                    intent.putExtra(Intent.EXTRA_TEXT, "Your text");
+                    intent.putExtra(Intent.EXTRA_TEXT, movie.getTitle());
                     startActivity(intent);
 
                 }
@@ -163,14 +187,14 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
             }
         });
 
-        ivEmailShareIcon.setOnClickListener(new View.OnClickListener() {
+        fragmentMoviedbDetailBinding.ivEmailShareIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("plain/text");
                 intent.putExtra(Intent.EXTRA_EMAIL, new String[] { "some@email.address" });
-                intent.putExtra(Intent.EXTRA_SUBJECT, "subject");
-                intent.putExtra(Intent.EXTRA_TEXT, "mail body");
+                intent.putExtra(Intent.EXTRA_SUBJECT, movie.getTitle());
+                intent.putExtra(Intent.EXTRA_TEXT, movie.getTitle());
                 if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                     startActivity(Intent.createChooser(intent, ""));
                 }
@@ -186,25 +210,22 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
 
     }
 
-    public void addToCalendar() {
+    public void addToCalendar(String startDate, String endDate) {
         long calID = 3;
         long startMillis = 0;
         long endMillis = 0;
-        Calendar beginTime = Calendar.getInstance();
-        beginTime.set(2017, 5, 8, 7, 30);
-        startMillis = beginTime.getTimeInMillis();
-        Calendar endTime = Calendar.getInstance();
-        endTime.set(2017, 5, 8, 8, 45);
-        endMillis = endTime.getTimeInMillis();
+        startMillis = DateUtils.convertUTCtoMilliSeconds(startDate);
+        endMillis = DateUtils.convertUTCtoMilliSeconds(endDate);
+
 
         ContentResolver cr = getActivity().getContentResolver();
         ContentValues values = new ContentValues();
         values.put(CalendarContract.Events.DTSTART, startMillis);
         values.put(CalendarContract.Events.DTEND, endMillis);
-        values.put(CalendarContract.Events.TITLE, "Codepath Project due");
-        values.put(CalendarContract.Events.DESCRIPTION, "Fomono");
+        values.put(CalendarContract.Events.TITLE, movie.getTitle());
+        values.put(CalendarContract.Events.DESCRIPTION, movie.getOverview());
         values.put(CalendarContract.Events.CALENDAR_ID, calID);
-        values.put(CalendarContract.Events.EVENT_TIMEZONE, "America/Los_Angeles");
+        values.put(CalendarContract.Events.EVENT_TIMEZONE, "UTC");
         // TODO: Consider calling
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -222,8 +243,8 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
 
         Geocoder coder = new Geocoder(getContext());
         try {
-            ArrayList<Address> adresses = (ArrayList<Address>) coder.getFromLocationName(strAddress, 50);
-            for (Address add : adresses) {
+            ArrayList<android.location.Address> adresses = (ArrayList<android.location.Address>) coder.getFromLocationName(strAddress, 50);
+            for (android.location.Address add : adresses) {
                 if (add.getCountryCode().equals("US") || add.getCountryCode().equals("USA") ) {//Controls to ensure it is right address such as country etc.
                     double longitude = add.getLongitude();
                     double latitude = add.getLatitude();

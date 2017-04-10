@@ -1,4 +1,4 @@
-package com.fomono.fomono.interfaces;
+package com.fomono.fomono.models;
 
 import android.os.Parcelable;
 
@@ -9,4 +9,6 @@ import android.os.Parcelable;
 public interface ICategory extends Parcelable {
     String getName();
     String getId();
+    String getApiName();
+    String getParamName();
 }

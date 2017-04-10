@@ -11,7 +11,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 
-public class Logo implements Parcelable{
+public class Logo implements Parcelable {
 
     @SerializedName("crop_mask")
     @Expose
@@ -35,28 +35,17 @@ public class Logo implements Parcelable{
     @Expose
     public Boolean edgeColorSet;
 
-    public Logo(Parcel in) {
+    public Logo(){
+
+    }
+
+    protected Logo(Parcel in) {
+        cropMask = in.readParcelable(CropMask.class.getClassLoader());
+        original = in.readParcelable(Original.class.getClassLoader());
         id = in.readString();
         url = in.readString();
         aspectRatio = in.readString();
         edgeColor = in.readString();
-    }
-
-    public Logo() {
-
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
-        dest.writeString(url);
-        dest.writeString(aspectRatio);
-        dest.writeString(edgeColor);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 
     public static final Creator<Logo> CREATOR = new Creator<Logo>() {
@@ -127,6 +116,21 @@ public class Logo implements Parcelable{
         this.edgeColorSet = edgeColorSet;
     }
 
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(cropMask, flags);
+        dest.writeParcelable(original, flags);
+        dest.writeString(id);
+        dest.writeString(url);
+        dest.writeString(aspectRatio);
+        dest.writeString(edgeColor);
+    }
 }
 
 

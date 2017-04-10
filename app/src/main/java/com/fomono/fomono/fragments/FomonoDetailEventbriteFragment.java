@@ -12,12 +12,13 @@ import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -27,6 +28,7 @@ import com.fomono.fomono.models.events.events.Address;
 import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.events.events.Venue;
 import com.fomono.fomono.network.client.EventBriteClientRetrofit;
+import com.fomono.fomono.utils.DateUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -38,14 +40,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.R.attr.x;
 import static android.content.ContentValues.TAG;
 
 /**
@@ -54,11 +57,7 @@ import static android.content.ContentValues.TAG;
 
 public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragment {
     FragmentEventbriteDetailBinding fragmentEventbriteDetailBinding;
-    public TextView tvClockCalendar;
-    public ImageView ivFBShareIcon;
-    public ImageView ivEmailShareIcon;
-    public ImageView ivTwitterShareIcon;
-    public ImageView ivMessageShareIcon;
+
     private GoogleMap googleMap;
     MapView mMapView;
     EventBriteClientRetrofit eventBriteClientRetrofit;
@@ -70,8 +69,6 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         event = getArguments().getParcelable("event_obj");
-        getAddressFromAPI(event);
-
     }
 
     public static FomonoDetailEventbriteFragment newInstance(Event event) {
@@ -85,6 +82,8 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        getAddressFromAPI(event);
+
     }
 
     private void getAddressFromAPI(Event e) {
@@ -131,12 +130,21 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
 
         fragmentEventbriteDetailBinding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_eventbrite_detail, parent, false);
+
         View view = fragmentEventbriteDetailBinding.getRoot();
-        //ButterKnife.bind(this,view);
-        tvClockCalendar = (TextView) view.findViewById(R.id.tvClockCalendar);
-        ivFBShareIcon = (ImageView) view.findViewById(R.id.ivFBShareIcon);
-        ivTwitterShareIcon = (ImageView) view.findViewById(R.id.ivTwitterShareIcon);
-        ivEmailShareIcon = (ImageView) view.findViewById(R.id.ivEmailShareIcon);
+        ButterKnife.bind(this,view);
+
+        fragmentEventbriteDetailBinding.tvSiteLink.setClickable(true);
+        fragmentEventbriteDetailBinding.tvSiteLink.setMovementMethod(LinkMovementMethod.getInstance());
+        String text = "<a href=" + event.getUrl() +  ">" + "CLICK HERE" + "</a>";
+        fragmentEventbriteDetailBinding.tvSiteLink.setText(Html.fromHtml(text));
+
+
+        fragmentEventbriteDetailBinding.tvEventDate.setText(DateUtils.getFormattedDateForHeader(event.getStart().getUtc()));
+        event.getStart().setLocal(DateUtils.getFormattedDate(event.getStart().getUtc()));
+
+        setImageUrl(fragmentEventbriteDetailBinding.ivEventImage, event.getLogo().getUrl());
+
         mMapView = (MapView) view.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
 
@@ -182,16 +190,26 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
         });
 
 
-        tvClockCalendar.setOnClickListener(new View.OnClickListener() {
+        fragmentEventbriteDetailBinding.tvClockCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addToCalendar();
+                addToCalendar(event.getStart().getUtc(), event.getEnd().getUtc());
             }
         });
 
 
+        fragmentEventbriteDetailBinding.ivMessageShareIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+                sendIntent.setData(Uri.parse("sms:"));
+                sendIntent.putExtra(event.getUrl(), x);
+                startActivity(sendIntent);
 
-        ivTwitterShareIcon.setOnClickListener(new View.OnClickListener() {
+            }
+        });
+
+        fragmentEventbriteDetailBinding.ivTwitterShareIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -202,7 +220,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
                     Intent intent = new Intent(Intent.ACTION_SEND);
                     intent.setClassName("com.twitter.android", "com.twitter.android.composer.ComposerActivity");
                     intent.setType("text/plain");
-                    intent.putExtra(Intent.EXTRA_TEXT, "Your text");
+                    intent.putExtra(Intent.EXTRA_TEXT, event.getUrl());
                     startActivity(intent);
 
                 }
@@ -217,14 +235,14 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
             }
         });
 
-        ivEmailShareIcon.setOnClickListener(new View.OnClickListener() {
+        fragmentEventbriteDetailBinding.ivEmailShareIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("plain/text");
                 intent.putExtra(Intent.EXTRA_EMAIL, new String[] { "some@email.address" });
-                intent.putExtra(Intent.EXTRA_SUBJECT, "subject");
-                intent.putExtra(Intent.EXTRA_TEXT, "mail body");
+                intent.putExtra(Intent.EXTRA_SUBJECT, event.getName().getText());
+                intent.putExtra(Intent.EXTRA_TEXT, event.getUrl());
                 if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                     startActivity(Intent.createChooser(intent, ""));
                 }
@@ -240,25 +258,22 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
 
     }
 
-    public void addToCalendar() {
+    public void addToCalendar(String startDate, String endDate) {
         long calID = 3;
         long startMillis = 0;
         long endMillis = 0;
-        Calendar beginTime = Calendar.getInstance();
-        beginTime.set(2017, 5, 8, 7, 30);
-        startMillis = beginTime.getTimeInMillis();
-        Calendar endTime = Calendar.getInstance();
-        endTime.set(2017, 5, 8, 8, 45);
-        endMillis = endTime.getTimeInMillis();
+        startMillis = DateUtils.convertUTCtoMilliSeconds(startDate);
+        endMillis = DateUtils.convertUTCtoMilliSeconds(endDate);
+
 
         ContentResolver cr = getActivity().getContentResolver();
         ContentValues values = new ContentValues();
         values.put(CalendarContract.Events.DTSTART, startMillis);
         values.put(CalendarContract.Events.DTEND, endMillis);
-        values.put(CalendarContract.Events.TITLE, "Codepath Project due");
-        values.put(CalendarContract.Events.DESCRIPTION, "Fomono");
+        values.put(CalendarContract.Events.TITLE, event.getName().getText());
+        values.put(CalendarContract.Events.DESCRIPTION, event.getDescription().getText().toString());
         values.put(CalendarContract.Events.CALENDAR_ID, calID);
-        values.put(CalendarContract.Events.EVENT_TIMEZONE, "America/Los_Angeles");
+        values.put(CalendarContract.Events.EVENT_TIMEZONE, "UTC");
       // TODO: Consider calling
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling

@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by jsaluja on 4/8/2017.
  */
 
-public class CropMask implements Parcelable{
+public class CropMask implements Parcelable {
 
     @SerializedName("top_left")
     @Expose
@@ -21,6 +21,21 @@ public class CropMask implements Parcelable{
     @SerializedName("height")
     @Expose
     private Integer height;
+
+    protected CropMask(Parcel in) {
+    }
+
+    public static final Creator<CropMask> CREATOR = new Creator<CropMask>() {
+        @Override
+        public CropMask createFromParcel(Parcel in) {
+            return new CropMask(in);
+        }
+
+        @Override
+        public CropMask[] newArray(int size) {
+            return new CropMask[size];
+        }
+    };
 
     public TopLeft getTopLeft() {
         return topLeft;
@@ -53,6 +68,5 @@ public class CropMask implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
     }
 }

@@ -4,19 +4,28 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.fomono.fomono.FomonoApplication;
+import com.fomono.fomono.models.db.Filter;
 import com.fomono.fomono.models.eats.Business;
 import com.fomono.fomono.models.eats.YelpResponse;
 import com.fomono.fomono.network.client.YelpClientRetrofit;
 import com.fomono.fomono.supportclasses.InternetAlertDialogue;
+import com.fomono.fomono.utils.FilterUtil;
+import com.fomono.fomono.utils.NumberUtil;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -44,21 +53,46 @@ public class EatsFragment extends MainListFragment {
 
     public void populateEats() {
         smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
-        getYelpBusinesses(getActivity(), null);
+        try {
+            //get user filters for yelp
+            FilterUtil.getFilters(FomonoApplication.API_NAME_EATS, new FindCallback<Filter>() {
+                @Override
+                public void done(List<Filter> filters, ParseException e) {
+                    Filter.initializeFromList(filters);
+                    ParseUser currentUser = ParseUser.getCurrentUser();
+                    String location = currentUser.getString("location");
+                    int distance = currentUser.getInt("distance");
+                    //gotta convert distance because yelp uses meters, and maxes out at 40,000 meters.
+                    int distanceInMeters = Math.min(40000, NumberUtil.convertToMeters(distance));
+                    String categoriesString = FilterUtil.buildCategoriesString(filters);
+                    getYelpBusinesses(getActivity(), location, categoriesString, distanceInMeters);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         Handler handlerTimer = new Handler();
         handlerTimer.postDelayed(() -> {//Just to show the progress bar
             smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
         }, 500);
     }
-    public void getYelpBusinesses(Context context, String stringQuery){
+    public void getYelpBusinesses(Context context, String location, String categories, int distance){
         yelpClientRetrofit = YelpClientRetrofit.getNewInstance();
 
         Map<String, String> data = new HashMap<>();
-        //FIXME - Should be current location
-        if(stringQuery != null) {data.put("location", stringQuery);}
-        else  {data.put("location", "San Francisco");}
+        if(location != null) {
+            data.put("location", location);
+        } else {
+            data.put("location", "San Francisco");
+        }
+        if (!TextUtils.isEmpty(categories)) {
+            data.put("categories", categories);
+        }
+        if (distance > 0) {
+            data.put("radius", String.valueOf(distance));
+        }
 
-        //FIXME:TODO: Incorrect string query. Write a method to generate a string
         Call<YelpResponse> callVenue = yelpClientRetrofit.YelpRetrofitClientFactory().getYelpBusinesssesFromServer(data);
 
         callVenue.enqueue(new Callback<YelpResponse>() {

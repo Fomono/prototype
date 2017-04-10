@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by jsaluja on 4/8/2017.
  */
 
-public class TopLeft implements Parcelable {
+public class TopLeft implements Parcelable{
 
     @SerializedName("x")
     @Expose

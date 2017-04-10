@@ -12,7 +12,10 @@ import com.fomono.fomono.fragments.FomonoDetailMoviedbFragment;
 import com.fomono.fomono.fragments.FomonoDetailYelpFragment;
 import com.fomono.fomono.models.FomonoEvent;
 import com.fomono.fomono.models.eats.Business;
+import com.fomono.fomono.models.eats.Coordinates;
+import com.fomono.fomono.models.eats.Location;
 import com.fomono.fomono.models.events.events.Description;
+import com.fomono.fomono.models.events.events.End;
 import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.events.events.Logo;
 import com.fomono.fomono.models.events.events.Name;
@@ -30,7 +33,8 @@ public class FomonoDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_fomono_detail);
         Intent i = getIntent();
         FomonoEvent fEvent = i.getParcelableExtra("FOM_OBJ");
-       // FomonoEvent fEvent = generateFakeEventObject();
+        // FomonoEvent fEvent = generateFakeEventObject();
+        // FomonoEvent fEvent = generateFakeEatObject();
 
         if (savedInstanceState == null && fEvent instanceof Event) {
             Event e = (Event) fEvent;
@@ -62,7 +66,9 @@ public class FomonoDetailActivity extends AppCompatActivity {
         Event e = new Event();
 
         Start startDate = new Start();
-        startDate.setLocal("2017-05-20T14:00:00");
+        End endDate = new End();
+        startDate.setUtc("2017-05-20T12:00:00Z");
+        endDate.setUtc("2017-05-21T12:00:00Z");
         Name name = new Name();
         name.setText("Holi Montreux");
         Description d = new Description();
@@ -72,13 +78,37 @@ public class FomonoDetailActivity extends AppCompatActivity {
 
         e.setName(name);
         e.setStart(startDate);
+        e.setEnd(endDate);
         e.setDescription(d);
         e.setLogo(l);
         e.setVenueId("18800935");
+        e.setUrl("https://www.eventbrite.com/e/holi-montreux-tickets-32905167241?aff=ebapi");
         return e;
 
 
     }
+    private FomonoEvent generateFakeMovieObject() {
+        Movie m = new Movie();
 
+        m.setPosterPath("http://i.imgur.com/hgXLjzr.png");
+        m.setTitle("50 Shades of crazy");
+        m.setOverview("Some random description ...........................................");
+        m.setReleaseDate("2017-05-20T12:00:00Z");
+        return m;
+    }
+
+
+    private FomonoEvent generateFakeEatObject() {
+        Business b = new Business();
+        b.setName("Yummy Food Restaurant");
+        b.setImageUrl("http://i.imgur.com/hgXLjzr.png");
+        b.setUrl("https://www.yelp.com/oakland");
+        Location l = new Location();
+        Coordinates c = new Coordinates();
+        c.setLatitude(37.7980312);
+        c.setLongitude(-122.4100467);
+        b.setCoordinates(c);
+        return b;
+    }
 
 }

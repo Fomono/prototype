@@ -3,6 +3,7 @@ package com.fomono.fomono.fragments;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,13 +11,20 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.fomono.fomono.R;
+import com.fomono.fomono.FomonoApplication;
+import com.fomono.fomono.models.db.Filter;
 import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.events.events.EventBriteResponse;
 import com.fomono.fomono.network.client.EventBriteClientRetrofit;
 import com.fomono.fomono.supportclasses.InternetAlertDialogue;
+import com.fomono.fomono.utils.FilterUtil;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -49,20 +57,44 @@ public class EventFragment extends MainListFragment {
 
     public void populateEvents() {
         smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
-        getEventList(0,null);
+        try {
+            //get user filters for events
+            FilterUtil.getFilters(FomonoApplication.API_NAME_EVENTS, new FindCallback<Filter>() {
+                @Override
+                public void done(List<Filter> filters, ParseException e) {
+                    Filter.initializeFromList(filters);
+                    String categoriesString = FilterUtil.buildCategoriesString(filters);
+                    ParseUser currentUser = ParseUser.getCurrentUser();
+                    String location = currentUser.getString("location");
+                    int distance = currentUser.getInt("distance");
+                    getEventList(0, null, location, categoriesString, distance);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Handler handlerTimer = new Handler();
         handlerTimer.postDelayed(() -> {//Just to show the progress bar
             smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
         }, 500);
     }
 
-    public void getEventList(int page, String strQuery) {
+    public void getEventList(int page, String strQuery, String location, String categories, int distance) {
 
         eventBriteClientRetrofit = EventBriteClientRetrofit.getNewInstance();
         Map<String, String> data = new HashMap<>();
         data.put("token", getResources().getString(R.string.event_brite_user_key));
         if(strQuery != null) {
             data.put("q", strQuery);
+        }
+        if (!TextUtils.isEmpty(location)) {
+            data.put("location.address", location);
+        }
+        if (!TextUtils.isEmpty(categories)) {
+            data.put("categories", categories);
+        }
+        if (distance > 0) {
+            data.put("location.within", distance + "mi");
         }
         Call<EventBriteResponse> call = eventBriteClientRetrofit.EBRetrofitClientFactory().
                 getEventsFromServer(data);

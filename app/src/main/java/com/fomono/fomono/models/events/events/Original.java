@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by jsaluja on 4/8/2017.
  */
 
-public class Original implements Parcelable{
+public class Original implements Parcelable {
 
     @SerializedName("url")
     @Expose
@@ -24,16 +24,6 @@ public class Original implements Parcelable{
 
     protected Original(Parcel in) {
         url = in.readString();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(url);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 
     public static final Creator<Original> CREATOR = new Creator<Original>() {
@@ -72,4 +62,13 @@ public class Original implements Parcelable{
         this.height = height;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(url);
+    }
 }
