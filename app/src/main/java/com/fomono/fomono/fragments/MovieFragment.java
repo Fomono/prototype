@@ -59,7 +59,6 @@ public class MovieFragment extends MainListFragment {
 
     public void populateMovies() {
         smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
-     //   getRecentMovies();
         getMoviesNowPlaying(getActivity(), null);
         Handler handlerTimer = new Handler();
         handlerTimer.postDelayed(() -> {//Just to show the progress bar
