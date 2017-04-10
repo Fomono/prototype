@@ -23,6 +23,7 @@ import com.fomono.fomono.models.events.events.Logo;
 import com.fomono.fomono.models.events.events.Name;
 import com.fomono.fomono.models.events.events.Start;
 import com.fomono.fomono.models.movies.Movie;
+import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -118,8 +119,9 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             if (event.getLogo() != null) {
                 if (event.getLogo().getOriginal() != null) {
                     if (!TextUtils.isEmpty(event.getLogo().getOriginal().getUrl())) {
-                        Glide.with(mContext).load(event.getLogo().getOriginal().getUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).override(screenWidth, screenHeight).into(holder.eventMediaImage);
-                        // Picasso.with(mContext).load(event.getLogo().getOriginal().getUrl()).placeholder(R.drawable.ic_fomono).resize(screenWidth, 0).into(holder.eventMediaImage);
+                     //   Glide.with(mContext).load(event.getLogo().getOriginal().getUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).override(200, 350).into(holder.eventMediaImage);
+                     //   Glide.with(mContext).load(event.getLogo().getOriginal().getUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).override(screenWidth, screenHeight).into(holder.eventMediaImage);
+                         Picasso.with(mContext).load(event.getLogo().getOriginal().getUrl()).placeholder(R.drawable.ic_fomono).resize(screenWidth, 0).into(holder.eventMediaImage);
                         imageSet = 1;
                     }
                 }
@@ -186,8 +188,8 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             holder.eventDesc.setVisibility(View.GONE);
 
             if (!TextUtils.isEmpty(business.getImageUrl())) {
-                Glide.with(mContext).load(business.getImageUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).override(screenWidth, screenHeight / 2).into(holder.eventMediaImage);
-                // Picasso.with(mContext).load(business.getImageUrl()).placeholder(R.drawable.ic_fomono).resize(screenWidth, 0).into(holder.eventMediaImage);
+               // Glide.with(mContext).load(business.getImageUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).override(screenWidth, screenHeight / 2).into(holder.eventMediaImage);
+                 Picasso.with(mContext).load(business.getImageUrl()).placeholder(R.drawable.ic_fomono).resize(screenWidth, 0).into(holder.eventMediaImage);
             } else {
                 holder.eventMediaImage.setVisibility(View.GONE);
             }
@@ -239,8 +241,8 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             else {holder.eventDesc.setVisibility(View.GONE);}
 
             if(movie.getPosterPath() != null) {
-                Glide.with(mContext).load(movie.getPosterPath()).diskCacheStrategy(DiskCacheStrategy.ALL).override(screenWidth, screenHeight).into(holder.eventMediaImage);
-                // Picasso.with(mContext).load(movie.getPosterPath()).placeholder(R.drawable.ic_fomono).resize(screenWidth, 0).into(holder.eventMediaImage);
+              //  Glide.with(mContext).load(movie.getPosterPath()).diskCacheStrategy(DiskCacheStrategy.ALL).override(screenWidth, screenHeight).into(holder.eventMediaImage);
+                Picasso.with(mContext).load(movie.getPosterPath()).placeholder(R.drawable.ic_fomono).resize(screenWidth, 0).into(holder.eventMediaImage);
             } else {
                 holder.eventMediaImage.setVisibility(View.GONE);
             }
