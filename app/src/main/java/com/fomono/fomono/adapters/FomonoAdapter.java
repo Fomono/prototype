@@ -176,6 +176,14 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (business != null) {
             if (business.getName() != null) {
                 holder.eventName.setText(business.getName());
+                holder.eventName.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(mContext, FomonoDetailActivity.class);
+                        i.putExtra("FOM_OBJ", business);
+                        mContext.startActivity(i);
+                    }
+                });
             } else {
                 holder.eventName.setVisibility(View.GONE);
             }
@@ -229,8 +237,17 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void populateWithMovies(ViewHolderEventsItem holder, int position) {
         Movie movie = (Movie)mFomonoEvents.get(position);
         if(movie != null) {
-            if(movie.getOriginalTitle() != null) { holder.eventName.setText(movie.getOriginalTitle());}
-            else {holder.eventName.setVisibility(View.GONE);}
+            if(movie.getOriginalTitle() != null) {
+                holder.eventName.setText(movie.getOriginalTitle());
+                holder.eventName.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(mContext, FomonoDetailActivity.class);
+                        i.putExtra("FOM_OBJ", movie);
+                        mContext.startActivity(i);
+                    }
+                });
+            } else {holder.eventName.setVisibility(View.GONE);}
 
             if(movie.getOverview() != null) { holder.eventDesc.setText(movie.getOverview());}
             else {holder.eventDesc.setVisibility(View.GONE);}

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.fomono.fomono.R;
 import com.fomono.fomono.models.eats.Business;
 import com.fomono.fomono.models.movies.Movie;
 import com.fomono.fomono.models.movies.MovieResponse;
@@ -58,7 +59,6 @@ public class MovieFragment extends MainListFragment {
 
     public void populateMovies() {
         smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
-     //   getRecentMovies();
         getMoviesNowPlaying(getActivity(), null);
         Handler handlerTimer = new Handler();
         handlerTimer.postDelayed(() -> {//Just to show the progress bar
@@ -72,11 +72,10 @@ public class MovieFragment extends MainListFragment {
         //TODO: Incorrect string query. Write a method to generate a string
         //Call<YelpTokenClass> callVenue = YelpRetrofitClientFactory().getYelpTokenFromServer(stringQuery);
 
-        Call<MovieResponse> callVenue = movieDBClientRetrofit.MovieDBRetrofitClientFactory().getNowPlayingMoviesFromServer(API_KEY);
+        Call<MovieResponse> callVenue = movieDBClientRetrofit.MovieDBRetrofitClientFactory().getNowPlayingMoviesFromServer(getResources().getString(R.string.movieDB_api_key));
         callVenue.enqueue(new Callback<MovieResponse>() {
             @Override
             public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                MovieResponse movieResponse = response.body();
                 ArrayList<Movie> movies = response.body().getResults();
                 if (movies == null || movies.isEmpty()) {
                     Log.d(TAG, "No movies fetched!!");
@@ -93,28 +92,4 @@ public class MovieFragment extends MainListFragment {
             }
         });
     }
-/*
-    public void getRecentMovies() {
-        AsyncHttpClient client = new AsyncHttpClient();
-        RequestParams params = new RequestParams();
-        String Url = "https://api.themoviedb.org/3/movie/now_playing?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
-
-        client.get(Url, params, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                MovieResponse movieResponse;
-                Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
-                Log.d(TAG, "response is " + response);
-                movieResponse = gson.fromJson(response.toString(), MovieResponse.class);
-                fomonoEvents.addAll(movieResponse.getResults());
-                fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("onFailure", "There is an error, status_code " + statusCode);
-            }
-        });
-    }
-*/
 }

@@ -5,7 +5,8 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorBlack">#000000</color>
-    <color name="colorFomono">#e97e54</color>
+    <color name="colorFomono">#e7665d</color>
+    <color name="colorFomonoDavid">#e97e54</color>
 
     <color name="gplus_color_1">#3e802f</color>
     <color name="gplus_color_2">#f4b400</color>

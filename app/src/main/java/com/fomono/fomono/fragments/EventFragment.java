@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.fomono.fomono.R;
 import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.models.db.Filter;
 import com.fomono.fomono.models.events.events.Event;
@@ -30,13 +31,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.fomono.fomono.network.client.YelpClientRetrofit.USER_KEY;
+
 /**
  * Created by Saranu on 4/6/17.
  */
 
 public class EventFragment extends MainListFragment {
   //  private EventBriteClient client;
-    public static final String USER_KEY = "IMWD66EDBK2PQIUKRK4K";
     private final static String TAG = "Event fragment";
     private EventBriteClientRetrofit eventBriteClientRetrofit;
 
@@ -81,7 +83,7 @@ public class EventFragment extends MainListFragment {
 
         eventBriteClientRetrofit = EventBriteClientRetrofit.getNewInstance();
         Map<String, String> data = new HashMap<>();
-        data.put("token", USER_KEY);
+        data.put("token", getResources().getString(R.string.event_brite_user_key));
         if(strQuery != null) {
             data.put("q", strQuery);
         }
