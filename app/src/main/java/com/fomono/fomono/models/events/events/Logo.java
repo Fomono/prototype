@@ -4,11 +4,14 @@ package com.fomono.fomono.models.events.events;
  * Created by jsaluja on 4/8/2017.
  */
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 
-public class Logo {
+public class Logo implements Parcelable{
 
     @SerializedName("crop_mask")
     @Expose
@@ -31,6 +34,42 @@ public class Logo {
     @SerializedName("edge_color_set")
     @Expose
     public Boolean edgeColorSet;
+
+    public Logo(Parcel in) {
+        id = in.readString();
+        url = in.readString();
+        aspectRatio = in.readString();
+        edgeColor = in.readString();
+    }
+
+    public Logo() {
+
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(url);
+        dest.writeString(aspectRatio);
+        dest.writeString(edgeColor);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Logo> CREATOR = new Creator<Logo>() {
+        @Override
+        public Logo createFromParcel(Parcel in) {
+            return new Logo(in);
+        }
+
+        @Override
+        public Logo[] newArray(int size) {
+            return new Logo[size];
+        }
+    };
 
     public CropMask getCropMask() {
         return cropMask;

@@ -27,4 +27,7 @@
     <string name="filter_title_events">Events</string>
     <string name="filter_title_food">Food</string>
     <string name="movie_release_date_string">Release date:</string>
+
+    <string name="event_brite_user_key">IMWD66EDBK2PQIUKRK4K</string>
+    <string name="movieDB_api_key">d0af6e07311c078f8b5c7419e1e0e3c3</string>
 </resources>

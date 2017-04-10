@@ -29,8 +29,8 @@ public class FomonoDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         setContentView(R.layout.activity_fomono_detail);
         Intent i = getIntent();
-        //FomonoEvent fEvent = i.getParcelableExtra("FOM_OBJ");
-        FomonoEvent fEvent = generateFakeEventObject();
+        FomonoEvent fEvent = i.getParcelableExtra("FOM_OBJ");
+       // FomonoEvent fEvent = generateFakeEventObject();
 
         if (savedInstanceState == null && fEvent instanceof Event) {
             Event e = (Event) fEvent;

@@ -1,5 +1,8 @@
 package com.fomono.fomono.models.events.events;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -7,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by jsaluja on 4/8/2017.
  */
 
-public class CropMask {
+public class CropMask implements Parcelable{
 
     @SerializedName("top_left")
     @Expose
@@ -43,4 +46,13 @@ public class CropMask {
         this.height = height;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+    }
 }

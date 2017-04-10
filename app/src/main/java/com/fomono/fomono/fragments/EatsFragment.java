@@ -28,9 +28,7 @@ import retrofit2.Response;
  */
 
 public class EatsFragment extends MainListFragment {
-    public static final String USER_KEY = "IMWD66EDBK2PQIUKRK4K";
     private final static String TAG = "Eats fragment";
-    public String YelpToken = "EHbNYMHOKBBlufnp61Eb2mO4gJ-Bmt4C8NWcGKyYDdVW5wTcEX5k_yUDyaTOTw7NvJhn-ws0OCcsEEXSQJixT4Wvf4JuYiF9qlpycTmsrBVk0URaftrXzKAKplvkWHYx";
     private YelpClientRetrofit yelpClientRetrofit;
 
     @Nullable

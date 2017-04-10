@@ -1,5 +1,8 @@
 package com.fomono.fomono.models.events.events;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -7,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by jsaluja on 4/8/2017.
  */
 
-public class Original {
+public class Original implements Parcelable{
 
     @SerializedName("url")
     @Expose
@@ -18,6 +21,32 @@ public class Original {
     @SerializedName("height")
     @Expose
     private Integer height;
+
+    protected Original(Parcel in) {
+        url = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(url);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Original> CREATOR = new Creator<Original>() {
+        @Override
+        public Original createFromParcel(Parcel in) {
+            return new Original(in);
+        }
+
+        @Override
+        public Original[] newArray(int size) {
+            return new Original[size];
+        }
+    };
 
     public String getUrl() {
         return url;

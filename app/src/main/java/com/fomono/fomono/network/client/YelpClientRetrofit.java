@@ -37,6 +37,7 @@ public class YelpClientRetrofit {
     public static final String YelpToken = "Bearer " + "EHbNYMHOKBBlufnp61Eb2mO4gJ-Bmt4C8NWcGKyYDdVW5wTcEX5k_yUDyaTOTw7NvJhn-ws0OCcsEEXSQJixT4Wvf4JuYiF9qlpycTmsrBVk0URaftrXzKAKplvkWHYx";
 
 
+
     YelpClientRetrofit.YelpService Yservice;
     final static String TAG = "YelpClient";
     Context mcontext;
