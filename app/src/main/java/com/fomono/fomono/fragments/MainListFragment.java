@@ -46,6 +46,7 @@ public class MainListFragment extends Fragment {
     public ProgressBar progressBar;
     public SmoothProgressBar smoothProgressBar;
     public static int screenWidth, screenHeight;
+    public static boolean initialEventsLoaded = false;
 
     public void setScreenWidthFromFragment(int width) {screenWidth = width;}
     public void setScreenHeightFromFragment(int height) {screenHeight = height;}

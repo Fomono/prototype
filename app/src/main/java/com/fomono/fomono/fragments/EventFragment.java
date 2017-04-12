@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.fomono.fomono.models.db.Filter;
 import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.events.events.EventBriteResponse;
 import com.fomono.fomono.network.client.EventBriteClientRetrofit;
+import com.fomono.fomono.supportclasses.EndlessRecyclerViewScrollListener;
 import com.fomono.fomono.supportclasses.InternetAlertDialogue;
 import com.fomono.fomono.utils.FilterUtil;
 import com.parse.FindCallback;
@@ -41,34 +43,40 @@ public class EventFragment extends MainListFragment {
   //  private EventBriteClient client;
     private final static String TAG = "Event fragment";
     private EventBriteClientRetrofit eventBriteClientRetrofit;
+    int eventPage = 0;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
-     //   client = new EventBriteClient(getActivity());
         InternetAlertDialogue internetAlertDialogue = new InternetAlertDialogue(mContext);
-        if(internetAlertDialogue.checkForInternet()) {
-            populateEvents();
+        if(internetAlertDialogue.checkForInternet() && !initialEventsLoaded) {
+            populateEvents(eventPage++);
+            Log.d(TAG, "data loaded = "+initialEventsLoaded);
         }
 
+        rvList.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                if(internetAlertDialogue.checkForInternet()) {
+                    populateEvents(eventPage++);
+                }
+            }
+        });
         return view;
     }
 
-    public void populateEvents() {
+    public void populateEvents(int page) {
         smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
         try {
             //get user filters for events
-            FilterUtil.getFilters(FomonoApplication.API_NAME_EVENTS, new FindCallback<Filter>() {
-                @Override
-                public void done(List<Filter> filters, ParseException e) {
-                    Filter.initializeFromList(filters);
-                    String categoriesString = FilterUtil.buildCategoriesString(filters);
-                    ParseUser currentUser = ParseUser.getCurrentUser();
-                    String location = currentUser.getString("location");
-                    int distance = currentUser.getInt("distance");
-                    getEventList(0, null, location, categoriesString, distance);
-                }
+            FilterUtil.getFilters(FomonoApplication.API_NAME_EVENTS, (filters, e) -> {
+                Filter.initializeFromList(filters);
+                String categoriesString = FilterUtil.buildCategoriesString(filters);
+                ParseUser currentUser = ParseUser.getCurrentUser();
+                String location = currentUser.getString("location");
+                int distance = currentUser.getInt("distance");
+                getEventList(page, null, location, categoriesString, distance);
             });
         } catch (Exception e) {
             e.printStackTrace();
@@ -81,7 +89,9 @@ public class EventFragment extends MainListFragment {
 
     public void getEventList(int page, String strQuery, String location, String categories, int distance) {
 
+        Log.d(TAG, "data loaded inside getEvent = "+initialEventsLoaded);
         eventBriteClientRetrofit = EventBriteClientRetrofit.getNewInstance();
+        initialEventsLoaded = true;
         Map<String, String> data = new HashMap<>();
         data.put("token", getResources().getString(R.string.event_brite_user_key));
         if(strQuery != null) {
@@ -96,6 +106,7 @@ public class EventFragment extends MainListFragment {
         if (distance > 0) {
             data.put("location.within", distance + "mi");
         }
+        data.put("page", String.valueOf(page));
         Call<EventBriteResponse> call = eventBriteClientRetrofit.EBRetrofitClientFactory().
                 getEventsFromServer(data);
 
