@@ -4,5 +4,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="MainPageHeaderFontSize">20sp</dimen>
-    <dimen name="MainMediaImagePadding">25dp</dimen>
+    <dimen name="MainMediaImagePadding">15dp</dimen>
+    <dimen name="main_list_description_bottom_padding">5dp</dimen>
 </resources>

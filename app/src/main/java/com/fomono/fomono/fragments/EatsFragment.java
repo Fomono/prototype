@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.fomono.fomono.models.db.Filter;
 import com.fomono.fomono.models.eats.Business;
 import com.fomono.fomono.models.eats.YelpResponse;
 import com.fomono.fomono.network.client.YelpClientRetrofit;
+import com.fomono.fomono.supportclasses.EndlessRecyclerViewScrollListener;
 import com.fomono.fomono.supportclasses.InternetAlertDialogue;
 import com.fomono.fomono.utils.FilterUtil;
 import com.fomono.fomono.utils.NumberUtil;
@@ -39,37 +41,47 @@ import retrofit2.Response;
 public class EatsFragment extends MainListFragment {
     private final static String TAG = "Eats fragment";
     private YelpClientRetrofit yelpClientRetrofit;
+    private boolean initialEatsLoaded = false;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         InternetAlertDialogue internetAlertDialogue = new InternetAlertDialogue(mContext);
-        if(internetAlertDialogue.checkForInternet()) {
-            populateEats();
+        if(internetAlertDialogue.checkForInternet() && !initialEatsLoaded) {
+            int offset = fomonoEvents.size();
+            populateEats(offset);
         }
+
+        rvList.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                if(internetAlertDialogue.checkForInternet()) {
+                    int offset = fomonoEvents.size();
+                    populateEats(offset);
+                }
+            }
+        });
+
         return view;
     }
 
-    public void populateEats() {
+    public void populateEats(int offset) {
         smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
         try {
             //get user filters for yelp
-            FilterUtil.getFilters(FomonoApplication.API_NAME_EATS, new FindCallback<Filter>() {
-                @Override
-                public void done(List<Filter> filters, ParseException e) {
-                    String categoriesString = "";
-                    if (filters != null) {
-                        Filter.initializeFromList(filters);
-                        categoriesString = FilterUtil.buildCategoriesString(filters);
-                    }
-                    ParseUser currentUser = ParseUser.getCurrentUser();
-                    String location = currentUser.getString("location");
-                    int distance = currentUser.getInt("distance");
-                    //gotta convert distance because yelp uses meters, and maxes out at 40,000 meters.
-                    int distanceInMeters = Math.min(40000, NumberUtil.convertToMeters(distance));
-                    getYelpBusinesses(getActivity(), location, categoriesString, distanceInMeters);
+            FilterUtil.getFilters(FomonoApplication.API_NAME_EATS, (filters, e) -> {
+                String categoriesString = "";
+                if (filters != null) {
+                    Filter.initializeFromList(filters);
+                    categoriesString = FilterUtil.buildCategoriesString(filters);
                 }
+                ParseUser currentUser = ParseUser.getCurrentUser();
+                String location = currentUser.getString("location");
+                int distance = currentUser.getInt("distance");
+                //gotta convert distance because yelp uses meters, and maxes out at 40,000 meters.
+                int distanceInMeters = Math.min(40000, NumberUtil.convertToMeters(distance));
+                getYelpBusinesses(getActivity(), location, categoriesString, distanceInMeters, offset);
             });
         } catch (Exception e) {
             e.printStackTrace();
@@ -80,9 +92,10 @@ public class EatsFragment extends MainListFragment {
             smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
         }, 500);
     }
-    public void getYelpBusinesses(Context context, String location, String categories, int distance){
-        yelpClientRetrofit = YelpClientRetrofit.getNewInstance();
 
+    public void getYelpBusinesses(Context context, String location, String categories, int distance, int offset){
+        yelpClientRetrofit = YelpClientRetrofit.getNewInstance();
+        initialEatsLoaded = true;
         Map<String, String> data = new HashMap<>();
         if(location != null) {
             data.put("location", location);
@@ -95,10 +108,15 @@ public class EatsFragment extends MainListFragment {
         if (distance > 0) {
             data.put("radius", String.valueOf(distance));
         }
+        if(offset > 0) {
+            data.put("offset", String.valueOf(offset));
+        }
 
-        Call<YelpResponse> callVenue = yelpClientRetrofit.YelpRetrofitClientFactory().getYelpBusinesssesFromServer(data);
+        Call<YelpResponse> callEats = yelpClientRetrofit.YelpRetrofitClientFactory().getYelpBusinesssesFromServer(data);
 
-        callVenue.enqueue(new Callback<YelpResponse>() {
+        Log.d(TAG, "Eats URL String is " + callEats.request().url());
+
+        callEats.enqueue(new Callback<YelpResponse>() {
             @Override
             public void onResponse(Call<YelpResponse> call, Response<YelpResponse> response) {
 

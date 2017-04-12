@@ -13,6 +13,9 @@ import android.view.MenuItem;
 import com.astuetz.PagerSlidingTabStrip;
 import com.fomono.fomono.R;
 import com.fomono.fomono.adapters.FomonoMainPagerAdapter;
+import com.fomono.fomono.fragments.EatsFragment;
+import com.fomono.fomono.fragments.EventFragment;
+import com.fomono.fomono.fragments.MovieFragment;
 
 
 public class FomonoActivity extends AppCompatActivity {
@@ -40,6 +43,8 @@ public class FomonoActivity extends AppCompatActivity {
 
         ViewPager fomonoPager = (ViewPager)findViewById(R.id.fomonoViewpagerId);
         fomonoPager.setAdapter(fomonoMainPagerAdapter);
+        //Tells the view pager to not destroy the fragment more than one tab away
+        fomonoPager.setOffscreenPageLimit(getResources().getInteger(R.integer.NUM_MAINLIST_FRAGMENTS) - 1);
         PagerSlidingTabStrip fomonoTabStrip = (PagerSlidingTabStrip)findViewById(R.id.fomonoTabsId);
         fomonoTabStrip.setViewPager(fomonoPager);
 

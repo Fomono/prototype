@@ -7,11 +7,10 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
 
     <!-- ${packageName} is substituted for the package name declared above. -->
     <permission
@@ -28,8 +27,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.MainActivity"
-                  android:noHistory="true">
+        <activity
+            android:name=".activities.MainActivity"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -63,24 +63,24 @@
         <meta-data
             android:name="com.parse.push.gcm_sender_id"
             android:value="@string/gcm_sender_id" />
-        <uses-library android:required="true" android:name="com.google.android.maps" />
 
-        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+        <uses-library
+            android:name="com.google.android.maps"
+            android:required="true" />
 
-        <meta-data android:name="com.google.android.maps.v2.API_KEY"
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_api_key" />
 
         <activity
             android:name=".activities.FomonoActivity"
-            android:label="@string/title_activity_fomono"
-            />
-
-        <activity
-            android:name=".activities.FomonoDetailActivity"
-            />
-        <activity
-            android:name=".activities.FomonoFilterActivity"
-            />
+            android:label="@string/title_activity_fomono" />
+        <activity android:name=".activities.FomonoDetailActivity" />
+        <activity android:name=".activities.FomonoFilterActivity" />
+        <activity android:name=".activities.FomonoTrailerActivity"></activity>
     </application>
 
 </manifest>
