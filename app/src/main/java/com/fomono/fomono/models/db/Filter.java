@@ -44,6 +44,9 @@ public class Filter extends ParseObject implements Parcelable {
     }
 
     public static void initializeFromList(List<Filter> filters) {
+        if (filters == null) {
+            return;
+        }
         for (Filter f : filters) {
             f.initialize();
         }

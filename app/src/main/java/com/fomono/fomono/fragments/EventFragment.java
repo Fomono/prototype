@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.fomono.fomono.R;
 import com.fomono.fomono.FomonoApplication;
+import com.fomono.fomono.R;
 import com.fomono.fomono.models.db.Filter;
 import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.events.events.EventBriteResponse;
@@ -32,8 +32,6 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.fomono.fomono.network.client.YelpClientRetrofit.USER_KEY;
 
 /**
  * Created by Saranu on 4/6/17.
@@ -70,13 +68,19 @@ public class EventFragment extends MainListFragment {
         smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
         try {
             //get user filters for events
-            FilterUtil.getFilters(FomonoApplication.API_NAME_EVENTS, (filters, e) -> {
-                Filter.initializeFromList(filters);
-                String categoriesString = FilterUtil.buildCategoriesString(filters);
-                ParseUser currentUser = ParseUser.getCurrentUser();
-                String location = currentUser.getString("location");
-                int distance = currentUser.getInt("distance");
-                getEventList(page, null, location, categoriesString, distance);
+            FilterUtil.getFilters(FomonoApplication.API_NAME_EVENTS, new FindCallback<Filter>() {
+                @Override
+                public void done(List<Filter> filters, ParseException e) {
+                    String categoriesString = "";
+                    if (filters != null) {
+                        Filter.initializeFromList(filters);
+                        categoriesString = FilterUtil.buildCategoriesString(filters);
+                    }
+                    ParseUser currentUser = ParseUser.getCurrentUser();
+                    String location = currentUser.getString("location");
+                    int distance = currentUser.getInt("distance");
+                    getEventList(page, null, location, categoriesString, distance);
+                }
             });
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,18 +1,19 @@
 # Project - Fomono
 
-Fomono is an android app that helps users to never miss an event. It pulls data from several API's including Meetup or Eventbrite, Fandango, and possibly more to aggregate event data and send user notifications based on new events and/or events happening nearby. Users can choose categories of events/movies and subcategories to cater to their interests. Users can also manually search for events for any location and see what's going down!
+Fomono is an android app that helps users to never miss the things they love. It pulls data from several API's including Eventbrite, Yelp, Fandango, and possibly more to aggregate event data and send user notifications based on new events and/or events happening nearby. Users can choose categories of events/movies and subcategories to cater to their interests. Users can also manually search for events for any location and see what's going down!
 
-Time spent: XXX hours spent in total
+Time spent: 60 hours spent in total
 
 ## User Stories
 
 The following **required** functionality is completed:
 
-* [ ] User can view events on their home page, including picture/title/date/distance/desc snippet of event
-* [ ] User can see details of each event in a fragment. Details include title, pic, videos, data/time, price, location, description
+* [X] User can view events on their home page, including picture/title/date/desc snippet of event
+* [X] User can see details of each event in a fragment. Details include title, pic, data/time, price, location, description
 * [ ] User can sort events on the home page by date, price, distance
-* [ ] User can configure filter criteria on settings page. filters will be broad category(tech, music, sports, etc). In a specific category, user can search for the event
-* [ ] User should be able to set location
+* [X] User can configure filter criteria on settings page. filters will be broad category (tech, music, sports, etc)
+* [X] User can scroll through events, restaurants, and movies using view group fragment implementation on home page
+* [X] User should be able to set location
 * [ ] User should be able to turn on/off notifications
 * [ ] User can scroll endlessly on home page for more events
 
@@ -23,12 +24,12 @@ The following **optional** features are implemented:
 * [ ] User can sign up using Facebook/Google/email
 * [ ] User can log in using the above
 * [ ] User can search for specific events by query string, and filter them on home page
-* [ ] User can scroll through event categories using view group fragment implementation on home page
-* [ ] On event details page, user can add events to calendar
-* [ ] On event details page, user can see a map of event location
+* [X] On event details page, user can add events to calendar
+* [X] On event details page, user can see a map of event location
 * [ ] Clicking on map could bring up directions to location on google maps
-* [ ] On event details page, user can click on a link to the original event page (on facebook, meetup, etc.)
-* [ ] On event details page, user can share event to Facebook/Twitter/email/text
+* [ ] On event details page, user can click on a link to the original event page (on eventbrite, or yelp)
+* [ ] On movie details page, user can click to see trailer video
+* [ ] On event details page, user can share event to Twitter/email/text
 * [ ] On home page, user can save events to favorites list
 
 The following **bonus** features are implemented:
@@ -43,7 +44,11 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='gifs/test.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='http://i.imgur.com/vklmmJQ.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
+<img src='http://i.imgur.com/qQpgA6L.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
+<img src='http://i.imgur.com/gTk5kaL.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 

@@ -42,7 +42,6 @@ public class EatsFragment extends MainListFragment {
     private final static String TAG = "Eats fragment";
     private YelpClientRetrofit yelpClientRetrofit;
     private boolean initialEatsLoaded = false;
-    int offset = 20;//
 
     @Nullable
     @Override
@@ -72,13 +71,16 @@ public class EatsFragment extends MainListFragment {
         try {
             //get user filters for yelp
             FilterUtil.getFilters(FomonoApplication.API_NAME_EATS, (filters, e) -> {
-                Filter.initializeFromList(filters);
+                String categoriesString = "";
+                if (filters != null) {
+                    Filter.initializeFromList(filters);
+                    categoriesString = FilterUtil.buildCategoriesString(filters);
+                }
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 String location = currentUser.getString("location");
                 int distance = currentUser.getInt("distance");
                 //gotta convert distance because yelp uses meters, and maxes out at 40,000 meters.
                 int distanceInMeters = Math.min(40000, NumberUtil.convertToMeters(distance));
-                String categoriesString = FilterUtil.buildCategoriesString(filters);
                 getYelpBusinesses(getActivity(), location, categoriesString, distanceInMeters, offset);
             });
         } catch (Exception e) {
