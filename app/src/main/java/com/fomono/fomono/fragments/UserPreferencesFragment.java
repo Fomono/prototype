@@ -20,7 +20,13 @@ import android.widget.TextView;
 
 import com.fomono.fomono.R;
 import com.fomono.fomono.databinding.FragmentUserPreferencesBinding;
+import com.fomono.fomono.models.db.Filter;
+import com.fomono.fomono.utils.FilterUtil;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseUser;
+
+import java.util.List;
 
 /**
  * Created by David on 4/7/2017.
@@ -141,8 +147,20 @@ public class UserPreferencesFragment extends Fragment {
         });
 
         //set number of categories selected
-        int numCategories = 0;  //TODO: get num categories from user
-        tvFiltersSelected.setText(getString(R.string.pref_filters_selected, numCategories));
+        try {
+            FilterUtil.getAllFilters(true, new FindCallback<Filter>() {
+                @Override
+                public void done(List<Filter> objects, ParseException e) {
+                    int numCategories = 0;
+                    if (objects != null) {
+                        numCategories = objects.size();
+                    }
+                    tvFiltersSelected.setText(getString(R.string.pref_filters_selected, numCategories));
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private int getDistanceIndex(int distance) {

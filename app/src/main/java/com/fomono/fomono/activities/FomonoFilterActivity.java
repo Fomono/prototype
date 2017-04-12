@@ -1,5 +1,6 @@
 package com.fomono.fomono.activities;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,13 +19,17 @@ import com.fomono.fomono.utils.FilterUtil;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FomonoFilterActivity extends AppCompatActivity implements FomonoFilterFragment.FilterFragmentListener, UserPreferencesFragment.UserPreferencesListener {
 
+    final String[] FILTER_PAGES = {FomonoApplication.API_NAME_EVENTS, FomonoApplication.API_NAME_EATS};
+
     ActivityFomonoFilterBinding binding;
     UserPreferencesFragment userPrefsFragment;
     FomonoFilterFragment filtersFragment;
+    int currentFilterPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +38,15 @@ public class FomonoFilterActivity extends AppCompatActivity implements FomonoFil
         Toolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.title_activity_fomono_filter));
+        //turn on back button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (savedInstanceState == null) {
             userPrefsFragment = UserPreferencesFragment.newInstance();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.flContent, userPrefsFragment)
                     .commit();
+            currentFilterPage = -1;
         }
     }
 
@@ -53,6 +61,12 @@ public class FomonoFilterActivity extends AppCompatActivity implements FomonoFil
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        switch (id) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -60,30 +74,34 @@ public class FomonoFilterActivity extends AppCompatActivity implements FomonoFil
     public void onComplete(int resultCode) {
         if (resultCode == UserPreferencesFragment.CODE_FILTERS) {
             //show event filters fragment
-            showFilterFragment(getString(R.string.filter_title_events), FomonoApplication.API_NAME_EVENTS, false);
+            showFilterFragment(FomonoApplication.API_NAME_EVENTS);
         }
     }
 
     /**
      * Shows correct filters fragment based on api and title.
      * Has to be a callback because we have to first get user selected filters from db.
-     * @param title
      * @param apiName
-     * @param lastPage
      */
-    private void showFilterFragment(String title, String apiName, boolean lastPage) {
+    private void showFilterFragment(String apiName) {
+        final String title = getApiTitle(apiName);
+        final boolean lastPage = isLastPage(apiName);
         try {
             FilterUtil.getFilters(apiName, new FindCallback<Filter>() {
                 @Override
                 public void done(List<Filter> objects, ParseException e) {
-                    Filter.initializeFromList(objects);
+                    if (objects != null) {
+                        Filter.initializeFromList(objects);
+                    } else {
+                        objects = new ArrayList<Filter>();
+                    }
                     //get list of categories
                     List<ICategory> categories = FilterUtil.getCategories(apiName, FomonoFilterActivity.this);
                     filtersFragment = FomonoFilterFragment.newInstance(title, apiName, categories, lastPage, objects);
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.flContent, filtersFragment)
                             .commit();
-
+                    currentFilterPage = getFilterPage(apiName);
                 }
             });
         } catch (Exception e) {
@@ -91,22 +109,60 @@ public class FomonoFilterActivity extends AppCompatActivity implements FomonoFil
         }
     }
 
+    private int getFilterPage(String apiName) {
+        for (int i = 0; i < FILTER_PAGES.length; i++) {
+            String api = FILTER_PAGES[i];
+            if (apiName.equals(api)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private String getApiTitle(String apiName) {
+        String title = "";
+        switch (apiName) {
+            case FomonoApplication.API_NAME_EVENTS:
+                title = getString(R.string.filter_title_events);
+                break;
+            case FomonoApplication.API_NAME_EATS:
+                title = getString(R.string.filter_title_food);
+                break;
+            case FomonoApplication.API_NAME_MOVIES:
+            default:
+                break;
+        }
+        return title;
+    }
+
+    private boolean isLastPage(String apiName) {
+        return getFilterPage(apiName) == FILTER_PAGES.length - 1;
+    }
+
     @Override
     public void onSubmit(int resultCode) {
         switch (resultCode) {
             case FomonoFilterFragment.CODE_DONE:
-                //intentional fall through
+                Intent i = new Intent(this, FomonoActivity.class);
+                startActivity(i);
+                break;
             case FomonoFilterFragment.CODE_CANCEL:
-                if (userPrefsFragment == null) {
-                    userPrefsFragment = UserPreferencesFragment.newInstance();
+                if (currentFilterPage > 0) {
+                    //show previous filter page
+                    showFilterFragment(FILTER_PAGES[currentFilterPage - 1]);
+                } else {
+                    if (userPrefsFragment == null) {
+                        userPrefsFragment = UserPreferencesFragment.newInstance();
+                    }
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.flContent, userPrefsFragment)
+                            .commit();
+                    currentFilterPage = -1;
                 }
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.flContent, userPrefsFragment)
-                        .commit();
                 break;
             case FomonoFilterFragment.CODE_NEXT:
                 //show food filters fragment
-                showFilterFragment(getString(R.string.filter_title_food), FomonoApplication.API_NAME_EATS, true);
+                showFilterFragment(FomonoApplication.API_NAME_EATS);
                 break;
         }
     }

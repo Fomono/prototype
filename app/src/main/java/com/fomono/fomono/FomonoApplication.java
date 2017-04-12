@@ -34,9 +34,6 @@ public class FomonoApplication extends Application {
         // Register our Parse objects
         ParseObject.registerSubclass(Filter.class);
 
-        // enable local db store
-        Parse.enableLocalDatastore(getApplicationContext());
-
         // set applicationId, and server server based on the values in the Heroku settings.
         // clientKey is not needed unless explicitly configured
         // any network interceptors must be added with the Configuration Builder given this syntax
@@ -45,6 +42,7 @@ public class FomonoApplication extends Application {
                 .clientKey(null)  // set explicitly unless clientKey is explicitly configured on Parse server
                 .addNetworkInterceptor(new ParseLogInterceptor())
                 .server("https://fomono.herokuapp.com/parse/")
+                .enableLocalDataStore()
                 .build());
 
         //subscribe to channel for push notifications
