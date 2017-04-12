@@ -133,7 +133,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
         //Glide.with(view.getContext()).load(imageUrl).placeholder(R.drawable.botaimage).
           //      error(R.drawable.botaimage).into(view);
         Picasso.with(view.getContext()).load(imageUrl).transform(new RoundedTransformation(6,3)).
-                placeholder(R.drawable.ic_fomono).
+                placeholder(R.drawable.ic_fomono_big).
                 resize(screenWidth, 0).into(view);
 
     }

@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.fomono.fomono.R;
 import com.fomono.fomono.activities.FomonoDetailActivity;
+import com.fomono.fomono.activities.FomonoTrailerActivity;
 import com.fomono.fomono.models.FomonoEvent;
 import com.fomono.fomono.models.eats.Business;
 import com.fomono.fomono.models.events.events.Event;
@@ -25,6 +26,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import static android.R.attr.format;
 
 /**
  * Created by Saranu on 4/6/17.
@@ -115,7 +118,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     if (!TextUtils.isEmpty(event.getLogo().getOriginal().getUrl())) {
                      //   Glide.with(mContext).load(event.getLogo().getOriginal().getUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).override(200, 350).into(holder.eventMediaImage);
                      //   Glide.with(mContext).load(event.getLogo().getOriginal().getUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).override(screenWidth, screenHeight).into(holder.eventMediaImage);
-                         Picasso.with(mContext).load(event.getLogo().getOriginal().getUrl()).placeholder(R.drawable.ic_fomono).resize(screenWidth, 0).into(holder.eventMediaImage);
+                         Picasso.with(mContext).load(event.getLogo().getOriginal().getUrl()).placeholder(R.drawable.ic_fomono_big).resize(screenWidth, 0).into(holder.eventMediaImage);
                         imageSet = 1;
                     }
                 }
@@ -135,7 +138,12 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 if (!TextUtils.isEmpty(event.getStart().getLocal())) {
                     String localDateTime = event.getStart().getLocal();
                     localDateTime = localDateTime.replace('T', ' ');
+                    String[] dateString = localDateTime.trim().split("\\s+");
+
+                    /*
+                    Log.d(TAG, "date time string is "+localDateTime);
                     SimpleDateFormat format = new SimpleDateFormat(mContext.getString(R.string.adapter_date_string_format));
+                //    SimpleDateFormat format = new SimpleDateFormat("yyyy");
                     try {
                         Date dateString = format.parse(localDateTime);
                         DateViewSet = 1;
@@ -143,6 +151,11 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
+                    */
+
+                    //FIXME - This works. But now, format it to ex of : 8:30PM, 18th April 2017
+                    holder.eventDateTime.setText(dateString[0]);
+                    DateViewSet = 1;
                 }
             }
             if (DateViewSet == 0) {
@@ -150,7 +163,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             }
 
             if (event.getUrl() != null) {
-                holder.eventUrl.setBackgroundResource(R.drawable.ic_eventbrite);
+                holder.eventUrl.setBackgroundResource(R.drawable.ic_fomono_red);
                 holder.eventUrl.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -160,7 +173,8 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     }
                 });
             } else {
-                holder.eventUrl.setVisibility(View.GONE);
+                holder.eventUrl.setBackgroundResource(R.drawable.ic_fomono_grey);
+             //   holder.eventUrl.setVisibility(View.GONE);
             }
 
             holder.eventDistance.setVisibility(View.GONE);
@@ -192,8 +206,8 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             holder.eventDesc.setVisibility(View.GONE);
 
             if (!TextUtils.isEmpty(business.getImageUrl())) {
-                Glide.with(mContext).load(business.getImageUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).override(screenWidth, screenHeight / 2).into(holder.eventMediaImage);
-               //  Picasso.with(mContext).load(business.getImageUrl()).placeholder(R.drawable.ic_fomono).resize(screenWidth, 0).into(holder.eventMediaImage);
+               // Glide.with(mContext).load(business.getImageUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).override(screenWidth, screenHeight / 2).into(holder.eventMediaImage);
+                 Picasso.with(mContext).load(business.getImageUrl()).placeholder(R.drawable.ic_fomono_big).resize(screenWidth, 0).into(holder.eventMediaImage);
             } else {
                 holder.eventMediaImage.setVisibility(View.GONE);
             }
@@ -201,8 +215,8 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             if (business.getDistance() != null)
                 //have to convert meters to miles
                 distance = (business.getDistance() * 0.000621);
-                DecimalFormat numberFormat = new DecimalFormat("#.00");
-                holder.eventDistance.setText("" + numberFormat.format(distance) + "mi");
+                DecimalFormat numberFormat = new DecimalFormat("#.0");
+                holder.eventDistance.setText("" + numberFormat.format(distance) + " mi");
             if (business.getPrice() != null) holder.eventPrice.setText(business.getPrice());
             if (business.getCategories() != null) {
                 if (business.getCategories().get(0).getAlias() != null) {
@@ -218,7 +232,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             holder.eventDateTime.setText("" + business.getRating() + "/5, " + business.getReviewCount() + " Reviews");
 
             if (business.getUrl() != null) {
-                holder.eventUrl.setBackgroundResource(R.drawable.ic_clock);
+                holder.eventUrl.setBackgroundResource(R.drawable.ic_fomono_red);
                 holder.eventUrl.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -228,7 +242,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     }
                 });
             } else {
-                holder.eventUrl.setVisibility(View.GONE);
+                holder.eventUrl.setBackgroundResource(R.drawable.ic_fomono_grey);
             }
         }
 
@@ -254,7 +268,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             if(movie.getPosterPath() != null) {
               //  Glide.with(mContext).load(movie.getBackdropPath()).diskCacheStrategy(DiskCacheStrategy.ALL).override(screenWidth, screenHeight).into(holder.eventMediaImage);
-                Picasso.with(mContext).load(movie.getBackdropPath()).placeholder(R.drawable.ic_fomono).resize(screenWidth, 0).into(holder.eventMediaImage);
+                Picasso.with(mContext).load(movie.getBackdropPath()).placeholder(R.drawable.ic_fomono_big).resize(screenWidth, 0).into(holder.eventMediaImage);
             } else {
                 holder.eventMediaImage.setVisibility(View.GONE);
             }
@@ -267,6 +281,19 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             if(movie.getReleaseDate() != null) {holder.eventDateTime.setText(mContext.getString(R.string.movie_release_date_string)+movie.getReleaseDate());}
             holder.eventType.setVisibility(View.GONE);
 
+            if(movie.getId() != -1) {
+                holder.eventUrl.setBackgroundResource(R.drawable.ic_fomono_red);
+                holder.eventUrl.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent MovTrail = new Intent(mContext, FomonoTrailerActivity.class);
+                        MovTrail.putExtra(mContext.getResources().getString(R.string.MovieId), movie.getId());
+                        mContext.startActivity(MovTrail);
+                    }
+                });
+            } else {
+                holder.eventUrl.setBackgroundResource(R.drawable.ic_fomono_grey);
+            }
         }
     }
 }
