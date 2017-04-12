@@ -1,6 +1,7 @@
 package com.fomono.fomono.fragments;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -21,7 +22,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.fomono.fomono.R;
 import com.fomono.fomono.databinding.FragmentEventbriteDetailBinding;
 import com.fomono.fomono.models.events.events.Address;
@@ -29,14 +29,17 @@ import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.events.events.Venue;
 import com.fomono.fomono.network.client.EventBriteClientRetrofit;
 import com.fomono.fomono.utils.DateUtils;
+import com.fomono.fomono.utils.RoundedTransformation;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,6 +53,7 @@ import retrofit2.Response;
 
 import static android.R.attr.x;
 import static android.content.ContentValues.TAG;
+import static com.fomono.fomono.fragments.MainListFragment.screenWidth;
 
 /**
  * Created by Saranu on 4/6/17.
@@ -62,6 +66,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
     MapView mMapView;
     EventBriteClientRetrofit eventBriteClientRetrofit;
     Event event;
+    ProgressDialog pd;
 
 
 
@@ -82,7 +87,6 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getAddressFromAPI(event);
 
     }
 
@@ -93,23 +97,29 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
         data.put("token", getResources().getString(R.string.eventbrite_api_key));
         Call<Venue> call = eventBriteClientRetrofit.EBRetrofitClientFactory().
                 getVenueFromServer(e.getVenueId(),data);
+        pd = new ProgressDialog(getActivity());
+        pd.setTitle("Loading...");
+        pd.setMessage("Please wait.");
+        pd.setCancelable(false);
+        pd.show();
 
         call.enqueue(new Callback<Venue>() {
             @Override
             public void onResponse(Call<Venue> call, Response<Venue> response) {
+                pd.dismiss();
                Address address = response.body().getAddress();
                 if (address == null) {
                     Log.d(TAG, "MO MATCH ");
                 } else {
-                   e.setVenue(response.body());
-                    populateDetail(e);
-
+                    e.setVenue(response.body());
+                    populateAddressMap(e);
                 }
 
             }
 
             @Override
             public void onFailure(Call<Venue> call, Throwable t) {
+                pd.dismiss();
                 Log.d(TAG, "REQUEST Failed " + t.getMessage());
 
             }
@@ -120,8 +130,12 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
 
     //  @BindingAdapter({"imageUrl"})
     private static void setImageUrl(ImageView view, String imageUrl) {
-        Glide.with(view.getContext()).load(imageUrl).placeholder(R.drawable.botaimage).
-                error(R.drawable.botaimage).into(view);
+        //Glide.with(view.getContext()).load(imageUrl).placeholder(R.drawable.botaimage).
+          //      error(R.drawable.botaimage).into(view);
+        Picasso.with(view.getContext()).load(imageUrl).transform(new RoundedTransformation(6,3)).
+                placeholder(R.drawable.ic_fomono).
+                resize(screenWidth, 0).into(view);
+
     }
 
 
@@ -145,7 +159,9 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
 
         setImageUrl(fragmentEventbriteDetailBinding.ivEventImage, event.getLogo().getUrl());
 
-        mMapView = (MapView) view.findViewById(R.id.mapView);
+        populateDetail(event);
+
+        mMapView = (MapView) view.findViewById(R.id.mapEBView);
         mMapView.onCreate(savedInstanceState);
 
         mMapView.onResume(); // needed to get the map to display immediately
@@ -156,38 +172,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
             e.printStackTrace();
         }
 
-        mMapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap mMap) {
-                googleMap = mMap;
-
-                // For showing a move to my location button
-                if (ActivityCompat.checkSelfPermission(getContext(),
-                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                        && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                         return;
-                }else {
-                    googleMap.setMyLocationEnabled(true);
-                }
-                LatLng latlng;
-                // For dropping a marker at a point on the Map
-                if(event.getVenue() != null) {
-                     latlng = new LatLng(Double.parseDouble(event.getVenue().getAddress().getLatitude()),
-                            Double.parseDouble(event.getVenue().getAddress().getLongitude()));
-                }else {
-                     latlng = getLocationFromAddress("121 Albright Way, Los Gatos, CA 95032");
-                }
-                googleMap.addMarker(new MarkerOptions().position(latlng).title(event.getName().getText()).snippet("Marker Desc"));
-                       // snippet(event.getVenue().getAddress().getAddress1() + event.getVenue().getAddress().getCity() +
-                             //   event.getVenue().getAddress().getCountry()  ));
-
-
-                // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(latlng).zoom(12).build();
-                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-            }
-        });
+        getAddressFromAPI(event);
 
 
         fragmentEventbriteDetailBinding.tvClockCalendar.setOnClickListener(new View.OnClickListener() {
@@ -256,6 +241,45 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
     protected void populateDetail(Event e) {
         fragmentEventbriteDetailBinding.setEvent(e);
 
+    }
+
+    protected void populateAddressMap(Event e){
+           //reset fragment's databinding
+        Address address = event.getVenue().getAddress();
+        fragmentEventbriteDetailBinding.setEvent(e);
+        mMapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap mMap) {
+                googleMap = mMap;
+
+                // For showing a move to my location button
+                if (ActivityCompat.checkSelfPermission(getContext(),
+                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    return;
+                }else {
+                    googleMap.setMyLocationEnabled(true);
+                }
+                LatLng latlng;
+                // For dropping a marker at a point on the Map
+                if(event.getVenue() != null) {
+                    latlng = new LatLng(Double.parseDouble(address.getLatitude()),
+                            Double.parseDouble(address.getLongitude()));
+                }else {
+                    latlng = new LatLng(0,0);
+                }
+                googleMap.addMarker(new MarkerOptions().position(latlng).title(event.getVenue().getName()).
+                        snippet(address.getAddress1() + ", " +address.getCity() + ", " +
+                                address.getCountry() + "," +  address.getPostalCode()).
+                        icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_location_pin)));
+
+
+                // For zooming automatically to the location of the marker
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(latlng).zoom(11).build();
+                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            }
+        });
     }
 
     public void addToCalendar(String startDate, String endDate) {

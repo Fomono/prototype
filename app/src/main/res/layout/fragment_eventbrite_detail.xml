@@ -46,8 +46,8 @@
 
         <ImageView
             android:id="@+id/ivEventImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_below="@id/llHeader"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
@@ -175,7 +175,7 @@
             android:layout_alignTop="@id/ivLocationIcon"
             android:layout_below="@id/ivClockIcon"
             android:layout_toRightOf="@id/ivLocationIcon"
-            android:text='@{event.venue.address.address1 + ", "  + event.venue.address.city + ", " + event.venue.address.country}'
+            android:text='@{event.venue.name + "," + event.venue.address.address1 + ", "  + event.venue.address.city + ", " + event.venue.address.country + ", " + event.venue.address.postalCode}'
             android:textSize="10dp" />
 
 
@@ -261,11 +261,12 @@
 
 
         <com.google.android.gms.maps.MapView
-            android:id="@+id/mapView"
+            android:id="@+id/mapEBView"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="200dp"
             android:layout_below="@id/ivFBShareIcon"
-            android:layout_marginTop="15dp" />
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="30dp"/>
 
 
     </RelativeLayout>
