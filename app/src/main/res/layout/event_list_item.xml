@@ -100,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/colorFomono"
                 android:textColor="@color/colorWhite"
-                android:layout_gravity="end"
+                android:layout_gravity="start|bottom"
                 android:textAllCaps="true"
                 android:text="TYPE"/>
 

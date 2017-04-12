@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -17,6 +18,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 
 
 /**
@@ -56,25 +58,26 @@ public class MovieDBClientRetrofit {
     public interface MovieDBService {
 
         @GET("/3/movie/now_playing")
-        Call<MovieResponse> getNowPlayingMoviesFromServer(@Query("api_key") String client_credentials);
+        Call<MovieResponse> getNowPlayingMoviesFromServer(@QueryMap Map<String, String> options);
+
         //@Query("token") String api_key,
         // @Query("q") String search_query, @Query("sort_by") String sort_string
 
         @GET("/3/movie/latest")
-        Call<MovieResponse> getLatesMoviesFromServer(@Query("api_key") String client_credentials);
+        Call<MovieResponse> getLatesMoviesFromServer(@QueryMap Map<String, String> options);
         //@Query("token") String api_key, @Query("q") String search_string
 
         @GET("/3/movie/popular")
-        Call<MovieResponse> getPopularMoviesFromServer(@Query("api_key") String client_credentials);
+        Call<MovieResponse> getPopularMoviesFromServer(@QueryMap Map<String, String> options);
         //@Query("token") String api_key, @Query("q") String search_string
 
 
         @GET("/3/movie/top_rated")
-        Call<MovieResponse> getTopRatedMoviesFromServer(@Query("api_key") String client_credentials);
+        Call<MovieResponse> getTopRatedMoviesFromServer(@QueryMap Map<String, String> options);
         //@Query("token") String api_key, @Query("q") String search_string
 
         @GET("/3/movie/upcoming")
-        Call<MovieResponse> getUpcomingMoviesFromServer(@Query("api_key") String client_credentials);
+        Call<MovieResponse> getUpcomingMoviesFromServer(@QueryMap Map<String, String> options);
 
     }
 
@@ -83,7 +86,7 @@ public class MovieDBClientRetrofit {
         return API_MDB_BASE_URL + relativeUrl;
     }
 
-
+/*
     public void callRetrofitGetMoviesNowPlaying(Context context, String stringQuery) {
 
         //eventBriteClientRetrofit = EventBriteClientRetrofit.getNewInstance();
@@ -239,7 +242,7 @@ public class MovieDBClientRetrofit {
             }
         });
     }
-
+*/
 
 }
 

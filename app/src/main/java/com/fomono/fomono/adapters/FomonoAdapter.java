@@ -85,7 +85,6 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private void populateWithEvents(ViewHolderEventsItem holder, int position) {
         Event event = (Event)mFomonoEvents.get(position);
      //   Event event = mEvents.get(position);
-        Log.d(TAG, "name is " + event.getName().getText());
         if (event != null) {
             if (event.getName() != null) {
                 holder.eventName.setText(event.getName().getText());
@@ -172,6 +171,8 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private void populateWithBusinesses(ViewHolderEventsItem holder, int position) {
         Business business = (Business) mFomonoEvents.get(position);
+        int DistSet = 0;
+        double distance = 0;
 
         if (business != null) {
             if (business.getName() != null) {
@@ -197,12 +198,11 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 holder.eventMediaImage.setVisibility(View.GONE);
             }
 
-            int DistSet = 0;
-            //FIXME - is distance in miles here? or km?
-            double distance = (business.getDistance() / 1000);
-            DecimalFormat numberFormat = new DecimalFormat("#.00");
             if (business.getDistance() != null)
-                holder.eventDistance.setText("" + numberFormat.format(distance) + "m");
+                //have to convert meters to miles
+                distance = (business.getDistance() * 0.000621);
+                DecimalFormat numberFormat = new DecimalFormat("#.00");
+                holder.eventDistance.setText("" + numberFormat.format(distance) + "mi");
             if (business.getPrice() != null) holder.eventPrice.setText(business.getPrice());
             if (business.getCategories() != null) {
                 if (business.getCategories().get(0).getAlias() != null) {
@@ -253,8 +253,8 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             else {holder.eventDesc.setVisibility(View.GONE);}
 
             if(movie.getPosterPath() != null) {
-              //  Glide.with(mContext).load(movie.getPosterPath()).diskCacheStrategy(DiskCacheStrategy.ALL).override(screenWidth, screenHeight).into(holder.eventMediaImage);
-                Picasso.with(mContext).load(movie.getPosterPath()).placeholder(R.drawable.ic_fomono).resize(screenWidth, 0).into(holder.eventMediaImage);
+              //  Glide.with(mContext).load(movie.getBackdropPath()).diskCacheStrategy(DiskCacheStrategy.ALL).override(screenWidth, screenHeight).into(holder.eventMediaImage);
+                Picasso.with(mContext).load(movie.getBackdropPath()).placeholder(R.drawable.ic_fomono).resize(screenWidth, 0).into(holder.eventMediaImage);
             } else {
                 holder.eventMediaImage.setVisibility(View.GONE);
             }
