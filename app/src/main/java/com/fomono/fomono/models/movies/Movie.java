@@ -32,7 +32,7 @@ public class Movie implements Parcelable, FomonoEvent{
         public List<Long> genreIds = null;
         @SerializedName("id")
         @Expose
-        public long id;
+        public long id = -1;
         @SerializedName("original_title")
         @Expose
         public String originalTitle;
