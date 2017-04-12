@@ -132,4 +132,23 @@ public class FilterUtil {
         }
         return sb.toString();
     }
+
+    /**
+     * Gets all filters regardless of what API they apply to.
+     * @param fromLocal
+     * @param callback
+     * @throws Exception
+     */
+    public static void getAllFilters(boolean fromLocal, FindCallback<Filter> callback) throws Exception {
+        ParseUser user = ParseUser.getCurrentUser();
+        if (user == null) {
+            throw new Exception("Error getting user filters: Current user is null.");
+        }
+        ParseQuery<Filter> query = ParseQuery.getQuery(Filter.class);
+        query.whereEqualTo("user", user);
+        if (fromLocal) {
+            query.fromLocalDatastore();
+        }
+        query.findInBackground(callback);
+    }
 }
