@@ -72,7 +72,7 @@ public class Business implements Parcelable, FomonoEvent
             instance.phone = ((String) in.readValue((String.class.getClassLoader())));
             instance.id = ((String) in.readValue((String.class.getClassLoader())));
             instance.isClosed = ((Boolean) in.readValue((Boolean.class.getClassLoader())));
-            in.readList(instance.categories, (Category.class.getClassLoader()));
+            instance.categories = in.readArrayList(Category.class.getClassLoader());
             instance.reviewCount = ((Integer) in.readValue((Integer.class.getClassLoader())));
             instance.name = ((String) in.readValue((String.class.getClassLoader())));
             instance.url = ((String) in.readValue((String.class.getClassLoader())));
@@ -80,7 +80,7 @@ public class Business implements Parcelable, FomonoEvent
             instance.imageUrl = ((String) in.readValue((String.class.getClassLoader())));
             instance.location = ((Location) in.readValue((Location.class.getClassLoader())));
             instance.distance = ((Double) in.readValue((Double.class.getClassLoader())));
-            in.readList(instance.transactions, (java.lang.String.class.getClassLoader()));
+            instance.transactions = in.readArrayList(java.lang.String.class.getClassLoader());
             return instance;
         }
 

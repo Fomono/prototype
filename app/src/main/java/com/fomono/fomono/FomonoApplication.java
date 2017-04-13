@@ -20,7 +20,7 @@ import com.parse.interceptors.ParseLogInterceptor;
 public class FomonoApplication extends Application {
     public static final String API_NAME_EVENTS = "eventbrite";
     public static final String API_NAME_EATS = "yelp";
-    public static final String API_NAME_MOVIES = "fandango";
+    public static final String API_NAME_MOVIES = "movies";
 
     final String CHANNEL_NAME = "pushChannelTest";
 

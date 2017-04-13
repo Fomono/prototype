@@ -1,7 +1,6 @@
 package com.fomono.fomono.network.client;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.fomono.fomono.models.movies.Movie;
 import com.fomono.fomono.models.movies.MovieResponse;
@@ -12,12 +11,10 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
-import retrofit2.http.Query;
+import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 
 
@@ -29,7 +26,7 @@ public class MovieDBClientRetrofit {
     public static final String API_MDB_BASE_URL = "https://api.themoviedb.org/";
     public static final String API_KEY = "d0af6e07311c078f8b5c7419e1e0e3c3";
     MovieDBClientRetrofit.MovieDBService MDBService;
-    final static String TAG = "EventBriteClient";
+    final static String TAG = "MovieDBClient";
     Context mcontext;
     ArrayList<Movie> movies;
 
@@ -79,6 +76,8 @@ public class MovieDBClientRetrofit {
         @GET("/3/movie/upcoming")
         Call<MovieResponse> getUpcomingMoviesFromServer(@QueryMap Map<String, String> options);
 
+        @GET("/3/movie/{movie_id}")
+        Call<Movie> getMovieById(@Path("movie_id") String id, @QueryMap Map<String, String> options);
     }
 
 

@@ -1,6 +1,7 @@
 package com.fomono.fomono.receivers;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,11 +9,10 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.fomono.fomono.R;
+import com.fomono.fomono.activities.FomonoActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Iterator;
 
 /**
  * Created by David on 4/5/2017.
@@ -40,38 +40,41 @@ public class PushReceiver extends BroadcastReceiver {
             try {
                 JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
                 Log.d(TAG, "got action " + action + " on channel " + channel + " with: " + json.toString());
-                // Iterate the parse keys if needed
-                Iterator<String> itr = json.keys();
-                while (itr.hasNext()) {
-                    String key = (String) itr.next();
-                    String value = json.getString(key);
-                    Log.d(TAG, "..." + key + " => " + value);
-                    // Extract custom push data
-                    if (key.equals("customdata")) {
-                        // create a local notification
-                        createNotification(context, value);
-                    } else if (key.equals("launch")) {
-                        // Handle push notification by invoking activity directly
-//                        launchSomeActivity(context, value);
-                    } else if (key.equals("broadcast")) {
-                        // OR trigger a broadcast to activity
-//                        triggerBroadcastToActivity(context, value);
-                    }
-                }
+                JSONObject eventData = json.getJSONObject("eventData");
+                String apiName = eventData.getString("apiName");
+                String id = eventData.getString("id");
+                String text = eventData.getString("text");
+                createNotification(context, apiName, id, text);
             } catch (JSONException ex) {
                 Log.d(TAG, "JSON failed!");
             }
         }
     }
 
-    public static final int NOTIFICATION_ID = 45;
+    public static final int NOTIFICATION_ID = 1;
     // Create a local dashboard notification to tell user about the event
     // See: http://guides.codepath.com/android/Notifications
-    private void createNotification(Context context, String datavalue) {
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(
-                R.mipmap.ic_launcher).setContentTitle("Notification: " + datavalue).setContentText("Pushed!");
-        NotificationManager mNotificationManager = (NotificationManager) context
-                .getSystemService(Context.NOTIFICATION_SERVICE);
+    private void createNotification(Context context, String apiName, String id, String text) {
+        // First let's define the intent to trigger when notification is selected
+        // Start out by creating a normal intent (in this case to open an activity)
+        Intent intent = new Intent(context, FomonoActivity.class);
+        intent.setAction(FomonoActivity.ACTION_DETAIL);
+        intent.putExtra("apiName", apiName);
+        intent.putExtra("id", id);
+        // Next, let's turn this into a PendingIntent using
+        //   public static PendingIntent getActivity(Context context, int requestCode,
+        //       Intent intent, int flags)
+        int requestID = (int) System.currentTimeMillis(); //unique requestID to differentiate between various notification with same NotifId
+        int flags = PendingIntent.FLAG_CANCEL_CURRENT; // cancel old intent and create new one
+        PendingIntent pIntent = PendingIntent.getActivity(context, requestID, intent, flags);
+        // Now we can attach the pendingIntent to a new notification using setContentIntent
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(text)
+                .setContentText(context.getString(R.string.notif_action_text))
+                .setContentIntent(pIntent)
+                .setAutoCancel(true); // Hides the notification after its been selected
+        NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
 
