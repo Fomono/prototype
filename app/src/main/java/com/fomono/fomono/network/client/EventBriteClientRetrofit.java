@@ -72,6 +72,8 @@ public class EventBriteClientRetrofit {
         Call<Venue> getVenueFromServer(@Path("venue_id") String venue_id, @QueryMap Map<String, String> options);
         //@Path("venue_id") String venue_id, @Query("token") String api_key
 
+        @GET("/v3/events/{event_id}")
+        Call<Event> getEventById(@Path("event_id") String event_id, @QueryMap Map<String, String> options);
     }
 
 
