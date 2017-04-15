@@ -28,7 +28,6 @@ public class FomonoMainPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        MainListFragment mainListFragment = new MainListFragment();
         if (position == 0) {
             EventFragment eventFragment = new EventFragment();
             return eventFragment;

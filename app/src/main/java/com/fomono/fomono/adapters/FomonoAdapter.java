@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import static android.R.attr.format;
+import static com.fomono.fomono.R.color.grey;
 import static com.loopj.android.http.AsyncHttpClient.log;
 
 /**
@@ -176,6 +177,8 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             holder.eventDistance.setVisibility(View.GONE);
             holder.eventType.setVisibility(View.GONE);
+
+            setEventFavorited(holder);
         }
 
     }
@@ -195,18 +198,22 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             holder.eventDesc.setVisibility(View.GONE);
 
             if (!TextUtils.isEmpty(business.getImageUrl())) {
-               // Glide.with(mContext).load(business.getImageUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).override(screenWidth, screenHeight / 2).into(holder.eventMediaImage);
-                 Picasso.with(mContext).load(business.getImageUrl()).placeholder(R.drawable.ic_fomono_big).resize(screenWidth, 0).into(holder.eventMediaImage);
+                // Glide.with(mContext).load(business.getImageUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).override(screenWidth, screenHeight / 2).into(holder.eventMediaImage);
+                Picasso.with(mContext).load(business.getImageUrl()).placeholder(R.drawable.ic_fomono_big).resize(screenWidth, 0).into(holder.eventMediaImage);
             } else {
                 holder.eventMediaImage.setVisibility(View.GONE);
             }
 
-            if (business.getDistance() != null)
+            if (business.getDistance() != null) {
                 //have to convert meters to miles
                 distance = (business.getDistance() * 0.000621);
                 DecimalFormat numberFormat = new DecimalFormat("#.0");
                 holder.eventDistance.setText("" + numberFormat.format(distance) + " mi");
+            }
+
             if (business.getPrice() != null) holder.eventPrice.setText(business.getPrice());
+            else holder.eventPrice.setVisibility(View.GONE);
+
             if (business.getCategories() != null) {
                 if (business.getCategories().get(0).getAlias() != null) {
                     holder.eventType.setText(business.getCategories().get(0).getAlias());
@@ -214,7 +221,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 }
             }
             if (DistSet == 0) {
-                holder.eventPrice.setVisibility(View.GONE);
+                holder.eventType.setVisibility(View.GONE);
             }
 
             //FIXME - call this something else. We can reuse this field, or collapse it and show something else.
@@ -235,6 +242,8 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 holder.eventUrl.setBackgroundResource(R.drawable.ic_fomono_grey);
             }
         }
+
+        setEventFavorited(holder);
 
     }
 
@@ -275,6 +284,27 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             } else {
                 holder.eventUrl.setBackgroundResource(R.drawable.ic_fomono_grey);
             }
+        }
+
+        setEventFavorited(holder);
+    }
+
+
+    public boolean isFavorite() {
+        return false;
+    }
+    public void setEventFavorited(ViewHolderEventsItem holder) {
+        //FIXME - Hack. David has to provide the is_favorite() function
+        holder.eventFavorited.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //FIXME - flip the isFavorite logic
+            }
+        });
+        if(isFavorite()) {
+            holder.eventFavorited.setBackgroundResource(R.drawable.ic_favorite);
+        } else {
+            holder.eventFavorited.setBackgroundResource(R.drawable.ic_favorite_grey);
         }
     }
 }

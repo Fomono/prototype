@@ -34,7 +34,7 @@
 
                 <com.astuetz.PagerSlidingTabStrip
                     android:id="@+id/fomonoTabsId"
-                    app:pstsShouldExpand="true"
+                    app:pstsShouldExpand="false"
                     app:pstsTextAllCaps="true"
                     android:layout_below="@id/fomonoToolbarId"
                     android:textColor="@color/colorFomono"

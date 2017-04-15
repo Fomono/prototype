@@ -26,6 +26,7 @@ public class ViewHolderEventsItem extends RecyclerView.ViewHolder {
     public TextView eventDateTime;
     public TextView eventType;
     public ImageButton eventUrl;
+    public ImageButton eventFavorited;
 
     public ViewHolderEventsItem(EventListItemBinding binding) {
         super(binding.getRoot());
@@ -37,5 +38,6 @@ public class ViewHolderEventsItem extends RecyclerView.ViewHolder {
         eventDateTime = binding.EventDateTimeId;
         eventType = binding.EventTypeId;
         eventUrl = binding.ImageLogoButtonId;
+        eventFavorited = binding.ImageFavoriteButtonId;
     }
 }
