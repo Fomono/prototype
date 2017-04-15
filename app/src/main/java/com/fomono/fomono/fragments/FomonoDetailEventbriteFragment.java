@@ -4,13 +4,17 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.location.Criteria;
 import android.location.Geocoder;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.text.Html;
@@ -69,7 +73,6 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
     public int screenWidthDetail;
 
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,7 +99,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
         Map<String, String> data = new HashMap<>();
         data.put("token", getResources().getString(R.string.eventbrite_api_key));
         Call<Venue> call = eventBriteClientRetrofit.EBRetrofitClientFactory().
-                getVenueFromServer(e.getVenueId(),data);
+                getVenueFromServer(e.getVenueId(), data);
         pd = new ProgressDialog(getActivity());
         pd.setTitle("Loading...");
         pd.setMessage("Please wait.");
@@ -107,7 +110,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
             @Override
             public void onResponse(Call<Venue> call, Response<Venue> response) {
                 pd.dismiss();
-               Address address = response.body().getAddress();
+                Address address = response.body().getAddress();
                 if (address == null) {
                     Log.d(TAG, "MO MATCH ");
                 } else {
@@ -131,8 +134,8 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
     //  @BindingAdapter({"imageUrl"})
     private static void setImageUrl(ImageView view, String imageUrl, int screenWidthDetail) {
         //Glide.with(view.getContext()).load(imageUrl).placeholder(R.drawable.botaimage).
-          //      error(R.drawable.botaimage).into(view);
-        Picasso.with(view.getContext()).load(imageUrl).transform(new RoundedTransformation(6,3)).
+        //      error(R.drawable.botaimage).into(view);
+        Picasso.with(view.getContext()).load(imageUrl).transform(new RoundedTransformation(6, 3)).
                 placeholder(R.drawable.ic_fomono_big).
                 resize(screenWidthDetail, 0).into(view);
 
@@ -146,11 +149,11 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
                 inflater, R.layout.fragment_eventbrite_detail, parent, false);
 
         View view = fragmentEventbriteDetailBinding.getRoot();
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
 
         fragmentEventbriteDetailBinding.tvSiteLink.setClickable(true);
         fragmentEventbriteDetailBinding.tvSiteLink.setMovementMethod(LinkMovementMethod.getInstance());
-        String text = "<a href=" + event.getUrl() +  ">" + "CLICK HERE" + "</a>";
+        String text = "<a href=" + event.getUrl() + ">" + "CLICK HERE" + "</a>";
         fragmentEventbriteDetailBinding.tvSiteLink.setText(Html.fromHtml(text));
 
 
@@ -205,8 +208,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
             @Override
             public void onClick(View v) {
 
-                try
-                {
+                try {
                     // Check if the Twitter app is installed on the phone.
                     getActivity().getPackageManager().getPackageInfo("com.twitter.android", 0);
                     Intent intent = new Intent(Intent.ACTION_SEND);
@@ -215,9 +217,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
                     intent.putExtra(Intent.EXTRA_TEXT, event.getUrl());
                     startActivity(intent);
 
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     String url = "http://www.twitter.com/intent/tweet?url=YOURURL&text=YOURTEXT";
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     i.setData(Uri.parse(url));
@@ -232,7 +232,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("plain/text");
-                intent.putExtra(Intent.EXTRA_EMAIL, new String[] { "some@email.address" });
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"some@email.address"});
                 intent.putExtra(Intent.EXTRA_SUBJECT, event.getName().getText());
                 intent.putExtra(Intent.EXTRA_TEXT, event.getUrl());
                 if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
@@ -250,8 +250,8 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
 
     }
 
-    protected void populateAddressMap(Event e){
-           //reset fragment's databinding
+    protected void populateAddressMap(Event e) {
+        //reset fragment's databinding
         Address address = event.getVenue().getAddress();
         fragmentEventbriteDetailBinding.setEvent(e);
         mMapView.getMapAsync(new OnMapReadyCallback() {
@@ -259,26 +259,37 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
 
+                LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+
+                Criteria locationCritera = new Criteria();
+                locationCritera.setAccuracy(Criteria.ACCURACY_COARSE);
+                locationCritera.setAltitudeRequired(false);
+                locationCritera.setBearingRequired(false);
+                locationCritera.setCostAllowed(true);
+                locationCritera.setPowerRequirement(Criteria.NO_REQUIREMENT);
+
                 // For showing a move to my location button
                 if (ActivityCompat.checkSelfPermission(getContext(),
                         Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                         && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    return;
-                }else {
+                    Toast.makeText(getContext(), "Please turn on your location", Toast.LENGTH_LONG).show();
+                    Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    getContext().startActivity(myIntent);
+                } else {
                     googleMap.setMyLocationEnabled(true);
                 }
                 LatLng latlng;
                 // For dropping a marker at a point on the Map
-                if(event.getVenue() != null) {
+                if (event.getVenue() != null) {
                     latlng = new LatLng(Double.parseDouble(address.getLatitude()),
                             Double.parseDouble(address.getLongitude()));
-                }else {
-                    latlng = new LatLng(0,0);
+                } else {
+                    latlng = new LatLng(0, 0);
                 }
                 googleMap.addMarker(new MarkerOptions().position(latlng).title(event.getVenue().getName()).
-                        snippet(address.getAddress1() + ", " +address.getCity() + ", " +
-                                address.getCountry() + "," +  address.getPostalCode()));
+                        snippet(address.getAddress1() + ", " + address.getCity() + ", " +
+                                address.getCountry() + "," + address.getPostalCode()));
+
 
                 // For zooming automatically to the location of the marker
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(latlng).zoom(11).build();
@@ -303,7 +314,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
         values.put(CalendarContract.Events.DESCRIPTION, event.getDescription().getText().toString());
         values.put(CalendarContract.Events.CALENDAR_ID, calID);
         values.put(CalendarContract.Events.EVENT_TIMEZONE, "UTC");
-      // TODO: Consider calling
+        // TODO: Consider calling
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -314,7 +325,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
 
             return;
         }
-        }
+    }
 
     public LatLng getLocationFromAddress(String strAddress) {
 
@@ -322,16 +333,16 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
         try {
             ArrayList<android.location.Address> adresses = (ArrayList<android.location.Address>) coder.getFromLocationName(strAddress, 50);
             for (android.location.Address add : adresses) {
-                if (add.getCountryCode().equals("US") || add.getCountryCode().equals("USA") ) {//Controls to ensure it is right address such as country etc.
+                if (add.getCountryCode().equals("US") || add.getCountryCode().equals("USA")) {//Controls to ensure it is right address such as country etc.
                     double longitude = add.getLongitude();
                     double latitude = add.getLatitude();
-                    return new LatLng(latitude,longitude);
+                    return new LatLng(latitude, longitude);
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return  null;
+        return null;
     }
 
     @Override
@@ -359,4 +370,4 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
     }
 
 
-    }
+}
