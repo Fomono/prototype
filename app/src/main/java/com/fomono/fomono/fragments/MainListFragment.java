@@ -23,6 +23,9 @@ import com.fomono.fomono.models.FomonoEvent;
 import com.fomono.fomono.models.eats.Business;
 import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.movies.Movie;
+import com.fomono.fomono.network.client.EventBriteClientRetrofit;
+import com.fomono.fomono.network.client.MovieDBClientRetrofit;
+import com.fomono.fomono.network.client.YelpClientRetrofit;
 import com.fomono.fomono.supportclasses.EndlessRecyclerViewScrollListener;
 import com.fomono.fomono.supportclasses.ItemClickSupport;
 import com.fomono.fomono.supportclasses.RecyclerItemDecorator;
@@ -48,7 +51,10 @@ public class MainListFragment extends Fragment {
     Context mContext;
     public ProgressBar progressBar;
     public SmoothProgressBar smoothProgressBar;
-    public static boolean initialEventsLoaded = false;
+    public EventBriteClientRetrofit eventBriteClientRetrofit;
+    public YelpClientRetrofit yelpClientRetrofit;
+    MovieDBClientRetrofit movieDBClientRetrofit;
+
 
 
     @Override
@@ -62,6 +68,10 @@ public class MainListFragment extends Fragment {
 
         fomonoEvents = new ArrayList<>();
         fomonoAdapter = new FomonoAdapter(getActivity(), fomonoEvents);
+
+        eventBriteClientRetrofit = EventBriteClientRetrofit.getNewInstance();
+        yelpClientRetrofit = YelpClientRetrofit.getNewInstance();
+        movieDBClientRetrofit = MovieDBClientRetrofit.getNewInstance();
 
         FomonoMainListFragmentBinding binding = DataBindingUtil.inflate(inflater, R.layout.fomono_main_list_fragment, container, false);
         View view = binding.getRoot();

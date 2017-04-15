@@ -44,15 +44,13 @@ import retrofit2.Response;
 
 public class EatsFragment extends MainListFragment {
     private final static String TAG = "Eats fragment";
-    private YelpClientRetrofit yelpClientRetrofit;
-    private boolean initialEatsLoaded = false;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         InternetAlertDialogue internetAlertDialogue = new InternetAlertDialogue(mContext);
-        if(internetAlertDialogue.checkForInternet() && !initialEatsLoaded) {
+        if(internetAlertDialogue.checkForInternet()) {
             int offset = fomonoEvents.size();
             populateEats(offset);
         }
@@ -98,10 +96,8 @@ public class EatsFragment extends MainListFragment {
     }
 
     public void getYelpBusinesses(Context context, String location, String categories, int distance, int offset){
-        yelpClientRetrofit = YelpClientRetrofit.getNewInstance();
-        initialEatsLoaded = true;
         Map<String, String> data = new HashMap<>();
-        if(location != null) {
+        if((location != null) && (location != "")) {
             data.put("location", location);
         } else {
             data.put("location", "San Francisco");
