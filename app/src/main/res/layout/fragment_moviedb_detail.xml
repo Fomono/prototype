@@ -53,7 +53,7 @@
             android:layout_below="@id/ivEventImage"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="60dp"
-            app:srcCompat="@drawable/ic_favorite_off" />
+            app:srcCompat="@drawable/ic_favorite_grey" />
 
         <TextView
             android:id="@+id/tvFavoriteLabel"
