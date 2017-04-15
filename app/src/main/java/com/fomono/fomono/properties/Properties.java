@@ -6,4 +6,8 @@ package com.fomono.fomono.properties;
 
 public class Properties {
 
+    public static final String PHOTO_TAKE = "PHOTO_TAKE";
+    public static final String PHOTO_SELECT = "PHOTO_SELECT";
+
+
 }
