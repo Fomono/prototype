@@ -5,17 +5,14 @@ package com.fomono.fomono.fragments;
  */
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -25,17 +22,17 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.fomono.fomono.R;
 import com.fomono.fomono.databinding.FragmentUserProfileBinding;
 import com.fomono.fomono.models.user.User;
 import com.fomono.fomono.properties.Properties;
-
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.fomono.fomono.services.UserService;
+import com.parse.ParseUser;
 
 import butterknife.ButterKnife;
 
@@ -47,11 +44,15 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
     User user;
     Uri file;
     private String photoType;
+    ParseUser pUser;
+    UserService uService;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        uService = new UserService();
+        pUser = ParseUser.getCurrentUser();
     }
 
     public static UserProfileFragment newInstance() {
@@ -64,13 +65,14 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        user = getDummyUser();
+        user = uService.retriveUserFromParseUser(pUser);
+        String fileUrl = pUser.get("profilePicture").toString();
+        setImageUrl(fragmentUserProfile.ivUserImage, fileUrl);
         fragmentUserProfile.setUser(user);
 
     }
 
 
-    //  @BindingAdapter({"imageUrl"})
     private static void setImageUrl(ImageView view, String imageUrl) {
         Glide.with(view.getContext()).load(imageUrl).placeholder(R.drawable.botaimage).
                 error(R.drawable.botaimage).into(view);
@@ -107,34 +109,34 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
             }
         });
 
+        fragmentUserProfile.btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                View view = getActivity().getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager)
+                            getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+                uService.saveParseUser(fragmentUserProfile);
+                Toast.makeText(getActivity(), "Successfully Saved",
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+
         return fragmentUserProfile.getRoot();
     }
 
-    public User getDummyUser() {
-
-        User u = new User();
-        u.setFirstName("Malle");
-        u.setLastName("Saranu");
-        u.setGender("Female");
-        u.setPhonenNumber(00000000);
-        u.setAboutMe("blah blah blah...............");
-        u.setLocation("SanFrancisco, CA");
-        u.setEmail("somebody@something.com");
-        return u;
-
-    }
-
-
     public void clickPicture() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        file = Uri.fromFile(getOutputMediaFile());
+        file = Uri.fromFile(uService.getOutputMediaFile());
         intent.putExtra(MediaStore.EXTRA_OUTPUT, file);
         startActivityForResult(intent, 100);
 
 
     }
 
-    private void convertImagetoBitmap(int requestCode) {
+    private void saveProfileImage(int requestCode) {
         int rotate = 0;
         String filePath = null;
         if (requestCode == 100) {
@@ -142,41 +144,9 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
         } else if (requestCode == 200) {
             filePath = getPath(file);
         }
-
-        try {
-            getContext().getContentResolver().notifyChange(file, null);
-            File imageFile = new File(filePath);
-            ExifInterface exif = new ExifInterface(
-                    imageFile.getAbsolutePath());
-            int orientation = exif.getAttributeInt(
-                    ExifInterface.TAG_ORIENTATION,
-                    ExifInterface.ORIENTATION_NORMAL);
-
-            switch (orientation) {
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    rotate = 270;
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    rotate = 180;
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    rotate = 90;
-                    break;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-        Bitmap bitmap = null;
-        bitmap = BitmapFactory.decodeFile(filePath, options);
-        Matrix matrix = new Matrix();
-        if (rotate != 0) {
-            matrix.preRotate(rotate);
-            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-        }
-
+        Bitmap bitmap = uService.getBitMap(getContext(), filePath);
         fragmentUserProfile.ivUserImage.setImageBitmap(bitmap);
+        uService.saveParseFile(bitmap, pUser);
 
     }
 
@@ -186,21 +156,6 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
         cursor.moveToFirst();
         int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
         return cursor.getString(idx);
-    }
-
-    private static File getOutputMediaFile() {
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "Gallery");
-
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                return null;
-            }
-        }
-
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        return new File(mediaStorageDir.getPath() + File.separator +
-                "IMG_" + timeStamp + ".jpg");
     }
 
 
@@ -237,20 +192,12 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
-        if (requestCode == 200) {
-            if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 200) {
                 file = imageReturnedIntent.getData();
-                convertImagetoBitmap(requestCode);
-
             }
-        } else if (requestCode == 100) {
-            if (resultCode == RESULT_OK) {
-
-                convertImagetoBitmap(requestCode);
-            }
+            saveProfileImage(requestCode);
         }
-
-
     }
 
 }
