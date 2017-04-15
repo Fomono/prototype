@@ -61,9 +61,19 @@ public class FavoritesUtil {
                 }
             });
         } else if (fEvent instanceof Business) {
-
+            ((Business) fEvent).getFromParse(new GetCallback<Business>() {
+                @Override
+                public void done(Business object, ParseException e) {
+                    addToFavoritesCallback(object);
+                }
+            });
         } else if (fEvent instanceof Movie) {
-
+            ((Movie) fEvent).getFromParse(new GetCallback<Movie>() {
+                @Override
+                public void done(Movie object, ParseException e) {
+                    addToFavoritesCallback(object);
+                }
+            });
         }
     }
 
@@ -75,11 +85,10 @@ public class FavoritesUtil {
 
     private void addToFavoritesMap(Favorite f) {
         String apiName = f.getApiName();
-        FomonoEvent fEvent = f.getFomonoEvent();
         if (!favoritesMap.containsKey(apiName)) {
             favoritesMap.put(apiName, new HashMap<>());
         }
-        favoritesMap.get(apiName).put(fEvent.getStringId(), f);
+        favoritesMap.get(apiName).put(f.getFomonoEventId(), f);
     }
 
     public void removeFromFavorites(FomonoEvent fEvent) {

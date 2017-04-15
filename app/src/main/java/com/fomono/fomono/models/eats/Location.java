@@ -5,12 +5,14 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.parse.ParseClassName;
+import com.parse.ParseObject;
 
 /**
  * Created by jsaluja on 4/5/2017.
  */
-
-public class Location implements Parcelable
+@ParseClassName("BusinessLocation")
+public class Location extends ParseObject implements Parcelable
 {
 
     @SerializedName("city")
@@ -27,7 +29,7 @@ public class Location implements Parcelable
     private String address3;
     @SerializedName("state")
     @Expose
-    private String state;
+    private String locationState;
     @SerializedName("address1")
     @Expose
     private String address1;
@@ -46,9 +48,10 @@ public class Location implements Parcelable
             instance.country = ((String) in.readValue((String.class.getClassLoader())));
             instance.address2 = ((String) in.readValue((String.class.getClassLoader())));
             instance.address3 = ((String) in.readValue((String.class.getClassLoader())));
-            instance.state = ((String) in.readValue((String.class.getClassLoader())));
+            instance.locationState = ((String) in.readValue((String.class.getClassLoader())));
             instance.address1 = ((String) in.readValue((String.class.getClassLoader())));
             instance.zipCode = ((String) in.readValue((String.class.getClassLoader())));
+            instance.initializeForParse();
             return instance;
         }
 
@@ -58,6 +61,44 @@ public class Location implements Parcelable
 
     }
             ;
+
+    public void updateWithExisting(Location instance) {
+        this.put("city", instance.city);
+        this.put("country", instance.country);
+        this.put("address1", instance.address1);
+        if (instance.address2 != null) {
+            this.put("address2", instance.address2);
+        }
+        if (instance.address3 != null) {
+            this.put("address3", instance.address3);
+        }
+        this.put("state", instance.locationState);
+        this.put("zip_code", instance.zipCode);
+    }
+
+    public void initializeForParse() {
+        if (this.city != null) {
+            this.put("city", this.city);
+        }
+        if (this.country != null) {
+            this.put("country", this.country);
+        }
+        if (this.address1 != null) {
+            this.put("address1", this.address1);
+        }
+        if (this.address2 != null) {
+            this.put("address2", this.address2);
+        }
+        if (this.address3 != null) {
+            this.put("address3", this.address3);
+        }
+        if (this.locationState != null) {
+            this.put("state", this.locationState);
+        }
+        if (this.zipCode != null) {
+            this.put("zip_code", this.zipCode);
+        }
+    }
 
     public String getCity() {
         return city;
@@ -91,12 +132,12 @@ public class Location implements Parcelable
         this.address3 = address3;
     }
 
-    public String getState() {
-        return state;
+    public String getLocationState() {
+        return locationState;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setLocationState(String state) {
+        this.locationState = state;
     }
 
     public String getAddress1() {
@@ -120,7 +161,7 @@ public class Location implements Parcelable
         dest.writeValue(country);
         dest.writeValue(address2);
         dest.writeValue(address3);
-        dest.writeValue(state);
+        dest.writeValue(locationState);
         dest.writeValue(address1);
         dest.writeValue(zipCode);
     }

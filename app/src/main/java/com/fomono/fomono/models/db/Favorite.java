@@ -1,6 +1,9 @@
 package com.fomono.fomono.models.db;
 
 import com.fomono.fomono.models.FomonoEvent;
+import com.fomono.fomono.models.eats.Business;
+import com.fomono.fomono.models.events.events.Event;
+import com.fomono.fomono.models.movies.Movie;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -27,15 +30,36 @@ public class Favorite extends ParseObject {
 
         this.put("api_name", apiName);
         this.put("fomono_event_id", fomonoEventId);
-        this.put("fomono_event", fomonoEvent);
+        addFomonoEventForParse(favoriteEvent);
         this.put("user", ParseUser.getCurrentUser());
+    }
+
+    private void addFomonoEventForParse(FomonoEvent ev) {
+        if (ev instanceof Event) {
+            this.put("event", ev);
+        } else if (ev instanceof Business) {
+            this.put("business", ev);
+        } else if (ev instanceof Movie) {
+            this.put("movie", ev);
+        }
+    }
+
+    private FomonoEvent getFomonoEventFromParse() {
+        if (this.has("event")) {
+            return (FomonoEvent) getParseObject("event");
+        } else if (this.has("business")) {
+            return (FomonoEvent) getParseObject("business");
+        } else if (this.has("movie")) {
+            return (FomonoEvent) getParseObject("movie");
+        }
+        return null;
     }
 
     /**
      * Needs to be called after retrieving objects from db.
      */
     public void initialize() {
-        this.fomonoEvent = (FomonoEvent) getParseObject("fomono_event");
+        this.fomonoEvent = getFomonoEventFromParse();
         this.apiName = getString("api_name");
         this.fomonoEventId = getString("fomono_event_id");
     }
@@ -62,9 +86,6 @@ public class Favorite extends ParseObject {
     }
 
     public FomonoEvent getFomonoEvent() {
-        if (fomonoEvent == null) {
-            fomonoEvent = (FomonoEvent) getParseObject("fomono_event");
-        }
         return fomonoEvent;
     }
 
@@ -74,14 +95,10 @@ public class Favorite extends ParseObject {
     }
 
     public String getFomonoEventId() {
-        if (fomonoEventId == null) {
-            fomonoEventId = getString("fomono_event_id");
-        }
         return fomonoEventId;
     }
 
     public void setFomonoEventId(String fomonoEventId) {
         this.fomonoEventId = fomonoEventId;
-        this.put("fomono_event_id", fomonoEventId);
     }
 }

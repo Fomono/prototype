@@ -7,11 +7,17 @@ import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.models.FomonoEvent;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by jsaluja on 4/6/2017.
@@ -168,7 +174,6 @@ public class Event extends ParseObject implements Parcelable, FomonoEvent
             instance.resourceUri = ((String) in.readValue((String.class.getClassLoader())));
             instance.logo = ((Logo) in.readValue((Logo.class.getClassLoader())));
             instance.venue = ((Venue) in.readValue((Venue.class.getClassLoader())));
-            instance.setObjectId(in.readString());
 
             initializeForParse(instance);
 
@@ -190,12 +195,12 @@ public class Event extends ParseObject implements Parcelable, FomonoEvent
      * Note: Only stores data we care about.
      * @param instance
      */
-    private static void initializeForParse(Event instance) {
+    public static void initializeForParse(Event instance) {
         instance.name.initializeForParse();
         instance.put("name", instance.name);
         instance.description.initializeForParse();
         instance.put("description", instance.description);
-        instance.put("id", instance.id);
+        instance.put("id", String.valueOf(instance.id));
         instance.put("url", instance.url);
         instance.start.initializeForParse();
         instance.put("start", instance.start);
@@ -212,9 +217,56 @@ public class Event extends ParseObject implements Parcelable, FomonoEvent
         }
     }
 
+    public static void getListFromParse(List<Event> list, FindCallback<Event> callback) {
+        ParseQuery<Event> query = ParseQuery.getQuery(Event.class);
+        List<String> ids = new ArrayList<>();
+        for (Event e : list) {
+            ids.add(e.getStringId());
+        }
+        query.whereContainedIn("id", ids)
+                .include("name")
+                .include("description")
+                .include("start")
+                .include("end")
+                .include("logo")
+                .include("venue")
+                .include("logo.original")
+                .include("venue.address")
+                .findInBackground(callback);
+    }
+
+    public static void saveOrUpdateFromList(List<Event> list) {
+        getListFromParse(list, new FindCallback<Event>() {
+            @Override
+            public void done(List<Event> objects, ParseException e) {
+                if (objects != null) {
+                    Map<String, Event> map = new HashMap<>();
+                    for (Event ev : objects) {
+                        map.put(ev.getStringId(), ev);
+                    }
+                    for (Event evFromApi : list) {
+                        if (map.containsKey(evFromApi.getStringId())) {
+                            Event evFromParse = map.get(evFromApi.getStringId());
+                            evFromParse.updateWithExisting(evFromApi);
+                            evFromParse.saveInBackground();
+                        } else {
+                            initializeForParse(evFromApi);
+                            evFromApi.saveInBackground();
+                        }
+                    }
+                } else {
+                    for (Event evFromApi : list) {
+                        initializeForParse(evFromApi);
+                    }
+                    ParseObject.saveAllInBackground(list);
+                }
+            }
+        });
+    }
+
     public void getFromParse(GetCallback<Event> callback) {
         ParseQuery<Event> query = ParseQuery.getQuery(Event.class);
-        query.whereEqualTo("id", this.getId())
+        query.whereEqualTo("id", this.getStringId())
                 .include("name")
                 .include("description")
                 .include("start")
@@ -232,6 +284,7 @@ public class Event extends ParseObject implements Parcelable, FomonoEvent
                     public void done(Event object, ParseException e) {
                         //if it's a new object, save it
                         if (object == null) {
+                            initializeForParse(Event.this);
                             Event.this.saveInBackground();
                         } else {
                             //otherwise update any fields, and save the original
@@ -245,7 +298,7 @@ public class Event extends ParseObject implements Parcelable, FomonoEvent
     public void updateWithExisting(Event event) {
         ((Name)this.get("name")).updateWithExisting(event.name);
         ((Description)this.get("description")).updateWithExisting(event.description);
-        this.put("id", event.id);
+        this.put("id", String.valueOf(event.id));
         this.put("url", event.url);
         ((Start)this.get("start")).updateWithExisting(event.start);
         ((End)this.get("end")).updateWithExisting(event.end);
@@ -295,7 +348,7 @@ public class Event extends ParseObject implements Parcelable, FomonoEvent
 
     public void setId(String id) {
         this.id = id;
-        this.put("id", id);
+        this.put("id", String.valueOf(id));
     }
 
     public String getUrl() {
@@ -624,7 +677,6 @@ public class Event extends ParseObject implements Parcelable, FomonoEvent
         dest.writeValue(resourceUri);
         dest.writeValue(logo);
         dest.writeValue(venue);
-        dest.writeString(getObjectId());
     }
 
     public int describeContents() {

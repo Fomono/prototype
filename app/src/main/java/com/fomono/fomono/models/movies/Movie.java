@@ -7,14 +7,23 @@ import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.models.FomonoEvent;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.ParseClassName;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Saranu on 4/8/17.
  */
-
-public class Movie implements Parcelable, FomonoEvent{
+@ParseClassName("Movie")
+public class Movie extends ParseObject implements Parcelable, FomonoEvent{
 
         @SerializedName("poster_path")
         @Expose
@@ -60,6 +69,7 @@ public class Movie implements Parcelable, FomonoEvent{
         public double voteAverage;
 
     public  Movie(){
+        //required empty default constructor
     }
 
     protected Movie(Parcel in) {
@@ -76,6 +86,8 @@ public class Movie implements Parcelable, FomonoEvent{
         voteCount = in.readLong();
         video = in.readByte() != 0;
         voteAverage = in.readDouble();
+
+        initializeForParse(this);
     }
 
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
@@ -89,6 +101,95 @@ public class Movie implements Parcelable, FomonoEvent{
             return new Movie[size];
         }
     };
+
+    /**
+     * Initializes an as a ParseObject that can be saved to db.
+     * Note: Only stores data we care about.
+     * @param instance
+     */
+    public static void initializeForParse(Movie instance) {
+        instance.put("poster_path", instance.posterPath);
+        instance.put("overview", instance.overview);
+        instance.put("release_date", instance.releaseDate);
+        instance.put("id", String.valueOf(instance.id));
+        instance.put("original_title", instance.originalTitle);
+        instance.put("title", instance.title);
+        instance.put("backdrop_path", instance.backdropPath);
+        instance.put("vote_average", instance.voteAverage);
+    }
+
+    public static void getListFromParse(List<Movie> list, FindCallback<Movie> callback) {
+        ParseQuery<Movie> query = ParseQuery.getQuery(Movie.class);
+        List<String> ids = new ArrayList<>();
+        for (Movie e : list) {
+            ids.add(e.getStringId());
+        }
+        query.whereContainedIn("id", ids)
+                .findInBackground(callback);
+    }
+
+    public static void saveOrUpdateFromList(List<Movie> list) {
+        getListFromParse(list, new FindCallback<Movie>() {
+            @Override
+            public void done(List<Movie> objects, ParseException e) {
+                if (objects != null) {
+                    Map<String, Movie> map = new HashMap<>();
+                    for (Movie o : objects) {
+                        map.put(o.getStringId(), o);
+                    }
+                    for (Movie oFromAPI : list) {
+                        if (map.containsKey(oFromAPI.getStringId())) {
+                            Movie oFromParse = map.get(oFromAPI.getStringId());
+                            oFromParse.updateWithExisting(oFromAPI);
+                            oFromParse.saveInBackground();
+                        } else {
+                            initializeForParse(oFromAPI);
+                            oFromAPI.saveInBackground();
+                        }
+                    }
+                } else {
+                    for (Movie oFromApi : list) {
+                        initializeForParse(oFromApi);
+                    }
+                    ParseObject.saveAllInBackground(list);
+                }
+            }
+        });
+    }
+
+    public void getFromParse(GetCallback<Movie> callback) {
+        ParseQuery<Movie> query = ParseQuery.getQuery(Movie.class);
+        query.whereEqualTo("id", this.getStringId())
+                .getFirstInBackground(callback);
+    }
+
+    public void saveOrUpdate() {
+        getFromParse(new GetCallback<Movie>() {
+            @Override
+            public void done(Movie object, ParseException e) {
+                //if it's a new object, save it
+                if (object == null) {
+                    initializeForParse(Movie.this);
+                    Movie.this.saveInBackground();
+                } else {
+                    //otherwise update any fields, and save the original
+                    object.updateWithExisting(Movie.this);
+                    object.saveInBackground();
+                }
+            }
+        });
+    }
+
+    public void updateWithExisting(Movie instance) {
+        this.put("poster_path", instance.posterPath);
+        this.put("overview", instance.overview);
+        this.put("release_date", instance.releaseDate);
+        this.put("id", String.valueOf(instance.id));
+        this.put("original_title", instance.originalTitle);
+        this.put("title", instance.title);
+        this.put("backdrop_path", instance.backdropPath);
+        this.put("vote_average", instance.voteAverage);
+    }
 
     public String getPosterPath() {
         return String.format("https://image.tmdb.org/t/p/w342/%s",posterPath);
@@ -225,6 +326,9 @@ public class Movie implements Parcelable, FomonoEvent{
 
     @Override
     public String getStringId() {
+        if (id == 0) {
+            return getString("id");
+        }
         return String.valueOf(id);
     }
 

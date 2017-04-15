@@ -11,11 +11,20 @@ import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.models.FomonoEvent;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.ParseClassName;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class Business implements Parcelable, FomonoEvent
+@ParseClassName("Business")
+public class Business extends ParseObject implements Parcelable, FomonoEvent
 {
 
     @SerializedName("rating")
@@ -47,7 +56,7 @@ public class Business implements Parcelable, FomonoEvent
     private String url;
     @SerializedName("coordinates")
     @Expose
-    private com.fomono.fomono.models.eats.Coordinates coordinates;
+    private Coordinates coordinates;
     @SerializedName("image_url")
     @Expose
     private String imageUrl;
@@ -77,11 +86,14 @@ public class Business implements Parcelable, FomonoEvent
             instance.reviewCount = ((Integer) in.readValue((Integer.class.getClassLoader())));
             instance.name = ((String) in.readValue((String.class.getClassLoader())));
             instance.url = ((String) in.readValue((String.class.getClassLoader())));
-            instance.coordinates = ((com.fomono.fomono.models.eats.Coordinates) in.readValue((com.fomono.fomono.models.eats.Coordinates.class.getClassLoader())));
+            instance.coordinates = ((Coordinates) in.readValue((Coordinates.class.getClassLoader())));
             instance.imageUrl = ((String) in.readValue((String.class.getClassLoader())));
             instance.location = ((Location) in.readValue((Location.class.getClassLoader())));
             instance.distance = ((Double) in.readValue((Double.class.getClassLoader())));
             instance.transactions = in.readArrayList(java.lang.String.class.getClassLoader());
+
+            initializeForParse(instance);
+
             return instance;
         }
 
@@ -91,6 +103,112 @@ public class Business implements Parcelable, FomonoEvent
 
     }
             ;
+
+    /**
+     * Initializes an as a ParseObject that can be saved to db.
+     * Note: Only stores data we care about.
+     * @param instance
+     */
+    public static void initializeForParse(Business instance) {
+        instance.put("rating", instance.rating);
+        instance.put("price", instance.price);
+        instance.put("id", String.valueOf(instance.id));
+        for (Category c : instance.categories) {
+            c.initializeForParse();
+        }
+        instance.put("categories", instance.categories);
+        instance.put("review_count", instance.reviewCount);
+        instance.put("name", instance.name);
+        instance.put("url", instance.url);
+        instance.coordinates.initializeForParse();
+        instance.put("coordinates", instance.coordinates);
+        instance.put("image_url", instance.imageUrl);
+        instance.location.initializeForParse();
+        instance.put("location", instance.location);
+        instance.put("distance", instance.distance);
+    }
+
+    public static void getListFromParse(List<Business> list, FindCallback<Business> callback) {
+        ParseQuery<Business> query = ParseQuery.getQuery(Business.class);
+        List<String> ids = new ArrayList<>();
+        for (Business e : list) {
+            ids.add(e.getStringId());
+        }
+        query.whereContainedIn("id", ids)
+                .include("categories")
+                .include("coordinates")
+                .include("location")
+                .findInBackground(callback);
+    }
+
+    public static void saveOrUpdateFromList(List<Business> list) {
+        getListFromParse(list, new FindCallback<Business>() {
+            @Override
+            public void done(List<Business> objects, ParseException e) {
+                if (objects != null) {
+                    Map<String, Business> map = new HashMap<>();
+                    for (Business o : objects) {
+                        map.put(o.getStringId(), o);
+                    }
+                    for (Business oFromAPI : list) {
+                        if (map.containsKey(oFromAPI.getStringId())) {
+                            Business oFromParse = map.get(oFromAPI.getStringId());
+                            oFromParse.updateWithExisting(oFromAPI);
+                            oFromParse.saveInBackground();
+                        } else {
+                            initializeForParse(oFromAPI);
+                            oFromAPI.saveInBackground();
+                        }
+                    }
+                } else {
+                    for (Business oFromApi : list) {
+                        initializeForParse(oFromApi);
+                    }
+                    ParseObject.saveAllInBackground(list);
+                }
+            }
+        });
+    }
+
+    public void getFromParse(GetCallback<Business> callback) {
+        ParseQuery<Business> query = ParseQuery.getQuery(Business.class);
+        query.whereEqualTo("id", this.getStringId())
+                .include("categories")
+                .include("coordinates")
+                .include("location")
+                .getFirstInBackground(callback);
+    }
+
+    public void saveOrUpdate() {
+        getFromParse(new GetCallback<Business>() {
+            @Override
+            public void done(Business object, ParseException e) {
+                //if it's a new object, save it
+                if (object == null) {
+                    initializeForParse(Business.this);
+                    Business.this.saveInBackground();
+                } else {
+                    //otherwise update any fields, and save the original
+                    object.updateWithExisting(Business.this);
+                    object.saveInBackground();
+                }
+            }
+        });
+    }
+
+    public void updateWithExisting(Business instance) {
+        this.put("rating", instance.rating);
+        this.put("price", instance.price);
+        this.put("id", String.valueOf(instance.id));
+        this.put("categories", instance.categories);
+        this.put("review_count", instance.reviewCount);
+        this.put("name", instance.name);
+        this.put("url", instance.url);
+        ((Coordinates)this.get("coordinates")).updateWithExisting(instance.coordinates);
+        this.put("image_url", instance.imageUrl);
+        ((Location)this.get("location")).updateWithExisting(instance.location);
+        this.put("distance", instance.distance);
+    }
 
     public double getRating() {
         return rating;
@@ -117,6 +235,9 @@ public class Business implements Parcelable, FomonoEvent
     }
 
     public String getId() {
+        if (id == null) {
+            id = getString("id");
+        }
         return id;
     }
 
@@ -164,11 +285,11 @@ public class Business implements Parcelable, FomonoEvent
         this.url = url;
     }
 
-    public com.fomono.fomono.models.eats.Coordinates getCoordinates() {
+    public Coordinates getCoordinates() {
         return coordinates;
     }
 
-    public void setCoordinates(com.fomono.fomono.models.eats.Coordinates coordinates) {
+    public void setCoordinates(Coordinates coordinates) {
         this.coordinates = coordinates;
     }
 

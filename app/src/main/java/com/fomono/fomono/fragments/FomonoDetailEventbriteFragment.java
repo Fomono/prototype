@@ -256,7 +256,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
                     ibFavorite.setImageResource(R.drawable.ic_favorite_grey);
                     favsUtil.removeFromFavorites(event);
                 } else {
-                    ibFavorite.setImageResource(R.drawable.ic_favorite_grey);
+                    ibFavorite.setImageResource(R.drawable.ic_favorite);
                     favsUtil.addToFavorites(event);
                 }
             }

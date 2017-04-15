@@ -5,12 +5,14 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.parse.ParseClassName;
+import com.parse.ParseObject;
 
 /**
  * Created by jsaluja on 4/5/2017.
  */
-
-public class Coordinates implements Parcelable
+@ParseClassName("BusinessCoordinates")
+public class Coordinates extends ParseObject implements Parcelable
 {
 
     @SerializedName("latitude")
@@ -29,6 +31,7 @@ public class Coordinates implements Parcelable
             Coordinates instance = new Coordinates();
             instance.latitude = ((Double) in.readValue((Double.class.getClassLoader())));
             instance.longitude = ((Double) in.readValue((Double.class.getClassLoader())));
+            instance.initializeForParse();
             return instance;
         }
 
@@ -38,6 +41,16 @@ public class Coordinates implements Parcelable
 
     }
             ;
+
+    public void updateWithExisting(Coordinates instance) {
+        this.put("latitude", instance.latitude);
+        this.put("longitude", instance.longitude);
+    }
+
+    public void initializeForParse() {
+        this.put("latitude", this.latitude);
+        this.put("longitude", this.longitude);
+    }
 
     public Double getLatitude() {
         return latitude;
