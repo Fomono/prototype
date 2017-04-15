@@ -1,8 +1,12 @@
 package com.fomono.fomono.activities;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -15,6 +19,7 @@ import com.fomono.fomono.fragments.FomonoFilterFragment;
 import com.fomono.fomono.fragments.UserPreferencesFragment;
 import com.fomono.fomono.models.ICategory;
 import com.fomono.fomono.models.db.Filter;
+import com.fomono.fomono.supportclasses.NavigationDrawerClass;
 import com.fomono.fomono.utils.FilterUtil;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -30,16 +35,20 @@ public class FomonoFilterActivity extends AppCompatActivity implements FomonoFil
     UserPreferencesFragment userPrefsFragment;
     FomonoFilterFragment filtersFragment;
     int currentFilterPage;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_fomono_filter);
-        Toolbar toolbar = binding.toolbar;
+        toolbar = binding.toolbar;
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.title_activity_fomono_filter));
         //turn on back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
 
         if (savedInstanceState == null) {
             userPrefsFragment = UserPreferencesFragment.newInstance();
@@ -70,6 +79,7 @@ public class FomonoFilterActivity extends AppCompatActivity implements FomonoFil
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
     public void onComplete(int resultCode) {
         if (resultCode == UserPreferencesFragment.CODE_FILTERS) {
@@ -87,22 +97,19 @@ public class FomonoFilterActivity extends AppCompatActivity implements FomonoFil
         final String title = getApiTitle(apiName);
         final boolean lastPage = isLastPage(apiName);
         try {
-            FilterUtil.getFilters(apiName, new FindCallback<Filter>() {
-                @Override
-                public void done(List<Filter> objects, ParseException e) {
-                    if (objects != null) {
-                        Filter.initializeFromList(objects);
-                    } else {
-                        objects = new ArrayList<Filter>();
-                    }
-                    //get list of categories
-                    List<ICategory> categories = FilterUtil.getCategories(apiName, FomonoFilterActivity.this);
-                    filtersFragment = FomonoFilterFragment.newInstance(title, apiName, categories, lastPage, objects);
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.flContent, filtersFragment)
-                            .commit();
-                    currentFilterPage = getFilterPage(apiName);
+            FilterUtil.getFilters(apiName, (objects, e) -> {
+                if (objects != null) {
+                    Filter.initializeFromList(objects);
+                } else {
+                    objects = new ArrayList<Filter>();
                 }
+                //get list of categories
+                List<ICategory> categories = FilterUtil.getCategories(apiName, FomonoFilterActivity.this);
+                filtersFragment = FomonoFilterFragment.newInstance(title, apiName, categories, lastPage, objects);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.flContent, filtersFragment)
+                        .commit();
+                currentFilterPage = getFilterPage(apiName);
             });
         } catch (Exception e) {
             e.printStackTrace();

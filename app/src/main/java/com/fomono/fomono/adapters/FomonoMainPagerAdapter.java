@@ -19,15 +19,8 @@ import static android.R.attr.width;
  */
 
 public class FomonoMainPagerAdapter extends FragmentPagerAdapter {
-    private int screenWidth, screenHeight;
 
-    private String tabTitles[] = {"Events", "Eats", "Movies"};
-    public void setScreenWidth(int width) {
-        screenWidth = width;
-    }
-    public void setScreenHeight(int height) {
-        screenHeight = height;
-    }
+    private String tabTitles[] = {"Events", "Eats", "Movies", "Favorites"};
 
     public FomonoMainPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -36,8 +29,6 @@ public class FomonoMainPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         MainListFragment mainListFragment = new MainListFragment();
-        mainListFragment.setScreenWidthFromFragment(screenWidth);
-        mainListFragment.setScreenHeightFromFragment(screenHeight);
         if (position == 0) {
             EventFragment eventFragment = new EventFragment();
             return eventFragment;

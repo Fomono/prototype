@@ -33,4 +33,10 @@
 
     <string name="event_brite_user_key">IMWD66EDBK2PQIUKRK4K</string>
     <string name="movieDB_api_key">d0af6e07311c078f8b5c7419e1e0e3c3</string>
+    <string name="drawer_menu_filters">Filters</string>
+    <string name="drawer_menu_home">Home</string>
+    <string name="drawer_menu_about">About</string>
+    <string name="open_drawer">Open nav drawer</string>
+    <string name="close_drawer">Close nav drawer</string>
+    <string name="drawer_menu_timeline">Timeline</string>
 </resources>

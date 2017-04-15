@@ -1,19 +1,24 @@
 package com.fomono.fomono.activities;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
 import com.fomono.fomono.adapters.FomonoMainPagerAdapter;
+import com.fomono.fomono.databinding.ActivityFomonoBinding;
+import com.fomono.fomono.supportclasses.NavigationDrawerClass;
 import com.fomono.fomono.models.eats.Business;
 import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.movies.Movie;
@@ -32,34 +37,40 @@ import retrofit2.Response;
 public class FomonoActivity extends AppCompatActivity {
     private FomonoMainPagerAdapter fomonoMainPagerAdapter;
     private final static String TAG = "Fomono Activity";
+    private NavigationView nvView;
+    private DrawerLayout mDrawer;
+    private ActionBarDrawerToggle drawerToggle;
+    private Toolbar toolbar;
+    private ViewPager fomonoPager;
+    private PagerSlidingTabStrip fomonoTabStrip;
 
     public static final String ACTION_DETAIL = "launch_detail";
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fomono);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.fomonoToolbarId);
+        ActivityFomonoBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_fomono);
+        toolbar = binding.fomonoToolbarId;
+        nvView = binding.fomonoNavViewId;
+        mDrawer = binding.fomonoDrawerLayoutId;
+
+
+        drawerToggle = setupDrawerToggle();
+        mDrawer.addDrawerListener(drawerToggle);
+
+        NavigationDrawerClass navigationDrawerClass = new NavigationDrawerClass(FomonoActivity.this, mDrawer);
+        navigationDrawerClass.setupDrawerContent(nvView);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
 
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        int screenWidthPixels = metrics.widthPixels;
-        int screenWidth = (int) (screenWidthPixels / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT));
-        int screenHeightPixels = metrics.heightPixels;
-        int screenHeight = (int) (screenHeightPixels / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT));
-
-        Log.d(TAG, "Screen width is "+screenWidth+" and screen height is "+screenHeight);
+        //Calculate screen width/height
         fomonoMainPagerAdapter = new FomonoMainPagerAdapter(getSupportFragmentManager());
-        fomonoMainPagerAdapter.setScreenWidth(screenWidth);
-        fomonoMainPagerAdapter.setScreenHeight(screenHeight);
 
-        ViewPager fomonoPager = (ViewPager)findViewById(R.id.fomonoViewpagerId);
+        fomonoPager = (ViewPager)findViewById(R.id.fomonoViewpagerId);
         fomonoPager.setAdapter(fomonoMainPagerAdapter);
         //Tells the view pager to not destroy the fragment more than one tab away
         fomonoPager.setOffscreenPageLimit(getResources().getInteger(R.integer.NUM_MAINLIST_FRAGMENTS) - 1);
-        PagerSlidingTabStrip fomonoTabStrip = (PagerSlidingTabStrip)findViewById(R.id.fomonoTabsId);
+        fomonoTabStrip = (PagerSlidingTabStrip)findViewById(R.id.fomonoTabsId);
         fomonoTabStrip.setViewPager(fomonoPager);
 
         //process intent from notification or elsewhere
@@ -67,24 +78,28 @@ public class FomonoActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_fomono, menu);
-
-        return true;
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
+    }
 
-        switch (id) {
-            case R.id.menu_filters:
-                Intent i = new Intent(this, FomonoFilterActivity.class);
-                startActivity(i);
-                break;
-        }
+    private ActionBarDrawerToggle setupDrawerToggle() {
+        return new ActionBarDrawerToggle(this, mDrawer, toolbar, (R.string.open_drawer), R.string.close_drawer);
+    }
 
-        return true;
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        drawerToggle.syncState();
     }
 
     private void processOutOfAppIntent() {
