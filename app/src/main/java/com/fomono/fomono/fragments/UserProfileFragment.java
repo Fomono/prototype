@@ -4,7 +4,9 @@ package com.fomono.fomono.fragments;
  * Created by Saranu on 4/14/17.
  */
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
@@ -16,8 +18,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +46,7 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
     FragmentUserProfileBinding fragmentUserProfile;
     User user;
     Uri file;
+    private String photoType;
 
 
     @Override
@@ -71,6 +76,16 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
                 error(R.drawable.botaimage).into(view);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 0) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                    && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                callCameraPhotoGallery();
+            }
+
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -79,6 +94,8 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
                 inflater, R.layout.fragment_user_profile, parent, false);
         View view = fragmentUserProfile.getRoot();
         ButterKnife.bind(this, view);
+
+
         fragmentUserProfile.ivCameraImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,11 +136,11 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
 
     private void convertImagetoBitmap(int requestCode) {
         int rotate = 0;
-        String filePath =null;
+        String filePath = null;
         if (requestCode == 100) {
             filePath = file.getPath();
         } else if (requestCode == 200) {
-            filePath=getPath(file);
+            filePath = getPath(file);
         }
 
         try {
@@ -196,6 +213,18 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
 
     @Override
     public void onFinishAlertDialog(String photoType) {
+        this.photoType = photoType;
+        if (ContextCompat.checkSelfPermission(this.getActivity(),
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this.getActivity(), new String[]
+                    {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+        } else {
+
+            callCameraPhotoGallery();
+        }
+    }
+
+    private void callCameraPhotoGallery() {
         if (photoType.equals(Properties.PHOTO_SELECT)) {
             pickPicture();
 
