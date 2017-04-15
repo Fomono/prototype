@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -29,6 +30,7 @@ import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.events.events.Venue;
 import com.fomono.fomono.network.client.EventBriteClientRetrofit;
 import com.fomono.fomono.utils.DateUtils;
+import com.fomono.fomono.utils.FavoritesUtil;
 import com.fomono.fomono.utils.RoundedTransformation;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -67,13 +69,14 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
     EventBriteClientRetrofit eventBriteClientRetrofit;
     Event event;
     ProgressDialog pd;
-
-
+    ImageButton ibFavorite;
+    FavoritesUtil favsUtil;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         event = getArguments().getParcelable("event_obj");
+        favsUtil = FavoritesUtil.getInstance();
     }
 
     public static FomonoDetailEventbriteFragment newInstance(Event event) {
@@ -112,6 +115,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
                     Log.d(TAG, "MO MATCH ");
                 } else {
                     e.setVenue(response.body());
+                    e.saveOrUpdate();
                     populateAddressMap(e);
                 }
 
@@ -230,6 +234,23 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
                 intent.putExtra(Intent.EXTRA_TEXT, event.getUrl());
                 if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                     startActivity(Intent.createChooser(intent, ""));
+                }
+            }
+        });
+
+        ibFavorite = fragmentEventbriteDetailBinding.ivFavoriteIcon;
+        if (favsUtil.isFavorited(event)) {
+            ibFavorite.setImageResource(R.drawable.ic_favorite_on);
+        }
+        ibFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (favsUtil.isFavorited(event)) {
+                    ibFavorite.setImageResource(R.drawable.ic_favorite_off);
+                    favsUtil.removeFromFavorites(event);
+                } else {
+                    ibFavorite.setImageResource(R.drawable.ic_favorite_on);
+                    favsUtil.addToFavorites(event);
                 }
             }
         });

@@ -3,6 +3,7 @@ package com.fomono.fomono.models.movies;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.models.FomonoEvent;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -220,5 +221,15 @@ public class Movie implements Parcelable, FomonoEvent{
         dest.writeLong(voteCount);
         dest.writeByte((byte) (video ? 1 : 0));
         dest.writeDouble(voteAverage);
+    }
+
+    @Override
+    public String getStringId() {
+        return String.valueOf(id);
+    }
+
+    @Override
+    public String getApiName() {
+        return FomonoApplication.API_NAME_MOVIES;
     }
 }

@@ -5,12 +5,14 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.parse.ParseClassName;
+import com.parse.ParseObject;
 
 /**
  * Created by jsaluja on 4/6/2017.
  */
-
-public class Description implements Parcelable
+@ParseClassName("EventDescription")
+public class Description extends ParseObject implements Parcelable
 {
 
     @SerializedName("text")
@@ -19,6 +21,11 @@ public class Description implements Parcelable
     @SerializedName("html")
     @Expose
     public Object html;
+
+    public Description() {
+        //required empty default constructor
+    }
+
     public final static Parcelable.Creator<Description> CREATOR = new Creator<Description>() {
 
 
@@ -29,6 +36,8 @@ public class Description implements Parcelable
             Description instance = new Description();
             instance.text = ((Object) in.readValue((Object.class.getClassLoader())));
             instance.html = ((Object) in.readValue((Object.class.getClassLoader())));
+
+            instance.initializeForParse();
             return instance;
         }
 
@@ -39,12 +48,24 @@ public class Description implements Parcelable
     }
             ;
 
+    public void updateWithExisting(Description desc) {
+        this.put("text", desc.text);
+    }
+
+    public void initializeForParse() {
+        this.put("text", this.text);
+    }
+
     public Object getText() {
+        if (text == null) {
+            text = get("text");
+        }
         return text;
     }
 
     public void setText(Object text) {
         this.text = text;
+        this.put("text", text);
     }
 
     public Object getHtml() {

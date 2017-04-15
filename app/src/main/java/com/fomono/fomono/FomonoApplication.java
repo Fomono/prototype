@@ -3,7 +3,18 @@ package com.fomono.fomono;
 import android.app.Application;
 import android.util.Log;
 
+import com.fomono.fomono.models.db.Favorite;
 import com.fomono.fomono.models.db.Filter;
+import com.fomono.fomono.models.events.events.Address;
+import com.fomono.fomono.models.events.events.Description;
+import com.fomono.fomono.models.events.events.End;
+import com.fomono.fomono.models.events.events.Event;
+import com.fomono.fomono.models.events.events.Logo;
+import com.fomono.fomono.models.events.events.Name;
+import com.fomono.fomono.models.events.events.Original;
+import com.fomono.fomono.models.events.events.Start;
+import com.fomono.fomono.models.events.events.Venue;
+import com.fomono.fomono.utils.FavoritesUtil;
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseAnonymousUtils;
@@ -33,6 +44,20 @@ public class FomonoApplication extends Application {
 
         // Register our Parse objects
         ParseObject.registerSubclass(Filter.class);
+        ParseObject.registerSubclass(Favorite.class);
+        //Parse objects related to Events
+        ParseObject.registerSubclass(Event.class);
+        ParseObject.registerSubclass(Address.class);
+        ParseObject.registerSubclass(Description.class);
+        ParseObject.registerSubclass(End.class);
+        ParseObject.registerSubclass(Logo.class);
+        ParseObject.registerSubclass(Name.class);
+        ParseObject.registerSubclass(Original.class);
+        ParseObject.registerSubclass(Start.class);
+        ParseObject.registerSubclass(Venue.class);
+        //Parse objects related to Businesses
+
+        //Parse objects related to Movies
 
         // set applicationId, and server server based on the values in the Heroku settings.
         // clientKey is not needed unless explicitly configured
@@ -61,6 +86,7 @@ public class FomonoApplication extends Application {
                     try {
                         //update user from server
                         user.fetch();
+                        FavoritesUtil.getInstance().initialize(ParseUser.getCurrentUser());
                     } catch (ParseException e1) {
                         e1.printStackTrace();
                     }

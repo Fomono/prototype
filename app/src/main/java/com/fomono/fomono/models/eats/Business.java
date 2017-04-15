@@ -7,6 +7,7 @@ package com.fomono.fomono.models.eats;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.models.FomonoEvent;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -224,4 +225,13 @@ public class Business implements Parcelable, FomonoEvent
         return 0;
     }
 
+    @Override
+    public String getStringId() {
+        return getId();
+    }
+
+    @Override
+    public String getApiName() {
+        return FomonoApplication.API_NAME_EATS;
+    }
 }

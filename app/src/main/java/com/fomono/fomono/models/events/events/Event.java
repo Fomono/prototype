@@ -3,15 +3,21 @@ package com.fomono.fomono.models.events.events;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.models.FomonoEvent;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.parse.GetCallback;
+import com.parse.ParseClassName;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 /**
  * Created by jsaluja on 4/6/2017.
  */
-
-public class Event implements Parcelable, FomonoEvent
+@ParseClassName("Event")
+public class Event extends ParseObject implements Parcelable, FomonoEvent
 {
     @SerializedName("name")
     @Expose
@@ -131,7 +137,7 @@ public class Event implements Parcelable, FomonoEvent
             instance.description = ((Description) in.readValue((Description.class.getClassLoader())));
             instance.id = ((String) in.readValue((String.class.getClassLoader())));
             instance.url = ((String) in.readValue((String.class.getClassLoader())));
-            instance.start = ((com.fomono.fomono.models.events.events.Start) in.readValue((com.fomono.fomono.models.events.events.Start.class.getClassLoader())));
+            instance.start = ((Start) in.readValue((Start.class.getClassLoader())));
             instance.end = ((End) in.readValue((End.class.getClassLoader())));
             instance.created = ((String) in.readValue((String.class.getClassLoader())));
             instance.changed = ((String) in.readValue((String.class.getClassLoader())));
@@ -162,6 +168,10 @@ public class Event implements Parcelable, FomonoEvent
             instance.resourceUri = ((String) in.readValue((String.class.getClassLoader())));
             instance.logo = ((Logo) in.readValue((Logo.class.getClassLoader())));
             instance.venue = ((Venue) in.readValue((Venue.class.getClassLoader())));
+            instance.setObjectId(in.readString());
+
+            initializeForParse(instance);
+
             return instance;
         }
 
@@ -169,63 +179,171 @@ public class Event implements Parcelable, FomonoEvent
             return (new Event[size]);
         }
 
+    };
+
+    public Event() {
+        //required empty default constructor
     }
-            ;
+
+    /**
+     * Initializes an Event object as a ParseObject that can be saved to db.
+     * Note: Only stores data we care about.
+     * @param instance
+     */
+    private static void initializeForParse(Event instance) {
+        instance.name.initializeForParse();
+        instance.put("name", instance.name);
+        instance.description.initializeForParse();
+        instance.put("description", instance.description);
+        instance.put("id", instance.id);
+        instance.put("url", instance.url);
+        instance.start.initializeForParse();
+        instance.put("start", instance.start);
+        instance.end.initializeForParse();
+        instance.put("end", instance.end);
+        instance.put("created", instance.created);
+        instance.put("is_free", instance.isFree);
+        instance.put("venue_id", instance.venueId);
+        instance.logo.initializeForParse();
+        instance.put("logo", instance.logo);
+        if (instance.venue != null) {
+            instance.venue.initializeForParse();
+            instance.put("venue", instance.venue);
+        }
+    }
+
+    public void getFromParse(GetCallback<Event> callback) {
+        ParseQuery<Event> query = ParseQuery.getQuery(Event.class);
+        query.whereEqualTo("id", this.getId())
+                .include("name")
+                .include("description")
+                .include("start")
+                .include("end")
+                .include("logo")
+                .include("venue")
+                .include("logo.original")
+                .include("venue.address")
+                .getFirstInBackground(callback);
+    }
+
+    public void saveOrUpdate() {
+        getFromParse(new GetCallback<Event>() {
+                    @Override
+                    public void done(Event object, ParseException e) {
+                        //if it's a new object, save it
+                        if (object == null) {
+                            Event.this.saveInBackground();
+                        } else {
+                            //otherwise update any fields, and save the original
+                            object.updateWithExisting(Event.this);
+                            object.saveInBackground();
+                        }
+                    }
+                });
+    }
+
+    public void updateWithExisting(Event event) {
+        ((Name)this.get("name")).updateWithExisting(event.name);
+        ((Description)this.get("description")).updateWithExisting(event.description);
+        this.put("id", event.id);
+        this.put("url", event.url);
+        ((Start)this.get("start")).updateWithExisting(event.start);
+        ((End)this.get("end")).updateWithExisting(event.end);
+        this.put("created", event.created);
+        this.put("is_free", event.isFree);
+        this.put("venue_id", event.venueId);
+        ((Logo)this.get("logo")).updateWithExisting(event.logo);
+        if (event.venue != null) {
+            if (this.has("venue")) {
+                ((Venue)this.get("venue")).updateWithExisting(event.venue);
+            } else {
+                this.put("venue", event.venue);
+            }
+        }
+    }
 
     public Name getName() {
+        if (name == null) {
+            name = (Name) getParseObject("name");
+        }
         return name;
     }
 
     public void setName(Name name) {
         this.name = name;
+        this.put("name", name);
     }
 
     public Description getDescription() {
+        if (description == null) {
+            description = (Description) getParseObject("description");
+        }
         return description;
     }
 
     public void setDescription(Description description) {
         this.description = description;
+        this.put("description", description);
     }
 
     public String getId() {
+        if (id == null) {
+            id = getString("id");
+        }
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
+        this.put("id", id);
     }
 
     public String getUrl() {
+        if (url == null) {
+            url = getString("url");
+        }
         return url;
     }
 
     public void setUrl(String url) {
         this.url = url;
+        this.put("url", url);
     }
 
-    public com.fomono.fomono.models.events.events.Start getStart() {
+    public Start getStart() {
+        if (start == null) {
+            start = (Start) getParseObject("start");
+        }
         return start;
     }
 
-    public void setStart(com.fomono.fomono.models.events.events.Start start) {
+    public void setStart(Start start) {
         this.start = start;
+        this.put("start", start);
     }
 
     public End getEnd() {
+        if (end == null) {
+            end = (End) getParseObject("end");
+        }
         return end;
     }
 
     public void setEnd(End end) {
         this.end = end;
+        this.put("end", end);
     }
 
     public String getCreated() {
+        if (created == null) {
+            created = getString("created");
+        }
         return created;
     }
 
     public void setCreated(String created) {
         this.created = created;
+        this.put("created", created);
     }
 
     public String getChanged() {
@@ -373,11 +491,15 @@ public class Event implements Parcelable, FomonoEvent
     }
 
     public Boolean getIsFree() {
+        if (has("is_free")) {
+            isFree = getBoolean("is_free");
+        }
         return isFree;
     }
 
     public void setIsFree(Boolean isFree) {
         this.isFree = isFree;
+        this.put("is_free", isFree);
     }
 
     public Object getLogoId() {
@@ -397,11 +519,15 @@ public class Event implements Parcelable, FomonoEvent
     }
 
     public String getVenueId() {
+        if (venueId == null) {
+            venueId = getString("venue_id");
+        }
         return venueId;
     }
 
     public void setVenueId(String venueId) {
         this.venueId = venueId;
+        this.put("venue_id", venueId);
     }
 
     public String getCategoryId() {
@@ -436,13 +562,31 @@ public class Event implements Parcelable, FomonoEvent
         this.resourceUri = resourceUri;
     }
 
-    public Logo getLogo() {return logo;}
+    public Logo getLogo() {
+        if (logo == null) {
+            logo = (Logo) getParseObject("logo");
+        }
+        return logo;
+    }
 
-    public void setLogo(Logo logo) {this.logo = logo;}
+    public void setLogo(Logo logo) {
+        this.logo = logo;
+        logo.initializeForParse();
+        this.put("logo", logo);
+    }
 
-    public Venue getVenue() {return venue;}
+    public Venue getVenue() {
+        if (venue == null) {
+            venue = (Venue) getParseObject("venue");
+        }
+        return venue;
+    }
 
-    public void setVenue(Venue venue) {this.venue = venue;}
+    public void setVenue(Venue venue) {
+        this.venue = venue;
+        venue.initializeForParse();
+        this.put("venue", venue);
+    }
 
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(name);
@@ -480,10 +624,20 @@ public class Event implements Parcelable, FomonoEvent
         dest.writeValue(resourceUri);
         dest.writeValue(logo);
         dest.writeValue(venue);
+        dest.writeString(getObjectId());
     }
 
     public int describeContents() {
         return 0;
     }
 
+    @Override
+    public String getStringId() {
+        return getId();
+    }
+
+    @Override
+    public String getApiName() {
+        return FomonoApplication.API_NAME_EVENTS;
+    }
 }

@@ -5,12 +5,14 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.parse.ParseClassName;
+import com.parse.ParseObject;
 
 /**
  * Created by jsaluja on 4/8/2017.
  */
-
-public class Original implements Parcelable {
+@ParseClassName("EventLogoOriginal")
+public class Original extends ParseObject implements Parcelable {
 
     @SerializedName("url")
     @Expose
@@ -22,8 +24,21 @@ public class Original implements Parcelable {
     @Expose
     private Integer height;
 
+    public Original() {
+        //required empty default constructor
+    }
+
     protected Original(Parcel in) {
         url = in.readString();
+        this.initializeForParse();
+    }
+
+    public void updateWithExisting(Original instance) {
+        this.put("url", instance.url);
+    }
+
+    public void initializeForParse() {
+        this.put("url", url);
     }
 
     public static final Creator<Original> CREATOR = new Creator<Original>() {
@@ -39,11 +54,15 @@ public class Original implements Parcelable {
     };
 
     public String getUrl() {
+        if (url == null) {
+            url = getString("url");
+        }
         return url;
     }
 
     public void setUrl(String url) {
         this.url = url;
+        this.put("url", url);
     }
 
     public Integer getWidth() {

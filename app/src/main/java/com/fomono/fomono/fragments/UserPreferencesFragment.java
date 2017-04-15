@@ -110,7 +110,7 @@ public class UserPreferencesFragment extends Fragment {
                 //TODO: this is saving after every key stroke, we might wanna change this
                 String location = editable.toString();
                 user.put("location", location);
-                user.saveEventually();
+                user.saveInBackground();
             }
         });
 
@@ -129,7 +129,7 @@ public class UserPreferencesFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 user.put("distance", ALLOWED_DISTANCES[i]);
-                user.saveEventually();
+                user.saveInBackground();
             }
 
             @Override

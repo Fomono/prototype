@@ -83,6 +83,7 @@ public class Filter extends ParseObject implements Parcelable {
         this.paramName = in.readString();
         this.value = in.readString();
         this.apiName = in.readString();
+        setObjectId(in.readString());   //important to avoid saving duplicates
 
         this.put("param_name", paramName);
         this.put("value", value);
@@ -100,6 +101,7 @@ public class Filter extends ParseObject implements Parcelable {
         parcel.writeString(this.paramName);
         parcel.writeString(this.value);
         parcel.writeString(this.apiName);
+        parcel.writeString(getObjectId());
     }
 
     public static final Parcelable.Creator<Filter> CREATOR = new Parcelable.Creator<Filter>() {

@@ -54,7 +54,7 @@
             app:srcCompat="@drawable/botaimage" />
 
 
-        <ImageView
+        <ImageButton
             android:id="@+id/ivFavoriteIcon"
             android:layout_width="20dp"
             android:layout_height="20dp"
@@ -62,7 +62,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="60dp"
-            app:srcCompat="@drawable/ic_favorite" />
+            app:srcCompat="@drawable/ic_favorite_off" />
 
         <TextView
             android:id="@+id/tvFavoriteLabel"
