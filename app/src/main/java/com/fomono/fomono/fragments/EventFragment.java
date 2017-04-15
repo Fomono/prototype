@@ -1,5 +1,6 @@
 package com.fomono.fomono.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.widget.ProgressBar;
 
 import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
+import com.fomono.fomono.adapters.FomonoAdapter;
 import com.fomono.fomono.models.db.Filter;
 import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.events.events.EventBriteResponse;
@@ -61,6 +63,7 @@ public class EventFragment extends MainListFragment {
                 }
             }
         });
+
         return view;
     }
 
@@ -103,28 +106,31 @@ public class EventFragment extends MainListFragment {
         }
         if (!TextUtils.isEmpty(location)) {
             data.put("location.address", location);
+
+            if (distance > 0) {
+                data.put("location.within", distance + "mi");
+            }
         }
         if (!TextUtils.isEmpty(categories)) {
             data.put("categories", categories);
         }
-        if (distance > 0) {
-            data.put("location.within", distance + "mi");
-        }
+
         data.put("page", String.valueOf(page));
         Call<EventBriteResponse> call = eventBriteClientRetrofit.EBRetrofitClientFactory().
                 getEventsFromServer(data);
 
+            Log.d(TAG, "Events URL String is " + call.request().url());
+
         call.enqueue(new Callback<EventBriteResponse>() {
             @Override
             public void onResponse(Call<EventBriteResponse> call, Response<EventBriteResponse> response) {
-                ArrayList<Event> events = response.body().getEvents();
-                if (events == null || events.isEmpty()) {
-                    Log.d(TAG, "No events fetched!!");
-                } else {
-                    fomonoEvents.addAll(events);
-                    fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
-                }
-
+                    ArrayList<Event> events = response.body().getEvents();
+                    if (events == null || events.isEmpty()) {
+                        Log.d(TAG, "No events fetched!!");
+                    } else {
+                        fomonoEvents.addAll(events);
+                        fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
+                    }
             }
 
             @Override

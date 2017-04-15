@@ -1,6 +1,7 @@
 package com.fomono.fomono.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -13,12 +14,15 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.fomono.fomono.FomonoApplication;
+import com.fomono.fomono.activities.FomonoDetailActivity;
+import com.fomono.fomono.adapters.FomonoAdapter;
 import com.fomono.fomono.models.db.Filter;
 import com.fomono.fomono.models.eats.Business;
 import com.fomono.fomono.models.eats.YelpResponse;
 import com.fomono.fomono.network.client.YelpClientRetrofit;
 import com.fomono.fomono.supportclasses.EndlessRecyclerViewScrollListener;
 import com.fomono.fomono.supportclasses.InternetAlertDialogue;
+import com.fomono.fomono.supportclasses.ItemClickSupport;
 import com.fomono.fomono.utils.FilterUtil;
 import com.fomono.fomono.utils.NumberUtil;
 import com.parse.FindCallback;

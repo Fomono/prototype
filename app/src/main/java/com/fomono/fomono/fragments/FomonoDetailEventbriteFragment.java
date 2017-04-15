@@ -15,6 +15,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,7 +55,6 @@ import retrofit2.Response;
 
 import static android.R.attr.x;
 import static android.content.ContentValues.TAG;
-import static com.fomono.fomono.fragments.MainListFragment.screenWidth;
 
 /**
  * Created by Saranu on 4/6/17.
@@ -70,6 +70,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
     ProgressDialog pd;
     ImageButton ibFavorite;
     FavoritesUtil favsUtil;
+    public int screenWidthDetail;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -132,12 +133,12 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
     }
 
     //  @BindingAdapter({"imageUrl"})
-    private static void setImageUrl(ImageView view, String imageUrl) {
+    private static void setImageUrl(ImageView view, String imageUrl, int screenWidthDetail) {
         //Glide.with(view.getContext()).load(imageUrl).placeholder(R.drawable.botaimage).
           //      error(R.drawable.botaimage).into(view);
         Picasso.with(view.getContext()).load(imageUrl).transform(new RoundedTransformation(6,3)).
                 placeholder(R.drawable.ic_fomono_big).
-                resize(screenWidth, 0).into(view);
+                resize(screenWidthDetail, 0).into(view);
 
     }
 
@@ -160,7 +161,14 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
         fragmentEventbriteDetailBinding.tvEventDate.setText(DateUtils.getFormattedDateForHeader(event.getStart().getUtc()));
         event.getStart().setLocal(DateUtils.getFormattedDate(event.getStart().getUtc()));
 
-        setImageUrl(fragmentEventbriteDetailBinding.ivEventImage, event.getLogo().getUrl());
+
+        DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
+        int pxWidth = displayMetrics.widthPixels;
+        screenWidthDetail = (int)(pxWidth / displayMetrics.density);
+
+        Log.d(TAG, "width is "+screenWidthDetail);
+
+        setImageUrl(fragmentEventbriteDetailBinding.ivEventImage, event.getLogo().getUrl(), screenWidthDetail);
 
         populateDetail(event);
 
