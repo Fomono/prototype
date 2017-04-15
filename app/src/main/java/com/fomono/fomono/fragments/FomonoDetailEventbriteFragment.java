@@ -36,7 +36,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -279,9 +278,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
                 }
                 googleMap.addMarker(new MarkerOptions().position(latlng).title(event.getVenue().getName()).
                         snippet(address.getAddress1() + ", " +address.getCity() + ", " +
-                                address.getCountry() + "," +  address.getPostalCode()).
-                        icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_location_pin)));
-
+                                address.getCountry() + "," +  address.getPostalCode()));
 
                 // For zooming automatically to the location of the marker
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(latlng).zoom(11).build();

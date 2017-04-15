@@ -47,7 +47,7 @@ public class InternetAlertDialogue {
     }
 
     public boolean checkForInternet() {
-        Log.d("Internet Dialog", "isOnline() = "+isOnline()+ "isNetworkAvailable = "+isNetworkAvailable());
+        Log.d("Internet Dialog", "isOnline() = "+isOnline()+ " isNetworkAvailable = "+isNetworkAvailable());
         if(isOnline() && isNetworkAvailable()) {
             return true;
         } else {

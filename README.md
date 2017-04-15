@@ -14,6 +14,7 @@ The following **required** functionality is completed:
 * [X] User can configure filter criteria on settings page. filters will be broad category (tech, music, sports, etc)
 * [X] User can scroll through events, restaurants, and movies using view group fragment implementation on home page
 * [X] User should be able to set location
+* [ ] User can click a notification to go to detailed event/restaurant/movie
 * [ ] User should be able to turn on/off notifications
 * [ ] User can scroll endlessly on home page for more events
 

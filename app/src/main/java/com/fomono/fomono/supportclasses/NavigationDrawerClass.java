@@ -9,6 +9,7 @@ import android.view.MenuItem;
 
 import com.fomono.fomono.R;
 import com.fomono.fomono.activities.FomonoFilterActivity;
+import com.fomono.fomono.activities.UserProfileActivity;
 
 /**
  * Created by jsaluja on 4/14/2017.
@@ -44,7 +45,7 @@ public class NavigationDrawerClass {
                 mContext.startActivity(filterIntent);
                 break;
             case R.id.drawerHomeId:
-                Intent userProfileIntent = new Intent(mContext,FomonoFilterActivity.class);
+                Intent userProfileIntent = new Intent(mContext,UserProfileActivity.class);
                 mContext.startActivity(userProfileIntent);
                 break;
             default:
