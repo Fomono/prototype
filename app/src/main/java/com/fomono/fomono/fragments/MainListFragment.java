@@ -1,6 +1,7 @@
 package com.fomono.fomono.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +16,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.ProgressBar;
 
 import com.fomono.fomono.R;
+import com.fomono.fomono.activities.FomonoDetailActivity;
 import com.fomono.fomono.adapters.FomonoAdapter;
 import com.fomono.fomono.databinding.FomonoMainListFragmentBinding;
 import com.fomono.fomono.models.FomonoEvent;
@@ -22,6 +24,7 @@ import com.fomono.fomono.models.eats.Business;
 import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.movies.Movie;
 import com.fomono.fomono.supportclasses.EndlessRecyclerViewScrollListener;
+import com.fomono.fomono.supportclasses.ItemClickSupport;
 import com.fomono.fomono.supportclasses.RecyclerItemDecorator;
 
 import java.util.ArrayList;
@@ -45,11 +48,8 @@ public class MainListFragment extends Fragment {
     Context mContext;
     public ProgressBar progressBar;
     public SmoothProgressBar smoothProgressBar;
-    public static int screenWidth, screenHeight;
     public static boolean initialEventsLoaded = false;
 
-    public void setScreenWidthFromFragment(int width) {screenWidth = width;}
-    public void setScreenHeightFromFragment(int height) {screenHeight = height;}
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,7 +61,7 @@ public class MainListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         fomonoEvents = new ArrayList<>();
-        fomonoAdapter = new FomonoAdapter(getActivity(), fomonoEvents, screenWidth, screenHeight);
+        fomonoAdapter = new FomonoAdapter(getActivity(), fomonoEvents);
 
         FomonoMainListFragmentBinding binding = DataBindingUtil.inflate(inflater, R.layout.fomono_main_list_fragment, container, false);
         View view = binding.getRoot();
@@ -77,6 +77,18 @@ public class MainListFragment extends Fragment {
 
         progressBar.setVisibility(ProgressBar.INVISIBLE);
         setupRecycleAdapter();
+
+
+        ItemClickSupport.addTo(rvList).setOnItemClickListener(
+                (recyclerView, position, v) -> {
+                    Intent showEatsDetails = new Intent(mContext, FomonoDetailActivity.class);
+                    showEatsDetails.putExtra("FOM_OBJ", fomonoEvents.get(position));
+                    mContext.startActivity(showEatsDetails);
+                }
+        );
+
+        fomonoAdapter.setCustomObjectListener(i -> startActivity(i));
+
         return view;
     }
 

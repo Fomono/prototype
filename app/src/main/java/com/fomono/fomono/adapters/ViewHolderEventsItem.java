@@ -8,6 +8,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.fomono.fomono.R;
+import com.fomono.fomono.databinding.EventListItemBinding;
 import com.fomono.fomono.supportclasses.LinkifiedTextView;
 import com.makeramen.roundedimageview.RoundedImageView;
 
@@ -26,15 +27,15 @@ public class ViewHolderEventsItem extends RecyclerView.ViewHolder {
     public TextView eventType;
     public ImageButton eventUrl;
 
-    public ViewHolderEventsItem(View itemView) {
-        super(itemView);
-        eventName = (TextView)itemView.findViewById(R.id.EventNameId);
-        eventDistance = (TextView)itemView.findViewById(R.id.EventDistanceId);
-        eventMediaImage = (com.makeramen.roundedimageview.RoundedImageView)itemView.findViewById(R.id.EventMediaImageId);
-        eventPrice = (TextView)itemView.findViewById(R.id.EventPriceId);
-        eventDesc = (TextView)itemView.findViewById(R.id.EventDescId);
-        eventDateTime = (TextView)itemView.findViewById(R.id.EventDateTimeId);
-        eventType = (TextView)itemView.findViewById(R.id.EventTypeId);
-        eventUrl = (ImageButton) itemView.findViewById(R.id.ImageLogoButtonId);
+    public ViewHolderEventsItem(EventListItemBinding binding) {
+        super(binding.getRoot());
+        eventName = binding.EventNameId;
+        eventDistance = binding.EventDistanceId;
+        eventMediaImage = binding.EventMediaImageId;
+        eventPrice = binding.EventPriceId;
+        eventDesc = binding.EventDescId;
+        eventDateTime = binding.EventDateTimeId;
+        eventType = binding.EventTypeId;
+        eventUrl = binding.ImageLogoButtonId;
     }
 }

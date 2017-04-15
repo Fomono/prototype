@@ -80,7 +80,7 @@
             android:label="@string/title_activity_fomono" />
         <activity android:name=".activities.FomonoDetailActivity" />
         <activity android:name=".activities.FomonoFilterActivity" />
-        <activity android:name=".activities.FomonoTrailerActivity"></activity>
+        <activity android:name=".activities.FomonoTrailerActivity" />
     </application>
 
 </manifest>
