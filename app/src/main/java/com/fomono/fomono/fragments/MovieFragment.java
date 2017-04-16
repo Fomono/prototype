@@ -34,8 +34,6 @@ public class MovieFragment extends MainListFragment {
 
 
     private final static String TAG = "Movie Fragment";
-    MovieDBClientRetrofit movieDBClientRetrofit;
-    private boolean initialMoviesLoaded = false;
     public int moviePage = 1;
 
     @Nullable
@@ -43,7 +41,7 @@ public class MovieFragment extends MainListFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         InternetAlertDialogue internetAlertDialogue = new InternetAlertDialogue(mContext);
-        if (internetAlertDialogue.checkForInternet() && !initialMoviesLoaded) {
+        if (internetAlertDialogue.checkForInternet()) {
             populateMovies(moviePage++);
         }
 
@@ -68,9 +66,6 @@ public class MovieFragment extends MainListFragment {
     }
 
     public void getMoviesNowPlaying(Context context, String stringQuery, int page) {
-        movieDBClientRetrofit = MovieDBClientRetrofit.getNewInstance();
-        initialMoviesLoaded = true;
-
 
         Map<String, String> data = new HashMap<>();
         data.put("api_key", getResources().getString(R.string.movieDB_api_key));

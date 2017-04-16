@@ -16,7 +16,6 @@ import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.models.db.Filter;
 import com.fomono.fomono.models.eats.Business;
 import com.fomono.fomono.models.eats.YelpResponse;
-import com.fomono.fomono.network.client.YelpClientRetrofit;
 import com.fomono.fomono.supportclasses.EndlessRecyclerViewScrollListener;
 import com.fomono.fomono.supportclasses.InternetAlertDialogue;
 import com.fomono.fomono.utils.FilterUtil;
@@ -37,15 +36,13 @@ import retrofit2.Response;
 
 public class EatsFragment extends MainListFragment {
     private final static String TAG = "Eats fragment";
-    private YelpClientRetrofit yelpClientRetrofit;
-    private boolean initialEatsLoaded = false;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         InternetAlertDialogue internetAlertDialogue = new InternetAlertDialogue(mContext);
-        if(internetAlertDialogue.checkForInternet() && !initialEatsLoaded) {
+        if(internetAlertDialogue.checkForInternet()) {
             int offset = fomonoEvents.size();
             populateEats(offset);
         }
@@ -91,10 +88,8 @@ public class EatsFragment extends MainListFragment {
     }
 
     public void getYelpBusinesses(Context context, String location, String categories, int distance, int offset){
-        yelpClientRetrofit = YelpClientRetrofit.getNewInstance();
-        initialEatsLoaded = true;
         Map<String, String> data = new HashMap<>();
-        if(location != null) {
+        if((location != null) && (location != "")) {
             data.put("location", location);
         } else {
             data.put("location", "San Francisco");

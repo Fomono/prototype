@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.fomono.fomono.FomonoApplication;
@@ -52,7 +53,8 @@ public class FomonoActivity extends AppCompatActivity {
         toolbar = binding.fomonoToolbarId;
         nvView = binding.fomonoNavViewId;
         mDrawer = binding.fomonoDrawerLayoutId;
-
+        fomonoTabStrip = binding.fomonoTabsId;
+        fomonoPager = binding.fomonoViewpagerId;
 
         drawerToggle = setupDrawerToggle();
         mDrawer.addDrawerListener(drawerToggle);
@@ -63,14 +65,10 @@ public class FomonoActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
 
-        //Calculate screen width/height
         fomonoMainPagerAdapter = new FomonoMainPagerAdapter(getSupportFragmentManager());
-
-        fomonoPager = (ViewPager)findViewById(R.id.fomonoViewpagerId);
         fomonoPager.setAdapter(fomonoMainPagerAdapter);
         //Tells the view pager to not destroy the fragment more than one tab away
         fomonoPager.setOffscreenPageLimit(getResources().getInteger(R.integer.NUM_MAINLIST_FRAGMENTS) - 1);
-        fomonoTabStrip = (PagerSlidingTabStrip)findViewById(R.id.fomonoTabsId);
         fomonoTabStrip.setViewPager(fomonoPager);
 
         //process intent from notification or elsewhere

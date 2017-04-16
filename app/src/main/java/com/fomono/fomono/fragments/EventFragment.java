@@ -33,6 +33,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.media.CamcorderProfile.get;
+
 /**
  * Created by Saranu on 4/6/17.
  */
@@ -40,7 +42,6 @@ import retrofit2.Response;
 public class EventFragment extends MainListFragment {
   //  private EventBriteClient client;
     private final static String TAG = "Event fragment";
-    private EventBriteClientRetrofit eventBriteClientRetrofit;
     int eventPage = 0;
 
     @Nullable
@@ -48,9 +49,8 @@ public class EventFragment extends MainListFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         InternetAlertDialogue internetAlertDialogue = new InternetAlertDialogue(mContext);
-        if(internetAlertDialogue.checkForInternet() && !initialEventsLoaded) {
+        if(internetAlertDialogue.checkForInternet()) {
             populateEvents(eventPage++);
-            Log.d(TAG, "data loaded = "+initialEventsLoaded);
         }
 
         rvList.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
@@ -94,9 +94,6 @@ public class EventFragment extends MainListFragment {
 
     public void getEventList(int page, String strQuery, String location, String categories, int distance) {
 
-        Log.d(TAG, "data loaded inside getEvent = "+initialEventsLoaded);
-        eventBriteClientRetrofit = EventBriteClientRetrofit.getNewInstance();
-        initialEventsLoaded = true;
         Map<String, String> data = new HashMap<>();
         data.put("token", getResources().getString(R.string.event_brite_user_key));
         if(strQuery != null) {
