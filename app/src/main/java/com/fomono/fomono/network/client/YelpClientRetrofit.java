@@ -37,11 +37,10 @@ public class YelpClientRetrofit {
     public static final String USER_SECRET = "HPPdcnhNTswBnC4DiTLVbQNLsQ07m1y1dN767UC2pjSeSfBHObFlc5NWVjGZx9IT";
     public static final String YelpToken = "Bearer " + "EHbNYMHOKBBlufnp61Eb2mO4gJ-Bmt4C8NWcGKyYDdVW5wTcEX5k_yUDyaTOTw7NvJhn-ws0OCcsEEXSQJixT4Wvf4JuYiF9qlpycTmsrBVk0URaftrXzKAKplvkWHYx";
 
-
+    private static YelpClientRetrofit instance;
 
     YelpClientRetrofit.YelpService Yservice;
     final static String TAG = "YelpClient";
-    Context mcontext;
     ArrayList<Business> businesses;
 
 
@@ -63,8 +62,11 @@ public class YelpClientRetrofit {
 
     }
 
-    public static YelpClientRetrofit getNewInstance() {
-        return new YelpClientRetrofit();
+    public static YelpClientRetrofit getInstance() {
+        if (instance == null) {
+            instance = new YelpClientRetrofit();
+        }
+        return instance;
     }
 
     public interface YelpService
@@ -103,7 +105,7 @@ public class YelpClientRetrofit {
 
     public void callRetrofitGetYelpToken(Context context,String stringQuery){
 
-        //eventBriteClientRetrofit = EventBriteClientRetrofit.getNewInstance();
+        //eventBriteClientRetrofit = EventBriteClientRetrofit.getInstance();
 
         //TODO: Incorrect string query. Write a method to generate a string
         //Call<YelpTokenClass> callVenue = YelpRetrofitClientFactory().getYelpTokenFromServer(stringQuery);
@@ -137,7 +139,7 @@ public class YelpClientRetrofit {
 /*
     public void callRetrofitGetYelpBusinesses(Context context,String stringQuery){
 
-        //eventBriteClientRetrofit = EventBriteClientRetrofit.getNewInstance();
+        //eventBriteClientRetrofit = EventBriteClientRetrofit.getInstance();
 
         //TODO: Incorrect string query. Write a method to generate a string
         //Call<YelpTokenClass> callVenue = YelpRetrofitClientFactory().getYelpTokenFromServer(stringQuery);
@@ -170,7 +172,7 @@ public class YelpClientRetrofit {
 */
     public void callRetrofitGetYelpDeliveryBusinesses(Context context,String stringQuery){
 
-        //eventBriteClientRetrofit = EventBriteClientRetrofit.getNewInstance();
+        //eventBriteClientRetrofit = EventBriteClientRetrofit.getInstance();
 
         //TODO: Incorrect string query. Write a method to generate a string
         //Call<YelpTokenClass> callVenue = YelpRetrofitClientFactory().getYelpTokenFromServer(stringQuery);

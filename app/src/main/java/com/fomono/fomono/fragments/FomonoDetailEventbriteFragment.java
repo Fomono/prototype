@@ -99,7 +99,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
 
     private void getAddressFromAPI(Event e) {
 
-        eventBriteClientRetrofit = EventBriteClientRetrofit.getNewInstance();
+        eventBriteClientRetrofit = EventBriteClientRetrofit.getInstance();
         Map<String, String> data = new HashMap<>();
         data.put("token", getResources().getString(R.string.eventbrite_api_key));
         Call<Venue> call = eventBriteClientRetrofit.EBRetrofitClientFactory().
