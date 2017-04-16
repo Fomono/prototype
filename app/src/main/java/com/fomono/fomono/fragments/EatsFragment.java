@@ -75,6 +75,10 @@ public class EatsFragment extends MainListFragment {
                     Filter.initializeFromList(filters);
                     categoriesString = FilterUtil.getInstance().buildCategoriesString(filters);
                 }
+                //default to our own set of filter categories
+                if (TextUtils.isEmpty(categoriesString)) {
+                    categoriesString = FilterUtil.getInstance().getDefaultFilterString(FomonoApplication.API_NAME_EATS, mContext);
+                }
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 String location = currentUser.getString("location");
                 int distance = currentUser.getInt("distance");

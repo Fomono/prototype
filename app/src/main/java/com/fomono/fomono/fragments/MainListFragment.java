@@ -6,7 +6,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -66,9 +65,9 @@ public abstract class MainListFragment extends Fragment {
         fomonoEvents = new ArrayList<>();
         fomonoAdapter = new FomonoAdapter(getActivity(), fomonoEvents);
 
-        eventBriteClientRetrofit = EventBriteClientRetrofit.getNewInstance();
-        yelpClientRetrofit = YelpClientRetrofit.getNewInstance();
-        movieDBClientRetrofit = MovieDBClientRetrofit.getNewInstance();
+        eventBriteClientRetrofit = EventBriteClientRetrofit.getInstance();
+        yelpClientRetrofit = YelpClientRetrofit.getInstance();
+        movieDBClientRetrofit = MovieDBClientRetrofit.getInstance();
 
         FomonoMainListFragmentBinding binding = DataBindingUtil.inflate(inflater, R.layout.fomono_main_list_fragment, container, false);
         View view = binding.getRoot();

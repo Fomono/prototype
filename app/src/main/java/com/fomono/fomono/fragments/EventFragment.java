@@ -1,10 +1,7 @@
 package com.fomono.fomono.fragments;
 
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -12,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
@@ -22,23 +18,17 @@ import com.fomono.fomono.models.events.events.EventBriteResponse;
 import com.fomono.fomono.supportclasses.EndlessRecyclerViewScrollListener;
 import com.fomono.fomono.supportclasses.InternetAlertDialogue;
 import com.fomono.fomono.utils.FilterUtil;
-import com.parse.FindCallback;
-import com.parse.ParseException;
 import com.parse.ParseUser;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.R.attr.format;
 
 /**
  * Created by Saranu on 4/6/17.
@@ -87,6 +77,10 @@ public class EventFragment extends MainListFragment {
                 if (filters != null) {
                     Filter.initializeFromList(filters);
                     categoriesString = FilterUtil.getInstance().buildCategoriesString(filters);
+                }
+                //default to our own set of filter categories
+                if (TextUtils.isEmpty(categoriesString)) {
+                    categoriesString = FilterUtil.getInstance().getDefaultFilterString(FomonoApplication.API_NAME_EVENTS, mContext);
                 }
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 String location = currentUser.getString("location");

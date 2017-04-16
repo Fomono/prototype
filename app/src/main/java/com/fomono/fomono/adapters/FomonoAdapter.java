@@ -213,16 +213,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             else holder.eventPrice.setVisibility(View.GONE);
 
             holder.eventType.setVisibility(View.GONE);
-            if (business.getCategories() != null) {
-                String alias = business.getCategories().get(0).getAlias();
-                if (alias != null) {
-                    String category = ConfigUtil.getCategoryName(alias, FomonoApplication.API_NAME_EATS, mContext);
-                    if (!TextUtils.isEmpty(category)) {
-                        holder.eventType.setText(category);
-                        holder.eventType.setVisibility(View.VISIBLE);
-                    }
-                }
-            }
+            setBusinessCategory(business, holder);
 
             //FIXME - call this something else. We can reuse this field, or collapse it and show something else.
             holder.eventDateTime.setText("" + business.getRating() + "/5, " + business.getReviewCount() + " Reviews");
@@ -243,10 +234,25 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
 
         setEventFavorited(holder, business);
-
     }
 
-    public void populateWithMovies(ViewHolderEventsItem holder, int position) {
+    private void setBusinessCategory(Business business, ViewHolderEventsItem holder) {
+        if (business.getCategories() != null) {
+            for (int i = 0; i < business.getCategories().size(); i++) {
+                String alias = business.getCategories().get(i).getAlias();
+                if (alias != null) {
+                    String category = ConfigUtil.getCategoryName(alias, FomonoApplication.API_NAME_EATS, mContext);
+                    if (!TextUtils.isEmpty(category)) {
+                        holder.eventType.setText(category);
+                        holder.eventType.setVisibility(View.VISIBLE);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    private void populateWithMovies(ViewHolderEventsItem holder, int position) {
         Movie movie = (Movie)mFomonoEvents.get(position);
         if(movie != null) {
             if(movie.getOriginalTitle() != null) {

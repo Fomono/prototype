@@ -36,10 +36,8 @@ public class EventBriteClientRetrofit {
 
 
     EventBriteClientRetrofit.EventBriteService EBservice;
-    EventBriteClientRetrofit eventBriteClientRetrofit;
+    private static EventBriteClientRetrofit eventBriteClientRetrofit;
     final static String TAG = "EventBriteClient";
-    Context mcontext;
-
 
     public EventBriteClientRetrofit.EventBriteService EBRetrofitClientFactory(){
 
@@ -58,8 +56,11 @@ public class EventBriteClientRetrofit {
 
     }
 
-    public static EventBriteClientRetrofit getNewInstance() {
-        return new EventBriteClientRetrofit();
+    public static EventBriteClientRetrofit getInstance() {
+        if (eventBriteClientRetrofit == null) {
+            eventBriteClientRetrofit = new EventBriteClientRetrofit();
+        }
+        return eventBriteClientRetrofit;
     }
 
     public interface EventBriteService
@@ -85,10 +86,9 @@ public class EventBriteClientRetrofit {
 
     public void callEBRetrofitGetVenueAPI(Context context,String venueId, String stringQuery){
 
-        eventBriteClientRetrofit = EventBriteClientRetrofit.getNewInstance();
         Map<String, String> data = new HashMap<>();
         data.put("token", "API_KEY goes here");
-        Call<Venue> call = eventBriteClientRetrofit.EBRetrofitClientFactory().
+        Call<Venue> call = EBRetrofitClientFactory().
                 getVenueFromServer(venueId,data);
 
         call.enqueue(new Callback<Venue>() {
@@ -116,13 +116,11 @@ public class EventBriteClientRetrofit {
 
     public void callEBRetrofitAPI(int page, String strQuery) {
 
-        eventBriteClientRetrofit = EventBriteClientRetrofit.getNewInstance();
-
         Map<String, String> data = new HashMap<>();
         data.put("token", "IMWD66EDBK2PQIUKRK4K");
         data.put("q", "holi");
 
-        Call<EventBriteResponse> call = eventBriteClientRetrofit.EBRetrofitClientFactory().
+        Call<EventBriteResponse> call = EBRetrofitClientFactory().
                 getEventsFromServer(data);
 
         call.enqueue(new Callback<EventBriteResponse>() {

@@ -1,13 +1,10 @@
 package com.fomono.fomono.network.client;
 
-import android.content.Context;
-
 import com.fomono.fomono.models.movies.Movie;
 import com.fomono.fomono.models.movies.MovieResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -27,9 +24,8 @@ public class MovieDBClientRetrofit {
     public static final String API_KEY = "d0af6e07311c078f8b5c7419e1e0e3c3";
     MovieDBClientRetrofit.MovieDBService MDBService;
     final static String TAG = "MovieDBClient";
-    Context mcontext;
-    ArrayList<Movie> movies;
 
+    private static MovieDBClientRetrofit instance;
 
     public MovieDBClientRetrofit.MovieDBService MovieDBRetrofitClientFactory() {
 
@@ -48,8 +44,11 @@ public class MovieDBClientRetrofit {
 
     }
 
-    public static MovieDBClientRetrofit getNewInstance() {
-        return new MovieDBClientRetrofit();
+    public static MovieDBClientRetrofit getInstance() {
+        if (instance == null) {
+            instance = new MovieDBClientRetrofit();
+        }
+        return instance;
     }
 
     public interface MovieDBService {
@@ -88,7 +87,7 @@ public class MovieDBClientRetrofit {
 /*
     public void callRetrofitGetMoviesNowPlaying(Context context, String stringQuery) {
 
-        //eventBriteClientRetrofit = EventBriteClientRetrofit.getNewInstance();
+        //eventBriteClientRetrofit = EventBriteClientRetrofit.getInstance();
 
         //TODO: Incorrect string query. Write a method to generate a string
         //Call<YelpTokenClass> callVenue = YelpRetrofitClientFactory().getYelpTokenFromServer(stringQuery);
@@ -120,7 +119,7 @@ public class MovieDBClientRetrofit {
 
     public void callRetrofitGetLatestMovies(Context context, String stringQuery) {
 
-        //eventBriteClientRetrofit = EventBriteClientRetrofit.getNewInstance();
+        //eventBriteClientRetrofit = EventBriteClientRetrofit.getInstance();
 
         //TODO: Incorrect string query. Write a method to generate a string
         //Call<YelpTokenClass> callVenue = YelpRetrofitClientFactory().getYelpTokenFromServer(stringQuery);
@@ -151,7 +150,7 @@ public class MovieDBClientRetrofit {
 
     public void callRetrofitGetPopularMovies(Context context, String stringQuery) {
 
-        //eventBriteClientRetrofit = EventBriteClientRetrofit.getNewInstance();
+        //eventBriteClientRetrofit = EventBriteClientRetrofit.getInstance();
 
         //TODO: Incorrect string query. Write a method to generate a string
         //Call<YelpTokenClass> callVenue = YelpRetrofitClientFactory().getYelpTokenFromServer(stringQuery);
@@ -182,7 +181,7 @@ public class MovieDBClientRetrofit {
 
     public void callRetrofitGetTopRatedMovies(Context context, String stringQuery) {
 
-        //eventBriteClientRetrofit = EventBriteClientRetrofit.getNewInstance();
+        //eventBriteClientRetrofit = EventBriteClientRetrofit.getInstance();
 
         //TODO: Incorrect string query. Write a method to generate a string
         //Call<YelpTokenClass> callVenue = YelpRetrofitClientFactory().getYelpTokenFromServer(stringQuery);
@@ -213,7 +212,7 @@ public class MovieDBClientRetrofit {
 
     public void callRetrofitGetUpcomingMovies(Context context, String stringQuery) {
 
-        //eventBriteClientRetrofit = EventBriteClientRetrofit.getNewInstance();
+        //eventBriteClientRetrofit = EventBriteClientRetrofit.getInstance();
 
         //TODO: Incorrect string query. Write a method to generate a string
         //Call<YelpTokenClass> callVenue = YelpRetrofitClientFactory().getYelpTokenFromServer(stringQuery);

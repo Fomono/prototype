@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,7 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.fomono.fomono.FomonoApplication;
@@ -228,7 +226,7 @@ public class FomonoActivity extends AppCompatActivity implements EventSortFragme
     }
 
     private void handleLaunchEventDetail(String id) {
-        EventBriteClientRetrofit eventBriteClientRetrofit = EventBriteClientRetrofit.getNewInstance();
+        EventBriteClientRetrofit eventBriteClientRetrofit = EventBriteClientRetrofit.getInstance();
         Map<String, String> data = new HashMap<>();
         data.put("token", getResources().getString(R.string.event_brite_user_key));
         Call<Event> call = eventBriteClientRetrofit.EBRetrofitClientFactory()
@@ -256,7 +254,7 @@ public class FomonoActivity extends AppCompatActivity implements EventSortFragme
     }
 
     private void handleLaunchBusinessDetail(String id) {
-        YelpClientRetrofit yelpClientRetrofit = YelpClientRetrofit.getNewInstance();
+        YelpClientRetrofit yelpClientRetrofit = YelpClientRetrofit.getInstance();
         Call<Business> call = yelpClientRetrofit.YelpRetrofitClientFactory()
                 .getYelpBusinessById(id);
 
@@ -281,7 +279,7 @@ public class FomonoActivity extends AppCompatActivity implements EventSortFragme
     }
 
     private void handleLaunchMovieDetail(String id) {
-        MovieDBClientRetrofit movieDBClientRetrofit = MovieDBClientRetrofit.getNewInstance();
+        MovieDBClientRetrofit movieDBClientRetrofit = MovieDBClientRetrofit.getInstance();
 
         Map<String, String> data = new HashMap<>();
         data.put("api_key", getResources().getString(R.string.movieDB_api_key));
