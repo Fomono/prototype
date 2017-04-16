@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.fomono.fomono.R;
+import com.fomono.fomono.utils.FavoritesUtil;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -59,6 +60,7 @@ public class SignupActivity extends AppCompatActivity {
         user.signUpInBackground(new SignUpCallback() {
             public void done(ParseException e) {
                 if (e == null) {
+                    FavoritesUtil.getInstance().initialize(user);
                     homePageIntent();
                 } else {
                     Toast.makeText(SignupActivity.this,"Signup failed"+e.getMessage(), Toast.LENGTH_LONG).show();

@@ -25,6 +25,7 @@ import com.facebook.Profile;
 import com.fomono.fomono.R;
 import com.fomono.fomono.models.user.User;
 import com.fomono.fomono.services.UserService;
+import com.fomono.fomono.utils.FavoritesUtil;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
@@ -135,6 +136,7 @@ public class LoginUserActivity extends AppCompatActivity {
         ParseUser.logInInBackground(userId, password, new LogInCallback() {
             public void done(ParseUser user, ParseException e) {
                 if (user != null) {
+                    FavoritesUtil.getInstance().initialize(user);
                     homePageIntent();
                 } else {
                     Toast.makeText(LoginUserActivity.this,"Login Failed" +e.getMessage(), Toast.LENGTH_LONG).show();
@@ -155,10 +157,12 @@ public class LoginUserActivity extends AppCompatActivity {
                     Log.d("Login", "Facebook Login Successful");
                     //getUserDetailsFromFB();
                     linkCurrentUsertoFB();
+                    FavoritesUtil.getInstance().initialize(user);
                     homePageIntent();
                 } else {
                     Log.d("Login", "User logged in through Facebook!");
                     getUserDetailsFromParse();
+                    FavoritesUtil.getInstance().initialize(user);
                     homePageIntent();
                 }
             }
