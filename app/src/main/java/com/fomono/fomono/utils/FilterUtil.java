@@ -14,6 +14,7 @@ import com.parse.ParseUser;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -62,6 +63,26 @@ public class FilterUtil {
         query.whereEqualTo("api_name", apiName);
         query.whereEqualTo("user", user);
         query.findInBackground(callback);
+    }
+
+    public String getDefaultFilterString(String apiName, Context context) {
+        String result = "";
+        try {
+            Set<Map.Entry<String, String>> catSet = ConfigUtil.getCategories(apiName, context);
+            StringBuilder sb = new StringBuilder();
+            Iterator<Map.Entry<String, String>> it = catSet.iterator();
+            while (it.hasNext()) {
+                Map.Entry<String, String> entry = it.next();
+                sb.append(entry.getKey());
+                if (it.hasNext()) {
+                    sb.append(",");
+                }
+            }
+            result = sb.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     /**
