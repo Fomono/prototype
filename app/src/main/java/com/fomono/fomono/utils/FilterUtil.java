@@ -177,7 +177,7 @@ public class FilterUtil {
                         f.pinInBackground();    //save locally on device for easy access
                         f.saveInBackground();
                         callback.done(f, null);
-                        isDirty = true;
+                        setDirty();
                     } else {
                         callback.done(object, null);
                     }
@@ -196,7 +196,7 @@ public class FilterUtil {
                     if (object != null) {
                         object.unpinInBackground();
                         object.deleteInBackground();
-                        isDirty = true;
+                        setDirty();
                     }
                 }
             });
@@ -207,6 +207,10 @@ public class FilterUtil {
 
     public boolean isDirty() {
         return isDirty;
+    }
+
+    public void setDirty() {
+        isDirty = true;
     }
 
     public void clearDirty() {

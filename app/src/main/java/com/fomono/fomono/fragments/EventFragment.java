@@ -130,6 +130,12 @@ public class EventFragment extends MainListFragment {
         });
     }
 
+    public void refresh() {
+        clear();
+        eventPage = 0;
+        populateEvents(0);
+    }
+
 /*
     public void getLocalEventBriteEventList(String query, String sortBy, String locationAddress, String locationRadius, String locationLat,
                                                    String locationLon, String categories, String subCategories, String price, String startDateRangeStart,

@@ -125,7 +125,10 @@ public class EatsFragment extends MainListFragment {
         });
     }
 
-
+    public void refresh() {
+        clear();
+        populateEats(0);
+    }
 
 
 /*

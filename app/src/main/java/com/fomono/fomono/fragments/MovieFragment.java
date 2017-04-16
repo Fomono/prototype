@@ -94,4 +94,10 @@ public class MovieFragment extends MainListFragment {
             }
         });
     }
+
+    public void refresh() {
+        clear();
+        moviePage = 1;
+        populateMovies(1);
+    }
 }

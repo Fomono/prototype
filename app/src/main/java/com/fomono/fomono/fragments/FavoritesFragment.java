@@ -44,8 +44,7 @@ public class FavoritesFragment extends MainListFragment implements FavoritesUtil
     public void onFavoritesLoaded(List<Favorite> favorites) {
         smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
 
-        fomonoEvents.clear();
-        fomonoAdapter.notifyDataSetChanged();
+        clear();
         List<FomonoEvent> favoriteEvents = new ArrayList<>();
         for (Favorite f : favorites) {
             favoriteEvents.add(f.getFomonoEvent());

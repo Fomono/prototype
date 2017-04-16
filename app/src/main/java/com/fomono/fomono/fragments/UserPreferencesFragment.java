@@ -111,6 +111,7 @@ public class UserPreferencesFragment extends Fragment {
                 String location = editable.toString();
                 user.put("location", location);
                 user.saveInBackground();
+                FilterUtil.getInstance().setDirty();
             }
         });
 
@@ -130,6 +131,9 @@ public class UserPreferencesFragment extends Fragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 user.put("distance", ALLOWED_DISTANCES[i]);
                 user.saveInBackground();
+                if (i != distanceIndex) {
+                    FilterUtil.getInstance().setDirty();
+                }
             }
 
             @Override

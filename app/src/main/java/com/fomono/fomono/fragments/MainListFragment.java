@@ -37,7 +37,7 @@ import fr.castorflex.android.smoothprogressbar.SmoothProgressDrawable;
  * Created by jsaluja on 4/7/2017.
  */
 
-public class MainListFragment extends Fragment {
+public abstract class MainListFragment extends Fragment {
     final static int NUM_GRID_COLUMNS = 1;
     private final static String TAG = "MAIN_LIST_FRAGMENT_LOG";
     public ArrayList<FomonoEvent> fomonoEvents;
@@ -125,4 +125,10 @@ public class MainListFragment extends Fragment {
         AlertDialog alertD = dialog.create();
         alertD.show();
     }
+
+    public void clear() {
+        fomonoEvents.clear();
+        fomonoAdapter.notifyDataSetChanged();
+    }
+
 }
