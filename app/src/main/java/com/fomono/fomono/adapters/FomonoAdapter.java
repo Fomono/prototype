@@ -205,7 +205,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             if (business.getDistance() != null) {
                 //have to convert meters to miles
                 distance = (business.getDistance() * 0.000621);
-                DecimalFormat numberFormat = new DecimalFormat("#.0");
+                DecimalFormat numberFormat = new DecimalFormat("#.000");
                 holder.eventDistance.setText("" + numberFormat.format(distance) + " mi");
             }
 
@@ -235,7 +235,6 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         Uri uri = Uri.parse(business.getUrl());
                         Intent openLink = new Intent(Intent.ACTION_VIEW, uri);
                         fomonoAdapterObjectListener.onOpenLink(openLink);
-                  //      mContext.startActivity(openLink);
                     }
                 });
             } else {
@@ -278,8 +277,6 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     Intent movTrail = new Intent(mContext, FomonoTrailerActivity.class);
                     movTrail.putExtra(mContext.getResources().getString(R.string.MovieId), movie.getId());
                     fomonoAdapterObjectListener.onOpenLink(movTrail);
-
-                //    mContext.startActivity(movTrail);
                 });
             } else {
                 holder.eventUrl.setBackgroundResource(R.drawable.ic_fomono_grey);

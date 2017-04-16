@@ -54,13 +54,13 @@ public class FomonoMainPagerAdapter extends FragmentPagerAdapter {
 
     public void refreshFragments() {
         if (eventFragment != null) {
-            eventFragment.refresh();
+            eventFragment.refreshEventList(null);
         }
         if (eatsFragment != null) {
-            eatsFragment.refresh();
+            eatsFragment.refreshEatsList(null);
         }
         if (movieFragment != null) {
-            movieFragment.refresh();
+            movieFragment.refreshMovieList(null);
         }
         FilterUtil.getInstance().clearDirty();
     }

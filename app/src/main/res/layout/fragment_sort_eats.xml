@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:context="com.fomono.fomono.fragments.FilterFragment">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/EatsSortTextId"
+            android:textSize="15sp"
+            android:textColor="@color/colorWhite"
+            android:text="@string/FilterSortText"
+            android:layout_alignParentTop="true"/>
+
+        <Spinner
+            android:id="@+id/EatsSortSpinnerId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown"
+            android:entries="@array/FilterEatsSortArray"
+            android:layout_alignLeft="@+id/EatsSortTextId"
+            android:layout_alignStart="@+id/EatsSortTextId"
+            android:layout_below="@+id/EatsSortButtonId"/>
+
+        <ImageButton
+            android:id="@+id/EatsSortButtonId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_sort"
+            android:textColor="@color/colorWhite"
+            android:text="@string/FilterEatsSortButtonText"
+            android:contentDescription="@string/FilterEatsSortButtonText"
+            android:layout_alignParentTop="true"
+            android:layout_alignRight="@id/EatsSortSpinnerId"
+            android:layout_alignEnd="@id/EatsSortSpinnerId" />
+
+    </RelativeLayout>
+</layout>

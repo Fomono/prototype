@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:context="com.fomono.fomono.fragments.FilterFragment">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/MovieSortTextId"
+            android:textSize="15sp"
+            android:textColor="@color/colorWhite"
+            android:text="@string/FilterSortText"
+            android:layout_alignParentTop="true"/>
+
+        <Spinner
+            android:id="@+id/MovieSortSpinnerId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown"
+            android:entries="@array/FilterMovieSortArray"
+            android:layout_alignLeft="@+id/MovieSortTextId"
+            android:layout_alignStart="@+id/MovieSortTextId"
+            android:layout_below="@+id/MovieSortButtonId"/>
+
+        <ImageButton
+            android:id="@+id/MovieSortButtonId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_sort"
+            android:textColor="@color/colorWhite"
+            android:text="@string/FilterMovieSortButtonText"
+            android:contentDescription="@string/FilterMovieSortButtonText"
+            android:layout_alignParentTop="true"
+            android:layout_alignRight="@id/MovieSortSpinnerId"
+            android:layout_alignEnd="@id/MovieSortSpinnerId" />
+
+    </RelativeLayout>
+</layout>

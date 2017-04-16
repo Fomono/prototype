@@ -114,21 +114,10 @@ public abstract class MainListFragment extends Fragment {
         smoothProgressBar = binding.fomonoMainFragSmoothBarId;
     }
 
-    public void alert_user(String title, String message) {
-        AlertDialog.Builder dialog;
-        dialog = new AlertDialog.Builder(mContext);
-        dialog.setTitle(title);
-        dialog.setMessage(message);
-        dialog.setCancelable(false);
-        dialog.setNegativeButton("Ok",
-                (dialog1, which) -> dialog1.cancel());
-        AlertDialog alertD = dialog.create();
-        alertD.show();
-    }
-
     public void clear() {
+        int size = fomonoEvents.size();
         fomonoEvents.clear();
-        fomonoAdapter.notifyDataSetChanged();
+        fomonoAdapter.notifyItemRangeRemoved(0, size);
     }
 
 }

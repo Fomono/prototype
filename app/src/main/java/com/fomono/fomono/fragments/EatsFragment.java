@@ -43,7 +43,7 @@ public class EatsFragment extends MainListFragment {
         InternetAlertDialogue internetAlertDialogue = new InternetAlertDialogue(mContext);
         if(internetAlertDialogue.checkForInternet()) {
             int offset = fomonoEvents.size();
-            populateEats(offset);
+            populateEats(offset, null);
         }
 
         rvList.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
@@ -51,7 +51,7 @@ public class EatsFragment extends MainListFragment {
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 if(internetAlertDialogue.checkForInternet()) {
                     int offset = fomonoEvents.size();
-                    populateEats(offset);
+                    populateEats(offset, null);
                 }
             }
         });
@@ -59,7 +59,13 @@ public class EatsFragment extends MainListFragment {
         return view;
     }
 
-    public void populateEats(int offset) {
+    public void refreshEatsList(String sortParam) {
+        String sortParameter = sortParam;
+        clear();
+        populateEats(0, sortParameter);
+    }
+
+    public void populateEats(int offset, String sortParameter) {
         smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
         try {
             //get user filters for yelp
@@ -74,14 +80,14 @@ public class EatsFragment extends MainListFragment {
                 int distance = currentUser.getInt("distance");
                 //gotta convert distance because yelp uses meters, and maxes out at 40,000 meters.
                 int distanceInMeters = Math.min(40000, NumberUtil.convertToMeters(distance));
-                getYelpBusinesses(getActivity(), location, categoriesString, distanceInMeters, offset);
+                getYelpBusinesses(getActivity(), location, categoriesString, distanceInMeters, offset, sortParameter);
             });
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void getYelpBusinesses(Context context, String location, String categories, int distance, int offset){
+    public void getYelpBusinesses(Context context, String location, String categories, int distance, int offset, String sortParam){
         Map<String, String> data = new HashMap<>();
         if((location != null) && (location != "")) {
             data.put("location", location);
@@ -96,6 +102,10 @@ public class EatsFragment extends MainListFragment {
         }
         if(offset > 0) {
             data.put("offset", String.valueOf(offset));
+        }
+
+        if((sortParam != null) && (sortParam != "")) {
+            data.put("sort_by", sortParam);
         }
 
         Call<YelpResponse> callEats = yelpClientRetrofit.YelpRetrofitClientFactory().getYelpBusinesssesFromServer(data);
@@ -124,58 +134,4 @@ public class EatsFragment extends MainListFragment {
             }
         });
     }
-
-    public void refresh() {
-        clear();
-        populateEats(0);
-    }
-
-
-/*
-    public void getLocalYelpBusinesses(String searchItem, String location, double lat, double lon, int radius,
-                                  String sortBy, String price,
-                                  boolean openNow, String attributes) {
-        String Url = "https://api.yelp.com/v3/businesses/search";
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.addHeader("Authorization", "Bearer " + YelpToken);
-        RequestParams params = new RequestParams();
-        if (searchItem == null) {params.put("term", "restaurants");}
-        else {params.put("term", searchItem);}
-
-        if (location == null) {
-            if ((lat == -1) || (lon == -1)) {
-                //FIXME - Use current location here
-                params.put("location", "San Francisco");
-            } else {
-                params.put("latitude", lat);
-                params.put("longitude", lon);
-            }
-        } else {params.put("location", location);}
-
-        if (radius != -1) {params.put("radius", radius);}
-        if (sortBy != null) {params.put("sort_by", sortBy);}
-        if (price != null) {params.put("price", price);}
-        params.put("open_now", openNow);
-        if (attributes != null) {params.put("attributes", attributes);}
-
-        client.get(Url, params, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                YelpResponse yelpResponse;
-                Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
-                Log.d(TAG, "response is " + response);
-                yelpResponse = gson.fromJson(response.toString(), YelpResponse.class);
-                fomonoEvents.addAll(yelpResponse.getBusinesses());
-                fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
-
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("onFailure", "There is an error, status_code " + statusCode);
-            }
-        });
-    }
-*/
-
 }

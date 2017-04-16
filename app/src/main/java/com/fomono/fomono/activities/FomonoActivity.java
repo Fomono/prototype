@@ -5,26 +5,37 @@ import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
 import com.fomono.fomono.adapters.FomonoMainPagerAdapter;
 import com.fomono.fomono.databinding.ActivityFomonoBinding;
+import com.fomono.fomono.fragments.EatsFragment;
+import com.fomono.fomono.fragments.EatsSortFragment;
+import com.fomono.fomono.fragments.EventFragment;
+import com.fomono.fomono.fragments.MovieFragment;
+import com.fomono.fomono.fragments.EventSortFragment;
+import com.fomono.fomono.fragments.MovieSortFragment;
+import com.fomono.fomono.supportclasses.NavigationDrawerClass;
 import com.fomono.fomono.models.eats.Business;
 import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.movies.Movie;
 import com.fomono.fomono.network.client.EventBriteClientRetrofit;
 import com.fomono.fomono.network.client.MovieDBClientRetrofit;
 import com.fomono.fomono.network.client.YelpClientRetrofit;
-import com.fomono.fomono.supportclasses.NavigationDrawerClass;
 import com.fomono.fomono.utils.FilterUtil;
 
 import java.util.HashMap;
@@ -35,7 +46,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class FomonoActivity extends AppCompatActivity {
+public class FomonoActivity extends AppCompatActivity implements EventSortFragment.OnFragmentInteractionListener,
+                                                                 EatsSortFragment.OnFragmentInteractionListener,
+                                                                 MovieSortFragment.OnFragmentInteractionListener {
     private FomonoMainPagerAdapter fomonoMainPagerAdapter;
     private final static String TAG = "Fomono Activity";
     private NavigationView nvView;
@@ -44,6 +57,7 @@ public class FomonoActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ViewPager fomonoPager;
     private PagerSlidingTabStrip fomonoTabStrip;
+    private int ActiveViewPagerPagePosition = 0;
 
     public static final String ACTION_DETAIL = "launch_detail";
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +84,22 @@ public class FomonoActivity extends AppCompatActivity {
         //Tells the view pager to not destroy the fragment more than one tab away
         fomonoPager.setOffscreenPageLimit(getResources().getInteger(R.integer.NUM_MAINLIST_FRAGMENTS) - 1);
         fomonoTabStrip.setViewPager(fomonoPager);
+        fomonoPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                ActiveViewPagerPagePosition = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         //clear filter dirty flags here since we're creating a new fomono activity and everything will be refreshed
         FilterUtil.getInstance().clearDirty();
@@ -91,7 +121,69 @@ public class FomonoActivity extends AppCompatActivity {
         if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        return super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case R.id.menuSortId:
+                String name = makeFragmentName(fomonoPager.getId(), ActiveViewPagerPagePosition);
+                Fragment viewPagerFragment = getSupportFragmentManager().findFragmentByTag(name);
+
+                if (viewPagerFragment != null) {
+                    // Do something with your Fragment
+                    if (viewPagerFragment.isResumed()) {
+
+                        FragmentManager fm = getSupportFragmentManager();
+                        if (viewPagerFragment instanceof EventFragment) {
+                            EventSortFragment sortFragmentObject = EventSortFragment.newInstance();
+                            sortFragmentObject.show(fm, "fragment_edit_name");
+
+                        } else if(viewPagerFragment instanceof EatsFragment) {
+                            EatsSortFragment sortFragmentObject = EatsSortFragment.newInstance();
+                            sortFragmentObject.show(fm, "fragment_edit_name");
+
+                        } else if(viewPagerFragment instanceof MovieFragment) {
+                            MovieSortFragment sortFragmentObject = MovieSortFragment.newInstance();
+                            sortFragmentObject.show(fm, "fragment_edit_name");
+                        }
+
+                    } else {
+                        Log.d(TAG, "Fragment not resumed");
+                    }
+                } else {
+                    fomonoMainPagerAdapter.refreshFragments();
+                }
+                return true;
+            default:return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private static String makeFragmentName(int viewId, int position) {
+        return "android:switcher:" + viewId + ":" + position;
+    }
+
+    @Override
+    public void onFinishEventSortDialog(String sortString) {
+        String name = makeFragmentName(fomonoPager.getId(), ActiveViewPagerPagePosition);
+        Fragment viewPagerFragment = getSupportFragmentManager().findFragmentByTag(name);
+
+        if (viewPagerFragment != null) {
+            if (viewPagerFragment.isResumed()) {
+                if (viewPagerFragment instanceof EventFragment) {
+                    EventFragment mEventFragment = (EventFragment) viewPagerFragment;
+                    mEventFragment.refreshEventList(sortString);
+                } else if (viewPagerFragment instanceof EatsFragment) {
+                    EatsFragment mEatsFragment = (EatsFragment) viewPagerFragment;
+                    mEatsFragment.refreshEatsList(sortString);
+                } else if (viewPagerFragment instanceof MovieFragment) {
+                    MovieFragment mMovieFragment = (MovieFragment) viewPagerFragment;
+                    mMovieFragment.refreshMovieList(sortString);
+                }
+            }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_fomono, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
