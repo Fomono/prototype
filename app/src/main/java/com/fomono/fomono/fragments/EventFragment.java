@@ -1,11 +1,10 @@
 package com.fomono.fomono.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +13,6 @@ import android.widget.ProgressBar;
 
 import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
-import com.fomono.fomono.adapters.FomonoAdapter;
 import com.fomono.fomono.models.db.Filter;
 import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.events.events.EventBriteResponse;
@@ -125,6 +123,7 @@ public class EventFragment extends MainListFragment {
                     if (events == null || events.isEmpty()) {
                         Log.d(TAG, "No events fetched!!");
                     } else {
+                        Event.saveOrUpdateFromList(events);
                         fomonoEvents.addAll(events);
                         fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
                     }

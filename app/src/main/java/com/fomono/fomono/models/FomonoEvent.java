@@ -7,5 +7,7 @@ import android.os.Parcelable;
  */
 
 public interface FomonoEvent extends Parcelable {
-
+    String getStringId();
+    String getApiName();
+    void initializeFromParse();
 }

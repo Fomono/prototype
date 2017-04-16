@@ -7,7 +7,7 @@
     <color name="colorBlack">#000000</color>
     <color name="colorFomono">#e7665d</color>
     <color name="colorFomonoDavid">#e97e54</color>
-    <color name="colorGrey">#8e8b8b</color>
+    <color name="colorGrey">@android:color/darker_gray</color>
 
     <color name="gplus_color_1">#3e802f</color>
     <color name="gplus_color_2">#f4b400</color>

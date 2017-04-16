@@ -17,6 +17,7 @@ import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ import com.fomono.fomono.R;
 import com.fomono.fomono.databinding.FragmentMoviedbDetailBinding;
 import com.fomono.fomono.models.movies.Movie;
 import com.fomono.fomono.utils.DateUtils;
+import com.fomono.fomono.utils.FavoritesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -51,13 +53,15 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
     private GoogleMap googleMap;
     MapView mMapView;
     Movie movie;
-
+    ImageButton ibFavorite;
+    FavoritesUtil favsUtil;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         movie = getArguments().getParcelable("movie_obj");
+        favsUtil = FavoritesUtil.getInstance();
     }
 
     public static FomonoDetailMoviedbFragment newInstance(Movie movie) {
@@ -197,6 +201,23 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
                 intent.putExtra(Intent.EXTRA_TEXT, movie.getTitle());
                 if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                     startActivity(Intent.createChooser(intent, ""));
+                }
+            }
+        });
+
+        ibFavorite = fragmentMoviedbDetailBinding.ivFavoriteIcon;
+        if (favsUtil.isFavorited(movie)) {
+            ibFavorite.setImageResource(R.drawable.ic_favorite);
+        }
+        ibFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (favsUtil.isFavorited(movie)) {
+                    ibFavorite.setImageResource(R.drawable.ic_favorite_grey);
+                    favsUtil.removeFromFavorites(movie);
+                } else {
+                    ibFavorite.setImageResource(R.drawable.ic_favorite);
+                    favsUtil.addToFavorites(movie);
                 }
             }
         });

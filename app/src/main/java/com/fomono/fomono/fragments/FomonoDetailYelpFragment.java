@@ -17,6 +17,7 @@ import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ import com.fomono.fomono.R;
 import com.fomono.fomono.databinding.FragmentYelpDetailBinding;
 import com.fomono.fomono.models.eats.Business;
 import com.fomono.fomono.utils.DateUtils;
+import com.fomono.fomono.utils.FavoritesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -53,12 +55,14 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
     private GoogleMap googleMap;
     MapView mMapView;
     Business business;
-
+    ImageButton ibFavorite;
+    FavoritesUtil favsUtil;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         business = getArguments().getParcelable("business_obj");
+        favsUtil = FavoritesUtil.getInstance();
     }
 
     public static FomonoDetailYelpFragment newInstance(Business business) {
@@ -198,6 +202,23 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
                 intent.putExtra(Intent.EXTRA_TEXT, business.getName());
                 if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                     startActivity(Intent.createChooser(intent, ""));
+                }
+            }
+        });
+
+        ibFavorite = fragmentYelpDetailBinding.ivFavoriteIcon;
+        if (favsUtil.isFavorited(business)) {
+            ibFavorite.setImageResource(R.drawable.ic_favorite);
+        }
+        ibFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (favsUtil.isFavorited(business)) {
+                    ibFavorite.setImageResource(R.drawable.ic_favorite_grey);
+                    favsUtil.removeFromFavorites(business);
+                } else {
+                    ibFavorite.setImageResource(R.drawable.ic_favorite);
+                    favsUtil.addToFavorites(business);
                 }
             }
         });
