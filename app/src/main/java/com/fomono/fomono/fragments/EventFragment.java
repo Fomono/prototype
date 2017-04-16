@@ -48,6 +48,7 @@ public class EventFragment extends MainListFragment {
   //  private EventBriteClient client;
     private final static String TAG = "Event fragment";
     int eventPage = 0;
+    String sortParameter;
 
     @Nullable
     @Override
@@ -62,7 +63,7 @@ public class EventFragment extends MainListFragment {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 if(internetAlertDialogue.checkForInternet()) {
-                    populateEvents(eventPage++, null);
+                    populateEvents(eventPage++, sortParameter);
                 }
             }
         });
@@ -71,7 +72,7 @@ public class EventFragment extends MainListFragment {
     }
 
     public void refreshEventList(String sortParam) {
-        String sortParameter = sortParam;
+        sortParameter = sortParam;
         clear();
 
         eventPage = 0;
@@ -116,7 +117,7 @@ public class EventFragment extends MainListFragment {
             data.put("categories", categories);
         }
 
-        if((sortParam != null) && (sortParam != "")) {
+        if((sortParam != null) && !(sortParam.equals(""))) {
             data.put("sort_by", sortParam);
         }
 

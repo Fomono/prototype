@@ -98,8 +98,6 @@
         <activity android:name=".activities.UserProfileActivity" />
         <activity android:name=".activities.LoginUserActivity" />
         <activity android:name=".activities.SignupActivity" />
-        <activity android:name=".fragments.EatsSortFragment" />
-        <activity android:name=".fragments.MovieSortFragment"></activity>
     </application>
 
 </manifest>

@@ -41,9 +41,12 @@
     <string name="drawer_menu_timeline">Timeline</string>
     <string name="menu_sort">Sort</string>
     <string name="FilterSortText">Sort results by:</string>
+    <string name="MovieSortFilterText">Pick a preference:</string>
     <string name="FilterEventSortButtonText">Search</string>
     <string name="FilterEatsSortButtonText">Sort</string>
     <string name="FilterMovieSortButtonText">Sort</string>
+    <string name="drawer_menu_signout">Sign Out</string>
+
 
     <string-array name="FilterEventSortArray">
         <item>best_match</item>
@@ -56,10 +59,9 @@
         <item>rating_count</item>
     </string-array>
     <string-array name="FilterMovieSortArray">
-        <item>popularity</item>
-        <item>rating</item>
-        <item>release_date</item>
-        <item>revenue</item>
+        <item>Playing Now</item>
+        <item>Popular</item>
+        <item>Top Rated</item>
     </string-array>
 
 </resources>

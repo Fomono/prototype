@@ -29,12 +29,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.R.attr.data;
+
 /**
  * Created by jsaluja on 4/8/2017.
  */
 
 public class EatsFragment extends MainListFragment {
     private final static String TAG = "Eats fragment";
+    String sortParameter = null;
 
     @Nullable
     @Override
@@ -51,7 +54,7 @@ public class EatsFragment extends MainListFragment {
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 if(internetAlertDialogue.checkForInternet()) {
                     int offset = fomonoEvents.size();
-                    populateEats(offset, null);
+                    populateEats(offset, sortParameter);
                 }
             }
         });
@@ -60,7 +63,7 @@ public class EatsFragment extends MainListFragment {
     }
 
     public void refreshEatsList(String sortParam) {
-        String sortParameter = sortParam;
+        sortParameter = sortParam;
         clear();
         populateEats(0, sortParameter);
     }
@@ -89,7 +92,8 @@ public class EatsFragment extends MainListFragment {
 
     public void getYelpBusinesses(Context context, String location, String categories, int distance, int offset, String sortParam){
         Map<String, String> data = new HashMap<>();
-        if((location != null) && (location != "")) {
+        Log.d(TAG, "Location is " +location);
+        if((location != null) && !(location.equals(""))) {
             data.put("location", location);
         } else {
             data.put("location", "San Francisco");
@@ -104,7 +108,7 @@ public class EatsFragment extends MainListFragment {
             data.put("offset", String.valueOf(offset));
         }
 
-        if((sortParam != null) && (sortParam != "")) {
+        if((sortParam != null) && !(sortParam.equals(""))) {
             data.put("sort_by", sortParam);
         }
 
@@ -115,14 +119,17 @@ public class EatsFragment extends MainListFragment {
         callEats.enqueue(new Callback<YelpResponse>() {
             @Override
             public void onResponse(Call<YelpResponse> call, Response<YelpResponse> response) {
-
-                ArrayList<Business> businesses = response.body().getBusinesses();
-                if (businesses == null || businesses.isEmpty()) {
-                    Log.d(TAG, "No Yelp businesses fetched!!");
-                } else {
-                    Business.saveOrUpdateFromList(businesses);
-                    fomonoEvents.addAll(businesses);
-                    fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
+                try {
+                    ArrayList<Business> businesses = response.body().getBusinesses();
+                    if (businesses == null || businesses.isEmpty()) {
+                        Log.d(TAG, "No Yelp businesses fetched!!");
+                    } else {
+                        Business.saveOrUpdateFromList(businesses);
+                        fomonoEvents.addAll(businesses);
+                        fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
+                    }
+                } catch(Exception e) {
+                    e.printStackTrace();
                 }
                 smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
             }

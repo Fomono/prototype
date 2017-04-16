@@ -6,6 +6,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.fomono.fomono.R;
 import com.fomono.fomono.activities.FomonoFilterActivity;
@@ -44,10 +45,8 @@ public class NavigationDrawerClass {
                 Intent filterIntent = new Intent(mContext,FomonoFilterActivity.class);
                 mContext.startActivity(filterIntent);
                 break;
-            case R.id.drawerHomeId:
-                Intent userProfileIntent = new Intent(mContext,UserProfileActivity.class);
-                mContext.startActivity(userProfileIntent);
-                break;
+            case R.id.drawerSignOutId:
+                Toast.makeText(mContext, "Go to sign out activity!!", Toast.LENGTH_SHORT).show();
             default:
                 break;
         }

@@ -26,6 +26,7 @@ public class EventSortFragment extends DialogFragment {
     private Spinner eventSortParam;
     private ImageButton eventSortSaveButton;
     String sortingParam;
+    int sortingParamPos=0;
 
     public OnFragmentInteractionListener mListener;
 
@@ -33,9 +34,10 @@ public class EventSortFragment extends DialogFragment {
         // Required empty public constructor
     }
 
-    public static EventSortFragment newInstance() {
+    public static EventSortFragment newInstance(int previousSortingParamPos) {
         EventSortFragment fragment = new EventSortFragment();
         Bundle args = new Bundle();
+        args.putInt("previous_spinner_pos", previousSortingParamPos);
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,9 +57,15 @@ public class EventSortFragment extends DialogFragment {
         params.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE;
         getDialog().getWindow().setAttributes(params);
 
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            int previousSortingParamPos = bundle.getInt("previous_spinner_pos", 0);
+            eventSortParam.setSelection(previousSortingParamPos);
+        }
         eventSortParam.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                sortingParamPos = position;
                 sortingParam = parent.getItemAtPosition(position).toString();
                 if(sortingParam.equals("best_match")) {
                     sortingParam = "best";
@@ -69,7 +77,7 @@ public class EventSortFragment extends DialogFragment {
 
         eventSortSaveButton.setOnClickListener(v -> {
             mListener = (OnFragmentInteractionListener) getActivity();
-            mListener.onFinishEventSortDialog(sortingParam);
+            mListener.onFinishSortDialog(sortingParam, sortingParamPos);
             dismiss();
         });
         return mView;
@@ -93,6 +101,6 @@ public class EventSortFragment extends DialogFragment {
     }
 
     public interface OnFragmentInteractionListener {
-        void onFinishEventSortDialog(String sortingParam);
+        void onFinishSortDialog(String sortingParam, int sortingParamPos);
     }
 }
