@@ -35,7 +35,7 @@ public class UserService {
         pUser = ParseUser.getCurrentUser();
     }
 
-    public String saveParseFile(Bitmap bitmap, ParseUser pUser) {
+    public String saveParseFile(Bitmap bitmap) {
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100,
@@ -152,6 +152,27 @@ public class UserService {
             }
         }
         return user;
+    }
+
+    public void saveParseUser(User u){
+        if(u.firstName !=null){
+            pUser.put("firstName", u.firstName);
+        }
+        if(u.lastName !=null){
+            pUser.put("lastName", u.lastName);
+        }
+        if(u.email !=null){
+            pUser.put("email", u.email);
+        }
+        if(u.imageUrl !=null){
+      //      pUser.put("profilePicture",u.imageUrl);
+        }
+        pUser.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                Log.d("USER_SERVICE", "User Saved successfully");
+            }
+        });
     }
 
     public void saveParseUser(FragmentUserProfileBinding fView) {

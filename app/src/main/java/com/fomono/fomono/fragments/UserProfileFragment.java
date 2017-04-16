@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.fomono.fomono.R;
+import com.fomono.fomono.activities.LoginUserActivity;
 import com.fomono.fomono.databinding.FragmentUserProfileBinding;
 import com.fomono.fomono.models.user.User;
 import com.fomono.fomono.properties.Properties;
@@ -66,8 +67,10 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         user = uService.retriveUserFromParseUser(pUser);
-        String fileUrl = pUser.get("profilePicture").toString();
-        setImageUrl(fragmentUserProfile.ivUserImage, fileUrl);
+        if( pUser.get("profilePicture") !=null) {
+            String fileUrl = pUser.get("profilePicture").toString();
+            setImageUrl(fragmentUserProfile.ivUserImage, fileUrl);
+        }
         fragmentUserProfile.setUser(user);
 
     }
@@ -96,6 +99,16 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
                 inflater, R.layout.fragment_user_profile, parent, false);
         View view = fragmentUserProfile.getRoot();
         ButterKnife.bind(this, view);
+
+        fragmentUserProfile.btnSignOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+          //      ParseUser.getCurrentUser().deleteInBackground();
+                ParseUser.logOutInBackground();
+                Intent i = new Intent(getActivity(), LoginUserActivity.class);
+                startActivity(i);
+            }
+        });
 
 
         fragmentUserProfile.ivCameraImage.setOnClickListener(new View.OnClickListener() {
@@ -146,7 +159,7 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
         }
         Bitmap bitmap = uService.getBitMap(getContext(), filePath);
         fragmentUserProfile.ivUserImage.setImageBitmap(bitmap);
-        uService.saveParseFile(bitmap, pUser);
+        uService.saveParseFile(bitmap);
 
     }
 
