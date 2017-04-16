@@ -37,7 +37,6 @@ public class FavoritesUtil {
     private List<FavoritesListener> listeners;
 
     private FavoritesUtil() {
-        this.favoritesMap = new HashMap<>();
         loaded = false;
         listeners = new ArrayList<>();
     }
@@ -48,6 +47,8 @@ public class FavoritesUtil {
 
     public void initialize(ParseUser user) {
         this.user = user;
+        this.favoritesMap = new HashMap<>();
+        loaded = false;
 
         ParseQuery<Favorite> query = ParseQuery.getQuery(Favorite.class);
         query.whereEqualTo("user", user)
