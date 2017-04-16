@@ -197,5 +197,16 @@
             android:layout_toEndOf="@id/btnSave"
             android:text="CANCEL"
             />
+
+        <Button
+            android:id="@+id/btnSignOut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/etLocation"
+            android:layout_toRightOf="@id/btnSave"
+            android:layout_toEndOf="@id/btnSave"
+            android:text="SIGN OUT"
+            />
+
     </RelativeLayout>
 </layout>
