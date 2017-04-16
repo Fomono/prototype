@@ -85,4 +85,13 @@
         android:text="SIGNUP" />
 
 
+    <Button
+        android:id="@+id/btnGuestLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnFB"
+        android:background="@color/grey"
+        android:layout_marginTop="10dp"
+        android:text="Continue as guest.." />
+
 </RelativeLayout>
