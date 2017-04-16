@@ -54,6 +54,7 @@ public class LoginUserActivity extends AppCompatActivity {
     UserService uService;
     EditText etUserId;
     EditText etPassword;
+    Button btnGuestLogin;
 
     String name = null, email = null;
 
@@ -74,6 +75,7 @@ public class LoginUserActivity extends AppCompatActivity {
         mFbProfile = Profile.getCurrentProfile();
         etUserId = (EditText) findViewById(R.id.etUserId);
         etPassword = (EditText) findViewById(R.id.etPassword);
+        btnGuestLogin =(Button) findViewById(R.id.btnGuestLogin);
 
         //  Use this to output your Facebook Key Hash to Logs
         try {
@@ -89,6 +91,13 @@ public class LoginUserActivity extends AppCompatActivity {
 
         }
 
+        //Guest Login
+        btnGuestLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                homePageIntent();
+            }
+        });
 
         //Firsttime signup
         btnSignup.setOnClickListener(new View.OnClickListener() {
