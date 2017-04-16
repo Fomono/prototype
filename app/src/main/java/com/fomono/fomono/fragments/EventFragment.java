@@ -1,5 +1,6 @@
 package com.fomono.fomono.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
@@ -65,6 +67,16 @@ public class EventFragment extends MainListFragment {
         return view;
     }
 
+    public void refreshEventList() {
+        //FIXME - Pass sort_by string here and pass it to populateEvent
+
+        int size = fomonoEvents.size();
+        fomonoEvents.clear();
+        fomonoAdapter.notifyItemRangeRemoved(0, size);
+
+        eventPage = 0;
+        populateEvents(eventPage++);
+    }
     public void populateEvents(int page) {
         smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
         try {

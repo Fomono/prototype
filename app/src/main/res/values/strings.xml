@@ -39,4 +39,14 @@
     <string name="open_drawer">Open nav drawer</string>
     <string name="close_drawer">Close nav drawer</string>
     <string name="drawer_menu_timeline">Timeline</string>
+    <string name="menu_sort">Sort</string>
+    <string name="FilterSortText">Sort results by:</string>
+    <string name="FilterEventSortButtonText">Search</string>
+
+    <string-array name="FilterEventSortArray">
+        <item>date</item>
+        <item>distance</item>
+        <item>best_match</item>
+    </string-array>
+
 </resources>
