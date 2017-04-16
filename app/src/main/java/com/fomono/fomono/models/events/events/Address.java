@@ -71,16 +71,30 @@ public class Address extends ParseObject implements Parcelable{
     }
 
     public void updateWithExisting(Address address) {
-        this.put("address_1", address.address1);
+        if (address.address1 != null) {
+            this.put("address_1", address.address1);
+        }
         if (address.address2 != null) {
             this.put("address_2", address.address2);
         }
-        this.put("city", address.city);
-        this.put("region", address.region);
-        this.put("postal_code", address.postalCode);
-        this.put("country", address.country);
-        this.put("latitude", address.latitude);
-        this.put("longitude", address.longitude);
+        if (address.city != null) {
+            this.put("city", address.city);
+        }
+        if (address.region != null) {
+            this.put("region", address.region);
+        }
+        if (address.postalCode != null) {
+            this.put("postal_code", address.postalCode);
+        }
+        if (address.country != null) {
+            this.put("country", address.country);
+        }
+        if (address.latitude != null) {
+            this.put("latitude", address.latitude);
+        }
+        if (address.longitude != null) {
+            this.put("longitude", address.longitude);
+        }
     }
 
     public void initializeForParse() {
