@@ -13,7 +13,7 @@
             android:id="@+id/MovieSortTextId"
             android:textSize="15sp"
             android:textColor="@color/colorWhite"
-            android:text="@string/FilterSortText"
+            android:text="@string/MovieSortFilterText"
             android:layout_alignParentTop="true"/>
 
         <Spinner

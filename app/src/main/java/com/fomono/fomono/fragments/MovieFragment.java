@@ -35,6 +35,7 @@ public class MovieFragment extends MainListFragment {
 
     private final static String TAG = "Movie Fragment";
     public int moviePage = 1;
+    public String sortParameter = null;
 
     @Nullable
     @Override
@@ -49,7 +50,7 @@ public class MovieFragment extends MainListFragment {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 if(internetAlertDialogue.checkForInternet()) {
-                    populateMovies(moviePage++, null);
+                    populateMovies(moviePage++, sortParameter);
                 }
             }
         });
@@ -57,7 +58,7 @@ public class MovieFragment extends MainListFragment {
     }
 
     public void refreshMovieList(String sortParam) {
-        String sortParameter = sortParam;
+        sortParameter = sortParam;
         clear();
         moviePage = 1;
         populateMovies(moviePage, sortParameter);
@@ -75,43 +76,161 @@ public class MovieFragment extends MainListFragment {
         data.put("api_key", getResources().getString(R.string.movieDB_api_key));
         data.put("page", String.valueOf(page));
 
-        if((sortParam != null) && (sortParam != "")) {
-            data.put("sort_by", sortParam);
-        }
+        if((sortParam != null) && !(sortParam.equals(""))) {
+            if (sortParam.equals("Playing Now")) {
+                Call<MovieResponse> callMovie = movieDBClientRetrofit.MovieDBRetrofitClientFactory()
+                        .getNowPlayingMoviesFromServer(data);
 
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        String dateString = format.format(cal.getTime());
-        data.put("release_date.lte", dateString);
-
-        Call<MovieResponse> callMovie = movieDBClientRetrofit.MovieDBRetrofitClientFactory()
-                .getNowPlayingMoviesFromServer(data);
-
-        Log.d(TAG, "Movie URL String is " + callMovie.request().url());
-        callMovie.enqueue(new Callback<MovieResponse>() {
-            @Override
-            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                try {
-                    ArrayList<Movie> movies = response.body().getResults();
-                    if (movies == null || movies.isEmpty()) {
-                        Log.d(TAG, "No movies fetched!!");
-                    } else {
-                        Movie.saveOrUpdateFromList(movies);
-                        fomonoEvents.addAll(movies);
-                        fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
-                        Log.d(TAG, "response is, with page = " + page + "is " + response.body().getResults().get(0));
+                Log.d(TAG, "Movie URL String is " + callMovie.request().url());
+                callMovie.enqueue(new Callback<MovieResponse>() {
+                    @Override
+                    public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+                        try {
+                            ArrayList<Movie> movies = response.body().getResults();
+                            if (movies == null || movies.isEmpty()) {
+                                Log.d(TAG, "No movies fetched!!");
+                            } else {
+                                Movie.saveOrUpdateFromList(movies);
+                                fomonoEvents.addAll(movies);
+                                fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
+                                Log.d(TAG, "response is, with page = " + page + "is " + response.body().getResults().get(0));
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
-            }
 
-            @Override
-            public void onFailure(Call<MovieResponse> call, Throwable t) {
-                Log.d(TAG, "REQUEST Failed " + t.getMessage());
-                smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                    @Override
+                    public void onFailure(Call<MovieResponse> call, Throwable t) {
+                        Log.d(TAG, "REQUEST Failed " + t.getMessage());
+                        smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                    }
+                });
+
+            } else if (sortParam.equals("Popular")) {
+                Call<MovieResponse> callMovie = movieDBClientRetrofit.MovieDBRetrofitClientFactory()
+                        .getPopularMoviesFromServer(data);
+
+                Log.d(TAG, "Movie URL String is " + callMovie.request().url());
+                callMovie.enqueue(new Callback<MovieResponse>() {
+                    @Override
+                    public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+                        try {
+                            ArrayList<Movie> movies = response.body().getResults();
+                            if (movies == null || movies.isEmpty()) {
+                                Log.d(TAG, "No movies fetched!!");
+                            } else {
+                                Movie.saveOrUpdateFromList(movies);
+                                fomonoEvents.addAll(movies);
+                                fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
+                                Log.d(TAG, "response is, with page = " + page + "is " + response.body().getResults().get(0));
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                    }
+
+                    @Override
+                    public void onFailure(Call<MovieResponse> call, Throwable t) {
+                        Log.d(TAG, "REQUEST Failed " + t.getMessage());
+                        smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                    }
+                });
+
+            } else if (sortParam.equals("Top Rated")) {
+                Call<MovieResponse> callMovie = movieDBClientRetrofit.MovieDBRetrofitClientFactory()
+                        .getTopRatedMoviesFromServer(data);
+
+                Log.d(TAG, "Movie URL String is " + callMovie.request().url());
+                callMovie.enqueue(new Callback<MovieResponse>() {
+                    @Override
+                    public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+                        try {
+                            ArrayList<Movie> movies = response.body().getResults();
+                            if (movies == null || movies.isEmpty()) {
+                                Log.d(TAG, "No movies fetched!!");
+                            } else {
+                                Movie.saveOrUpdateFromList(movies);
+                                fomonoEvents.addAll(movies);
+                                fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
+                                Log.d(TAG, "response is, with page = " + page + "is " + response.body().getResults().get(0));
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                    }
+
+                    @Override
+                    public void onFailure(Call<MovieResponse> call, Throwable t) {
+                        Log.d(TAG, "REQUEST Failed " + t.getMessage());
+                        smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                    }
+                });
+
+            } else {
+                Call<MovieResponse> callMovie = movieDBClientRetrofit.MovieDBRetrofitClientFactory()
+                        .getNowPlayingMoviesFromServer(data);
+
+                Log.d(TAG, "Movie URL String is " + callMovie.request().url());
+                callMovie.enqueue(new Callback<MovieResponse>() {
+                    @Override
+                    public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+                        try {
+                            ArrayList<Movie> movies = response.body().getResults();
+                            if (movies == null || movies.isEmpty()) {
+                                Log.d(TAG, "No movies fetched!!");
+                            } else {
+                                Movie.saveOrUpdateFromList(movies);
+                                fomonoEvents.addAll(movies);
+                                fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
+                                Log.d(TAG, "response is, with page = " + page + "is " + response.body().getResults().get(0));
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                    }
+
+                    @Override
+                    public void onFailure(Call<MovieResponse> call, Throwable t) {
+                        Log.d(TAG, "REQUEST Failed " + t.getMessage());
+                        smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                    }
+                });
             }
-        });
+        } else {
+            Call<MovieResponse> callMovie = movieDBClientRetrofit.MovieDBRetrofitClientFactory()
+                    .getNowPlayingMoviesFromServer(data);
+
+            Log.d(TAG, "Movie URL String is " + callMovie.request().url());
+            callMovie.enqueue(new Callback<MovieResponse>() {
+                @Override
+                public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+                    try {
+                        ArrayList<Movie> movies = response.body().getResults();
+                        if (movies == null || movies.isEmpty()) {
+                            Log.d(TAG, "No movies fetched!!");
+                        } else {
+                            Movie.saveOrUpdateFromList(movies);
+                            fomonoEvents.addAll(movies);
+                            fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
+                            Log.d(TAG, "response is, with page = " + page + "is " + response.body().getResults().get(0));
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                }
+
+                @Override
+                public void onFailure(Call<MovieResponse> call, Throwable t) {
+                    Log.d(TAG, "REQUEST Failed " + t.getMessage());
+                    smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                }
+            });
+        }
     }
 }

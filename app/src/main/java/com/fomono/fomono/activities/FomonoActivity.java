@@ -56,6 +56,9 @@ public class FomonoActivity extends AppCompatActivity implements EventSortFragme
     private ViewPager fomonoPager;
     private PagerSlidingTabStrip fomonoTabStrip;
     private int ActiveViewPagerPagePosition = 0;
+    private int eventSortFragmentParamPos = 0;
+    private int eatsSortFragmentParamPos = 0;
+    private int movieSortFragmentParamPos = 0;
 
     public static final String ACTION_DETAIL = "launch_detail";
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,18 +133,17 @@ public class FomonoActivity extends AppCompatActivity implements EventSortFragme
 
                         FragmentManager fm = getSupportFragmentManager();
                         if (viewPagerFragment instanceof EventFragment) {
-                            EventSortFragment sortFragmentObject = EventSortFragment.newInstance();
+                            EventSortFragment sortFragmentObject = EventSortFragment.newInstance(eventSortFragmentParamPos);
                             sortFragmentObject.show(fm, "fragment_edit_name");
 
                         } else if(viewPagerFragment instanceof EatsFragment) {
-                            EatsSortFragment sortFragmentObject = EatsSortFragment.newInstance();
+                            EatsSortFragment sortFragmentObject = EatsSortFragment.newInstance(eatsSortFragmentParamPos);
                             sortFragmentObject.show(fm, "fragment_edit_name");
 
                         } else if(viewPagerFragment instanceof MovieFragment) {
-                            MovieSortFragment sortFragmentObject = MovieSortFragment.newInstance();
+                            MovieSortFragment sortFragmentObject = MovieSortFragment.newInstance(movieSortFragmentParamPos);
                             sortFragmentObject.show(fm, "fragment_edit_name");
                         }
-
                     } else {
                         Log.d(TAG, "Fragment not resumed");
                     }
@@ -158,19 +160,22 @@ public class FomonoActivity extends AppCompatActivity implements EventSortFragme
     }
 
     @Override
-    public void onFinishEventSortDialog(String sortString) {
+    public void onFinishSortDialog(String sortString, int pos) {
         String name = makeFragmentName(fomonoPager.getId(), ActiveViewPagerPagePosition);
         Fragment viewPagerFragment = getSupportFragmentManager().findFragmentByTag(name);
 
         if (viewPagerFragment != null) {
             if (viewPagerFragment.isResumed()) {
                 if (viewPagerFragment instanceof EventFragment) {
+                    eventSortFragmentParamPos = pos;
                     EventFragment mEventFragment = (EventFragment) viewPagerFragment;
                     mEventFragment.refreshEventList(sortString);
                 } else if (viewPagerFragment instanceof EatsFragment) {
+                    eatsSortFragmentParamPos = pos;
                     EatsFragment mEatsFragment = (EatsFragment) viewPagerFragment;
                     mEatsFragment.refreshEatsList(sortString);
                 } else if (viewPagerFragment instanceof MovieFragment) {
+                    movieSortFragmentParamPos = pos;
                     MovieFragment mMovieFragment = (MovieFragment) viewPagerFragment;
                     mMovieFragment.refreshMovieList(sortString);
                 }
