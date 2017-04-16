@@ -48,6 +48,7 @@ public class YelpClientRetrofit {
     public YelpClientRetrofit.YelpService YelpRetrofitClientFactory(){
 
         Gson gson = new GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
                 .create();
 

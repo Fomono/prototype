@@ -1,11 +1,10 @@
 package com.fomono.fomono.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +13,6 @@ import android.widget.ProgressBar;
 
 import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
-import com.fomono.fomono.adapters.FomonoAdapter;
 import com.fomono.fomono.models.db.Filter;
 import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.events.events.EventBriteResponse;
@@ -35,6 +33,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.media.CamcorderProfile.get;
+
 /**
  * Created by Saranu on 4/6/17.
  */
@@ -42,7 +42,6 @@ import retrofit2.Response;
 public class EventFragment extends MainListFragment {
   //  private EventBriteClient client;
     private final static String TAG = "Event fragment";
-    private EventBriteClientRetrofit eventBriteClientRetrofit;
     int eventPage = 0;
 
     @Nullable
@@ -50,9 +49,8 @@ public class EventFragment extends MainListFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         InternetAlertDialogue internetAlertDialogue = new InternetAlertDialogue(mContext);
-        if(internetAlertDialogue.checkForInternet() && !initialEventsLoaded) {
+        if(internetAlertDialogue.checkForInternet()) {
             populateEvents(eventPage++);
-            Log.d(TAG, "data loaded = "+initialEventsLoaded);
         }
 
         rvList.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
@@ -96,9 +94,6 @@ public class EventFragment extends MainListFragment {
 
     public void getEventList(int page, String strQuery, String location, String categories, int distance) {
 
-        Log.d(TAG, "data loaded inside getEvent = "+initialEventsLoaded);
-        eventBriteClientRetrofit = EventBriteClientRetrofit.getNewInstance();
-        initialEventsLoaded = true;
         Map<String, String> data = new HashMap<>();
         data.put("token", getResources().getString(R.string.event_brite_user_key));
         if(strQuery != null) {
@@ -128,6 +123,7 @@ public class EventFragment extends MainListFragment {
                     if (events == null || events.isEmpty()) {
                         Log.d(TAG, "No events fetched!!");
                     } else {
+                        Event.saveOrUpdateFromList(events);
                         fomonoEvents.addAll(events);
                         fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
                     }
