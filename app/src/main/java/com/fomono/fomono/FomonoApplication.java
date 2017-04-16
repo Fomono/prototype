@@ -3,11 +3,13 @@ package com.fomono.fomono;
 import android.app.Application;
 import android.util.Log;
 
+import com.facebook.FacebookSdk;
 import com.fomono.fomono.models.db.Filter;
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -45,6 +47,9 @@ public class FomonoApplication extends Application {
                 .enableLocalDataStore()
                 .build());
 
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        ParseFacebookUtils.initialize(this);
         //subscribe to channel for push notifications
 //        ParsePush.subscribeInBackground(CHANNEL_NAME);
         // Need to register GCM token
