@@ -108,14 +108,28 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
      * @param instance
      */
     public static void initializeForParse(Movie instance) {
-        instance.put("poster_path", instance.posterPath);
-        instance.put("overview", instance.overview);
-        instance.put("release_date", instance.releaseDate);
+        if (instance.posterPath != null) {
+            instance.put("poster_path", instance.posterPath);
+        }
+        if (instance.overview != null) {
+            instance.put("overview", instance.overview);
+        }
+        if (instance.releaseDate != null) {
+            instance.put("release_date", instance.releaseDate);
+        }
         instance.put("id", String.valueOf(instance.id));
-        instance.put("original_title", instance.originalTitle);
-        instance.put("title", instance.title);
-        instance.put("backdrop_path", instance.backdropPath);
-        instance.put("vote_average", instance.voteAverage);
+        if (instance.originalTitle != null) {
+            instance.put("original_title", instance.originalTitle);
+        }
+        if (instance.title != null) {
+            instance.put("title", instance.title);
+        }
+        if (instance.backdropPath != null) {
+            instance.put("backdrop_path", instance.backdropPath);
+        }
+        if (instance.voteAverage >= 0) {
+            instance.put("vote_average", instance.voteAverage);
+        }
     }
 
     public static void getListFromParse(List<Movie> list, FindCallback<Movie> callback) {
@@ -159,14 +173,28 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
 
     @Override
     public void initializeFromParse() {
-        this.posterPath = getString("poster_path");
-        this.overview = getString("overview");
-        this.releaseDate = getString("release_date");
+        if (has("poster_path")) {
+            this.posterPath = getString("poster_path");
+        }
+        if (has("overview")) {
+            this.overview = getString("overview");
+        }
+        if (has("releaseDate")) {
+            this.releaseDate = getString("release_date");
+        }
         this.id = Long.parseLong(getString("id"));
-        this.originalTitle = getString("original_title");
-        this.title = getString("title");
-        this.backdropPath = getString("backdrop_path");
-        this.voteAverage = getDouble("vote_average");
+        if (has("original_title")) {
+            this.originalTitle = getString("original_title");
+        }
+        if (has("title")) {
+            this.title = getString("title");
+        }
+        if (has("backdrop_path")) {
+            this.backdropPath = getString("backdrop_path");
+        }
+        if (has("vote_average")) {
+            this.voteAverage = getDouble("vote_average");
+        }
     }
 
     public void getFromParse(GetCallback<Movie> callback) {
@@ -193,14 +221,28 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
     }
 
     public void updateWithExisting(Movie instance) {
-        this.put("poster_path", instance.posterPath);
-        this.put("overview", instance.overview);
-        this.put("release_date", instance.releaseDate);
+        if (instance.posterPath != null) {
+            this.put("poster_path", instance.posterPath);
+        }
+        if (instance.overview != null) {
+            this.put("overview", instance.overview);
+        }
+        if (instance.releaseDate != null) {
+            this.put("release_date", instance.releaseDate);
+        }
         this.put("id", String.valueOf(instance.id));
-        this.put("original_title", instance.originalTitle);
-        this.put("title", instance.title);
-        this.put("backdrop_path", instance.backdropPath);
-        this.put("vote_average", instance.voteAverage);
+        if (instance.originalTitle != null) {
+            this.put("original_title", instance.originalTitle);
+        }
+        if (instance.title != null) {
+            this.put("title", instance.title);
+        }
+        if (instance.backdropPath != null) {
+            this.put("backdrop_path", instance.backdropPath);
+        }
+        if (instance.voteAverage >= 0) {
+            this.put("vote_average", instance.voteAverage);
+        }
     }
 
     public String getPosterPath() {

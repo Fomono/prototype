@@ -84,36 +84,16 @@ public class FiltersAdapter extends RecyclerView.Adapter<FiltersAdapter.ViewHold
                 //update user's selected filters
                 if (b) {
                     //store new user filter, but first check for dupe
-                    try {
-                        FilterUtil.getFilter(category.getParamName(), category.getId(), category.getApiName(), new GetCallback<Filter>() {
-                            @Override
-                            public void done(Filter object, ParseException e) {
-                                if (object == null) {
-                                    Filter f = new Filter(category.getParamName(), category.getId(), category.getApiName());
-                                    filters.put(category.getId(), f);
-                                    f.pinInBackground();    //save locally on device for easy access
-                                    f.saveInBackground();
-                                }
-                            }
-                        });
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    FilterUtil.getInstance().addFilter(category.getParamName(), category.getId(), category.getApiName(), new GetCallback<Filter>() {
+                        @Override
+                        public void done(Filter object, ParseException e) {
+                            filters.put(category.getId(), object);
+                        }
+                    });
                 } else {
                     //delete existing user filter
                     filters.remove(category.getId());
-                    try {
-                        FilterUtil.getFilter(category.getParamName(), category.getId(), category.getApiName(), new GetCallback<Filter>() {
-                            @Override
-                            public void done(Filter object, ParseException e) {
-                                if (object != null) {
-                                    object.deleteInBackground();
-                                }
-                            }
-                        });
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    FilterUtil.getInstance().removeFilter(category.getParamName(), category.getId(), category.getApiName());
                 }
             }
         });

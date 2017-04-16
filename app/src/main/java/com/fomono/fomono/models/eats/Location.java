@@ -63,17 +63,27 @@ public class Location extends ParseObject implements Parcelable
             ;
 
     public void updateWithExisting(Location instance) {
-        this.put("city", instance.city);
-        this.put("country", instance.country);
-        this.put("address1", instance.address1);
+        if (instance.city != null) {
+            this.put("city", instance.city);
+        }
+        if (instance.country != null) {
+            this.put("country", instance.country);
+        }
+        if (instance.address1 != null) {
+            this.put("address1", instance.address1);
+        }
         if (instance.address2 != null) {
             this.put("address2", instance.address2);
         }
         if (instance.address3 != null) {
             this.put("address3", instance.address3);
         }
-        this.put("state", instance.locationState);
-        this.put("zip_code", instance.zipCode);
+        if (instance.locationState != null) {
+            this.put("state", instance.locationState);
+        }
+        if (instance.zipCode != null) {
+            this.put("zip_code", instance.zipCode);
+        }
     }
 
     public void initializeForParse() {
@@ -101,17 +111,27 @@ public class Location extends ParseObject implements Parcelable
     }
 
     public void initializeFromParse() {
-        city = getString("city");
-        country = getString("country");
-        address1 = getString("address1");
+        if (has("city")) {
+            city = getString("city");
+        }
+        if (has("country")) {
+            country = getString("country");
+        }
+        if (has("address1")) {
+            address1 = getString("address1");
+        }
         if (has("address2")) {
             address2 = getString("address2");
         }
         if (has("address3")) {
             address3 = getString("address3");
         }
-        locationState = getString("state");
-        zipCode = getString("zip_code");
+        if (has("state")) {
+            locationState = getString("state");
+        }
+        if (has("zip_code")) {
+            zipCode = getString("zip_code");
+        }
     }
 
     public String getCity() {

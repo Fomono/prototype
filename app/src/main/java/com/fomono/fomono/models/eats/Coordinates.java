@@ -43,18 +43,30 @@ public class Coordinates extends ParseObject implements Parcelable
             ;
 
     public void updateWithExisting(Coordinates instance) {
-        this.put("latitude", instance.latitude);
-        this.put("longitude", instance.longitude);
+        if (instance.latitude != null) {
+            this.put("latitude", instance.latitude);
+        }
+        if (instance.longitude != null) {
+            this.put("longitude", instance.longitude);
+        }
     }
 
     public void initializeForParse() {
-        this.put("latitude", this.latitude);
-        this.put("longitude", this.longitude);
+        if (this.latitude != null) {
+            this.put("latitude", this.latitude);
+        }
+        if (this.longitude != null) {
+            this.put("longitude", this.longitude);
+        }
     }
 
     public void initializeFromParse() {
-        latitude = getDouble("latitude");
-        longitude = getDouble("longitude");
+        if (has("latitude")) {
+            latitude = getDouble("latitude");
+        }
+        if (has("longitude")) {
+            longitude = getDouble("longitude");
+        }
     }
 
     public Double getLatitude() {

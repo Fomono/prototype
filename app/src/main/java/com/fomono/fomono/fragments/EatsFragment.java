@@ -2,7 +2,6 @@ package com.fomono.fomono.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -64,11 +63,11 @@ public class EatsFragment extends MainListFragment {
         smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
         try {
             //get user filters for yelp
-            FilterUtil.getFilters(FomonoApplication.API_NAME_EATS, (filters, e) -> {
+            FilterUtil.getInstance().getFilters(FomonoApplication.API_NAME_EATS, (filters, e) -> {
                 String categoriesString = "";
                 if (filters != null) {
                     Filter.initializeFromList(filters);
-                    categoriesString = FilterUtil.buildCategoriesString(filters);
+                    categoriesString = FilterUtil.getInstance().buildCategoriesString(filters);
                 }
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 String location = currentUser.getString("location");
@@ -80,11 +79,6 @@ public class EatsFragment extends MainListFragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        Handler handlerTimer = new Handler();
-        handlerTimer.postDelayed(() -> {//Just to show the progress bar
-            smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
-        }, 500);
     }
 
     public void getYelpBusinesses(Context context, String location, String categories, int distance, int offset){
@@ -120,17 +114,21 @@ public class EatsFragment extends MainListFragment {
                     fomonoEvents.addAll(businesses);
                     fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
                 }
+                smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
             }
 
             @Override
             public void onFailure(Call<YelpResponse> call, Throwable t) {
                 Log.d(TAG, "REQUEST Failed " + t.getMessage() );
-
+                smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
             }
         });
     }
 
-
+    public void refresh() {
+        clear();
+        populateEats(0);
+    }
 
 
 /*

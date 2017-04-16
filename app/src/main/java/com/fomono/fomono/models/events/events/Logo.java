@@ -53,23 +53,41 @@ public class Logo extends ParseObject implements Parcelable {
     }
 
     public void updateWithExisting(Logo instance) {
-        ((Original) this.get("original")).updateWithExisting(instance.original);
-        this.put("id", instance.id);
-        this.put("url", instance.url);
+        if (instance.original != null) {
+            ((Original) this.get("original")).updateWithExisting(instance.original);
+        }
+        if (instance.id != null) {
+            this.put("id", instance.id);
+        }
+        if (instance.url != null) {
+            this.put("url", instance.url);
+        }
     }
 
     public void initializeForParse() {
-        original.initializeForParse();
-        this.put("original", original);
-        this.put("id", id);
-        this.put("url", url);
+        if (original != null) {
+            original.initializeForParse();
+            this.put("original", original);
+        }
+        if (id != null) {
+            this.put("id", id);
+        }
+        if (url != null) {
+            this.put("url", url);
+        }
     }
 
     public void initializeFromParse() {
-        original = (Original) getParseObject("original");
-        original.initializeFromParse();
-        id = getString("id");
-        url = getString("url");
+        if (has("original")) {
+            original = (Original) getParseObject("original");
+            original.initializeFromParse();
+        }
+        if (has("id")) {
+            id = getString("id");
+        }
+        if (has("url")) {
+            url = getString("url");
+        }
     }
 
     public static final Creator<Logo> CREATOR = new Creator<Logo>() {

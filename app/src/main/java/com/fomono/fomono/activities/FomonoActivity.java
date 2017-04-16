@@ -12,20 +12,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
 import com.fomono.fomono.adapters.FomonoMainPagerAdapter;
 import com.fomono.fomono.databinding.ActivityFomonoBinding;
-import com.fomono.fomono.supportclasses.NavigationDrawerClass;
 import com.fomono.fomono.models.eats.Business;
 import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.movies.Movie;
 import com.fomono.fomono.network.client.EventBriteClientRetrofit;
 import com.fomono.fomono.network.client.MovieDBClientRetrofit;
 import com.fomono.fomono.network.client.YelpClientRetrofit;
+import com.fomono.fomono.supportclasses.NavigationDrawerClass;
+import com.fomono.fomono.utils.FilterUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,8 +71,19 @@ public class FomonoActivity extends AppCompatActivity {
         fomonoPager.setOffscreenPageLimit(getResources().getInteger(R.integer.NUM_MAINLIST_FRAGMENTS) - 1);
         fomonoTabStrip.setViewPager(fomonoPager);
 
+        //clear filter dirty flags here since we're creating a new fomono activity and everything will be refreshed
+        FilterUtil.getInstance().clearDirty();
+
         //process intent from notification or elsewhere
         processOutOfAppIntent();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (FilterUtil.getInstance().isDirty()) {
+            fomonoMainPagerAdapter.refreshFragments();
+        }
     }
 
     @Override

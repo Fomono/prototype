@@ -8,6 +8,7 @@ import com.fomono.fomono.models.db.Filter;
 import com.fomono.fomono.models.events.categories.Category;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
+import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -22,6 +23,20 @@ import java.util.Set;
  */
 
 public class FilterUtil {
+
+    private static FilterUtil instance;
+    public static FilterUtil getInstance() {
+        if (instance == null) {
+            instance = new FilterUtil();
+        }
+        return instance;
+    }
+
+    private boolean isDirty;
+
+    private FilterUtil() {
+        isDirty = false;
+    }
 
     /**
      * Gets all filters for a given api, for current user.
@@ -38,7 +53,7 @@ public class FilterUtil {
      * @param callback
      * @throws Exception
      */
-    public static void getFilters(String apiName, FindCallback<Filter> callback) throws Exception {
+    public void getFilters(String apiName, FindCallback<Filter> callback) throws Exception {
         ParseUser user = ParseUser.getCurrentUser();
         if (user == null) {
             throw new Exception("Error getting user filters: Current user is null.");
@@ -68,7 +83,7 @@ public class FilterUtil {
      * @param callback
      * @throws Exception
      */
-    public static void getFilter(String paramName, String value, String apiName, GetCallback<Filter> callback) throws Exception {
+    public void getFilter(String paramName, String value, String apiName, GetCallback<Filter> callback) throws Exception {
         ParseUser user = ParseUser.getCurrentUser();
         if (user == null) {
             throw new Exception("Error getting specific filter: Current user is null.");
@@ -87,7 +102,7 @@ public class FilterUtil {
      * @param context
      * @return
      */
-    public static List<ICategory> getCategories(String apiName, Context context) {
+    public List<ICategory> getCategories(String apiName, Context context) {
         List<ICategory> categories = new ArrayList<>();
         //get list of event categories
         try {
@@ -119,7 +134,7 @@ public class FilterUtil {
         return categories;
     }
 
-    public static String buildCategoriesString(List<Filter> filters) {
+    public String buildCategoriesString(List<Filter> filters) {
         StringBuilder sb = new StringBuilder();
         if (filters != null) {
             for (int i = 0; i < filters.size(); i++) {
@@ -139,7 +154,7 @@ public class FilterUtil {
      * @param callback
      * @throws Exception
      */
-    public static void getAllFilters(boolean fromLocal, FindCallback<Filter> callback) throws Exception {
+    public void getAllFilters(boolean fromLocal, FindCallback<Filter> callback) throws Exception {
         ParseUser user = ParseUser.getCurrentUser();
         if (user == null) {
             throw new Exception("Error getting user filters: Current user is null.");
@@ -150,5 +165,55 @@ public class FilterUtil {
             query.fromLocalDatastore();
         }
         query.findInBackground(callback);
+    }
+
+    public void addFilter(String paramName, String value, String apiName, GetCallback<Filter> callback) {
+        try {
+            FilterUtil.getInstance().getFilter(paramName, value, apiName, new GetCallback<Filter>() {
+                @Override
+                public void done(Filter object, ParseException e) {
+                    if (object == null) {
+                        Filter f = new Filter(paramName, value, apiName);
+                        f.pinInBackground();    //save locally on device for easy access
+                        f.saveInBackground();
+                        callback.done(f, null);
+                        setDirty();
+                    } else {
+                        callback.done(object, null);
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removeFilter(String paramName, String value, String apiName) {
+        try {
+            FilterUtil.getInstance().getFilter(paramName, value, apiName, new GetCallback<Filter>() {
+                @Override
+                public void done(Filter object, ParseException e) {
+                    if (object != null) {
+                        object.unpinInBackground();
+                        object.deleteInBackground();
+                        setDirty();
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean isDirty() {
+        return isDirty;
+    }
+
+    public void setDirty() {
+        isDirty = true;
+    }
+
+    public void clearDirty() {
+        isDirty = false;
     }
 }

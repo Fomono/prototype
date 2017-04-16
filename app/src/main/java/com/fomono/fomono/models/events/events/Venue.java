@@ -34,20 +34,32 @@ public class Venue extends ParseObject implements Parcelable {
     }
 
     public void updateWithExisting(Venue instance) {
-        this.put("name", instance.name);
-        ((Address)this.get("address")).updateWithExisting(instance.address);
+        if (instance.name != null) {
+            this.put("name", instance.name);
+        }
+        if (instance.address != null) {
+            ((Address) this.get("address")).updateWithExisting(instance.address);
+        }
     }
 
     public void initializeForParse() {
-        this.put("name", name);
-        address.initializeForParse();
-        this.put("address", address);
+        if (name != null) {
+            this.put("name", name);
+        }
+        if (address != null) {
+            address.initializeForParse();
+            this.put("address", address);
+        }
     }
 
     public void initializeFromParse() {
-        name = getString("name");
-        address = (Address) getParseObject("address");
-        address.initializeFromParse();
+        if (has("name")) {
+            name = getString("name");
+        }
+        if (has("address")) {
+            address = (Address) getParseObject("address");
+            address.initializeFromParse();
+        }
     }
 
     @Override
