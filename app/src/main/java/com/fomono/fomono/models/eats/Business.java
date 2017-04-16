@@ -200,7 +200,7 @@ public class Business extends ParseObject implements Parcelable, FomonoEvent
         this.put("rating", instance.rating);
         this.put("price", instance.price);
         this.put("id", String.valueOf(instance.id));
-        this.put("categories", instance.categories);
+        this.mergeCategoriesForParse(instance.categories);
         this.put("review_count", instance.reviewCount);
         this.put("name", instance.name);
         this.put("url", instance.url);
@@ -210,7 +210,60 @@ public class Business extends ParseObject implements Parcelable, FomonoEvent
         this.put("distance", instance.distance);
     }
 
+    private void mergeCategoriesForParse(List<Category> categories) {
+        //merging categories from api to our server
+        Map<String, Category> apiCatsMap = new HashMap<>();
+        for (Category c : categories) {
+            apiCatsMap.put(c.getAlias(), c);
+        }
+        List<Category> finalCats = new ArrayList<>();
+        //update existing categories in parse with new data from api, ignoring ones that have been removed
+        List<Category> parseCats = (List<Category>)(List<?>)getList("categories");
+        for (Category parseCat : parseCats) {
+            String alias = parseCat.getAlias();
+            if (apiCatsMap.containsKey(alias)) {
+                parseCat.updateWithExisting(apiCatsMap.get(alias));
+                finalCats.add(parseCat);
+            }
+        }
+        //now add any new categories from api
+        Map<String, Category> parseCatsMap = new HashMap<>();
+        for (Category c : finalCats) {
+            parseCatsMap.put(c.getAlias(), c);
+        }
+        for (Category c : categories) {
+            String alias = c.getAlias();
+            if (!parseCatsMap.containsKey(alias)) {
+                finalCats.add(c);
+            }
+        }
+        this.put("categories", finalCats);
+    }
+
+    @Override
+    public void initializeFromParse() {
+        this.rating = getDouble("rating");
+        this.price = getString("price");
+        this.id = getString("id");
+        this.categories = (ArrayList<Category>)(List<?>)getList("categories");
+        for (Category c : categories) {
+            c.initializeFromParse();
+        }
+        this.reviewCount = getInt("review_count");
+        this.name = getString("name");
+        this.url = getString("url");
+        this.coordinates = (Coordinates) getParseObject("coordinates");
+        this.coordinates.initializeFromParse();
+        this.imageUrl = getString("image_url");
+        this.location = (Location) getParseObject("location");
+        this.location.initializeFromParse();
+        this.distance = getDouble("distance");
+    }
+
     public double getRating() {
+        if (rating == 0) {
+            rating = getDouble("rating");
+        }
         return rating;
     }
 
@@ -219,6 +272,9 @@ public class Business extends ParseObject implements Parcelable, FomonoEvent
     }
 
     public String getPrice() {
+        if (price == null) {
+            price = getString("price");
+        }
         return price;
     }
 
@@ -254,6 +310,9 @@ public class Business extends ParseObject implements Parcelable, FomonoEvent
     }
 
     public ArrayList<Category> getCategories() {
+        if (categories == null) {
+            categories = (ArrayList<Category>)(List<?>)getList("categories");
+        }
         return categories;
     }
 
@@ -262,6 +321,9 @@ public class Business extends ParseObject implements Parcelable, FomonoEvent
     }
 
     public Integer getReviewCount() {
+        if (reviewCount == null) {
+            reviewCount = getInt("review_count");
+        }
         return reviewCount;
     }
 
@@ -270,6 +332,9 @@ public class Business extends ParseObject implements Parcelable, FomonoEvent
     }
 
     public String getName() {
+        if (name == null) {
+            name = getString("name");
+        }
         return name;
     }
 
@@ -278,6 +343,9 @@ public class Business extends ParseObject implements Parcelable, FomonoEvent
     }
 
     public String getUrl() {
+        if (url == null) {
+            url = getString("url");
+        }
         return url;
     }
 
@@ -286,6 +354,9 @@ public class Business extends ParseObject implements Parcelable, FomonoEvent
     }
 
     public Coordinates getCoordinates() {
+        if (coordinates == null) {
+            coordinates = (Coordinates) getParseObject("coordinates");
+        }
         return coordinates;
     }
 
@@ -294,6 +365,9 @@ public class Business extends ParseObject implements Parcelable, FomonoEvent
     }
 
     public String getImageUrl() {
+        if (imageUrl == null) {
+            imageUrl = getString("image_url");
+        }
         return imageUrl;
     }
 
@@ -302,6 +376,9 @@ public class Business extends ParseObject implements Parcelable, FomonoEvent
     }
 
     public Location getLocation() {
+        if (location == null) {
+            location = (Location) getParseObject("location");
+        }
         return location;
     }
 
@@ -310,6 +387,9 @@ public class Business extends ParseObject implements Parcelable, FomonoEvent
     }
 
     public Double getDistance() {
+        if (distance == null) {
+            distance = getDouble("distance");
+        }
         return distance;
     }
 

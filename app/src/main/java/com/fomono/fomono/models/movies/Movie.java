@@ -157,6 +157,18 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
         });
     }
 
+    @Override
+    public void initializeFromParse() {
+        this.posterPath = getString("poster_path");
+        this.overview = getString("overview");
+        this.releaseDate = getString("release_date");
+        this.id = Long.parseLong(getString("id"));
+        this.originalTitle = getString("original_title");
+        this.title = getString("title");
+        this.backdropPath = getString("backdrop_path");
+        this.voteAverage = getDouble("vote_average");
+    }
+
     public void getFromParse(GetCallback<Movie> callback) {
         ParseQuery<Movie> query = ParseQuery.getQuery(Movie.class);
         query.whereEqualTo("id", this.getStringId())
@@ -192,6 +204,9 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
     }
 
     public String getPosterPath() {
+        if (posterPath == null) {
+            posterPath = getString("poster_path");
+        }
         return String.format("https://image.tmdb.org/t/p/w342/%s",posterPath);
     }
     public void setPosterPath(String posterPath) {
@@ -207,6 +222,9 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
     }
 
     public String getOverview() {
+        if (overview == null) {
+            overview = getString("overview");
+        }
         return overview;
     }
 
@@ -215,6 +233,9 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
     }
 
     public String getReleaseDate() {
+        if (releaseDate == null) {
+            releaseDate = getString("release_date");
+        }
         return releaseDate;
     }
 
@@ -231,6 +252,9 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
     }
 
     public long getId() {
+        if (id <= 0) {
+            id = Long.parseLong(getString("id"));
+        }
         return id;
     }
 
@@ -239,6 +263,9 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
     }
 
     public String getOriginalTitle() {
+        if (originalTitle == null && has("original_title")) {
+            originalTitle = getString("original_title");
+        }
         return originalTitle;
     }
 
@@ -255,6 +282,9 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
     }
 
     public String getTitle() {
+        if (title == null) {
+            title = getString("title");
+        }
         return title;
     }
 
@@ -263,6 +293,9 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
     }
 
     public String getBackdropPath() {
+        if (backdropPath == null) {
+            backdropPath = getString("backdrop_path");
+        }
         return String.format("https://image.tmdb.org/t/p/w342/%s",backdropPath);
     }
 
@@ -295,6 +328,9 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
     }
 
     public double getVoteAverage() {
+        if (voteAverage == 0) {
+            voteAverage = getDouble("vote_average");
+        }
         return voteAverage;
     }
 
@@ -326,10 +362,7 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
 
     @Override
     public String getStringId() {
-        if (id == 0) {
-            return getString("id");
-        }
-        return String.valueOf(id);
+        return String.valueOf(getId());
     }
 
     @Override

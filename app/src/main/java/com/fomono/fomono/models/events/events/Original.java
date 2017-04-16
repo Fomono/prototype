@@ -41,6 +41,10 @@ public class Original extends ParseObject implements Parcelable {
         this.put("url", url);
     }
 
+    public void initializeFromParse() {
+        url = getString("url");
+    }
+
     public static final Creator<Original> CREATOR = new Creator<Original>() {
         @Override
         public Original createFromParcel(Parcel in) {

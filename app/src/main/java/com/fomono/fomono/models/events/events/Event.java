@@ -264,6 +264,29 @@ public class Event extends ParseObject implements Parcelable, FomonoEvent
         });
     }
 
+    @Override
+    public void initializeFromParse() {
+        this.name = (Name) getParseObject("name");
+        this.name.initializeFromParse();
+        this.description = (Description) getParseObject("description");
+        this.description.initializeFromParse();
+        this.id = getString("id");
+        this.url = getString("url");
+        this.start = (Start) getParseObject("start");
+        this.start.initializeFromParse();
+        this.end = (End) getParseObject("end");
+        this.end.initializeFromParse();
+        this.created = getString("created");
+        this.isFree = getBoolean("is_free");
+        this.venueId = getString("venue_id");
+        this.logo = (Logo) getParseObject("logo");
+        this.logo.initializeFromParse();
+        if (has("venue")) {
+            this.venue = (Venue) getParseObject("venue");
+            this.venue.initializeFromParse();
+        }
+    }
+
     public void getFromParse(GetCallback<Event> callback) {
         ParseQuery<Event> query = ParseQuery.getQuery(Event.class);
         query.whereEqualTo("id", this.getStringId())

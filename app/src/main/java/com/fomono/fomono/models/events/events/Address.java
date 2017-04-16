@@ -110,6 +110,19 @@ public class Address extends ParseObject implements Parcelable{
         }
     }
 
+    public void initializeFromParse() {
+        address1 = getString("address_1");
+        if (has("address_2")) {
+            address2 = getString("address_2");
+        }
+        city = getString("city");
+        region = getString("region");
+        postalCode = getString("postal_code");
+        country = getString("country");
+        latitude = getString("latitude");
+        longitude = getString("longitude");
+    }
+
     public static final Creator<Address> CREATOR = new Creator<Address>() {
         @Override
         public Address createFromParcel(Parcel in) {
@@ -135,7 +148,7 @@ public class Address extends ParseObject implements Parcelable{
     }
 
     public String getAddress2() {
-        if (address2 == null) {
+        if (address2 == null && has("address_2")) {
             address2 = getString("address_2");
         }
         return address2;

@@ -60,6 +60,7 @@ public class Favorite extends ParseObject {
      */
     public void initialize() {
         this.fomonoEvent = getFomonoEventFromParse();
+        this.fomonoEvent.initializeFromParse();
         this.apiName = getString("api_name");
         this.fomonoEventId = getString("fomono_event_id");
     }

@@ -44,6 +44,12 @@ public class Venue extends ParseObject implements Parcelable {
         this.put("address", address);
     }
 
+    public void initializeFromParse() {
+        name = getString("name");
+        address = (Address) getParseObject("address");
+        address.initializeFromParse();
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);

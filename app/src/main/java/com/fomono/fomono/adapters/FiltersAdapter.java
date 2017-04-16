@@ -107,7 +107,7 @@ public class FiltersAdapter extends RecyclerView.Adapter<FiltersAdapter.ViewHold
                             @Override
                             public void done(Filter object, ParseException e) {
                                 if (object != null) {
-                                    object.deleteEventually();
+                                    object.deleteInBackground();
                                 }
                             }
                         });

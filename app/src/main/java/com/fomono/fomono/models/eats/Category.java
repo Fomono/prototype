@@ -55,7 +55,15 @@ public class Category extends ParseObject implements Parcelable, ICategory
         this.put("title", this.title);
     }
 
+    public void initializeFromParse() {
+        this.alias = getString("alias");
+        this.title = getString("title");
+    }
+
     public String getAlias() {
+        if (alias == null) {
+            alias = getString("alias");
+        }
         return alias;
     }
 
@@ -64,6 +72,9 @@ public class Category extends ParseObject implements Parcelable, ICategory
     }
 
     public String getTitle() {
+        if (title == null) {
+            title = getString("title");
+        }
         return title;
     }
 

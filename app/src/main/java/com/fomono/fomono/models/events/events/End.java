@@ -65,6 +65,12 @@ public class End extends ParseObject implements Parcelable
         this.put("utc", utc);
     }
 
+    public void initializeFromParse() {
+        timezone = getString("timezone");
+        local = getString("local");
+        utc = getString("utc");
+    }
+
     public String getTimezone() {
         if (timezone == null) {
             timezone = getString("timezone");

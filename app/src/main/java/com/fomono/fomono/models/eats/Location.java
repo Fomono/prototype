@@ -100,7 +100,24 @@ public class Location extends ParseObject implements Parcelable
         }
     }
 
+    public void initializeFromParse() {
+        city = getString("city");
+        country = getString("country");
+        address1 = getString("address1");
+        if (has("address2")) {
+            address2 = getString("address2");
+        }
+        if (has("address3")) {
+            address3 = getString("address3");
+        }
+        locationState = getString("state");
+        zipCode = getString("zip_code");
+    }
+
     public String getCity() {
+        if (city == null) {
+            city = getString("city");
+        }
         return city;
     }
 
@@ -109,6 +126,9 @@ public class Location extends ParseObject implements Parcelable
     }
 
     public String getCountry() {
+        if (country == null) {
+            country = getString("country");
+        }
         return country;
     }
 
@@ -117,6 +137,9 @@ public class Location extends ParseObject implements Parcelable
     }
 
     public String getAddress2() {
+        if (address2 == null && has("address2")) {
+            address2 = getString("address2");
+        }
         return address2;
     }
 
@@ -125,6 +148,9 @@ public class Location extends ParseObject implements Parcelable
     }
 
     public String getAddress3() {
+        if (address3 == null && has("address3")) {
+            address3 = getString("address3");
+        }
         return address3;
     }
 
@@ -133,6 +159,9 @@ public class Location extends ParseObject implements Parcelable
     }
 
     public String getLocationState() {
+        if (locationState == null) {
+            locationState = getString("state");
+        }
         return locationState;
     }
 
@@ -141,6 +170,9 @@ public class Location extends ParseObject implements Parcelable
     }
 
     public String getAddress1() {
+        if (address1 == null) {
+            address1 = getString("address1");
+        }
         return address1;
     }
 
@@ -149,6 +181,9 @@ public class Location extends ParseObject implements Parcelable
     }
 
     public String getZipCode() {
+        if (zipCode == null) {
+            zipCode = getString("zip_code");
+        }
         return zipCode;
     }
 

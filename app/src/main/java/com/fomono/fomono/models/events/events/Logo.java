@@ -65,6 +65,13 @@ public class Logo extends ParseObject implements Parcelable {
         this.put("url", url);
     }
 
+    public void initializeFromParse() {
+        original = (Original) getParseObject("original");
+        original.initializeFromParse();
+        id = getString("id");
+        url = getString("url");
+    }
+
     public static final Creator<Logo> CREATOR = new Creator<Logo>() {
         @Override
         public Logo createFromParcel(Parcel in) {

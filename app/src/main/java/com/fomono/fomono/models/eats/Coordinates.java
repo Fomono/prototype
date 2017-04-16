@@ -52,7 +52,15 @@ public class Coordinates extends ParseObject implements Parcelable
         this.put("longitude", this.longitude);
     }
 
+    public void initializeFromParse() {
+        latitude = getDouble("latitude");
+        longitude = getDouble("longitude");
+    }
+
     public Double getLatitude() {
+        if (latitude == null) {
+            latitude = getDouble("latitude");
+        }
         return latitude;
     }
 
@@ -61,6 +69,9 @@ public class Coordinates extends ParseObject implements Parcelable
     }
 
     public Double getLongitude() {
+        if (longitude == null) {
+            longitude = getDouble("longitude");
+        }
         return longitude;
     }
 
