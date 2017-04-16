@@ -148,7 +148,7 @@ public class UserPreferencesFragment extends Fragment {
 
         //set number of categories selected
         try {
-            FilterUtil.getAllFilters(true, new FindCallback<Filter>() {
+            FilterUtil.getInstance().getAllFilters(true, new FindCallback<Filter>() {
                 @Override
                 public void done(List<Filter> objects, ParseException e) {
                     int numCategories = 0;

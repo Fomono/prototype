@@ -1,7 +1,6 @@
 package com.fomono.fomono.fragments;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -16,7 +15,6 @@ import com.fomono.fomono.R;
 import com.fomono.fomono.models.db.Filter;
 import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.events.events.EventBriteResponse;
-import com.fomono.fomono.network.client.EventBriteClientRetrofit;
 import com.fomono.fomono.supportclasses.EndlessRecyclerViewScrollListener;
 import com.fomono.fomono.supportclasses.InternetAlertDialogue;
 import com.fomono.fomono.utils.FilterUtil;
@@ -32,8 +30,6 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.media.CamcorderProfile.get;
 
 /**
  * Created by Saranu on 4/6/17.
@@ -69,13 +65,13 @@ public class EventFragment extends MainListFragment {
         smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
         try {
             //get user filters for events
-            FilterUtil.getFilters(FomonoApplication.API_NAME_EVENTS, new FindCallback<Filter>() {
+            FilterUtil.getInstance().getFilters(FomonoApplication.API_NAME_EVENTS, new FindCallback<Filter>() {
                 @Override
                 public void done(List<Filter> filters, ParseException e) {
                     String categoriesString = "";
                     if (filters != null) {
                         Filter.initializeFromList(filters);
-                        categoriesString = FilterUtil.buildCategoriesString(filters);
+                        categoriesString = FilterUtil.getInstance().buildCategoriesString(filters);
                     }
                     ParseUser currentUser = ParseUser.getCurrentUser();
                     String location = currentUser.getString("location");
@@ -86,10 +82,6 @@ public class EventFragment extends MainListFragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Handler handlerTimer = new Handler();
-        handlerTimer.postDelayed(() -> {//Just to show the progress bar
-            smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
-        }, 500);
     }
 
     public void getEventList(int page, String strQuery, String location, String categories, int distance) {
@@ -119,20 +111,21 @@ public class EventFragment extends MainListFragment {
         call.enqueue(new Callback<EventBriteResponse>() {
             @Override
             public void onResponse(Call<EventBriteResponse> call, Response<EventBriteResponse> response) {
-                    ArrayList<Event> events = response.body().getEvents();
-                    if (events == null || events.isEmpty()) {
-                        Log.d(TAG, "No events fetched!!");
-                    } else {
-                        Event.saveOrUpdateFromList(events);
-                        fomonoEvents.addAll(events);
-                        fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
-                    }
+                ArrayList<Event> events = response.body().getEvents();
+                if (events == null || events.isEmpty()) {
+                    Log.d(TAG, "No events fetched!!");
+                } else {
+                    Event.saveOrUpdateFromList(events);
+                    fomonoEvents.addAll(events);
+                    fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
+                }
+                smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
             }
 
             @Override
             public void onFailure(Call<EventBriteResponse> call, Throwable t) {
                 Log.d(TAG, "REQUEST Failed " + t.getMessage());
-
+                smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
             }
         });
     }

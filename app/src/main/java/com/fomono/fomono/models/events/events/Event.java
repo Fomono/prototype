@@ -209,8 +209,10 @@ public class Event extends ParseObject implements Parcelable, FomonoEvent
         instance.put("created", instance.created);
         instance.put("is_free", instance.isFree);
         instance.put("venue_id", instance.venueId);
-        instance.logo.initializeForParse();
-        instance.put("logo", instance.logo);
+        if (instance.logo != null) {
+            instance.logo.initializeForParse();
+            instance.put("logo", instance.logo);
+        }
         if (instance.venue != null) {
             instance.venue.initializeForParse();
             instance.put("venue", instance.venue);
@@ -279,8 +281,10 @@ public class Event extends ParseObject implements Parcelable, FomonoEvent
         this.created = getString("created");
         this.isFree = getBoolean("is_free");
         this.venueId = getString("venue_id");
-        this.logo = (Logo) getParseObject("logo");
-        this.logo.initializeFromParse();
+        if (has("logo")) {
+            this.logo = (Logo) getParseObject("logo");
+            this.logo.initializeFromParse();
+        }
         if (has("venue")) {
             this.venue = (Venue) getParseObject("venue");
             this.venue.initializeFromParse();
@@ -328,7 +332,13 @@ public class Event extends ParseObject implements Parcelable, FomonoEvent
         this.put("created", event.created);
         this.put("is_free", event.isFree);
         this.put("venue_id", event.venueId);
-        ((Logo)this.get("logo")).updateWithExisting(event.logo);
+        if (event.logo != null) {
+            if (has("logo")) {
+                ((Logo)this.get("logo")).updateWithExisting(event.logo);
+            } else {
+                this.put("logo", event.logo);
+            }
+        }
         if (event.venue != null) {
             if (this.has("venue")) {
                 ((Venue)this.get("venue")).updateWithExisting(event.venue);

@@ -2,7 +2,6 @@ package com.fomono.fomono.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,7 +13,6 @@ import android.widget.ProgressBar;
 import com.fomono.fomono.R;
 import com.fomono.fomono.models.movies.Movie;
 import com.fomono.fomono.models.movies.MovieResponse;
-import com.fomono.fomono.network.client.MovieDBClientRetrofit;
 import com.fomono.fomono.supportclasses.EndlessRecyclerViewScrollListener;
 import com.fomono.fomono.supportclasses.InternetAlertDialogue;
 
@@ -59,10 +57,6 @@ public class MovieFragment extends MainListFragment {
     public void populateMovies(int page) {
         smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
         getMoviesNowPlaying(getActivity(), null, page);
-        Handler handlerTimer = new Handler();
-        handlerTimer.postDelayed(() -> {//Just to show the progress bar
-            smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
-        }, 500);
     }
 
     public void getMoviesNowPlaying(Context context, String stringQuery, int page) {
@@ -90,12 +84,13 @@ public class MovieFragment extends MainListFragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
             }
 
             @Override
             public void onFailure(Call<MovieResponse> call, Throwable t) {
                 Log.d(TAG, "REQUEST Failed " + t.getMessage());
-
+                smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
             }
         });
     }
