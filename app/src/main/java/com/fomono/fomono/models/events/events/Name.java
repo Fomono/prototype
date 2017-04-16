@@ -49,15 +49,21 @@ public class Name extends ParseObject implements Parcelable
             ;
 
     public void updateWithExisting(Name instance) {
-        this.put("text", instance.text);
+        if (instance.text != null) {
+            this.put("text", instance.text);
+        }
     }
 
     public void initializeForParse() {
-        this.put("text", this.text);
+        if (text != null) {
+            this.put("text", this.text);
+        }
     }
 
     public void initializeFromParse() {
-        text = getString("text");
+        if (has("text")) {
+            text = getString("text");
+        }
     }
 
     public String getText() {

@@ -125,16 +125,30 @@ public class Address extends ParseObject implements Parcelable{
     }
 
     public void initializeFromParse() {
-        address1 = getString("address_1");
+        if (has("address_1")) {
+            address1 = getString("address_1");
+        }
         if (has("address_2")) {
             address2 = getString("address_2");
         }
-        city = getString("city");
-        region = getString("region");
-        postalCode = getString("postal_code");
-        country = getString("country");
-        latitude = getString("latitude");
-        longitude = getString("longitude");
+        if (has("city")) {
+            city = getString("city");
+        }
+        if (has("region")) {
+            region = getString("region");
+        }
+        if (has("postal_code")) {
+            postalCode = getString("postal_code");
+        }
+        if (has("country")) {
+            country = getString("country");
+        }
+        if (has("latitude")) {
+            latitude = getString("latitude");
+        }
+        if (has("longitutde")) {
+            longitude = getString("longitude");
+        }
     }
 
     public static final Creator<Address> CREATOR = new Creator<Address>() {

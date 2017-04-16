@@ -110,22 +110,42 @@ public class Business extends ParseObject implements Parcelable, FomonoEvent
      * @param instance
      */
     public static void initializeForParse(Business instance) {
-        instance.put("rating", instance.rating);
-        instance.put("price", instance.price);
-        instance.put("id", String.valueOf(instance.id));
-        for (Category c : instance.categories) {
-            c.initializeForParse();
+        if (instance.rating >= 0) {
+            instance.put("rating", instance.rating);
         }
-        instance.put("categories", instance.categories);
-        instance.put("review_count", instance.reviewCount);
-        instance.put("name", instance.name);
-        instance.put("url", instance.url);
-        instance.coordinates.initializeForParse();
-        instance.put("coordinates", instance.coordinates);
-        instance.put("image_url", instance.imageUrl);
-        instance.location.initializeForParse();
-        instance.put("location", instance.location);
-        instance.put("distance", instance.distance);
+        if (instance.price != null) {
+            instance.put("price", instance.price);
+        }
+        instance.put("id", String.valueOf(instance.id));
+        if (instance.categories != null) {
+            for (Category c : instance.categories) {
+                c.initializeForParse();
+            }
+            instance.put("categories", instance.categories);
+        }
+        if (instance.reviewCount != null) {
+            instance.put("review_count", instance.reviewCount);
+        }
+        if (instance.name != null) {
+            instance.put("name", instance.name);
+        }
+        if (instance.url != null) {
+            instance.put("url", instance.url);
+        }
+        if (instance.coordinates != null) {
+            instance.coordinates.initializeForParse();
+            instance.put("coordinates", instance.coordinates);
+        }
+        if (instance.imageUrl != null) {
+            instance.put("image_url", instance.imageUrl);
+        }
+        if (instance.location != null) {
+            instance.location.initializeForParse();
+            instance.put("location", instance.location);
+        }
+        if (instance.distance != null) {
+            instance.put("distance", instance.distance);
+        }
     }
 
     public static void getListFromParse(List<Business> list, FindCallback<Business> callback) {
@@ -197,17 +217,37 @@ public class Business extends ParseObject implements Parcelable, FomonoEvent
     }
 
     public void updateWithExisting(Business instance) {
-        this.put("rating", instance.rating);
-        this.put("price", instance.price);
+        if (instance.rating >= 0) {
+            this.put("rating", instance.rating);
+        }
+        if (instance.price != null) {
+            this.put("price", instance.price);
+        }
         this.put("id", String.valueOf(instance.id));
-        this.mergeCategoriesForParse(instance.categories);
-        this.put("review_count", instance.reviewCount);
-        this.put("name", instance.name);
-        this.put("url", instance.url);
-        ((Coordinates)this.get("coordinates")).updateWithExisting(instance.coordinates);
-        this.put("image_url", instance.imageUrl);
-        ((Location)this.get("location")).updateWithExisting(instance.location);
-        this.put("distance", instance.distance);
+        if (instance.categories != null) {
+            this.mergeCategoriesForParse(instance.categories);
+        }
+        if (instance.reviewCount != null) {
+            this.put("review_count", instance.reviewCount);
+        }
+        if (instance.name != null) {
+            this.put("name", instance.name);
+        }
+        if (instance.url != null) {
+            this.put("url", instance.url);
+        }
+        if (instance.coordinates != null) {
+            ((Coordinates) this.get("coordinates")).updateWithExisting(instance.coordinates);
+        }
+        if (instance.imageUrl != null) {
+            this.put("image_url", instance.imageUrl);
+        }
+        if (instance.location != null) {
+            ((Location) this.get("location")).updateWithExisting(instance.location);
+        }
+        if (instance.distance != null) {
+            this.put("distance", instance.distance);
+        }
     }
 
     private void mergeCategoriesForParse(List<Category> categories) {
@@ -242,22 +282,42 @@ public class Business extends ParseObject implements Parcelable, FomonoEvent
 
     @Override
     public void initializeFromParse() {
-        this.rating = getDouble("rating");
-        this.price = getString("price");
-        this.id = getString("id");
-        this.categories = (ArrayList<Category>)(List<?>)getList("categories");
-        for (Category c : categories) {
-            c.initializeFromParse();
+        if (has("rating")) {
+            this.rating = getDouble("rating");
         }
-        this.reviewCount = getInt("review_count");
-        this.name = getString("name");
-        this.url = getString("url");
-        this.coordinates = (Coordinates) getParseObject("coordinates");
-        this.coordinates.initializeFromParse();
-        this.imageUrl = getString("image_url");
-        this.location = (Location) getParseObject("location");
-        this.location.initializeFromParse();
-        this.distance = getDouble("distance");
+        if (has("price")) {
+            this.price = getString("price");
+        }
+        this.id = getString("id");
+        if (has("categories")) {
+            this.categories = (ArrayList<Category>) (List<?>) getList("categories");
+            for (Category c : categories) {
+                c.initializeFromParse();
+            }
+        }
+        if (has("review_count")) {
+            this.reviewCount = getInt("review_count");
+        }
+        if (has("name")) {
+            this.name = getString("name");
+        }
+        if (has("url")) {
+            this.url = getString("url");
+        }
+        if (has("coordinates")) {
+            this.coordinates = (Coordinates) getParseObject("coordinates");
+            this.coordinates.initializeFromParse();
+        }
+        if (has("image_url")) {
+            this.imageUrl = getString("image_url");
+        }
+        if (has("location")) {
+            this.location = (Location) getParseObject("location");
+            this.location.initializeFromParse();
+        }
+        if (has("distance")) {
+            this.distance = getDouble("distance");
+        }
     }
 
     public double getRating() {
