@@ -12,14 +12,7 @@ import com.fomono.fomono.fragments.FomonoDetailMoviedbFragment;
 import com.fomono.fomono.fragments.FomonoDetailYelpFragment;
 import com.fomono.fomono.models.FomonoEvent;
 import com.fomono.fomono.models.eats.Business;
-import com.fomono.fomono.models.eats.Coordinates;
-import com.fomono.fomono.models.eats.Location;
-import com.fomono.fomono.models.events.events.Description;
-import com.fomono.fomono.models.events.events.End;
 import com.fomono.fomono.models.events.events.Event;
-import com.fomono.fomono.models.events.events.Logo;
-import com.fomono.fomono.models.events.events.Name;
-import com.fomono.fomono.models.events.events.Start;
 import com.fomono.fomono.models.movies.Movie;
 
 
@@ -60,55 +53,55 @@ public class FomonoDetailActivity extends AppCompatActivity {
 
         }
     }
-
-    private FomonoEvent generateFakeEventObject() {
-
-        Event e = new Event();
-
-        Start startDate = new Start();
-        End endDate = new End();
-        startDate.setUtc("2017-05-20T12:00:00Z");
-        endDate.setUtc("2017-05-21T12:00:00Z");
-        Name name = new Name();
-        name.setText("Holi Montreux");
-        Description d = new Description();
-        d.setText("Holi is an Indian inspired festivity, created to celebrate the rebirth of Spring and new beginnings!");
-        Logo l = new Logo();
-        l.setUrl("https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F29366453%2F140913306390%2F1%2Foriginal.jpg?h=200&w=450&rect=177%2C410%2C1090%2C545&s=8aa1cb74651213865e999a3d9fd51eb0");
-
-        e.setName(name);
-        e.setStart(startDate);
-        e.setEnd(endDate);
-        e.setDescription(d);
-        e.setLogo(l);
-        e.setVenueId("18800935");
-        e.setUrl("https://www.eventbrite.com/e/holi-montreux-tickets-32905167241?aff=ebapi");
-        return e;
-
-
-    }
-    private FomonoEvent generateFakeMovieObject() {
-        Movie m = new Movie();
-
-        m.setPosterPath("http://i.imgur.com/hgXLjzr.png");
-        m.setTitle("50 Shades of crazy");
-        m.setOverview("Some random description ...........................................");
-        m.setReleaseDate("2017-05-20T12:00:00Z");
-        return m;
-    }
-
-
-    private FomonoEvent generateFakeEatObject() {
-        Business b = new Business();
-        b.setName("Yummy Food Restaurant");
-        b.setImageUrl("http://i.imgur.com/hgXLjzr.png");
-        b.setUrl("https://www.yelp.com/oakland");
-        Location l = new Location();
-        Coordinates c = new Coordinates();
-        c.setLatitude(37.7980312);
-        c.setLongitude(-122.4100467);
-        b.setCoordinates(c);
-        return b;
-    }
+//
+//    private FomonoEvent generateFakeEventObject() {
+//
+//        Event e = new Event();
+//
+//        Start startDate = new Start();
+//        End endDate = new End();
+//        startDate.setUtc("2017-05-20T12:00:00Z");
+//        endDate.setUtc("2017-05-21T12:00:00Z");
+//        Name name = new Name();
+//        name.setText("Holi Montreux");
+//        Description d = new Description();
+//        d.setText("Holi is an Indian inspired festivity, created to celebrate the rebirth of Spring and new beginnings!");
+//        Logo l = new Logo();
+//        l.setUrl("https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F29366453%2F140913306390%2F1%2Foriginal.jpg?h=200&w=450&rect=177%2C410%2C1090%2C545&s=8aa1cb74651213865e999a3d9fd51eb0");
+//
+//        e.setName(name);
+//        e.setStart(startDate);
+//        e.setEnd(endDate);
+//        e.setDescription(d);
+//        e.setLogo(l);
+//        e.setVenueId("18800935");
+//        e.setUrl("https://www.eventbrite.com/e/holi-montreux-tickets-32905167241?aff=ebapi");
+//        return e;
+//
+//
+//    }
+//    private FomonoEvent generateFakeMovieObject() {
+//        Movie m = new Movie();
+//
+//        m.setPosterPath("http://i.imgur.com/hgXLjzr.png");
+//        m.setTitle("50 Shades of crazy");
+//        m.setOverview("Some random description ...........................................");
+//        m.setReleaseDate("2017-05-20T12:00:00Z");
+//        return m;
+//    }
+//
+//
+//    private FomonoEvent generateFakeEatObject() {
+//        Business b = new Business();
+//        b.setName("Yummy Food Restaurant");
+//        b.setImageUrl("http://i.imgur.com/hgXLjzr.png");
+//        b.setUrl("https://www.yelp.com/oakland");
+//        Location l = new Location();
+//        Coordinates c = new Coordinates();
+//        c.setLatitude(37.7980312);
+//        c.setLongitude(-122.4100467);
+//        b.setCoordinates(c);
+//        return b;
+//    }
 
 }

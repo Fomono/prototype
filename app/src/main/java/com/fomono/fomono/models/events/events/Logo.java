@@ -9,9 +9,11 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.parse.ParseClassName;
+import com.parse.ParseObject;
 
-
-public class Logo implements Parcelable {
+@ParseClassName("EventLogo")
+public class Logo extends ParseObject implements Parcelable {
 
     @SerializedName("crop_mask")
     @Expose
@@ -35,8 +37,8 @@ public class Logo implements Parcelable {
     @Expose
     public Boolean edgeColorSet;
 
-    public Logo(){
-
+    public Logo() {
+        //required empty default constructor
     }
 
     protected Logo(Parcel in) {
@@ -46,6 +48,28 @@ public class Logo implements Parcelable {
         url = in.readString();
         aspectRatio = in.readString();
         edgeColor = in.readString();
+
+        this.initializeForParse();
+    }
+
+    public void updateWithExisting(Logo instance) {
+        ((Original) this.get("original")).updateWithExisting(instance.original);
+        this.put("id", instance.id);
+        this.put("url", instance.url);
+    }
+
+    public void initializeForParse() {
+        original.initializeForParse();
+        this.put("original", original);
+        this.put("id", id);
+        this.put("url", url);
+    }
+
+    public void initializeFromParse() {
+        original = (Original) getParseObject("original");
+        original.initializeFromParse();
+        id = getString("id");
+        url = getString("url");
     }
 
     public static final Creator<Logo> CREATOR = new Creator<Logo>() {
@@ -69,27 +93,39 @@ public class Logo implements Parcelable {
     }
 
     public Original getOriginal() {
+        if (original == null) {
+            original = (Original) getParseObject("original");
+        }
         return original;
     }
 
     public void setOriginal(Original original) {
         this.original = original;
+        this.put("original", original);
     }
 
     public String getId() {
+        if (id == null) {
+            id = getString("id");
+        }
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
+        this.put("id", id);
     }
 
     public String getUrl() {
+        if (url == null) {
+            url = getString("url");
+        }
         return url;
     }
 
     public void setUrl(String url) {
         this.url = url;
+        this.put("url", url);
     }
 
     public String getAspectRatio() {

@@ -114,10 +114,10 @@
                     android:layout_gravity="right"/>
 
                 <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:id="@+id/ImageFavoriteButtonId"
-                    android:background="@color/colorGrey"
+                    app:srcCompat="@drawable/ic_favorite_grey"
                     android:layout_gravity="center_horizontal"/>
 
 

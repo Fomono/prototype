@@ -12,31 +12,19 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.fomono.fomono.R;
-import com.fomono.fomono.models.eats.Business;
 import com.fomono.fomono.models.movies.Movie;
 import com.fomono.fomono.models.movies.MovieResponse;
 import com.fomono.fomono.network.client.MovieDBClientRetrofit;
 import com.fomono.fomono.supportclasses.EndlessRecyclerViewScrollListener;
 import com.fomono.fomono.supportclasses.InternetAlertDialogue;
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import cz.msebera.android.httpclient.Header;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.fomono.fomono.network.client.MovieDBClientRetrofit.API_KEY;
 
 /**
  * Created by Saranu on 4/6/17.
@@ -46,8 +34,6 @@ public class MovieFragment extends MainListFragment {
 
 
     private final static String TAG = "Movie Fragment";
-    MovieDBClientRetrofit movieDBClientRetrofit;
-    private boolean initialMoviesLoaded = false;
     public int moviePage = 1;
 
     @Nullable
@@ -55,7 +41,7 @@ public class MovieFragment extends MainListFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         InternetAlertDialogue internetAlertDialogue = new InternetAlertDialogue(mContext);
-        if (internetAlertDialogue.checkForInternet() && !initialMoviesLoaded) {
+        if (internetAlertDialogue.checkForInternet()) {
             populateMovies(moviePage++);
         }
 
@@ -80,9 +66,6 @@ public class MovieFragment extends MainListFragment {
     }
 
     public void getMoviesNowPlaying(Context context, String stringQuery, int page) {
-        movieDBClientRetrofit = MovieDBClientRetrofit.getNewInstance();
-        initialMoviesLoaded = true;
-
 
         Map<String, String> data = new HashMap<>();
         data.put("api_key", getResources().getString(R.string.movieDB_api_key));
@@ -99,6 +82,7 @@ public class MovieFragment extends MainListFragment {
                     if (movies == null || movies.isEmpty()) {
                         Log.d(TAG, "No movies fetched!!");
                     } else {
+                        Movie.saveOrUpdateFromList(movies);
                         fomonoEvents.addAll(movies);
                         fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
                         Log.d(TAG, "response is, with page = " + page + "is " + response.body().getResults().get(0));

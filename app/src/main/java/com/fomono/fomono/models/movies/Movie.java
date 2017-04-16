@@ -3,17 +3,27 @@ package com.fomono.fomono.models.movies;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.models.FomonoEvent;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.ParseClassName;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Saranu on 4/8/17.
  */
-
-public class Movie implements Parcelable, FomonoEvent{
+@ParseClassName("Movie")
+public class Movie extends ParseObject implements Parcelable, FomonoEvent{
 
         @SerializedName("poster_path")
         @Expose
@@ -59,6 +69,7 @@ public class Movie implements Parcelable, FomonoEvent{
         public double voteAverage;
 
     public  Movie(){
+        //required empty default constructor
     }
 
     protected Movie(Parcel in) {
@@ -75,6 +86,8 @@ public class Movie implements Parcelable, FomonoEvent{
         voteCount = in.readLong();
         video = in.readByte() != 0;
         voteAverage = in.readDouble();
+
+        initializeForParse(this);
     }
 
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
@@ -89,7 +102,111 @@ public class Movie implements Parcelable, FomonoEvent{
         }
     };
 
+    /**
+     * Initializes an as a ParseObject that can be saved to db.
+     * Note: Only stores data we care about.
+     * @param instance
+     */
+    public static void initializeForParse(Movie instance) {
+        instance.put("poster_path", instance.posterPath);
+        instance.put("overview", instance.overview);
+        instance.put("release_date", instance.releaseDate);
+        instance.put("id", String.valueOf(instance.id));
+        instance.put("original_title", instance.originalTitle);
+        instance.put("title", instance.title);
+        instance.put("backdrop_path", instance.backdropPath);
+        instance.put("vote_average", instance.voteAverage);
+    }
+
+    public static void getListFromParse(List<Movie> list, FindCallback<Movie> callback) {
+        ParseQuery<Movie> query = ParseQuery.getQuery(Movie.class);
+        List<String> ids = new ArrayList<>();
+        for (Movie e : list) {
+            ids.add(e.getStringId());
+        }
+        query.whereContainedIn("id", ids)
+                .findInBackground(callback);
+    }
+
+    public static void saveOrUpdateFromList(List<Movie> list) {
+        getListFromParse(list, new FindCallback<Movie>() {
+            @Override
+            public void done(List<Movie> objects, ParseException e) {
+                if (objects != null) {
+                    Map<String, Movie> map = new HashMap<>();
+                    for (Movie o : objects) {
+                        map.put(o.getStringId(), o);
+                    }
+                    for (Movie oFromAPI : list) {
+                        if (map.containsKey(oFromAPI.getStringId())) {
+                            Movie oFromParse = map.get(oFromAPI.getStringId());
+                            oFromParse.updateWithExisting(oFromAPI);
+                            oFromParse.saveInBackground();
+                        } else {
+                            initializeForParse(oFromAPI);
+                            oFromAPI.saveInBackground();
+                        }
+                    }
+                } else {
+                    for (Movie oFromApi : list) {
+                        initializeForParse(oFromApi);
+                    }
+                    ParseObject.saveAllInBackground(list);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void initializeFromParse() {
+        this.posterPath = getString("poster_path");
+        this.overview = getString("overview");
+        this.releaseDate = getString("release_date");
+        this.id = Long.parseLong(getString("id"));
+        this.originalTitle = getString("original_title");
+        this.title = getString("title");
+        this.backdropPath = getString("backdrop_path");
+        this.voteAverage = getDouble("vote_average");
+    }
+
+    public void getFromParse(GetCallback<Movie> callback) {
+        ParseQuery<Movie> query = ParseQuery.getQuery(Movie.class);
+        query.whereEqualTo("id", this.getStringId())
+                .getFirstInBackground(callback);
+    }
+
+    public void saveOrUpdate() {
+        getFromParse(new GetCallback<Movie>() {
+            @Override
+            public void done(Movie object, ParseException e) {
+                //if it's a new object, save it
+                if (object == null) {
+                    initializeForParse(Movie.this);
+                    Movie.this.saveInBackground();
+                } else {
+                    //otherwise update any fields, and save the original
+                    object.updateWithExisting(Movie.this);
+                    object.saveInBackground();
+                }
+            }
+        });
+    }
+
+    public void updateWithExisting(Movie instance) {
+        this.put("poster_path", instance.posterPath);
+        this.put("overview", instance.overview);
+        this.put("release_date", instance.releaseDate);
+        this.put("id", String.valueOf(instance.id));
+        this.put("original_title", instance.originalTitle);
+        this.put("title", instance.title);
+        this.put("backdrop_path", instance.backdropPath);
+        this.put("vote_average", instance.voteAverage);
+    }
+
     public String getPosterPath() {
+        if (posterPath == null) {
+            posterPath = getString("poster_path");
+        }
         return String.format("https://image.tmdb.org/t/p/w342/%s",posterPath);
     }
     public void setPosterPath(String posterPath) {
@@ -105,6 +222,9 @@ public class Movie implements Parcelable, FomonoEvent{
     }
 
     public String getOverview() {
+        if (overview == null) {
+            overview = getString("overview");
+        }
         return overview;
     }
 
@@ -113,6 +233,9 @@ public class Movie implements Parcelable, FomonoEvent{
     }
 
     public String getReleaseDate() {
+        if (releaseDate == null) {
+            releaseDate = getString("release_date");
+        }
         return releaseDate;
     }
 
@@ -129,6 +252,9 @@ public class Movie implements Parcelable, FomonoEvent{
     }
 
     public long getId() {
+        if (id <= 0) {
+            id = Long.parseLong(getString("id"));
+        }
         return id;
     }
 
@@ -137,6 +263,9 @@ public class Movie implements Parcelable, FomonoEvent{
     }
 
     public String getOriginalTitle() {
+        if (originalTitle == null && has("original_title")) {
+            originalTitle = getString("original_title");
+        }
         return originalTitle;
     }
 
@@ -153,6 +282,9 @@ public class Movie implements Parcelable, FomonoEvent{
     }
 
     public String getTitle() {
+        if (title == null) {
+            title = getString("title");
+        }
         return title;
     }
 
@@ -161,6 +293,9 @@ public class Movie implements Parcelable, FomonoEvent{
     }
 
     public String getBackdropPath() {
+        if (backdropPath == null) {
+            backdropPath = getString("backdrop_path");
+        }
         return String.format("https://image.tmdb.org/t/p/w342/%s",backdropPath);
     }
 
@@ -193,6 +328,9 @@ public class Movie implements Parcelable, FomonoEvent{
     }
 
     public double getVoteAverage() {
+        if (voteAverage == 0) {
+            voteAverage = getDouble("vote_average");
+        }
         return voteAverage;
     }
 
@@ -220,5 +358,15 @@ public class Movie implements Parcelable, FomonoEvent{
         dest.writeLong(voteCount);
         dest.writeByte((byte) (video ? 1 : 0));
         dest.writeDouble(voteAverage);
+    }
+
+    @Override
+    public String getStringId() {
+        return String.valueOf(getId());
+    }
+
+    @Override
+    public String getApiName() {
+        return FomonoApplication.API_NAME_MOVIES;
     }
 }

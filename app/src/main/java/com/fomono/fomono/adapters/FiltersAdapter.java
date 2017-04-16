@@ -92,7 +92,7 @@ public class FiltersAdapter extends RecyclerView.Adapter<FiltersAdapter.ViewHold
                                     Filter f = new Filter(category.getParamName(), category.getId(), category.getApiName());
                                     filters.put(category.getId(), f);
                                     f.pinInBackground();    //save locally on device for easy access
-                                    f.saveEventually();
+                                    f.saveInBackground();
                                 }
                             }
                         });
@@ -107,7 +107,7 @@ public class FiltersAdapter extends RecyclerView.Adapter<FiltersAdapter.ViewHold
                             @Override
                             public void done(Filter object, ParseException e) {
                                 if (object != null) {
-                                    object.deleteEventually();
+                                    object.deleteInBackground();
                                 }
                             }
                         });

@@ -1,12 +1,11 @@
 package com.fomono.fomono.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,24 +13,17 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.fomono.fomono.FomonoApplication;
-import com.fomono.fomono.activities.FomonoDetailActivity;
-import com.fomono.fomono.adapters.FomonoAdapter;
 import com.fomono.fomono.models.db.Filter;
 import com.fomono.fomono.models.eats.Business;
 import com.fomono.fomono.models.eats.YelpResponse;
-import com.fomono.fomono.network.client.YelpClientRetrofit;
 import com.fomono.fomono.supportclasses.EndlessRecyclerViewScrollListener;
 import com.fomono.fomono.supportclasses.InternetAlertDialogue;
-import com.fomono.fomono.supportclasses.ItemClickSupport;
 import com.fomono.fomono.utils.FilterUtil;
 import com.fomono.fomono.utils.NumberUtil;
-import com.parse.FindCallback;
-import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -44,15 +36,13 @@ import retrofit2.Response;
 
 public class EatsFragment extends MainListFragment {
     private final static String TAG = "Eats fragment";
-    private YelpClientRetrofit yelpClientRetrofit;
-    private boolean initialEatsLoaded = false;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         InternetAlertDialogue internetAlertDialogue = new InternetAlertDialogue(mContext);
-        if(internetAlertDialogue.checkForInternet() && !initialEatsLoaded) {
+        if(internetAlertDialogue.checkForInternet()) {
             int offset = fomonoEvents.size();
             populateEats(offset);
         }
@@ -98,10 +88,8 @@ public class EatsFragment extends MainListFragment {
     }
 
     public void getYelpBusinesses(Context context, String location, String categories, int distance, int offset){
-        yelpClientRetrofit = YelpClientRetrofit.getNewInstance();
-        initialEatsLoaded = true;
         Map<String, String> data = new HashMap<>();
-        if(location != null) {
+        if((location != null) && (location != "")) {
             data.put("location", location);
         } else {
             data.put("location", "San Francisco");
@@ -128,6 +116,7 @@ public class EatsFragment extends MainListFragment {
                 if (businesses == null || businesses.isEmpty()) {
                     Log.d(TAG, "No Yelp businesses fetched!!");
                 } else {
+                    Business.saveOrUpdateFromList(businesses);
                     fomonoEvents.addAll(businesses);
                     fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
                 }

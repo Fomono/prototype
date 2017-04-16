@@ -2,41 +2,28 @@ package com.fomono.fomono.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.DatabaseUtils;
 import android.databinding.DataBindingUtil;
-import android.databinding.adapters.AdapterViewBindingAdapter;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.fomono.fomono.R;
-import com.fomono.fomono.activities.FomonoDetailActivity;
 import com.fomono.fomono.activities.FomonoTrailerActivity;
 import com.fomono.fomono.databinding.EventListItemBinding;
-import com.fomono.fomono.databinding.FomonoMainListFragmentBinding;
 import com.fomono.fomono.models.FomonoEvent;
 import com.fomono.fomono.models.eats.Business;
 import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.movies.Movie;
+import com.fomono.fomono.utils.FavoritesUtil;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-
-import static android.R.attr.format;
-import static com.loopj.android.http.AsyncHttpClient.log;
 
 /**
  * Created by Saranu on 4/6/17.
@@ -47,6 +34,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private ArrayList<FomonoEvent> mFomonoEvents;
     private static final String TAG = "Fomono Adapter";
     private int screenWidth;
+    private FavoritesUtil favsUtil;
 
     public interface FomonoAdapterObjectListener {
         void onOpenLink(Intent i);
@@ -58,6 +46,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         mContext = context;
         mFomonoEvents = fomonoEvents;
         this.fomonoAdapterObjectListener = null;
+        this.favsUtil = FavoritesUtil.getInstance();
     }
 
     public void setCustomObjectListener(FomonoAdapterObjectListener listener) {
@@ -176,6 +165,8 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             holder.eventDistance.setVisibility(View.GONE);
             holder.eventType.setVisibility(View.GONE);
+
+            setEventFavorited(holder, event);
         }
 
     }
@@ -195,18 +186,22 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             holder.eventDesc.setVisibility(View.GONE);
 
             if (!TextUtils.isEmpty(business.getImageUrl())) {
-               // Glide.with(mContext).load(business.getImageUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).override(screenWidth, screenHeight / 2).into(holder.eventMediaImage);
-                 Picasso.with(mContext).load(business.getImageUrl()).placeholder(R.drawable.ic_fomono_big).resize(screenWidth, 0).into(holder.eventMediaImage);
+                // Glide.with(mContext).load(business.getImageUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).override(screenWidth, screenHeight / 2).into(holder.eventMediaImage);
+                Picasso.with(mContext).load(business.getImageUrl()).placeholder(R.drawable.ic_fomono_big).resize(screenWidth, 0).into(holder.eventMediaImage);
             } else {
                 holder.eventMediaImage.setVisibility(View.GONE);
             }
 
-            if (business.getDistance() != null)
+            if (business.getDistance() != null) {
                 //have to convert meters to miles
                 distance = (business.getDistance() * 0.000621);
                 DecimalFormat numberFormat = new DecimalFormat("#.0");
                 holder.eventDistance.setText("" + numberFormat.format(distance) + " mi");
+            }
+
             if (business.getPrice() != null) holder.eventPrice.setText(business.getPrice());
+            else holder.eventPrice.setVisibility(View.GONE);
+
             if (business.getCategories() != null) {
                 if (business.getCategories().get(0).getAlias() != null) {
                     holder.eventType.setText(business.getCategories().get(0).getAlias());
@@ -214,7 +209,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 }
             }
             if (DistSet == 0) {
-                holder.eventPrice.setVisibility(View.GONE);
+                holder.eventType.setVisibility(View.GONE);
             }
 
             //FIXME - call this something else. We can reuse this field, or collapse it and show something else.
@@ -235,6 +230,8 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 holder.eventUrl.setBackgroundResource(R.drawable.ic_fomono_grey);
             }
         }
+
+        setEventFavorited(holder, business);
 
     }
 
@@ -276,5 +273,28 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 holder.eventUrl.setBackgroundResource(R.drawable.ic_fomono_grey);
             }
         }
+
+        setEventFavorited(holder, movie);
+    }
+
+
+    public void setEventFavorited(ViewHolderEventsItem holder, FomonoEvent fEvent) {
+        if (favsUtil.isFavorited(fEvent)) {
+            holder.eventFavorited.setImageResource(R.drawable.ic_favorite);
+        } else {
+            holder.eventFavorited.setImageResource(R.drawable.ic_favorite_grey);
+        }
+        holder.eventFavorited.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (favsUtil.isFavorited(fEvent)) {
+                    holder.eventFavorited.setImageResource(R.drawable.ic_favorite_grey);
+                    favsUtil.removeFromFavorites(fEvent);
+                } else {
+                    holder.eventFavorited.setImageResource(R.drawable.ic_favorite);
+                    favsUtil.addToFavorites(fEvent);
+                }
+            }
+        });
     }
 }
