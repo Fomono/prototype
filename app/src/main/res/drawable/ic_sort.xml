@@ -1,8 +1,8 @@
 <vector android:height="24dp" android:viewportHeight="512.0"
     android:viewportWidth="512.0" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
-    <path android:fillColor="@color/colorFomono" android:pathData="M256,256m-256,0a256,256 0,1 1,512 0a256,256 0,1 1,-512 0"/>
-    <path android:fillColor="@color/colorFomono" android:pathData="M256,469.3c-117.6,0 -213.3,-95.7 -213.3,-213.3c0,-117.6 95.7,-213.3 213.3,-213.3c117.6,0 213.3,95.7 213.3,213.3C469.3,373.6 373.6,469.3 256,469.3z"/>
-    <path android:fillAlpha="0.3" android:fillColor="@color/colorFomono"
+    <path android:fillColor="@color/colorWhite" android:pathData="M256,256m-256,0a256,256 0,1 1,512 0a256,256 0,1 1,-512 0"/>
+    <path android:fillColor="@color/colorWhite" android:pathData="M256,469.3c-117.6,0 -213.3,-95.7 -213.3,-213.3c0,-117.6 95.7,-213.3 213.3,-213.3c117.6,0 213.3,95.7 213.3,213.3C469.3,373.6 373.6,469.3 256,469.3z"/>
+    <path android:fillAlpha="0.3" android:fillColor="@color/colorWhite"
         android:pathData="M384,150.6l-91.4,96.3l0,101l-57.1,29.5l0,-130.5l-91.4,-96.3z" android:strokeAlpha="0.3"/>
-    <path android:fillColor="#FFFFFF" android:pathData="M376,142.6l-91.4,96.3l0,101l-57.1,29.5l0,-130.5l-91.4,-96.3z"/>
+    <path android:fillColor="@color/colorFomono" android:pathData="M376,142.6l-91.4,96.3l0,101l-57.1,29.5l0,-130.5l-91.4,-96.3z"/>
 </vector>

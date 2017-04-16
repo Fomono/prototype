@@ -42,6 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvLocationOther"
             android:layout_marginTop="10dp"
+            android:maxLines="1"
             android:hint="@string/pref_loc_hint" />
 
         <TextView

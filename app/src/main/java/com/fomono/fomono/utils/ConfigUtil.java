@@ -25,6 +25,21 @@ public class ConfigUtil {
         return properties.getProperty(key);
     }
 
+    public static String getCategoryName(String categoryId, String apiName, Context context) {
+        String result = "";
+        try {
+            Properties properties = new Properties();
+            AssetManager assetManager = context.getAssets();
+            String fileName = getPropertiesFileName(apiName);
+            InputStream inputStream = assetManager.open(fileName);
+            properties.load(inputStream);
+            result = properties.getProperty(categoryId);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public static Set<Map.Entry<String, String>> getCategories(String apiName, Context context) throws IOException {
         Properties properties = new Properties();
         AssetManager assetManager = context.getAssets();

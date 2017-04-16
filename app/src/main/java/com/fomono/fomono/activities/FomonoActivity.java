@@ -24,9 +24,11 @@ import com.fomono.fomono.R;
 import com.fomono.fomono.adapters.FomonoMainPagerAdapter;
 import com.fomono.fomono.databinding.ActivityFomonoBinding;
 import com.fomono.fomono.fragments.EatsFragment;
+import com.fomono.fomono.fragments.EatsSortFragment;
 import com.fomono.fomono.fragments.EventFragment;
 import com.fomono.fomono.fragments.MovieFragment;
-import com.fomono.fomono.fragments.SortFragment;
+import com.fomono.fomono.fragments.EventSortFragment;
+import com.fomono.fomono.fragments.MovieSortFragment;
 import com.fomono.fomono.supportclasses.NavigationDrawerClass;
 import com.fomono.fomono.models.eats.Business;
 import com.fomono.fomono.models.events.events.Event;
@@ -34,6 +36,7 @@ import com.fomono.fomono.models.movies.Movie;
 import com.fomono.fomono.network.client.EventBriteClientRetrofit;
 import com.fomono.fomono.network.client.MovieDBClientRetrofit;
 import com.fomono.fomono.network.client.YelpClientRetrofit;
+import com.fomono.fomono.utils.FilterUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,7 +46,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class FomonoActivity extends AppCompatActivity implements SortFragment.OnFragmentInteractionListener {
+public class FomonoActivity extends AppCompatActivity implements EventSortFragment.OnFragmentInteractionListener,
+                                                                 EatsSortFragment.OnFragmentInteractionListener,
+                                                                 MovieSortFragment.OnFragmentInteractionListener {
     private FomonoMainPagerAdapter fomonoMainPagerAdapter;
     private final static String TAG = "Fomono Activity";
     private NavigationView nvView;
@@ -96,8 +101,19 @@ public class FomonoActivity extends AppCompatActivity implements SortFragment.On
             }
         });
 
+        //clear filter dirty flags here since we're creating a new fomono activity and everything will be refreshed
+        FilterUtil.getInstance().clearDirty();
+
         //process intent from notification or elsewhere
         processOutOfAppIntent();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (FilterUtil.getInstance().isDirty()) {
+            fomonoMainPagerAdapter.refreshFragments();
+        }
     }
 
     @Override
@@ -107,64 +123,35 @@ public class FomonoActivity extends AppCompatActivity implements SortFragment.On
         }
         switch (item.getItemId()) {
             case R.id.menuSortId:
-                FragmentPagerAdapter fragmentPagerAdapter = (FragmentPagerAdapter) fomonoPager.getAdapter();
                 String name = makeFragmentName(fomonoPager.getId(), ActiveViewPagerPagePosition);
                 Fragment viewPagerFragment = getSupportFragmentManager().findFragmentByTag(name);
 
                 if (viewPagerFragment != null) {
                     // Do something with your Fragment
                     if (viewPagerFragment.isResumed()) {
-                        if (viewPagerFragment instanceof EventFragment) {
-                            FragmentManager fm = getSupportFragmentManager();
 
-                            SortFragment sortFragmentObject = SortFragment.newInstance();
+                        FragmentManager fm = getSupportFragmentManager();
+                        if (viewPagerFragment instanceof EventFragment) {
+                            EventSortFragment sortFragmentObject = EventSortFragment.newInstance();
                             sortFragmentObject.show(fm, "fragment_edit_name");
 
-                            //          EventFragment mEventFragment = (EventFragment) viewPagerFragment;
-                            //          mEventFragment.refreshEventList();
                         } else if(viewPagerFragment instanceof EatsFragment) {
-                            EatsFragment mEatsFragment = (EatsFragment)viewPagerFragment;
+                            EatsSortFragment sortFragmentObject = EatsSortFragment.newInstance();
+                            sortFragmentObject.show(fm, "fragment_edit_name");
+
                         } else if(viewPagerFragment instanceof MovieFragment) {
-                            MovieFragment mMovieFragment = (MovieFragment)viewPagerFragment;
+                            MovieSortFragment sortFragmentObject = MovieSortFragment.newInstance();
+                            sortFragmentObject.show(fm, "fragment_edit_name");
                         }
 
                     } else {
-                        Log.d(TAG, "Fragment not resumed yet!!");
-                        // Flag something for update later, when this viewPagerFragment
-                        // returns to onResume
+                        Log.d(TAG, "Fragment not resumed");
                     }
                 } else {
+                    fomonoMainPagerAdapter.refreshFragments();
                 }
-          //      }
                 return true;
             default:return super.onOptionsItemSelected(item);
-        }
-    }
-    public void onUpdateFragments(String sortString) {
-        FragmentPagerAdapter fragmentPagerAdapter = (FragmentPagerAdapter) fomonoPager.getAdapter();
-        for(int i = 0; i < fragmentPagerAdapter.getCount(); i++) {
-            String name = makeFragmentName(fomonoPager.getId(), i);
-            Fragment viewPagerFragment = getSupportFragmentManager().findFragmentByTag(name);
-
-            if (viewPagerFragment != null) {
-                // Do something with your Fragment
-                if (viewPagerFragment.isResumed()) {
-                    if (viewPagerFragment instanceof EventFragment) {
-                        EventFragment mEventFragment = (EventFragment) viewPagerFragment;
-                        mEventFragment.refreshEventList();
-                    } else if(viewPagerFragment instanceof EatsFragment) {
-                        EatsFragment mEatsFragment = (EatsFragment)viewPagerFragment;
-                    } else if(viewPagerFragment instanceof MovieFragment) {
-                        MovieFragment mMovieFragment = (MovieFragment)viewPagerFragment;
-                    }
-
-                } else {
-                    Log.d(TAG, "Fragment not resumed yet!!");
-                    // Flag something for update later, when this viewPagerFragment
-                    // returns to onResume
-                }
-            } else {
-            }
         }
     }
 
@@ -173,8 +160,24 @@ public class FomonoActivity extends AppCompatActivity implements SortFragment.On
     }
 
     @Override
-    public void onFinishEventSortDialog(String sortingString) {
-        Toast.makeText(this, "CALL EVENT BRITE API", Toast.LENGTH_SHORT).show();
+    public void onFinishEventSortDialog(String sortString) {
+        String name = makeFragmentName(fomonoPager.getId(), ActiveViewPagerPagePosition);
+        Fragment viewPagerFragment = getSupportFragmentManager().findFragmentByTag(name);
+
+        if (viewPagerFragment != null) {
+            if (viewPagerFragment.isResumed()) {
+                if (viewPagerFragment instanceof EventFragment) {
+                    EventFragment mEventFragment = (EventFragment) viewPagerFragment;
+                    mEventFragment.refreshEventList(sortString);
+                } else if (viewPagerFragment instanceof EatsFragment) {
+                    EatsFragment mEatsFragment = (EatsFragment) viewPagerFragment;
+                    mEatsFragment.refreshEatsList(sortString);
+                } else if (viewPagerFragment instanceof MovieFragment) {
+                    MovieFragment mMovieFragment = (MovieFragment) viewPagerFragment;
+                    mMovieFragment.refreshMovieList(sortString);
+                }
+            }
+        }
     }
 
     @Override

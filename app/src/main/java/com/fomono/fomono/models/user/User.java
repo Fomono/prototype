@@ -16,6 +16,15 @@ public class User implements Parcelable{
     public String gender;
     public String aboutMe;
     public String location;
+    public String imageUrl;
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -75,28 +84,6 @@ public class User implements Parcelable{
 
     public User(){}
 
-    protected User(Parcel in) {
-        firstName = in.readString();
-        lastName = in.readString();
-        email = in.readString();
-        phonenNumber = in.readLong();
-        gender = in.readString();
-        aboutMe = in.readString();
-        location = in.readString();
-    }
-
-    public static final Creator<User> CREATOR = new Creator<User>() {
-        @Override
-        public User createFromParcel(Parcel in) {
-            return new User(in);
-        }
-
-        @Override
-        public User[] newArray(int size) {
-            return new User[size];
-        }
-    };
-
     @Override
     public int describeContents() {
         return 0;
@@ -104,12 +91,36 @@ public class User implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(firstName);
-        dest.writeString(lastName);
-        dest.writeString(email);
-        dest.writeLong(phonenNumber);
-        dest.writeString(gender);
-        dest.writeString(aboutMe);
-        dest.writeString(location);
+        dest.writeString(this.firstName);
+        dest.writeString(this.lastName);
+        dest.writeString(this.email);
+        dest.writeLong(this.phonenNumber);
+        dest.writeString(this.gender);
+        dest.writeString(this.aboutMe);
+        dest.writeString(this.location);
+        dest.writeString(this.imageUrl);
     }
+
+    protected User(Parcel in) {
+        this.firstName = in.readString();
+        this.lastName = in.readString();
+        this.email = in.readString();
+        this.phonenNumber = in.readLong();
+        this.gender = in.readString();
+        this.aboutMe = in.readString();
+        this.location = in.readString();
+        this.imageUrl = in.readString();
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel source) {
+            return new User(source);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 }

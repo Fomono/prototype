@@ -54,21 +54,39 @@ public class End extends ParseObject implements Parcelable
             ;
 
     public void updateWithExisting(End instance) {
-        this.put("timezone", instance.timezone);
-        this.put("local", instance.local);
-        this.put("utc", instance.utc);
+        if (instance.timezone != null) {
+            this.put("timezone", instance.timezone);
+        }
+        if (instance.local != null) {
+            this.put("local", instance.local);
+        }
+        if (instance.utc != null) {
+            this.put("utc", instance.utc);
+        }
     }
 
     public void initializeForParse() {
-        this.put("timezone", timezone);
-        this.put("local", local);
-        this.put("utc", utc);
+        if (timezone != null) {
+            this.put("timezone", timezone);
+        }
+        if (local != null) {
+            this.put("local", local);
+        }
+        if (utc != null) {
+            this.put("utc", utc);
+        }
     }
 
     public void initializeFromParse() {
-        timezone = getString("timezone");
-        local = getString("local");
-        utc = getString("utc");
+        if (has("timezone")) {
+            timezone = getString("timezone");
+        }
+        if (has("local")) {
+            local = getString("local");
+        }
+        if (has("utc")) {
+            utc = getString("utc");
+        }
     }
 
     public String getTimezone() {

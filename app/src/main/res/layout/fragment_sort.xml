@@ -2,54 +2,9 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:context="com.fomono.fomono.fragments.FilterFragment">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/EventSortTextId"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:textColor="@color/colorFomono"
-                android:text="@string/FilterSortText"
-                android:layout_alignParentTop="true"/>
-
-            <Spinner
-                android:id="@+id/EventSortSpinnerId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:drawable/btn_dropdown"
-                android:spinnerMode="dropdown"
-                android:entries="@array/FilterEventSortArray"
-                android:layout_alignLeft="@+id/EventSortTextId"
-                android:layout_alignStart="@+id/EventSortTextId"
-                android:layout_below="@+id/EventSortButtonId"/>
-
-            <ImageButton
-                android:id="@+id/EventSortButtonId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ic_sort"
-                android:textColor="@color/colorWhite"
-                android:text="@string/FilterEventSortButtonText"
-                android:contentDescription="@string/FilterEventSortButtonText"
-                android:layout_alignParentTop="true"
-                android:layout_alignRight="@id/EventSortSpinnerId"
-                android:layout_alignEnd="@id/EventSortSpinnerId" />
-            <!--
-            <Button
-                android:id="@+id/EventSortButtonId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/round_button"
-                android:textColor="@color/colorWhite"
-                android:text="@string/FilterEventSortButtonText"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@+id/EventSortSpinnerId"/>
--->
-
-        </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:context="com.fomono.fomono.fragments.FilterFragment">
+    </RelativeLayout>
 </layout>

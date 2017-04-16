@@ -2,40 +2,40 @@ package com.fomono.fomono.fragments;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import com.fomono.fomono.R;
-import com.fomono.fomono.databinding.FragmentSortBinding;
+import com.fomono.fomono.databinding.FragmentSortEatsBinding;
 
-/**
- * Created by jsaluja on 4/15/2017.
- */
+public class EatsSortFragment extends DialogFragment {
 
-
-public class SortFragment extends DialogFragment {
-
-    private Spinner eventSortOrder;
-    private ImageButton eventSortSaveButton;
-    String sortingOrder;
+    private Spinner eatsSortParam;
+    private ImageButton eatsSortSaveButton;
+    String sortingParam;
 
     public OnFragmentInteractionListener mListener;
 
-    public SortFragment() {
+    public EatsSortFragment() {
         // Required empty public constructor
     }
 
-    public static SortFragment newInstance() {
-        SortFragment fragment = new SortFragment();
+    public static EatsSortFragment newInstance() {
+        EatsSortFragment fragment = new EatsSortFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -45,7 +45,7 @@ public class SortFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        FragmentSortBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_sort, container, false);
+        FragmentSortEatsBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_sort_eats, container, false);
         View mView = binding.getRoot();
         dataBindFragmentValues(binding);
 
@@ -56,27 +56,30 @@ public class SortFragment extends DialogFragment {
         params.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE;
         getDialog().getWindow().setAttributes(params);
 
-        eventSortOrder.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        eatsSortParam.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                sortingOrder = parent.getItemAtPosition(position).toString();
+                sortingParam = parent.getItemAtPosition(position).toString();
+                if(sortingParam.equals("rating_count")) {
+                    sortingParam = "review_count";
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
 
-        eventSortSaveButton.setOnClickListener(v -> {
+        eatsSortSaveButton.setOnClickListener(v -> {
             mListener = (OnFragmentInteractionListener) getActivity();
-            mListener.onFinishEventSortDialog(sortingOrder);
+            mListener.onFinishEventSortDialog(sortingParam);
             dismiss();
         });
         return mView;
     }
 
-    public void dataBindFragmentValues(FragmentSortBinding binding) {
+    public void dataBindFragmentValues(FragmentSortEatsBinding binding) {
 
-        eventSortOrder = binding.EventSortSpinnerId;
-        eventSortSaveButton = binding.EventSortButtonId;
+        eatsSortParam = binding.EatsSortSpinnerId;
+        eatsSortSaveButton = binding.EatsSortButtonId;
     }
 
     @Override
@@ -91,6 +94,6 @@ public class SortFragment extends DialogFragment {
     }
 
     public interface OnFragmentInteractionListener {
-        void onFinishEventSortDialog(String sortingOrder);
+        void onFinishEventSortDialog(String sortingParam);
     }
 }

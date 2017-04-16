@@ -97,14 +97,14 @@ public class FomonoFilterActivity extends AppCompatActivity implements FomonoFil
         final String title = getApiTitle(apiName);
         final boolean lastPage = isLastPage(apiName);
         try {
-            FilterUtil.getFilters(apiName, (objects, e) -> {
+            FilterUtil.getInstance().getFilters(apiName, (objects, e) -> {
                 if (objects != null) {
                     Filter.initializeFromList(objects);
                 } else {
                     objects = new ArrayList<Filter>();
                 }
                 //get list of categories
-                List<ICategory> categories = FilterUtil.getCategories(apiName, FomonoFilterActivity.this);
+                List<ICategory> categories = FilterUtil.getInstance().getCategories(apiName, FomonoFilterActivity.this);
                 filtersFragment = FomonoFilterFragment.newInstance(title, apiName, categories, lastPage, objects);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.flContent, filtersFragment)

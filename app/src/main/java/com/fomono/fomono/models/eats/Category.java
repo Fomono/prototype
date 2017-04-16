@@ -46,18 +46,30 @@ public class Category extends ParseObject implements Parcelable, ICategory
             ;
 
     public void updateWithExisting(Category instance) {
-        this.put("alias", instance.alias);
-        this.put("title", instance.title);
+        if (instance.alias != null) {
+            this.put("alias", instance.alias);
+        }
+        if (instance.title != null) {
+            this.put("title", instance.title);
+        }
     }
 
     public void initializeForParse() {
-        this.put("alias", this.alias);
-        this.put("title", this.title);
+        if (this.alias != null) {
+            this.put("alias", this.alias);
+        }
+        if (this.title != null) {
+            this.put("title", this.title);
+        }
     }
 
     public void initializeFromParse() {
-        this.alias = getString("alias");
-        this.title = getString("title");
+        if (has("alias")) {
+            this.alias = getString("alias");
+        }
+        if (has("title")) {
+            this.title = getString("title");
+        }
     }
 
     public String getAlias() {

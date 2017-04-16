@@ -71,16 +71,30 @@ public class Address extends ParseObject implements Parcelable{
     }
 
     public void updateWithExisting(Address address) {
-        this.put("address_1", address.address1);
+        if (address.address1 != null) {
+            this.put("address_1", address.address1);
+        }
         if (address.address2 != null) {
             this.put("address_2", address.address2);
         }
-        this.put("city", address.city);
-        this.put("region", address.region);
-        this.put("postal_code", address.postalCode);
-        this.put("country", address.country);
-        this.put("latitude", address.latitude);
-        this.put("longitude", address.longitude);
+        if (address.city != null) {
+            this.put("city", address.city);
+        }
+        if (address.region != null) {
+            this.put("region", address.region);
+        }
+        if (address.postalCode != null) {
+            this.put("postal_code", address.postalCode);
+        }
+        if (address.country != null) {
+            this.put("country", address.country);
+        }
+        if (address.latitude != null) {
+            this.put("latitude", address.latitude);
+        }
+        if (address.longitude != null) {
+            this.put("longitude", address.longitude);
+        }
     }
 
     public void initializeForParse() {
@@ -111,16 +125,30 @@ public class Address extends ParseObject implements Parcelable{
     }
 
     public void initializeFromParse() {
-        address1 = getString("address_1");
+        if (has("address_1")) {
+            address1 = getString("address_1");
+        }
         if (has("address_2")) {
             address2 = getString("address_2");
         }
-        city = getString("city");
-        region = getString("region");
-        postalCode = getString("postal_code");
-        country = getString("country");
-        latitude = getString("latitude");
-        longitude = getString("longitude");
+        if (has("city")) {
+            city = getString("city");
+        }
+        if (has("region")) {
+            region = getString("region");
+        }
+        if (has("postal_code")) {
+            postalCode = getString("postal_code");
+        }
+        if (has("country")) {
+            country = getString("country");
+        }
+        if (has("latitude")) {
+            latitude = getString("latitude");
+        }
+        if (has("longitutde")) {
+            longitude = getString("longitude");
+        }
     }
 
     public static final Creator<Address> CREATOR = new Creator<Address>() {

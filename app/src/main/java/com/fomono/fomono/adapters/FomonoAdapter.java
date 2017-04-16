@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
 import com.fomono.fomono.activities.FomonoTrailerActivity;
 import com.fomono.fomono.databinding.EventListItemBinding;
@@ -19,6 +20,7 @@ import com.fomono.fomono.models.FomonoEvent;
 import com.fomono.fomono.models.eats.Business;
 import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.movies.Movie;
+import com.fomono.fomono.utils.ConfigUtil;
 import com.fomono.fomono.utils.FavoritesUtil;
 import com.squareup.picasso.Picasso;
 
@@ -166,6 +168,15 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             holder.eventDistance.setVisibility(View.GONE);
             holder.eventType.setVisibility(View.GONE);
 
+            String catId = event.getCategoryId();
+            if (catId != null) {
+                String category = ConfigUtil.getCategoryName(catId, FomonoApplication.API_NAME_EVENTS, mContext);
+                if (!TextUtils.isEmpty(category)) {
+                    holder.eventType.setText(category);
+                    holder.eventType.setVisibility(View.VISIBLE);
+                }
+            }
+
             setEventFavorited(holder, event);
         }
 
@@ -173,7 +184,6 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private void populateWithBusinesses(ViewHolderEventsItem holder, int position) {
         Business business = (Business) mFomonoEvents.get(position);
-        int DistSet = 0;
         double distance = 0;
 
         if (business != null) {
@@ -195,21 +205,23 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             if (business.getDistance() != null) {
                 //have to convert meters to miles
                 distance = (business.getDistance() * 0.000621);
-                DecimalFormat numberFormat = new DecimalFormat("#.0");
+                DecimalFormat numberFormat = new DecimalFormat("#.000");
                 holder.eventDistance.setText("" + numberFormat.format(distance) + " mi");
             }
 
             if (business.getPrice() != null) holder.eventPrice.setText(business.getPrice());
             else holder.eventPrice.setVisibility(View.GONE);
 
+            holder.eventType.setVisibility(View.GONE);
             if (business.getCategories() != null) {
-                if (business.getCategories().get(0).getAlias() != null) {
-                    holder.eventType.setText(business.getCategories().get(0).getAlias());
-                    DistSet = 1;
+                String alias = business.getCategories().get(0).getAlias();
+                if (alias != null) {
+                    String category = ConfigUtil.getCategoryName(alias, FomonoApplication.API_NAME_EATS, mContext);
+                    if (!TextUtils.isEmpty(category)) {
+                        holder.eventType.setText(category);
+                        holder.eventType.setVisibility(View.VISIBLE);
+                    }
                 }
-            }
-            if (DistSet == 0) {
-                holder.eventType.setVisibility(View.GONE);
             }
 
             //FIXME - call this something else. We can reuse this field, or collapse it and show something else.
@@ -223,7 +235,6 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         Uri uri = Uri.parse(business.getUrl());
                         Intent openLink = new Intent(Intent.ACTION_VIEW, uri);
                         fomonoAdapterObjectListener.onOpenLink(openLink);
-                  //      mContext.startActivity(openLink);
                     }
                 });
             } else {
@@ -266,8 +277,6 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     Intent movTrail = new Intent(mContext, FomonoTrailerActivity.class);
                     movTrail.putExtra(mContext.getResources().getString(R.string.MovieId), movie.getId());
                     fomonoAdapterObjectListener.onOpenLink(movTrail);
-
-                //    mContext.startActivity(movTrail);
                 });
             } else {
                 holder.eventUrl.setBackgroundResource(R.drawable.ic_fomono_grey);

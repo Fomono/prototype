@@ -34,15 +34,21 @@ public class Original extends ParseObject implements Parcelable {
     }
 
     public void updateWithExisting(Original instance) {
-        this.put("url", instance.url);
+        if (instance.url != null) {
+            this.put("url", instance.url);
+        }
     }
 
     public void initializeForParse() {
-        this.put("url", url);
+        if (url != null){
+            this.put("url", url);
+        }
     }
 
     public void initializeFromParse() {
-        url = getString("url");
+        if (has("url")) {
+            url = getString("url");
+        }
     }
 
     public static final Creator<Original> CREATOR = new Creator<Original>() {

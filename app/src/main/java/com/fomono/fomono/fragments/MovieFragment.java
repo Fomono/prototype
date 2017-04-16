@@ -2,7 +2,6 @@ package com.fomono.fomono.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,11 +13,12 @@ import android.widget.ProgressBar;
 import com.fomono.fomono.R;
 import com.fomono.fomono.models.movies.Movie;
 import com.fomono.fomono.models.movies.MovieResponse;
-import com.fomono.fomono.network.client.MovieDBClientRetrofit;
 import com.fomono.fomono.supportclasses.EndlessRecyclerViewScrollListener;
 import com.fomono.fomono.supportclasses.InternetAlertDialogue;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,38 +42,52 @@ public class MovieFragment extends MainListFragment {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         InternetAlertDialogue internetAlertDialogue = new InternetAlertDialogue(mContext);
         if (internetAlertDialogue.checkForInternet()) {
-            populateMovies(moviePage++);
+            populateMovies(moviePage++, null);
         }
 
         rvList.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 if(internetAlertDialogue.checkForInternet()) {
-                    populateMovies(moviePage++);
+                    populateMovies(moviePage++, null);
                 }
             }
         });
         return view;
     }
 
-    public void populateMovies(int page) {
-        smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
-        getMoviesNowPlaying(getActivity(), null, page);
-        Handler handlerTimer = new Handler();
-        handlerTimer.postDelayed(() -> {//Just to show the progress bar
-            smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
-        }, 500);
+    public void refreshMovieList(String sortParam) {
+        String sortParameter = sortParam;
+        clear();
+        moviePage = 1;
+        populateMovies(moviePage, sortParameter);
     }
 
-    public void getMoviesNowPlaying(Context context, String stringQuery, int page) {
+
+    public void populateMovies(int page, String sortParameter) {
+        smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
+        getMoviesNowPlaying(null, page, sortParameter);
+    }
+
+    public void getMoviesNowPlaying(String stringQuery, int page, String sortParam) {
 
         Map<String, String> data = new HashMap<>();
         data.put("api_key", getResources().getString(R.string.movieDB_api_key));
         data.put("page", String.valueOf(page));
 
+        if((sortParam != null) && (sortParam != "")) {
+            data.put("sort_by", sortParam);
+        }
+
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String dateString = format.format(cal.getTime());
+        data.put("release_date.lte", dateString);
+
         Call<MovieResponse> callMovie = movieDBClientRetrofit.MovieDBRetrofitClientFactory()
                 .getNowPlayingMoviesFromServer(data);
 
+        Log.d(TAG, "Movie URL String is " + callMovie.request().url());
         callMovie.enqueue(new Callback<MovieResponse>() {
             @Override
             public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
@@ -90,12 +104,13 @@ public class MovieFragment extends MainListFragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
             }
 
             @Override
             public void onFailure(Call<MovieResponse> call, Throwable t) {
                 Log.d(TAG, "REQUEST Failed " + t.getMessage());
-
+                smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
             }
         });
     }

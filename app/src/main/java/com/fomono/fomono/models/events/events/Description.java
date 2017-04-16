@@ -49,19 +49,25 @@ public class Description extends ParseObject implements Parcelable
             ;
 
     public void updateWithExisting(Description desc) {
-        this.put("text", desc.text);
+        if (desc.text != null) {
+            this.put("text", desc.text);
+        }
     }
 
     public void initializeForParse() {
-        this.put("text", this.text);
+        if (this.text != null) {
+            this.put("text", this.text);
+        }
     }
 
     public void initializeFromParse() {
-        text = getString("text");
+        if (has("text")) {
+            text = getString("text");
+        }
     }
 
     public Object getText() {
-        if (text == null) {
+        if (text == null && has("text")) {
             text = get("text");
         }
         return text;
