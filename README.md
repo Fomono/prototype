@@ -57,10 +57,11 @@ User Profile Page:
 * [X] When a user is logged in through Facebook,  the user information like Name, email and Profile image and captured and saved into the application.
 * [X] User can eventually add/Update that information from the profile page
 * [X] User can save/cancel the request to  update the profile information
-* [X] User can upload a profile picture  by selecting one from the Photo Gallery or Google Photos.  User is asked permission to access the gallery.
+* [X] User can upload a profile picture  by selecting one from the Photo Gallery or Google Photos.  
+	* [ ] User is asked permission to access the gallery.
 * [X] User can access the device’s camera from the profile page, click a picture and upload it.
    * [X] User is asked permission to access the camera. 
-         * [] If a permission is granted the first time, subsequent requests should directly pull the camera
+         * [ ] If a permission is granted the first time, subsequent requests should directly pull the camera
 
 Events Detail Page:
 * [X] For Events/Eats & Movies, User can share the events using Twitter, Mail & Messaging.
