@@ -67,7 +67,7 @@ public class EatsFragment extends MainListFragment {
         searchParamDispText.setOnClickListener(v -> {
             clear();
             searchParameter = null;
-            populateEats(offset, null, searchParameter);
+            populateEats(0, null, searchParameter);
             searchParamDispText.setVisibility(View.GONE);
         });
         return view;
