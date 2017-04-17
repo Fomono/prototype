@@ -1,8 +1,13 @@
 # Project - Fomono
 
-Fomono is an android app that helps users to never miss the things they love. It pulls data from several API's including Eventbrite, Yelp, Fandango, and possibly more to aggregate event data and send user notifications based on new events and/or events happening nearby. Users can choose categories of events/movies and subcategories to cater to their interests. Users can also manually search for events for any location and see what's going down!
+Fomono is an android app that helps users to never miss the things they love. It pulls data from several API's including Eventbrite, Yelp, Fandango, and possibly more to aggregate event data and send user notifications based on new events and/or events happening nearby. Users can choose categories of events/movies and subcategories to cater to their interests. Users can also manually search for events for any location and see what's going down
 
-Time spent: 60 hours spent in total
+API (4/17/2017): 
+1. Events(EventBrite)
+2. Eats(Yelp)
+3. Movies(MovieDB)
+
+Time spent: 120 hours spent in total
 
 ## User Stories
 
@@ -80,8 +85,8 @@ Home Page:
 * [ ] On home page, user should be able to specify a date range for search events
 
 Notifications:
-* [ ] User should be able to turn on/off notifications
-* [ ] User can click a notification to go to detailed event/restaurant/movie
+* [X] User should be able to turn on/off notifications
+* [X] User can click a notification to go to detailed event/restaurant/movie
 
 
 The following **bonus** features are implemented:
