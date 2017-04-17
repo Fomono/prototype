@@ -194,7 +194,9 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("plain/text");
                 intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"some@email.address"});
-                intent.putExtra(Intent.EXTRA_SUBJECT, business.getName().toString());
+                if (business.getName() != null) {
+                    intent.putExtra(Intent.EXTRA_SUBJECT, business.getName().toString());
+                }
                 intent.putExtra(Intent.EXTRA_TEXT, business.getUrl());
                 if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                     startActivity(Intent.createChooser(intent, ""));

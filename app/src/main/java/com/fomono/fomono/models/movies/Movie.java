@@ -102,6 +102,12 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
         if (instance.voteAverage >= 0) {
             instance.put("vote_average", instance.voteAverage);
         }
+        if (instance.originalLanguage != null) {
+            instance.put("original_language", instance.originalLanguage);
+        }
+        if (instance.genreIds != null) {
+            instance.put("genre_ids", instance.genreIds);
+        }
     }
 
     public static void getListFromParse(List<Movie> list, FindCallback<Movie> callback) {
@@ -169,6 +175,12 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
         if (has("vote_average")) {
             this.voteAverage = getDouble("vote_average");
         }
+        if (has("original_language")) {
+            this.originalLanguage = getString("original_language");
+        }
+        if (has("genre_ids")) {
+            this.genreIds = getList("genre_ids");
+        }
     }
 
     public void getFromParse(GetCallback<Movie> callback) {
@@ -219,9 +231,18 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
         if (instance.voteAverage >= 0) {
             this.put("vote_average", instance.voteAverage);
         }
+        if (instance.originalLanguage != null) {
+            this.put("original_language", instance.originalLanguage);
+        }
+        if (instance.genreIds != null) {
+            this.put("genre_ids", instance.genreIds);
+        }
     }
 
     public String getOrigPosterPath() {
+        if (posterPath == null) {
+            posterPath = getString("poster_path");
+        }
         return posterPath;
     }
     public String getPosterPath() {
@@ -265,6 +286,9 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
     }
 
     public List<Long> getGenreIds() {
+        if (genreIds == null) {
+            genreIds = getList("genre_ids");
+        }
         return genreIds;
     }
 
@@ -314,6 +338,9 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
     }
 
     public String getOrigBackdropPath() {
+        if (backdropPath == null) {
+            backdropPath = getString("backdrop_path");
+        }
         return backdropPath;
     }
     public String getBackdropPath() {
