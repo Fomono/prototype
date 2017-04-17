@@ -72,36 +72,6 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
         //required empty default constructor
     }
 
-    protected Movie(Parcel in) {
-        posterPath = in.readString();
-        adult = in.readByte() != 0;
-        overview = in.readString();
-        releaseDate = in.readString();
-        id = in.readLong();
-        originalTitle = in.readString();
-        originalLanguage = in.readString();
-        title = in.readString();
-        backdropPath = in.readString();
-        popularity = in.readDouble();
-        voteCount = in.readLong();
-        video = in.readByte() != 0;
-        voteAverage = in.readDouble();
-
-        initializeForParse(this);
-    }
-
-    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
-        @Override
-        public Movie createFromParcel(Parcel in) {
-            return new Movie(in);
-        }
-
-        @Override
-        public Movie[] newArray(int size) {
-            return new Movie[size];
-        }
-    };
-
     /**
      * Initializes an as a ParseObject that can be saved to db.
      * Note: Only stores data we care about.
@@ -251,6 +221,9 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
         }
     }
 
+    public String getOrigPosterPath() {
+        return posterPath;
+    }
     public String getPosterPath() {
         if (posterPath == null) {
             posterPath = getString("poster_path");
@@ -340,6 +313,9 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
         this.title = title;
     }
 
+    public String getOrigBackdropPath() {
+        return backdropPath;
+    }
     public String getBackdropPath() {
         if (backdropPath == null) {
             backdropPath = getString("backdrop_path");
@@ -387,28 +363,6 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
     }
 
     @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(posterPath);
-        dest.writeByte((byte) (adult ? 1 : 0));
-        dest.writeString(overview);
-        dest.writeString(releaseDate);
-        dest.writeLong(id);
-        dest.writeString(originalTitle);
-        dest.writeString(originalLanguage);
-        dest.writeString(title);
-        dest.writeString(backdropPath);
-        dest.writeDouble(popularity);
-        dest.writeLong(voteCount);
-        dest.writeByte((byte) (video ? 1 : 0));
-        dest.writeDouble(voteAverage);
-    }
-
-    @Override
     public String getStringId() {
         return String.valueOf(getId());
     }
@@ -417,4 +371,57 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
     public String getApiName() {
         return FomonoApplication.API_NAME_MOVIES;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.posterPath);
+        dest.writeByte(this.adult ? (byte) 1 : (byte) 0);
+        dest.writeString(this.overview);
+        dest.writeString(this.releaseDate);
+        dest.writeList(this.genreIds);
+        dest.writeLong(this.id);
+        dest.writeString(this.originalTitle);
+        dest.writeString(this.originalLanguage);
+        dest.writeString(this.title);
+        dest.writeString(this.backdropPath);
+        dest.writeDouble(this.popularity);
+        dest.writeLong(this.voteCount);
+        dest.writeByte(this.video ? (byte) 1 : (byte) 0);
+        dest.writeDouble(this.voteAverage);
+    }
+
+    protected Movie(Parcel in) {
+        this.posterPath = in.readString();
+        this.adult = in.readByte() != 0;
+        this.overview = in.readString();
+        this.releaseDate = in.readString();
+        this.genreIds = new ArrayList<Long>();
+        in.readList(this.genreIds, Long.class.getClassLoader());
+        this.id = in.readLong();
+        this.originalTitle = in.readString();
+        this.originalLanguage = in.readString();
+        this.title = in.readString();
+        this.backdropPath = in.readString();
+        this.popularity = in.readDouble();
+        this.voteCount = in.readLong();
+        this.video = in.readByte() != 0;
+        this.voteAverage = in.readDouble();
+    }
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel source) {
+            return new Movie(source);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 }

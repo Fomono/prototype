@@ -7,13 +7,16 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.astuetz.PagerSlidingTabStrip;
@@ -56,6 +59,9 @@ public class FomonoActivity extends AppCompatActivity implements EventSortFragme
     private ViewPager fomonoPager;
     private PagerSlidingTabStrip fomonoTabStrip;
     private int ActiveViewPagerPagePosition = 0;
+    private int eventSortFragmentParamPos = 0;
+    private int eatsSortFragmentParamPos = 0;
+    private int movieSortFragmentParamPos = 0;
 
     public static final String ACTION_DETAIL = "launch_detail";
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,18 +136,17 @@ public class FomonoActivity extends AppCompatActivity implements EventSortFragme
 
                         FragmentManager fm = getSupportFragmentManager();
                         if (viewPagerFragment instanceof EventFragment) {
-                            EventSortFragment sortFragmentObject = EventSortFragment.newInstance();
+                            EventSortFragment sortFragmentObject = EventSortFragment.newInstance(eventSortFragmentParamPos);
                             sortFragmentObject.show(fm, "fragment_edit_name");
 
                         } else if(viewPagerFragment instanceof EatsFragment) {
-                            EatsSortFragment sortFragmentObject = EatsSortFragment.newInstance();
+                            EatsSortFragment sortFragmentObject = EatsSortFragment.newInstance(eatsSortFragmentParamPos);
                             sortFragmentObject.show(fm, "fragment_edit_name");
 
                         } else if(viewPagerFragment instanceof MovieFragment) {
-                            MovieSortFragment sortFragmentObject = MovieSortFragment.newInstance();
+                            MovieSortFragment sortFragmentObject = MovieSortFragment.newInstance(movieSortFragmentParamPos);
                             sortFragmentObject.show(fm, "fragment_edit_name");
                         }
-
                     } else {
                         Log.d(TAG, "Fragment not resumed");
                     }
@@ -158,19 +163,22 @@ public class FomonoActivity extends AppCompatActivity implements EventSortFragme
     }
 
     @Override
-    public void onFinishEventSortDialog(String sortString) {
+    public void onFinishSortDialog(String sortString, int pos) {
         String name = makeFragmentName(fomonoPager.getId(), ActiveViewPagerPagePosition);
         Fragment viewPagerFragment = getSupportFragmentManager().findFragmentByTag(name);
 
         if (viewPagerFragment != null) {
             if (viewPagerFragment.isResumed()) {
                 if (viewPagerFragment instanceof EventFragment) {
+                    eventSortFragmentParamPos = pos;
                     EventFragment mEventFragment = (EventFragment) viewPagerFragment;
                     mEventFragment.refreshEventList(sortString);
                 } else if (viewPagerFragment instanceof EatsFragment) {
+                    eatsSortFragmentParamPos = pos;
                     EatsFragment mEatsFragment = (EatsFragment) viewPagerFragment;
                     mEatsFragment.refreshEatsList(sortString);
                 } else if (viewPagerFragment instanceof MovieFragment) {
+                    movieSortFragmentParamPos = pos;
                     MovieFragment mMovieFragment = (MovieFragment) viewPagerFragment;
                     mMovieFragment.refreshMovieList(sortString);
                 }
@@ -181,6 +189,38 @@ public class FomonoActivity extends AppCompatActivity implements EventSortFragme
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_fomono, menu);
+        MenuItem searchItem = menu.findItem(R.id.menuSearchId);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                String name = makeFragmentName(fomonoPager.getId(), ActiveViewPagerPagePosition);
+                Fragment viewPagerFragment = getSupportFragmentManager().findFragmentByTag(name);
+
+                if (viewPagerFragment != null) {
+                    if (viewPagerFragment.isResumed()) {
+                        if (viewPagerFragment instanceof EventFragment) {
+                            EventFragment mEventFragment = (EventFragment) viewPagerFragment;
+                            mEventFragment.searchEventList(query);
+                        } else if (viewPagerFragment instanceof EatsFragment) {
+                            EatsFragment mEatsFragment = (EatsFragment) viewPagerFragment;
+                            mEatsFragment.searchEatsList(query);
+                        } else if (viewPagerFragment instanceof MovieFragment) {
+                            MovieFragment mMovieFragment = (MovieFragment) viewPagerFragment;
+                            mMovieFragment.searchMovieList(query);
+                        }
+                    }
+                }
+                searchView.clearFocus();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 

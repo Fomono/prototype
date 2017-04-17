@@ -69,40 +69,8 @@ public class Business extends ParseObject implements Parcelable, FomonoEvent
     @SerializedName("transactions")
     @Expose
     private List<String> transactions = null;
-    public final static Parcelable.Creator<Business> CREATOR = new Creator<Business>() {
 
-
-        @SuppressWarnings({
-                "unchecked"
-        })
-        public Business createFromParcel(Parcel in) {
-            Business instance = new Business();
-            instance.rating = ((Double) in.readValue((Double.class.getClassLoader())));
-            instance.price = ((String) in.readValue((String.class.getClassLoader())));
-            instance.phone = ((String) in.readValue((String.class.getClassLoader())));
-            instance.id = ((String) in.readValue((String.class.getClassLoader())));
-            instance.isClosed = ((Boolean) in.readValue((Boolean.class.getClassLoader())));
-            instance.categories = in.readArrayList(Category.class.getClassLoader());
-            instance.reviewCount = ((Integer) in.readValue((Integer.class.getClassLoader())));
-            instance.name = ((String) in.readValue((String.class.getClassLoader())));
-            instance.url = ((String) in.readValue((String.class.getClassLoader())));
-            instance.coordinates = ((Coordinates) in.readValue((Coordinates.class.getClassLoader())));
-            instance.imageUrl = ((String) in.readValue((String.class.getClassLoader())));
-            instance.location = ((Location) in.readValue((Location.class.getClassLoader())));
-            instance.distance = ((Double) in.readValue((Double.class.getClassLoader())));
-            instance.transactions = in.readArrayList(java.lang.String.class.getClassLoader());
-
-            initializeForParse(instance);
-
-            return instance;
-        }
-
-        public Business[] newArray(int size) {
-            return (new Business[size]);
-        }
-
-    }
-            ;
+    private BusinessDetail businessDetail;
 
     /**
      * Initializes an as a ParseObject that can be saved to db.
@@ -471,27 +439,6 @@ public class Business extends ParseObject implements Parcelable, FomonoEvent
         this.transactions = transactions;
     }
 
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(rating);
-        dest.writeValue(price);
-        dest.writeValue(phone);
-        dest.writeValue(id);
-        dest.writeValue(isClosed);
-        dest.writeList(categories);
-        dest.writeValue(reviewCount);
-        dest.writeValue(name);
-        dest.writeValue(url);
-        dest.writeValue(coordinates);
-        dest.writeValue(imageUrl);
-        dest.writeValue(location);
-        dest.writeValue(distance);
-        dest.writeList(transactions);
-    }
-
-    public int describeContents() {
-        return 0;
-    }
-
     @Override
     public String getStringId() {
         return getId();
@@ -501,4 +448,69 @@ public class Business extends ParseObject implements Parcelable, FomonoEvent
     public String getApiName() {
         return FomonoApplication.API_NAME_EATS;
     }
+
+    public BusinessDetail getBusinessDetail() {
+        return businessDetail;
+    }
+
+    public void setBusinessDetail(BusinessDetail businessDetail) {
+        this.businessDetail = businessDetail;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(this.rating);
+        dest.writeString(this.price);
+        dest.writeString(this.phone);
+        dest.writeString(this.id);
+        dest.writeValue(this.isClosed);
+        dest.writeTypedList(this.categories);
+        dest.writeValue(this.reviewCount);
+        dest.writeString(this.name);
+        dest.writeString(this.url);
+        dest.writeParcelable(this.coordinates, flags);
+        dest.writeString(this.imageUrl);
+        dest.writeParcelable(this.location, flags);
+        dest.writeValue(this.distance);
+        dest.writeStringList(this.transactions);
+        dest.writeParcelable(this.businessDetail, flags);
+    }
+
+    public Business() {
+    }
+
+    protected Business(Parcel in) {
+        this.rating = in.readDouble();
+        this.price = in.readString();
+        this.phone = in.readString();
+        this.id = in.readString();
+        this.isClosed = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.categories = in.createTypedArrayList(Category.CREATOR);
+        this.reviewCount = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.name = in.readString();
+        this.url = in.readString();
+        this.coordinates = in.readParcelable(Coordinates.class.getClassLoader());
+        this.imageUrl = in.readString();
+        this.location = in.readParcelable(Location.class.getClassLoader());
+        this.distance = (Double) in.readValue(Double.class.getClassLoader());
+        this.transactions = in.createStringArrayList();
+        this.businessDetail = in.readParcelable(BusinessDetail.class.getClassLoader());
+    }
+
+    public static final Creator<Business> CREATOR = new Creator<Business>() {
+        @Override
+        public Business createFromParcel(Parcel source) {
+            return new Business(source);
+        }
+
+        @Override
+        public Business[] newArray(int size) {
+            return new Business[size];
+        }
+    };
 }

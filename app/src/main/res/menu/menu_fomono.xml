@@ -2,8 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/menuSortId"
+    <item android:id="@+id/menuSearchId"
+        android:orderInCategory="1"
+        android:title="@string/search"
+        android:icon="@drawable/ic_search"
         app:showAsAction="always|collapseActionView"
+        app:actionViewClass="android.support.v7.widget.SearchView" />
+
+    <item android:id="@+id/menuSortId"
+        app:showAsAction="collapseActionView|always"
         android:orderInCategory="5"
         android:icon="@drawable/ic_sort_big"
         android:title="@string/menu_sort"
