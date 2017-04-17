@@ -116,7 +116,9 @@ public class Business extends ParseObject implements Parcelable, FomonoEvent
         if (instance.price != null) {
             instance.put("price", instance.price);
         }
-        instance.put("id", String.valueOf(instance.id));
+        if (instance.id != null) {
+            instance.put("id", String.valueOf(instance.id));
+        }
         if (instance.categories != null) {
             for (Category c : instance.categories) {
                 c.initializeForParse();
@@ -223,7 +225,9 @@ public class Business extends ParseObject implements Parcelable, FomonoEvent
         if (instance.price != null) {
             this.put("price", instance.price);
         }
-        this.put("id", String.valueOf(instance.id));
+        if (instance.id != null) {
+            this.put("id", String.valueOf(instance.id));
+        }
         if (instance.categories != null) {
             this.mergeCategoriesForParse(instance.categories);
         }
@@ -288,7 +292,9 @@ public class Business extends ParseObject implements Parcelable, FomonoEvent
         if (has("price")) {
             this.price = getString("price");
         }
-        this.id = getString("id");
+        if (has("id")) {
+            this.id = getString("id");
+        }
         if (has("categories")) {
             this.categories = (ArrayList<Category>) (List<?>) getList("categories");
             for (Category c : categories) {

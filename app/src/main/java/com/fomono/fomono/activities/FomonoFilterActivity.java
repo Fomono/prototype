@@ -1,12 +1,11 @@
 package com.fomono.fomono.activities;
 
 import android.content.Intent;
-import android.content.res.Configuration;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -19,15 +18,16 @@ import com.fomono.fomono.fragments.FomonoFilterFragment;
 import com.fomono.fomono.fragments.UserPreferencesFragment;
 import com.fomono.fomono.models.ICategory;
 import com.fomono.fomono.models.db.Filter;
-import com.fomono.fomono.supportclasses.NavigationDrawerClass;
+import com.fomono.fomono.models.user.User;
 import com.fomono.fomono.utils.FilterUtil;
-import com.parse.FindCallback;
-import com.parse.ParseException;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FomonoFilterActivity extends AppCompatActivity implements FomonoFilterFragment.FilterFragmentListener, UserPreferencesFragment.UserPreferencesListener {
+public class FomonoFilterActivity extends AppCompatActivity implements FomonoFilterFragment.FilterFragmentListener,
+        UserPreferencesFragment.UserPreferencesListener,
+        ActivityCompat.OnRequestPermissionsResultCallback {
 
     final String[] FILTER_PAGES = {FomonoApplication.API_NAME_EVENTS, FomonoApplication.API_NAME_EATS};
 
@@ -47,7 +47,6 @@ public class FomonoFilterActivity extends AppCompatActivity implements FomonoFil
         getSupportActionBar().setTitle(getString(R.string.title_activity_fomono_filter));
         //turn on back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
 
 
         if (savedInstanceState == null) {
@@ -91,6 +90,7 @@ public class FomonoFilterActivity extends AppCompatActivity implements FomonoFil
     /**
      * Shows correct filters fragment based on api and title.
      * Has to be a callback because we have to first get user selected filters from db.
+     *
      * @param apiName
      */
     private void showFilterFragment(String apiName) {
@@ -171,6 +171,24 @@ public class FomonoFilterActivity extends AppCompatActivity implements FomonoFil
                 //show food filters fragment
                 showFilterFragment(FomonoApplication.API_NAME_EATS);
                 break;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == FomonoApplication.PERM_LOC_FILTER_REQ_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                if (userPrefsFragment != null) {
+                    userPrefsFragment.useCurrentLocation();
+                }
+            }
+
+            //set a flag on the user
+            ParseUser user = ParseUser.getCurrentUser();
+            user.put(User.LOC_PERM_SEEN, true);
+            user.saveInBackground();
         }
     }
 }
