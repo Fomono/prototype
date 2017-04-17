@@ -204,7 +204,9 @@ public class Event extends ParseObject implements Parcelable, FomonoEvent
             instance.description.initializeForParse();
             instance.put("description", instance.description);
         }
-        instance.put("id", String.valueOf(instance.id));
+        if (instance.id != null) {
+            instance.put("id", String.valueOf(instance.id));
+        }
         if (instance.url != null) {
             instance.put("url", instance.url);
         }
@@ -292,7 +294,9 @@ public class Event extends ParseObject implements Parcelable, FomonoEvent
             this.description = (Description) getParseObject("description");
             this.description.initializeFromParse();
         }
-        this.id = getString("id");
+        if (has("id")) {
+            this.id = getString("id");
+        }
         if (has("url")) {
             this.url = getString("url");
         }
@@ -361,7 +365,9 @@ public class Event extends ParseObject implements Parcelable, FomonoEvent
         if (event.description != null) {
             ((Description) this.get("description")).updateWithExisting(event.description);
         }
-        this.put("id", String.valueOf(event.id));
+        if (event.id != null) {
+            this.put("id", String.valueOf(event.id));
+        }
         if (event.url != null) {
             this.put("url", event.url);
         }

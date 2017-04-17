@@ -298,7 +298,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
                 if (fineLocationPerm != PackageManager.PERMISSION_GRANTED && coarseLocationPerm != PackageManager.PERMISSION_GRANTED) {
                     ParseUser user = ParseUser.getCurrentUser();
                     if (!user.getBoolean(User.LOC_PERM_SEEN)) {
-                        Toast.makeText(getContext(), "Please turn on your location", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), getString(R.string.pref_turn_on_location), Toast.LENGTH_LONG).show();
                         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, FomonoApplication.PERM_LOC_EVENT_REQ_CODE);
                     }
                 } else {

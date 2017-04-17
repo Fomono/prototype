@@ -20,6 +20,16 @@
             android:layout_marginTop="10dp"
             android:text="@string/pref_curr_location" />
 
+        <ImageButton
+            android:id="@+id/ibUseMyLocation"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignBottom="@+id/tvLocationCurr"
+            android:src="@drawable/ic_my_location"
+            android:background="@android:color/transparent"/>
+
         <TextView
             android:id="@+id/tvLocationOther"
             android:layout_width="wrap_content"
@@ -27,14 +37,6 @@
             android:layout_below="@+id/tvLocationCurr"
             android:layout_marginTop="10dp"
             android:text="@string/pref_use_other_loc" />
-
-        <Switch
-            android:id="@+id/swLocationCurr"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignBaseline="@+id/tvLocationCurr" />
 
         <EditText
             android:id="@+id/etLocation"

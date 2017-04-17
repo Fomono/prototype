@@ -87,7 +87,9 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
         if (instance.releaseDate != null) {
             instance.put("release_date", instance.releaseDate);
         }
-        instance.put("id", String.valueOf(instance.id));
+        if (instance.id >= 0) {
+            instance.put("id", String.valueOf(instance.id));
+        }
         if (instance.originalTitle != null) {
             instance.put("original_title", instance.originalTitle);
         }
@@ -152,7 +154,9 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
         if (has("releaseDate")) {
             this.releaseDate = getString("release_date");
         }
-        this.id = Long.parseLong(getString("id"));
+        if (has("id")) {
+            this.id = Long.parseLong(getString("id"));
+        }
         if (has("original_title")) {
             this.originalTitle = getString("original_title");
         }
@@ -200,7 +204,9 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
         if (instance.releaseDate != null) {
             this.put("release_date", instance.releaseDate);
         }
-        this.put("id", String.valueOf(instance.id));
+        if (instance.id >= 0) {
+            this.put("id", String.valueOf(instance.id));
+        }
         if (instance.originalTitle != null) {
             this.put("original_title", instance.originalTitle);
         }
