@@ -9,6 +9,8 @@ import android.os.Parcelable;
 
 public class User implements Parcelable{
 
+    public static final String LOC_PERM_SEEN = "seenLocPerm";
+
     public String firstName;
     public String lastName;
     public String email;

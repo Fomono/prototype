@@ -40,6 +40,11 @@ public class FomonoApplication extends Application {
     public static final String API_NAME_EATS = "yelp";
     public static final String API_NAME_MOVIES = "movies";
 
+    //permission request codes
+    public static final int PERM_LOC_EVENT_REQ_CODE = 1;
+    public static final int PERM_LOC_BUS_REQ_CODE = 2;
+    public static final int PERM_LOC_MOVIE_REQ_CODE = 3;
+
     final String CHANNEL_NAME = "pushChannelTest";
 
     @Override
