@@ -17,12 +17,12 @@ Home Page:
 * [X] User can see list of events, restaurants and movies. The list will show title, desc, media Image, etc
 * [X] User can scroll through events, restaurants, and movies using view group fragment implementation on home page
 * [X] User can make any item as favorite and it will show up under the favorite tab on the main page. The favorites are saved and loaded everytime user comes back to the app
-* User can click on the Fomono icon and get directed to
+* [X] User can click on the Fomono icon and get directed to
     * [X]	- eventbrite website/app for events
     * [X]	- yelp website/app for restaurants, cafes, etc
     * [X]	- the movie trailer for movies
 * [X] User can click anywhere on the list item and see more information in the detail page 
-* User can get the results sorted by 
+* [X] User can get the results sorted by 
     * [X]	-  best_match, date, distance for events
     * [X]	-  best_match, distance, rating_count for restaurants
 * [X] User can get the movie lists which are "Playing now", "Popular" or "Top Rated"
@@ -76,8 +76,6 @@ Events Detail Page:
 
 Filters Page:
 * [X] User can search for specific events by query string, and filter them on home page
-* [X] On event details page, user can add events to calendar
-* [X] On event details page, user can see a map of event location
 
 Home Page:
 * [ ] On home page, user can save events to favorites list
@@ -102,11 +100,15 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/vklmmJQ.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+Sprint 1 GIFs:
+1. http://i.imgur.com/vklmmJQ.gif
+2. http://i.imgur.com/qQpgA6L.gif
+3. http://i.imgur.com/gTk5kaL.gif
 
-<img src='http://i.imgur.com/qQpgA6L.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
-
-<img src='http://i.imgur.com/gTk5kaL.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+Sprint 2 GIFs:
+1.
+2.
+3.
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
