@@ -10,7 +10,6 @@ import android.location.Criteria;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.text.Html;
@@ -26,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
 import com.fomono.fomono.databinding.FragmentYelpDetailBinding;
 import com.fomono.fomono.models.eats.Business;
@@ -33,6 +33,7 @@ import com.fomono.fomono.models.eats.BusinessDetail;
 import com.fomono.fomono.models.eats.Coordinates;
 import com.fomono.fomono.models.eats.Location;
 import com.fomono.fomono.models.eats.Open;
+import com.fomono.fomono.models.user.User;
 import com.fomono.fomono.network.client.YelpClientRetrofit;
 import com.fomono.fomono.utils.DateUtils;
 import com.fomono.fomono.utils.FavoritesUtil;
@@ -45,6 +46,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.ParseUser;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -240,7 +242,7 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
 
     private void getDetailsFromAPI() {
 
-        yelpClientRetrofit = YelpClientRetrofit.getNewInstance().getNewInstance();
+        yelpClientRetrofit = YelpClientRetrofit.getInstance();
         Call<BusinessDetail> call = yelpClientRetrofit.YelpRetrofitClientFactory().getYelpBusinessDetailById
                 (business.getId());
 
@@ -337,12 +339,14 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
                 locationCritera.setPowerRequirement(Criteria.NO_REQUIREMENT);
 
                 // For showing a move to my location button
-                if (ActivityCompat.checkSelfPermission(getContext(),
-                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                        && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(getContext(), "Please turn on your location", Toast.LENGTH_LONG).show();
-                    Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    getContext().startActivity(myIntent);
+                int fineLocationPerm = ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION);
+                int coarseLocationPerm = ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
+                if (fineLocationPerm != PackageManager.PERMISSION_GRANTED && coarseLocationPerm != PackageManager.PERMISSION_GRANTED) {
+                    ParseUser user = ParseUser.getCurrentUser();
+                    if (!user.getBoolean(User.LOC_PERM_SEEN)) {
+                        Toast.makeText(getContext(), "Please turn on your location", Toast.LENGTH_LONG).show();
+                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, FomonoApplication.PERM_LOC_EVENT_REQ_CODE);
+                    }
                 } else {
                     googleMap.setMyLocationEnabled(true);
                 }
@@ -390,6 +394,14 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
     public void onLowMemory() {
         super.onLowMemory();
         mMapView.onLowMemory();
+    }
+
+    public void enableMapLocation() {
+        int fineLocationPerm = ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION);
+        int coarseLocationPerm = ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
+        if (fineLocationPerm == PackageManager.PERMISSION_GRANTED || coarseLocationPerm == PackageManager.PERMISSION_GRANTED) {
+            googleMap.setMyLocationEnabled(true);
+        }
     }
 
 
