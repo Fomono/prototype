@@ -41,8 +41,7 @@ public class UserService {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100,
                 stream);
         byte[] imageBytes = stream.toByteArray();
-        ParseFile file = new ParseFile("ProfileID123",
-                imageBytes);
+        ParseFile file = new ParseFile("profile_picture_file", imageBytes);
         ParseUser finalPUser = pUser;
         file.saveInBackground(new SaveCallback() {
             @Override
@@ -150,22 +149,25 @@ public class UserService {
             if (pUser.get("location") != null) {
                 user.setLocation(pUser.get("location").toString());
             }
+            if (pUser.get("profilePicture") != null) {
+                user.setImageUrl(pUser.get("profilePicture").toString());
+            }
         }
         return user;
     }
 
     public void saveParseUser(User u){
-        if(u.firstName !=null){
-            pUser.put("firstName", u.firstName);
+        if(u.getFirstName() !=null){
+            pUser.put("firstName", u.getFirstName());
         }
-        if(u.lastName !=null){
-            pUser.put("lastName", u.lastName);
+        if(u.getLastName() !=null){
+            pUser.put("lastName", u.getLastName());
         }
-        if(u.email !=null){
-            pUser.put("email", u.email);
+        if(u.getLastName() !=null){
+            pUser.put("email", u.getLastName());
         }
-        if(u.imageUrl !=null){
-      //      pUser.put("profilePicture",u.imageUrl);
+        if(u.getImageUrl() !=null){
+            pUser.put("profilePicture", u.getImageUrl());
         }
         pUser.saveInBackground(new SaveCallback() {
             @Override

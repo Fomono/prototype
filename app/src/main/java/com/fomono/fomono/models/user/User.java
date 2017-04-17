@@ -11,14 +11,14 @@ public class User implements Parcelable{
 
     public static final String LOC_PERM_SEEN = "seenLocPerm";
 
-    public String firstName;
-    public String lastName;
-    public String email;
-    public long phonenNumber;
-    public String gender;
-    public String aboutMe;
-    public String location;
-    public String imageUrl;
+    String firstName;
+    String lastName;
+    String email;
+    long phonenNumber;
+    String gender;
+    String aboutMe;
+    String location;
+    String imageUrl;
 
     public String getImageUrl() {
         return imageUrl;

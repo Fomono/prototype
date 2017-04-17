@@ -16,12 +16,13 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.bumptech.glide.Glide;
 import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
 import com.fomono.fomono.adapters.FomonoMainPagerAdapter;
@@ -29,17 +30,19 @@ import com.fomono.fomono.databinding.ActivityFomonoBinding;
 import com.fomono.fomono.fragments.EatsFragment;
 import com.fomono.fomono.fragments.EatsSortFragment;
 import com.fomono.fomono.fragments.EventFragment;
-import com.fomono.fomono.fragments.MovieFragment;
 import com.fomono.fomono.fragments.EventSortFragment;
+import com.fomono.fomono.fragments.MovieFragment;
 import com.fomono.fomono.fragments.MovieSortFragment;
-import com.fomono.fomono.supportclasses.NavigationDrawerClass;
 import com.fomono.fomono.models.eats.Business;
 import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.movies.Movie;
 import com.fomono.fomono.network.client.EventBriteClientRetrofit;
 import com.fomono.fomono.network.client.MovieDBClientRetrofit;
 import com.fomono.fomono.network.client.YelpClientRetrofit;
+import com.fomono.fomono.supportclasses.NavigationDrawerClass;
 import com.fomono.fomono.utils.FilterUtil;
+import com.parse.ParseAnonymousUtils;
+import com.parse.ParseUser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -66,6 +69,7 @@ public class FomonoActivity extends AppCompatActivity implements EventSortFragme
     private int eatsSortFragmentParamPos = 0;
     private int movieSortFragmentParamPos = 0;
     private ImageView navHeaderProfileImage;
+    private TextView tvNavName;
 
     public static final String ACTION_DETAIL = "launch_detail";
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,12 +84,14 @@ public class FomonoActivity extends AppCompatActivity implements EventSortFragme
 
         View headerView = nvView.inflateHeaderView(R.layout.fomono_nav_drawer_header);
         navHeaderProfileImage = (ImageView) headerView.findViewById(R.id.fomonoNavImageId);
+        tvNavName = (TextView) headerView.findViewById(R.id.fomonoNavNameId);
 
         drawerToggle = setupDrawerToggle();
         mDrawer.addDrawerListener(drawerToggle);
 
         NavigationDrawerClass navigationDrawerClass = new NavigationDrawerClass(FomonoActivity.this, mDrawer);
         navigationDrawerClass.setupDrawerContent(nvView);
+        setupDrawerMenu();
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
@@ -123,6 +129,20 @@ public class FomonoActivity extends AppCompatActivity implements EventSortFragme
 
         //process intent from notification or elsewhere
         processOutOfAppIntent();
+    }
+
+    private void setupDrawerMenu() {
+        ParseUser user = ParseUser.getCurrentUser();
+        if (ParseAnonymousUtils.isLinked(user)) {
+            tvNavName.setText(getString(R.string.guest_name));
+        } else {
+            tvNavName.setText(user.getString("firstName") + " " + user.getString("lastName"));
+        }
+        if (user.get("profilePicture") != null) {
+            String fileUrl = user.get("profilePicture").toString();
+            Glide.with(this).load(fileUrl)
+                    .into(navHeaderProfileImage);
+        }
     }
 
     @Override

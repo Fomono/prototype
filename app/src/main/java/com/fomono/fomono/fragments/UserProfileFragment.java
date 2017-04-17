@@ -28,7 +28,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.fomono.fomono.R;
-import com.fomono.fomono.activities.LoginUserActivity;
 import com.fomono.fomono.databinding.FragmentUserProfileBinding;
 import com.fomono.fomono.models.user.User;
 import com.fomono.fomono.properties.Properties;
@@ -77,8 +76,8 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
 
 
     private static void setImageUrl(ImageView view, String imageUrl) {
-        Glide.with(view.getContext()).load(imageUrl).placeholder(R.drawable.botaimage).
-                error(R.drawable.botaimage).into(view);
+        Glide.with(view.getContext()).load(imageUrl).placeholder(R.drawable.ic_fomono_big).
+                error(R.drawable.ic_fomono_big).into(view);
     }
 
     @Override
@@ -99,17 +98,6 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
                 inflater, R.layout.fragment_user_profile, parent, false);
         View view = fragmentUserProfile.getRoot();
         ButterKnife.bind(this, view);
-
-        fragmentUserProfile.btnSignOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-          //      ParseUser.getCurrentUser().deleteInBackground();
-                ParseUser.logOutInBackground();
-                Intent i = new Intent(getActivity(), LoginUserActivity.class);
-                startActivity(i);
-            }
-        });
-
 
         fragmentUserProfile.ivCameraImage.setOnClickListener(new View.OnClickListener() {
             @Override
