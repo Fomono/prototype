@@ -10,6 +10,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:textColor="@color/colorFomono"
+            android:textAllCaps="true"
+            android:textSize="@dimen/filter_heading_text_size"
+            android:textStyle="bold"
             android:layout_centerHorizontal="true"
             tools:text="TextView" />
 
@@ -24,11 +28,21 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 
+        <Space android:id="@+id/dummy"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_centerHorizontal="true"
+            android:visibility="invisible"/>
+
         <Button
             android:id="@+id/btnCancel"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@id/dummy"
+            android:layout_toStartOf="@id/dummy"
+            android:textColor="@color/colorFomono"
+            android:background="@color/colorWhite"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:text="@string/btn_cancel"/>
@@ -38,6 +52,10 @@
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@id/dummy"
+            android:layout_toEndOf="@id/dummy"
+            android:textColor="@color/colorFomono"
+            android:background="@color/colorWhite"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:text="@string/btn_next"/>

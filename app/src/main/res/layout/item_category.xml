@@ -4,12 +4,15 @@
 
     <LinearLayout
         android:orientation="vertical" android:layout_width="match_parent"
+        android:padding="@dimen/toggle_button_padding"
         android:layout_height="wrap_content">
 
         <ToggleButton
             android:id="@+id/tbCategory"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/toggle_button_text_size"
             tools:text="ToggleButton" />
     </LinearLayout>
 </layout>
