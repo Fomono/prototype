@@ -75,7 +75,7 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
                     fomonoDetailEventbriteFragment.enableMapLocation();
                 }
                 if (requestCode == FomonoApplication.PERM_LOC_BUS_REQ_CODE && fomonoDetailYelpFragment != null) {
-                    //TODO
+                    fomonoDetailEventbriteFragment.enableMapLocation();
                 }
                 if (requestCode == FomonoApplication.PERM_LOC_MOVIE_REQ_CODE && fomonoDetailMoviedbFragment != null) {
                     //TODO
