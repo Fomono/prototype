@@ -18,6 +18,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.fomono.fomono.FomonoApplication;
@@ -55,6 +57,7 @@ public class FomonoActivity extends AppCompatActivity implements EventSortFragme
     private NavigationView nvView;
     private DrawerLayout mDrawer;
     private ActionBarDrawerToggle drawerToggle;
+
     private Toolbar toolbar;
     private ViewPager fomonoPager;
     private PagerSlidingTabStrip fomonoTabStrip;
@@ -62,6 +65,7 @@ public class FomonoActivity extends AppCompatActivity implements EventSortFragme
     private int eventSortFragmentParamPos = 0;
     private int eatsSortFragmentParamPos = 0;
     private int movieSortFragmentParamPos = 0;
+    private ImageView navHeaderProfileImage;
 
     public static final String ACTION_DETAIL = "launch_detail";
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +77,9 @@ public class FomonoActivity extends AppCompatActivity implements EventSortFragme
         mDrawer = binding.fomonoDrawerLayoutId;
         fomonoTabStrip = binding.fomonoTabsId;
         fomonoPager = binding.fomonoViewpagerId;
+
+        View headerView = nvView.inflateHeaderView(R.layout.fomono_nav_drawer_header);
+        navHeaderProfileImage = (ImageView) headerView.findViewById(R.id.fomonoNavImageId);
 
         drawerToggle = setupDrawerToggle();
         mDrawer.addDrawerListener(drawerToggle);
@@ -88,6 +95,7 @@ public class FomonoActivity extends AppCompatActivity implements EventSortFragme
         //Tells the view pager to not destroy the fragment more than one tab away
         fomonoPager.setOffscreenPageLimit(getResources().getInteger(R.integer.NUM_MAINLIST_FRAGMENTS) - 1);
         fomonoTabStrip.setViewPager(fomonoPager);
+
         fomonoPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -103,6 +111,11 @@ public class FomonoActivity extends AppCompatActivity implements EventSortFragme
             public void onPageScrollStateChanged(int state) {
 
             }
+        });
+
+        navHeaderProfileImage.setOnClickListener(v -> {
+            Intent profileIntent = new Intent(FomonoActivity.this, UserProfileActivity.class);
+            startActivity(profileIntent);
         });
 
         //clear filter dirty flags here since we're creating a new fomono activity and everything will be refreshed
