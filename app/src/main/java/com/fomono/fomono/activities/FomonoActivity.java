@@ -39,6 +39,7 @@ import com.fomono.fomono.models.movies.Movie;
 import com.fomono.fomono.network.client.EventBriteClientRetrofit;
 import com.fomono.fomono.network.client.MovieDBClientRetrofit;
 import com.fomono.fomono.network.client.YelpClientRetrofit;
+import com.fomono.fomono.services.UserService;
 import com.fomono.fomono.supportclasses.NavigationDrawerClass;
 import com.fomono.fomono.utils.FilterUtil;
 import com.parse.ParseAnonymousUtils;
@@ -150,6 +151,10 @@ public class FomonoActivity extends AppCompatActivity implements EventSortFragme
         super.onResume();
         if (FilterUtil.getInstance().isDirty()) {
             fomonoMainPagerAdapter.refreshFragments();
+        }
+        if (UserService.getInstance().isUserUpdated()) {
+            setupDrawerMenu();
+            UserService.getInstance().setUserUpdated(false);
         }
     }
 

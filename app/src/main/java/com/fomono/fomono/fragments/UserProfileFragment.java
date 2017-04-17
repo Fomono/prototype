@@ -19,6 +19,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,13 +27,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.fomono.fomono.R;
 import com.fomono.fomono.databinding.FragmentUserProfileBinding;
 import com.fomono.fomono.models.user.User;
 import com.fomono.fomono.properties.Properties;
 import com.fomono.fomono.services.UserService;
+import com.fomono.fomono.utils.RoundedTransformation;
 import com.parse.ParseUser;
+import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
 
@@ -46,12 +48,12 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
     private String photoType;
     ParseUser pUser;
     UserService uService;
-
+    int screenSize;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        uService = new UserService();
+        uService = UserService.getInstance();
         pUser = ParseUser.getCurrentUser();
     }
 
@@ -66,18 +68,22 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         user = uService.retriveUserFromParseUser(pUser);
+        DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
+        int pxWidth = displayMetrics.widthPixels;
+        screenSize = (int) (pxWidth / displayMetrics.density);
         if( pUser.get("profilePicture") !=null) {
             String fileUrl = pUser.get("profilePicture").toString();
-            setImageUrl(fragmentUserProfile.ivUserImage, fileUrl);
+            setImageUrl(fragmentUserProfile.ivUserImage, fileUrl,screenSize);
         }
         fragmentUserProfile.setUser(user);
 
     }
 
 
-    private static void setImageUrl(ImageView view, String imageUrl) {
-        Glide.with(view.getContext()).load(imageUrl).placeholder(R.drawable.ic_fomono_big).
-                error(R.drawable.ic_fomono_big).into(view);
+    private static void setImageUrl(ImageView view, String imageUrl,int screenSize) {
+        Picasso.with(view.getContext()).load(imageUrl).transform(new RoundedTransformation(6, 3)).
+                placeholder(R.drawable.ic_fomono_big).
+                resize(screenSize, 0).into(view);
     }
 
     @Override
@@ -122,6 +128,7 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
                 uService.saveParseUser(fragmentUserProfile);
                 Toast.makeText(getActivity(), "Successfully Saved",
                         Toast.LENGTH_LONG).show();
+                uService.setUserUpdated(true);
             }
         });
 

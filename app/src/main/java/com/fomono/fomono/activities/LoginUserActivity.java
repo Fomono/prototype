@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -49,7 +50,7 @@ import java.util.List;
 public class LoginUserActivity extends AppCompatActivity {
     Button btnFB;
     Button btnFomono;
-    Button btnSignup;
+    TextView btnSignup;
     Profile mFbProfile;
     ParseUser parseUser;
     UserService uService;
@@ -68,11 +69,11 @@ public class LoginUserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_user);
-        uService = new UserService();
+        uService = UserService.getInstance();
 
         btnFB = (Button) findViewById(R.id.btnFB);
         btnFomono = (Button) findViewById(R.id.btnFomono);
-        btnSignup =(Button) findViewById(R.id.btnSignup) ;
+        btnSignup = (TextView) findViewById(R.id.btnSignup) ;
         mFbProfile = Profile.getCurrentProfile();
         etUserId = (EditText) findViewById(R.id.etUserId);
         etPassword = (EditText) findViewById(R.id.etPassword);

@@ -17,13 +17,27 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 
-        <ImageView
-            android:id="@+id/ivUserImage"
+        <RelativeLayout
+            android:id="@+id/rlEventImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            app:srcCompat="@drawable/ic_fomono_big" />
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/llHeader">
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/ivUserImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                app:riv_border_color="@color/colorWhite"
+                app:riv_border_width="2dip"
+                app:riv_corner_radius="10dp"
+                app:riv_mutate_background="true">
+
+            </com.makeramen.roundedimageview.RoundedImageView>
+        </RelativeLayout>
+
 
 
         <ImageView
@@ -39,10 +53,11 @@
             android:id="@+id/tvFirstNameLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/ivUserImage"
+            android:layout_below="@id/rlEventImage"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="30dp"
             android:text='First name'
-            android:textSize="20dp"
-            android:textStyle="bold" />
+            android:textSize="15dp" />
 
 
         <EditText
@@ -50,153 +65,227 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvFirstNameLabel"
+            android:layout_marginLeft="5dp"
+            android:background="@android:color/transparent"
+            android:layout_marginTop="5dp"
             android:text='@{user.firstName}'
             android:textSize="20dp"
             android:textStyle="bold" />
+
+        <View
+            android:id="@+id/spView01"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/etFirstName"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/veryLightGrey" />
 
 
         <TextView
             android:id="@+id/tvLastNameLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/etFirstName"
+            android:layout_below="@id/spView01"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
             android:text='Last name'
-            android:textSize="20dp"
-            android:textStyle="bold" />
-
+            android:textSize="15dp" />
 
         <EditText
             android:id="@+id/etLastName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvLastNameLabel"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:background="@android:color/transparent"
             android:text='@{user.lastName}'
             android:textSize="20dp"
             android:textStyle="bold" />
+
+
+        <View
+            android:id="@+id/spView02"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/etLastName"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/veryLightGrey" />
 
 
         <TextView
             android:id="@+id/tvEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/etLastName"
+            android:layout_below="@id/spView02"
+            android:layout_marginLeft="5dp"
             android:text='Email'
-            android:textSize="20dp"
-            android:textStyle="bold" />
-
+            android:textSize="15dp" />
 
         <EditText
             android:id="@+id/etEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvEmail"
+            android:layout_marginLeft="5dp"
+            android:background="@android:color/transparent"
             android:text='@{user.email}'
             android:textSize="20dp"
+            android:layout_marginTop="5dp"
             android:textStyle="bold" />
+
+
+        <View
+            android:id="@+id/spView03"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/etEmail"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/veryLightGrey" />
 
 
         <TextView
             android:id="@+id/tvPhone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/etEmail"
-            android:text='Phone'
-            android:textSize="20dp"
-            android:textStyle="bold" />
-
+            android:layout_below="@id/spView03"
+            android:layout_marginLeft="5dp"
+            android:text='Phone' />
 
         <EditText
             android:id="@+id/etPhone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvPhone"
+            android:layout_marginLeft="5dp"
+            android:background="@android:color/transparent"
             android:text='@{Long.toString(user.phonenNumber)}'
             android:textSize="20dp"
+            android:layout_marginTop="5dp"
             android:textStyle="bold" />
 
+
+        <View
+            android:id="@+id/spView04"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/etPhone"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/veryLightGrey" />
 
 
         <TextView
             android:id="@+id/tvGender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/etPhone"
+            android:layout_below="@id/spView04"
+            android:layout_marginLeft="5dp"
             android:text='Gender'
-            android:textSize="20dp"
-            android:textStyle="bold" />
-
+            android:textSize="15dp" />
 
         <EditText
             android:id="@+id/etGender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvGender"
+            android:layout_marginLeft="5dp"
+            android:background="@android:color/transparent"
             android:text='@{user.gender}'
             android:textSize="20dp"
+            android:layout_marginTop="5dp"
             android:textStyle="bold" />
 
+
+        <View
+            android:id="@+id/spView05"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/etGender"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/veryLightGrey" />
 
 
         <TextView
             android:id="@+id/tvAboutMe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/etGender"
+            android:layout_below="@id/spView05"
+            android:layout_marginLeft="5dp"
             android:text="About me"
-            android:textSize="20dp"
-            android:textStyle="bold" />
-
+            android:textSize="15dp" />
 
         <EditText
             android:id="@+id/etAboutMe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvAboutMe"
+            android:layout_marginLeft="5dp"
+            android:background="@android:color/transparent"
             android:text='@{user.aboutMe}'
             android:textSize="20dp"
+            android:layout_marginTop="5dp"
             android:textStyle="bold" />
 
+
+        <View
+            android:id="@+id/spView06"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/etAboutMe"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/veryLightGrey" />
 
 
         <TextView
             android:id="@+id/tvLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/etAboutMe"
+            android:layout_below="@id/spView06"
+            android:layout_marginLeft="5dp"
             android:text='Location'
-            android:textSize="20dp"
-            android:textStyle="bold" />
-
+            android:textSize="15dp" />
 
         <EditText
             android:id="@+id/etLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvLocation"
+            android:layout_marginBottom="25dp"
+            android:layout_marginLeft="5dp"
+            android:background="@android:color/transparent"
             android:text='@{user.location}'
             android:textSize="20dp"
+            android:layout_marginTop="5dp"
             android:textStyle="bold" />
+
 
         <Button
             android:id="@+id/btnSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/etLocation"
-            android:background="@color/twitterBlue"
             android:layout_marginRight="50dp"
-            android:textColor="@color/white"
+            android:backgroundTint="@color/lightBlue"
             android:text="SAVE"
-        />
+            android:textColor="@color/white"
+            android:textSize="15sp" />
 
         <Button
             android:id="@+id/btnCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/etLocation"
-            android:layout_toRightOf="@id/btnSave"
             android:layout_toEndOf="@id/btnSave"
+            android:layout_toRightOf="@id/btnSave"
             android:text="CANCEL"
-            />
+            android:textSize="15sp" />
+
 
     </RelativeLayout>
 </layout>

@@ -51,6 +51,18 @@
     <string name="guest_name">Guest User</string>
     <string name="search">menu_search</string>
 
+    <string name="login_username">Username</string>
+    <string name="login_password">Password</string>
+    <string name="login_login">Log in</string>
+    <string name="login_facebook">Log in with Facebook</string>
+    <string name="login_no_account">Don\'t have an account?</string>
+    <string name="login_sign_up"><u>Create one now.</u></string>
+    <string name="login_guest">Continue as guest</string>
+
+    <string name="signup_email">Email</string>
+    <string name="signup_firstname">First Name</string>
+    <string name="signup_lastname">Last Name</string>
+    <string name="signup_signup">Sign Up</string>
 
     <string-array name="FilterEventSortArray">
         <item>best_match</item>
