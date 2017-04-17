@@ -3,7 +3,7 @@
     <string name="app_name">Fomono</string>
     <string name="notif_action_text">Take a look.</string>
     <string name="title_activity_fomono">FomonoActivity</string>
-    <string name="title_activity_fomono_detail">FomonoDetailActivity</string>
+    <string name="title_activity_fomono_detail">Fomono</string>
     <string name="title_activity_fomono_filter">Filters</string>
     <string name="title_activity_favorite_fragment">FavoriteFragment</string>
     <string name="EventFeeFree">Free</string>

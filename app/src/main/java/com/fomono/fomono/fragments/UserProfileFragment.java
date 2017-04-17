@@ -77,8 +77,8 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
 
 
     private static void setImageUrl(ImageView view, String imageUrl) {
-        Glide.with(view.getContext()).load(imageUrl).placeholder(R.drawable.botaimage).
-                error(R.drawable.botaimage).into(view);
+        Glide.with(view.getContext()).load(imageUrl).placeholder(R.drawable.ic_fomono_big).
+                error(R.drawable.ic_fomono_big).into(view);
     }
 
     @Override
