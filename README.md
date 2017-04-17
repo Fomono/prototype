@@ -7,16 +7,24 @@ Time spent: 60 hours spent in total
 ## User Stories
 
 The following **required** functionality is completed:
-
-* [X] User can view events on their home page, including picture/title/date/desc snippet of event
-* [X] User can see details of each event in a fragment. Details include title, pic, data/time, price, location, description
-* [ ] User can sort events on the home page by date, price, distance
-* [X] User can configure filter criteria on settings page. filters will be broad category (tech, music, sports, etc)
+* [X] User can see list of events, restaurants and movies. The list will show title, desc, media Image, etc
 * [X] User can scroll through events, restaurants, and movies using view group fragment implementation on home page
+* [X] User can make any item as favorite and it will show up under the favorite tab on the main page. The favorites are saved and loaded everytime user comes back to the app
+* User can click on the Fomono icon and get directed to
+    * [X]	- eventbrite website/app for events
+    * [X]	- yelp website/app for restaurants, cafes, etc
+    * [X]	- the movie trailer for movies
+* [X] User can click anywhere on the list item and see more information in the detail page 
+* User can get the results sorted by 
+    * [X]	-  best_match, date, distance for events
+    * [X]	-  best_match, distance, rating_count for restaurants
+* [X] User can get the movie lists which are "Playing now", "Popular" or "Top Rated"
+* [X] User can see details of each event in a fragment. Details include title, pic, data/time, price, location, description
+* [X] User can configure filter criteria on settings page. filters will be broad category (tech, music, sports, etc)
 * [X] User should be able to set location
 * [ ] User can click a notification to go to detailed event/restaurant/movie
 * [ ] User should be able to turn on/off notifications
-* [ ] User can scroll endlessly on home page for more events
+* [X] User can scroll endlessly on home page for more events
 
 The following **optional** features are implemented:
 
@@ -24,7 +32,7 @@ The following **optional** features are implemented:
 * [ ] User can select a profile image or take picture on profile page
 * [ ] User can sign up using Facebook/Google/email
 * [ ] User can log in using the above
-* [ ] User can search for specific events by query string, and filter them on home page
+* [X] User can search for specific events by query string, and filter them on home page
 * [X] On event details page, user can add events to calendar
 * [X] On event details page, user can see a map of event location
 * [ ] Clicking on map could bring up directions to location on google maps
@@ -32,6 +40,9 @@ The following **optional** features are implemented:
 * [ ] On movie details page, user can click to see trailer video
 * [ ] On event details page, user can share event to Twitter/email/text
 * [ ] On home page, user can save events to favorites list
+* [ ] On home page, user can choose to see only free or only paid events
+* [ ] On home page, user can see the list of restaurants which are "open_now"
+* [ ] On home page, user should be able to specify a date range for search events
 
 The following **bonus** features are implemented:
 
