@@ -141,8 +141,6 @@ public class FomonoActivity extends AppCompatActivity implements EventSortFragme
         if (user.get("profilePicture") != null) {
             String fileUrl = user.get("profilePicture").toString();
             Glide.with(this).load(fileUrl)
-                    .placeholder(R.drawable.botaimage)
-                    .error(R.drawable.botaimage)
                     .into(navHeaderProfileImage);
         }
     }
