@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -46,6 +47,7 @@ public class FomonoFilterActivity extends AppCompatActivity implements FomonoFil
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.title_activity_fomono_filter));
         //turn on back button
+        getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(FomonoFilterActivity.this, R.drawable.ic_arrow_back));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 

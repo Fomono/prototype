@@ -126,7 +126,7 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
         fragmentBinding.tvEventDate.setText("");
         fragmentBinding.tvLocation.setText(getLocationAddress());
         fragmentBinding.rbMovierating.setRating(Double.valueOf(business.getRating()).floatValue());
-        fragmentBinding.tvRatingText.setText(Double.valueOf(business.getRating()).toString());
+        fragmentBinding.tvRatingText.setText(Double.valueOf(business.getRating()).toString() + "/5");
 
         DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
         int pxWidth = displayMetrics.widthPixels;
