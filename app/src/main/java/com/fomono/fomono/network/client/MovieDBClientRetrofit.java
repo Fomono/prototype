@@ -56,9 +56,6 @@ public class MovieDBClientRetrofit {
         @GET("/3/movie/now_playing")
         Call<MovieResponse> getNowPlayingMoviesFromServer(@QueryMap Map<String, String> options);
 
-        //@Query("token") String api_key,
-        // @Query("q") String search_query, @Query("sort_by") String sort_string
-
         @GET("/3/movie/latest")
         Call<MovieResponse> getLatesMoviesFromServer(@QueryMap Map<String, String> options);
         //@Query("token") String api_key, @Query("q") String search_string
@@ -77,170 +74,17 @@ public class MovieDBClientRetrofit {
 
         @GET("/3/movie/{movie_id}")
         Call<Movie> getMovieById(@Path("movie_id") String id, @QueryMap Map<String, String> options);
+
+
+        @GET("/3/search/movie")
+        Call<MovieResponse> getSearchMoviesFromServer(@QueryMap Map<String, String> options);
+
     }
 
 
     private String getApiUrl(String relativeUrl) {
         return API_MDB_BASE_URL + relativeUrl;
     }
-
-/*
-    public void callRetrofitGetMoviesNowPlaying(Context context, String stringQuery) {
-
-        //eventBriteClientRetrofit = EventBriteClientRetrofit.getInstance();
-
-        //TODO: Incorrect string query. Write a method to generate a string
-        //Call<YelpTokenClass> callVenue = YelpRetrofitClientFactory().getYelpTokenFromServer(stringQuery);
-
-        Call<MovieResponse> callVenue = MovieDBRetrofitClientFactory().getNowPlayingMoviesFromServer(API_KEY);
-
-
-        callVenue.enqueue(new Callback<MovieResponse>() {
-            @Override
-            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                MovieResponse movieResponse = response.body();
-
-                if (movieResponse == null) {
-                    Log.d(TAG, "NO MATCH ");
-
-                } else {
-                    movies = (ArrayList) movieResponse.getResults();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MovieResponse> call, Throwable t) {
-                Log.d(TAG, "REQUEST Failed " + t.getMessage());
-
-            }
-        });
-    }
-
-
-    public void callRetrofitGetLatestMovies(Context context, String stringQuery) {
-
-        //eventBriteClientRetrofit = EventBriteClientRetrofit.getInstance();
-
-        //TODO: Incorrect string query. Write a method to generate a string
-        //Call<YelpTokenClass> callVenue = YelpRetrofitClientFactory().getYelpTokenFromServer(stringQuery);
-
-        Call<MovieResponse> callVenue = MovieDBRetrofitClientFactory().getLatesMoviesFromServer(API_KEY);
-
-
-        callVenue.enqueue(new Callback<MovieResponse>() {
-            @Override
-            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                MovieResponse movieResponse = response.body();
-
-                if (movieResponse == null) {
-                    Log.d(TAG, "NO MATCH ");
-
-                } else {
-                    movies = (ArrayList) movieResponse.getResults();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MovieResponse> call, Throwable t) {
-                Log.d(TAG, "REQUEST Failed " + t.getMessage());
-
-            }
-        });
-    }
-
-    public void callRetrofitGetPopularMovies(Context context, String stringQuery) {
-
-        //eventBriteClientRetrofit = EventBriteClientRetrofit.getInstance();
-
-        //TODO: Incorrect string query. Write a method to generate a string
-        //Call<YelpTokenClass> callVenue = YelpRetrofitClientFactory().getYelpTokenFromServer(stringQuery);
-
-        Call<MovieResponse> callVenue = MovieDBRetrofitClientFactory().getPopularMoviesFromServer(API_KEY);
-
-
-        callVenue.enqueue(new Callback<MovieResponse>() {
-            @Override
-            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                MovieResponse movieResponse = response.body();
-
-                if (movieResponse == null) {
-                    Log.d(TAG, "NO MATCH ");
-
-                } else {
-                    movies = (ArrayList) movieResponse.getResults();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MovieResponse> call, Throwable t) {
-                Log.d(TAG, "REQUEST Failed " + t.getMessage());
-
-            }
-        });
-    }
-
-    public void callRetrofitGetTopRatedMovies(Context context, String stringQuery) {
-
-        //eventBriteClientRetrofit = EventBriteClientRetrofit.getInstance();
-
-        //TODO: Incorrect string query. Write a method to generate a string
-        //Call<YelpTokenClass> callVenue = YelpRetrofitClientFactory().getYelpTokenFromServer(stringQuery);
-
-        Call<MovieResponse> callVenue = MovieDBRetrofitClientFactory().getTopRatedMoviesFromServer(API_KEY);
-
-
-        callVenue.enqueue(new Callback<MovieResponse>() {
-            @Override
-            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                MovieResponse movieResponse = response.body();
-
-                if (movieResponse == null) {
-                    Log.d(TAG, "NO MATCH ");
-
-                } else {
-                    movies = (ArrayList) movieResponse.getResults();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MovieResponse> call, Throwable t) {
-                Log.d(TAG, "REQUEST Failed " + t.getMessage());
-
-            }
-        });
-    }
-
-    public void callRetrofitGetUpcomingMovies(Context context, String stringQuery) {
-
-        //eventBriteClientRetrofit = EventBriteClientRetrofit.getInstance();
-
-        //TODO: Incorrect string query. Write a method to generate a string
-        //Call<YelpTokenClass> callVenue = YelpRetrofitClientFactory().getYelpTokenFromServer(stringQuery);
-
-        Call<MovieResponse> callVenue = MovieDBRetrofitClientFactory().getUpcomingMoviesFromServer(API_KEY);
-
-
-        callVenue.enqueue(new Callback<MovieResponse>() {
-            @Override
-            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                MovieResponse movieResponse = response.body();
-
-                if (movieResponse == null) {
-                    Log.d(TAG, "NO MATCH ");
-
-                } else {
-                    movies = (ArrayList) movieResponse.getResults();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MovieResponse> call, Throwable t) {
-                Log.d(TAG, "REQUEST Failed " + t.getMessage());
-
-            }
-        });
-    }
-*/
 
 }
 

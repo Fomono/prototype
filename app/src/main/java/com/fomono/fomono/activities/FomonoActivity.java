@@ -7,13 +7,16 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.astuetz.PagerSlidingTabStrip;
@@ -186,6 +189,38 @@ public class FomonoActivity extends AppCompatActivity implements EventSortFragme
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_fomono, menu);
+        MenuItem searchItem = menu.findItem(R.id.menuSearchId);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                String name = makeFragmentName(fomonoPager.getId(), ActiveViewPagerPagePosition);
+                Fragment viewPagerFragment = getSupportFragmentManager().findFragmentByTag(name);
+
+                if (viewPagerFragment != null) {
+                    if (viewPagerFragment.isResumed()) {
+                        if (viewPagerFragment instanceof EventFragment) {
+                            EventFragment mEventFragment = (EventFragment) viewPagerFragment;
+                            mEventFragment.searchEventList(query);
+                        } else if (viewPagerFragment instanceof EatsFragment) {
+                            EatsFragment mEatsFragment = (EatsFragment) viewPagerFragment;
+                            mEatsFragment.searchEatsList(query);
+                        } else if (viewPagerFragment instanceof MovieFragment) {
+                            MovieFragment mMovieFragment = (MovieFragment) viewPagerFragment;
+                            mMovieFragment.searchMovieList(query);
+                        }
+                    }
+                }
+                searchView.clearFocus();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 

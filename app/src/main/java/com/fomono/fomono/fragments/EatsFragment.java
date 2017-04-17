@@ -30,6 +30,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.R.attr.data;
+import static android.R.attr.offset;
 
 /**
  * Created by jsaluja on 4/8/2017.
@@ -37,16 +38,20 @@ import static android.R.attr.data;
 
 public class EatsFragment extends MainListFragment {
     private final static String TAG = "Eats fragment";
-    String sortParameter = null;
+    private String sortParameter = null;
+    private String searchParameter = null;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
+
+        searchParamDispText.setVisibility(View.GONE);
+
         InternetAlertDialogue internetAlertDialogue = new InternetAlertDialogue(mContext);
         if(internetAlertDialogue.checkForInternet()) {
             int offset = fomonoEvents.size();
-            populateEats(offset, null);
+            populateEats(offset, null, searchParameter);
         }
 
         rvList.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
@@ -54,21 +59,41 @@ public class EatsFragment extends MainListFragment {
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 if(internetAlertDialogue.checkForInternet()) {
                     int offset = fomonoEvents.size();
-                    populateEats(offset, sortParameter);
+                    populateEats(offset, sortParameter, searchParameter);
                 }
             }
         });
 
+        searchParamDispText.setOnClickListener(v -> {
+            clear();
+            searchParameter = null;
+            populateEats(offset, null, searchParameter);
+            searchParamDispText.setVisibility(View.GONE);
+        });
         return view;
+    }
+
+    public void searchEatsList(String query) {
+        clear();
+        searchParameter = query;
+        populateEats(0, sortParameter, searchParameter);
     }
 
     public void refreshEatsList(String sortParam) {
         sortParameter = sortParam;
         clear();
-        populateEats(0, sortParameter);
+        populateEats(0, sortParameter, searchParameter);
     }
 
-    public void populateEats(int offset, String sortParameter) {
+    public void populateEats(int offset, String sortParameter, String searchQuery) {
+
+        if(searchQuery != null) {
+            searchParamDispText.setVisibility(View.VISIBLE);
+            searchParamDispText.setText(""+searchQuery+" X");
+        } else {
+            searchParamDispText.setVisibility(View.GONE);
+        }
+
         smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
         try {
             //get user filters for yelp
@@ -87,14 +112,16 @@ public class EatsFragment extends MainListFragment {
                 int distance = currentUser.getInt("distance");
                 //gotta convert distance because yelp uses meters, and maxes out at 40,000 meters.
                 int distanceInMeters = Math.min(40000, NumberUtil.convertToMeters(distance));
-                getYelpBusinesses(getActivity(), location, categoriesString, distanceInMeters, offset, sortParameter);
+                getYelpBusinesses(getActivity(), location, categoriesString, distanceInMeters, offset, sortParameter, searchQuery);
             });
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void getYelpBusinesses(Context context, String location, String categories, int distance, int offset, String sortParam){
+    public void getYelpBusinesses(Context context, String location, String categories,
+                                  int distance, int offset, String sortParam, String strQuery){
+
         Map<String, String> data = new HashMap<>();
         Log.d(TAG, "Location is " +location);
         if((location != null) && !(location.equals(""))) {
@@ -102,6 +129,7 @@ public class EatsFragment extends MainListFragment {
         } else {
             data.put("location", "San Francisco");
         }
+
         if (!TextUtils.isEmpty(categories)) {
             data.put("categories", categories);
         }
@@ -114,6 +142,10 @@ public class EatsFragment extends MainListFragment {
 
         if((sortParam != null) && !(sortParam.equals(""))) {
             data.put("sort_by", sortParam);
+        }
+
+        if(strQuery != null) {
+            data.put("term", strQuery);
         }
 
         Call<YelpResponse> callEats = yelpClientRetrofit.YelpRetrofitClientFactory().getYelpBusinesssesFromServer(data);

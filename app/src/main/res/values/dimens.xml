@@ -6,4 +6,5 @@
     <dimen name="MainPageHeaderFontSize">20sp</dimen>
     <dimen name="MainMediaImagePadding">15dp</dimen>
     <dimen name="main_list_description_bottom_padding">5dp</dimen>
+    <dimen name="SearchPrefDisplayTextSize">20sp</dimen>
 </resources>

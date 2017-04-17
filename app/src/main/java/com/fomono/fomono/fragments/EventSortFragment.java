@@ -25,8 +25,8 @@ public class EventSortFragment extends DialogFragment {
 
     private Spinner eventSortParam;
     private ImageButton eventSortSaveButton;
-    String sortingParam;
-    int sortingParamPos=0;
+    private String sortingParam;
+    private int sortingParamPos=0;
 
     public OnFragmentInteractionListener mListener;
 
