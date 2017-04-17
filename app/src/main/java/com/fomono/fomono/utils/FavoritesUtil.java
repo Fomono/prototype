@@ -151,12 +151,9 @@ public class FavoritesUtil {
     }
 
     public void getFavoritesWhenLoaded(@NonNull FavoritesListener listener) {
+        addListener(listener);
         if (loaded) {
             listener.onFavoritesLoaded(getFavorites());
-        } else {
-            if (!listeners.contains(listener)) {
-                listeners.add(listener);
-            }
         }
     }
 
@@ -177,5 +174,15 @@ public class FavoritesUtil {
             }
         }
         return favs;
+    }
+
+    public void addListener(@NonNull FavoritesListener listener) {
+        if (!listeners.contains(listener)) {
+            listeners.add(listener);
+        }
+    }
+
+    public void removeListener(@NonNull FavoritesListener listener) {
+        listeners.remove(listener);
     }
 }
