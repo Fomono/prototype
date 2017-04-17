@@ -48,6 +48,8 @@
     <string name="FilterEatsSortButtonText">Sort</string>
     <string name="FilterMovieSortButtonText">Sort</string>
     <string name="drawer_menu_signout">Sign Out</string>
+    <string name="drawer_menu_signin">Sign In</string>
+    <string name="guest_name">Guest User</string>
     <string name="search">menu_search</string>
 
 
