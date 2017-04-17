@@ -137,6 +137,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:stepSize="0.3"
+            android:progressTint="#ebda57"
             android:layout_below="@id/tvDescription"
             android:theme="@style/RatingBar"
             />
