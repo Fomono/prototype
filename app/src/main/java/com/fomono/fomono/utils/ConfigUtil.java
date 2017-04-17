@@ -43,6 +43,12 @@ public class ConfigUtil {
             case FomonoApplication.API_NAME_EATS:
                 fileName = "yelpcategories.properties";
                 break;
+            case FomonoApplication.API_NAME_MOVIE_GENRE:
+                fileName = "moviedbgenres.properties";
+                break;
+            case FomonoApplication.API_NAME_MOVIE_LANGUAGE:
+                fileName = "languagecodesmoviedb.properties";
+                break;
             case FomonoApplication.API_NAME_MOVIES:
             default:
                 break;

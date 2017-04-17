@@ -21,10 +21,10 @@
             android:id="@+id/tvEventDate"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/twitterBlue"
-            android:text="May 10"
-            android:textSize="20dp"
             android:layout_marginRight="20dp"
+            android:text="May 10"
+            android:textColor="@color/twitterBlue"
+            android:textSize="20dp"
             android:textStyle="bold" />
 
 
@@ -60,11 +60,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/ivFavoriteIcon"
-            android:text="Favorite"
-            android:textStyle="bold"
             android:layout_below="@id/ivFavoriteIcon"
-            android:textSize="10dp"
-            />
+            android:text="Favorite"
+            android:textSize="13sp"
+            android:textStyle="bold" />
 
 
         <ImageView
@@ -80,12 +79,11 @@
             android:id="@+id/tvYesLabel"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/ivYesIcon"
-            android:textStyle="bold"
             android:layout_alignLeft="@id/ivYesIcon"
+            android:layout_below="@id/ivYesIcon"
             android:text="Interested/Going"
-            android:textSize="10dp"
-            />
+            android:textSize="13sp"
+            android:textStyle="bold" />
 
 
         <ImageView
@@ -101,65 +99,49 @@
             android:id="@+id/tvNoLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/ivNoIcon"
             android:layout_alignLeft="@id/ivNoIcon"
-            android:textStyle="bold"
-            android:textSize="10dp"
-            android:text="Not Interested" />
+            android:layout_below="@id/ivNoIcon"
+            android:text="Not Interested"
+            android:textSize="13sp"
+            android:textStyle="bold" />
 
 
         <TextView
             android:id="@+id/tvDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/tvFavoriteLabel"
-            android:text="Come experience the biggest plant sale in the bay area.blah blah blah blah blah blah blah blah........................................................"
+            android:layout_marginTop="15dp"
+            android:text=""
             android:textSize="12dp" />
 
 
-        <ImageView
-            android:id="@+id/ivClockIcon"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_marginTop="30dp"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/tvDescription"
-            app:srcCompat="@drawable/ic_clock" />
-
-        <TextView
-            android:id="@+id/tvClockEventDate"
+        <RatingBar
+            android:id="@+id/rbMovierating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/ivClockIcon"
-            android:layout_alignTop="@id/ivClockIcon"
             android:layout_below="@id/tvDescription"
-            android:layout_marginRight="5dp"
-            android:textSize="10dp"
-            android:text=" May 6, 2017 at 10:30 PM"
-            />
+            android:layout_marginTop="15dp"
+            android:stepSize="0.3"
+            android:theme="@style/RatingBar" />
 
         <TextView
-            android:id="@+id/tvClockCalendar"
+            android:id="@+id/tvRatingText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/tvClockEventDate"
-            android:layout_alignTop="@id/ivClockIcon"
             android:layout_below="@id/tvDescription"
-            android:textSize="10dp"
-            android:textColor="@color/twitterBlue"
-            android:clickable="true"
-            android:text="ADD TO CALENDAR"
-            />
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/rbMovierating"
+            android:textSize="20dp" />
 
 
         <ImageView
             android:id="@+id/ivLocationIcon"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:layout_below="@id/ivClockIcon"
             android:layout_alignParentLeft="true"
+            android:layout_below="@id/rbMovierating"
             android:layout_marginTop="15dp"
             app:srcCompat="@drawable/ic_location_pin" />
 
@@ -167,23 +149,61 @@
             android:id="@+id/tvLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/ivLocationIcon"
-            android:layout_below="@id/ivClockIcon"
             android:layout_alignTop="@id/ivLocationIcon"
+            android:layout_below="@id/rbMovierating"
+            android:layout_toRightOf="@id/ivLocationIcon"
             android:text="Golden Gate Park, San Francisco, CA"
-            android:textSize="10dp" />
+            android:textSize="13sp" />
 
+        <TextView
+            android:id="@+id/tvHoursLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ivLocationIcon"
+            android:layout_marginTop="10dp"
+            android:text='Hours:'
+            android:textSize="13sp" />
+
+
+        <TextView
+            android:id="@+id/tvHours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvHoursLabel"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/tvHours"
+            android:text=''
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tvPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvHours"
+            android:layout_marginTop="10dp"
+            android:text='@{"Price: " + business.price}'
+            android:textSize="13sp" />
+
+
+        <TextView
+            android:id="@+id/tvPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvPrice"
+            android:layout_marginTop="10dp"
+            android:text='@{"Phone: " + business.phone}'
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/tvSiteLinkLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/ivLocationIcon"
             android:layout_alignParentLeft="true"
+            android:layout_below="@id/tvPhone"
             android:layout_marginTop="20dp"
             android:text="Go to the Site: "
             android:textColor="@color/black"
-            android:textSize="10dp" />
+            android:textSize="13sp" />
 
 
         <TextView
@@ -191,37 +211,34 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/tvSiteLinkLabel"
-            android:layout_below="@id/ivLocationIcon"
+            android:layout_below="@id/tvPhone"
             android:layout_toRightOf="@id/tvSiteLinkLabel"
-            android:textSize="10dp"
-            android:textColor="@color/twitterBlue"
             android:clickable="true"
             android:text="CLICK HERE"
-            />
-
+            android:textColor="@color/twitterBlue"
+            android:textSize="13sp" />
 
 
         <TextView
             android:id="@+id/tvShareLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:layout_below="@id/tvSiteLinkLabel"
             android:layout_marginTop="20dp"
-            android:layout_alignParentLeft="true"
             android:text="SHARE: "
-            android:textSize="10dp" />
-
+            android:textSize="13sp" />
 
 
         <ImageView
             android:id="@+id/ivFBShareIcon"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_below="@id/tvSiteLink"
-            android:layout_toRightOf="@id/tvShareLabel"
             android:layout_alignTop="@id/tvSiteLink"
+            android:layout_below="@id/tvSiteLink"
             android:layout_marginRight="15dp"
             android:layout_marginTop="20dp"
+            android:layout_toRightOf="@id/tvShareLabel"
             app:srcCompat="@drawable/ic_facebook" />
 
 
@@ -231,8 +248,8 @@
             android:layout_height="30dp"
             android:layout_alignTop="@id/ivFBShareIcon"
             android:layout_below="@id/tvSiteLink"
-            android:layout_toRightOf="@id/ivFBShareIcon"
             android:layout_marginRight="15dp"
+            android:layout_toRightOf="@id/ivFBShareIcon"
 
             app:srcCompat="@drawable/ic_twitter" />
 
@@ -243,29 +260,43 @@
             android:layout_height="30dp"
             android:layout_alignTop="@id/ivFBShareIcon"
             android:layout_below="@id/tvSiteLink"
-            app:srcCompat="@drawable/ic_email"
             android:layout_marginRight="15dp"
-            android:layout_toRightOf="@id/ivTwitterShareIcon" />
+            android:layout_toRightOf="@id/ivTwitterShareIcon"
+            app:srcCompat="@drawable/ic_email" />
 
         <ImageView
             android:id="@+id/ivMessageShareIcon"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_below="@id/tvSiteLink"
             android:layout_alignTop="@id/ivFBShareIcon"
-            android:layout_toRightOf="@id/ivEmailShareIcon"
+            android:layout_below="@id/tvSiteLink"
             android:layout_marginRight="15dp"
+            android:layout_marginBottom="20dp"
+            android:layout_toRightOf="@id/ivEmailShareIcon"
             app:srcCompat="@drawable/ic_whatsapp" />
+
+
+        <HorizontalScrollView
+            android:id="@+id/hsvGallery"
+            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ivFBShareIcon">
+            <LinearLayout
+                android:id="@+id/llGallery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
 
 
         <com.google.android.gms.maps.MapView
             android:id="@+id/mapView"
-            android:layout_below="@id/ivFBShareIcon"
-            android:layout_marginTop="15dp"
             android:layout_width="match_parent"
-            android:layout_height="150dp" />
-
-
+            android:layout_height="150dp"
+            android:layout_below="@id/hsvGallery"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"/>
 
     </RelativeLayout>
 </layout>

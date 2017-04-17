@@ -61,4 +61,17 @@ public class DateUtils {
         }
         return date.getTime();
     }
+
+    public static String convertMilitarytoStandard(String mTime){
+        DateFormat militaryFormat = new SimpleDateFormat( "HHmm");
+        DateFormat standardFormat = new SimpleDateFormat( "hh:mm aa");
+        Date date = null;
+        try {
+            date = militaryFormat.parse(mTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return standardFormat.format(date);
+    }
 }

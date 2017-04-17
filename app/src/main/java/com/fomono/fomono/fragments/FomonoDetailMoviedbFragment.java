@@ -6,7 +6,6 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
-import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
@@ -17,7 +16,6 @@ import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -26,36 +24,33 @@ import com.bumptech.glide.Glide;
 import com.fomono.fomono.R;
 import com.fomono.fomono.databinding.FragmentMoviedbDetailBinding;
 import com.fomono.fomono.models.movies.Movie;
+import com.fomono.fomono.utils.ConfigUtil;
 import com.fomono.fomono.utils.DateUtils;
 import com.fomono.fomono.utils.FavoritesUtil;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 
 import butterknife.ButterKnife;
 
 import static android.R.attr.x;
+import static com.facebook.FacebookSdk.getApplicationContext;
+import static com.fomono.fomono.FomonoApplication.API_NAME_MOVIE_GENRE;
 
 /**
  * Created by Saranu on 4/6/17.
  */
 
 public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment {
-    FragmentMoviedbDetailBinding fragmentMoviedbDetailBinding;
+    FragmentMoviedbDetailBinding fragmentBinding;
 
-    private GoogleMap googleMap;
-    MapView mMapView;
     Movie movie;
     ImageButton ibFavorite;
     FavoritesUtil favsUtil;
+    String movieKey;
+
+
 
 
     @Override
@@ -63,6 +58,7 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
         super.onCreate(savedInstanceState);
         movie = getArguments().getParcelable("movie_obj");
         favsUtil = FavoritesUtil.getInstance();
+
     }
 
     public static FomonoDetailMoviedbFragment newInstance(Movie movie) {
@@ -91,71 +87,34 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
 
-        fragmentMoviedbDetailBinding = DataBindingUtil.inflate(
+        fragmentBinding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_moviedb_detail, parent, false);
-        View view = fragmentMoviedbDetailBinding.getRoot();
+        View view = fragmentBinding.getRoot();
         ButterKnife.bind(this,view);
 
-        fragmentMoviedbDetailBinding.tvSiteLink.setClickable(true);
-        fragmentMoviedbDetailBinding.tvSiteLink.setMovementMethod(LinkMovementMethod.getInstance());
+       // callYouTube();
+        fragmentBinding.tvSiteLink.setClickable(true);
+        fragmentBinding.tvSiteLink.setMovementMethod(LinkMovementMethod.getInstance());
         String text = "<a href=" + "https://www.themoviedb.org/movie?language=en" +  ">" + "CLICK HERE" + "</a>";
-        fragmentMoviedbDetailBinding.tvSiteLink.setText(Html.fromHtml(text));
+        fragmentBinding.tvSiteLink.setText(Html.fromHtml(text));
 
+        fragmentBinding.tvEventDate.setText("");
+        fragmentBinding.tvRatingText.setText(Double.valueOf(movie.getVoteAverage()/2).toString()+ "/5");
 
-        fragmentMoviedbDetailBinding.tvEventDate.setText(movie.getReleaseDate());
+        setImageUrl(fragmentBinding.ivEventImage, movie.getPosterPath());
+        fragmentBinding.rbMovierating.setRating
+                (Double.valueOf(movie.getVoteAverage()/2).floatValue());
 
-        setImageUrl(fragmentMoviedbDetailBinding.ivEventImage, movie.getPosterPath());
-
-        mMapView = (MapView) view.findViewById(R.id.mapView);
-        mMapView.onCreate(savedInstanceState);
-
-        mMapView.onResume(); // needed to get the map to display immediately
-
-        try {
-            MapsInitializer.initialize(getActivity().getApplicationContext());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        mMapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap mMap) {
-                googleMap = mMap;
-
-                // For showing a move to my location button
-                if (ActivityCompat.checkSelfPermission(getContext(),
-                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                        && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    return;
-                }else {
-                    googleMap.setMyLocationEnabled(true);
-                }
-                LatLng latlng;
-                // For dropping a marker at a point on the Map
-
-                    latlng = getLocationFromAddress("121 Albright Way, Los Gatos, CA 95032");
-                googleMap.addMarker(new MarkerOptions().position(latlng).title(movie.getTitle()).snippet("Marker Desc"));
-                // snippet(event.getVenue().getAddress().getAddress1() + event.getVenue().getAddress().getCity() +
-                //   event.getVenue().getAddress().getCountry()  ));
-
-
-                // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(latlng).zoom(12).build();
-                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-            }
-        });
-
-
-        fragmentMoviedbDetailBinding.tvClockCalendar.setOnClickListener(new View.OnClickListener() {
+        fragmentBinding.tvClockCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addToCalendar(movie.getReleaseDate(), movie.getReleaseDate());
             }
         });
 
+        fragmentBinding.tvGenres.setText(getGenres());
 
-        fragmentMoviedbDetailBinding.ivMessageShareIcon.setOnClickListener(new View.OnClickListener() {
+        fragmentBinding.ivMessageShareIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent sendIntent = new Intent(Intent.ACTION_VIEW);
@@ -166,7 +125,7 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
             }
         });
 
-        fragmentMoviedbDetailBinding.ivTwitterShareIcon.setOnClickListener(new View.OnClickListener() {
+        fragmentBinding.ivTwitterShareIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -192,7 +151,7 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
             }
         });
 
-        fragmentMoviedbDetailBinding.ivEmailShareIcon.setOnClickListener(new View.OnClickListener() {
+        fragmentBinding.ivEmailShareIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
@@ -206,7 +165,7 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
             }
         });
 
-        ibFavorite = fragmentMoviedbDetailBinding.ivFavoriteIcon;
+        ibFavorite = fragmentBinding.ivFavoriteIcon;
         if (favsUtil.isFavorited(movie)) {
             ibFavorite.setImageResource(R.drawable.ic_favorite);
         }
@@ -223,12 +182,34 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
             }
         });
 
-        return fragmentMoviedbDetailBinding.getRoot();
+        return fragmentBinding.getRoot();
+    }
+
+    private String getGenres() {
+        String genres ="";
+        Set<Map.Entry<String, String>> genreSet = null;
+        try {
+            genreSet = ConfigUtil.getCategories(API_NAME_MOVIE_GENRE, getApplicationContext());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        for(Long genreId : movie.getGenreIds()) {
+                for (Map.Entry<String, String> entry : genreSet){
+                    if(genreId.toString().equals(entry.getKey())){
+                        if(movie.getGenreIds().size()-1 != movie.getGenreIds().indexOf(genreId)) {
+                            genres += entry.getValue() + ", ";
+                        } else {
+                            genres += entry.getValue();
+                        }
+                    }
+                }
+            }
+         return genres;
     }
 
 
     protected void populateDetail(Movie m) {
-        fragmentMoviedbDetailBinding.setMovie(m);
+        fragmentBinding.setMovie(m);
 
     }
 
@@ -260,48 +241,4 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
             return;
         }
     }
-
-    public LatLng getLocationFromAddress(String strAddress) {
-
-        Geocoder coder = new Geocoder(getContext());
-        try {
-            ArrayList<android.location.Address> adresses = (ArrayList<android.location.Address>) coder.getFromLocationName(strAddress, 50);
-            for (android.location.Address add : adresses) {
-                if (add.getCountryCode().equals("US") || add.getCountryCode().equals("USA") ) {//Controls to ensure it is right address such as country etc.
-                    double longitude = add.getLongitude();
-                    double latitude = add.getLatitude();
-                    return new LatLng(latitude,longitude);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return  null;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mMapView.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mMapView.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mMapView.onDestroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mMapView.onLowMemory();
-    }
-
-
 }
