@@ -2,7 +2,9 @@ package com.fomono.fomono.adapters;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -77,24 +79,26 @@ public class FiltersAdapter extends RecyclerView.Adapter<FiltersAdapter.ViewHold
             viewHolder.tbCategory.setChecked(false);
         }
 
+        if(viewHolder.tbCategory.isChecked()) { viewHolder.tbCategory.setBackgroundColor(ContextCompat.getColor(context, R.color.colorFomono)); }
+        else {viewHolder.tbCategory.setBackgroundColor(ContextCompat.getColor(context, R.color.colorFomonoSecondary));}
+
         //attach listener
-        viewHolder.tbCategory.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                //update user's selected filters
-                if (b) {
-                    //store new user filter, but first check for dupe
-                    FilterUtil.getInstance().addFilter(category.getParamName(), category.getId(), category.getApiName(), new GetCallback<Filter>() {
-                        @Override
-                        public void done(Filter object, ParseException e) {
-                            filters.put(category.getId(), object);
-                        }
-                    });
-                } else {
-                    //delete existing user filter
-                    filters.remove(category.getId());
-                    FilterUtil.getInstance().removeFilter(category.getParamName(), category.getId(), category.getApiName());
-                }
+        viewHolder.tbCategory.setOnCheckedChangeListener((compoundButton, b) -> {
+            //update user's selected filters
+            if (b) {
+                viewHolder.tbCategory.setBackgroundColor(ContextCompat.getColor(context, R.color.colorFomono));
+                //store new user filter, but first check for dupe
+                FilterUtil.getInstance().addFilter(category.getParamName(), category.getId(), category.getApiName(), new GetCallback<Filter>() {
+                    @Override
+                    public void done(Filter object, ParseException e) {
+                        filters.put(category.getId(), object);
+                    }
+                });
+            } else {
+                viewHolder.tbCategory.setBackgroundColor(ContextCompat.getColor(context, R.color.colorFomonoSecondary));
+                //delete existing user filter
+                filters.remove(category.getId());
+                FilterUtil.getInstance().removeFilter(category.getParamName(), category.getId(), category.getApiName());
             }
         });
     }
