@@ -51,7 +51,7 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        uService = new UserService();
+        uService = UserService.getInstance();
         pUser = ParseUser.getCurrentUser();
     }
 
@@ -122,6 +122,7 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
                 uService.saveParseUser(fragmentUserProfile);
                 Toast.makeText(getActivity(), "Successfully Saved",
                         Toast.LENGTH_LONG).show();
+                uService.setUserUpdated(true);
             }
         });
 

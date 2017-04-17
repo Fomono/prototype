@@ -69,7 +69,7 @@ public class LoginUserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_user);
-        uService = new UserService();
+        uService = UserService.getInstance();
 
         btnFB = (Button) findViewById(R.id.btnFB);
         btnFomono = (Button) findViewById(R.id.btnFomono);

@@ -29,10 +29,17 @@ import java.util.Date;
 
 public class UserService {
 
-    ParseUser pUser;
+    private static UserService instance;
+    public static UserService getInstance() {
+        if (instance == null) {
+            instance = new UserService();
+        }
+        return instance;
+    }
 
-    public UserService() {
-        pUser = ParseUser.getCurrentUser();
+    boolean userUpdated;
+
+    private UserService() {
     }
 
     public String saveParseFile(Bitmap bitmap) {
@@ -42,7 +49,7 @@ public class UserService {
                 stream);
         byte[] imageBytes = stream.toByteArray();
         ParseFile file = new ParseFile("profile_picture_file", imageBytes);
-        ParseUser finalPUser = pUser;
+        ParseUser finalPUser = ParseUser.getCurrentUser();;
         file.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -157,6 +164,7 @@ public class UserService {
     }
 
     public void saveParseUser(User u){
+        ParseUser pUser = ParseUser.getCurrentUser();
         if(u.getFirstName() !=null){
             pUser.put("firstName", u.getFirstName());
         }
@@ -178,6 +186,7 @@ public class UserService {
     }
 
     public void saveParseUser(FragmentUserProfileBinding fView) {
+        ParseUser pUser = ParseUser.getCurrentUser();
         if (fView.etFirstName.getText() != null && !(fView.etFirstName.getText().toString().equals(pUser.get("firstName")))) {
             pUser.put("firstName", fView.etFirstName.getText().toString());
         }
@@ -207,5 +216,13 @@ public class UserService {
             }
         });
 
+    }
+
+    public boolean isUserUpdated() {
+        return userUpdated;
+    }
+
+    public void setUserUpdated(boolean userUpdated) {
+        this.userUpdated = userUpdated;
     }
 }
