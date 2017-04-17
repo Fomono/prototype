@@ -215,6 +215,9 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
         }
     }
 
+    public String getOrigPosterPath() {
+        return posterPath;
+    }
     public String getPosterPath() {
         if (posterPath == null) {
             posterPath = getString("poster_path");
@@ -304,6 +307,9 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
         this.title = title;
     }
 
+    public String getOrigBackdropPath() {
+        return backdropPath;
+    }
     public String getBackdropPath() {
         if (backdropPath == null) {
             backdropPath = getString("backdrop_path");

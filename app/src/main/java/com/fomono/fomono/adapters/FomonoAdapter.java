@@ -122,7 +122,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                      //   Glide.with(mContext).load(event.getLogo().getOriginal().getUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).override(200, 350).into(holder.eventMediaImage);
                      //   Glide.with(mContext).load(event.getLogo().getOriginal().getUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).override(screenWidth, screenHeight).into(holder.eventMediaImage);
                          Picasso.with(mContext).load(event.getLogo().getOriginal().getUrl()).placeholder(R.drawable.ic_fomono_big).resize(screenWidth, 0).into(holder.eventMediaImage);
-                        imageSet = 1;
+                         imageSet = 1;
                     }
                 }
             }
@@ -220,13 +220,10 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             if (business.getUrl() != null) {
                 holder.eventUrl.setBackgroundResource(R.drawable.ic_fomono_red);
-                holder.eventUrl.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Uri uri = Uri.parse(business.getUrl());
-                        Intent openLink = new Intent(Intent.ACTION_VIEW, uri);
-                        fomonoAdapterObjectListener.onOpenLink(openLink);
-                    }
+                holder.eventUrl.setOnClickListener(v -> {
+                    Uri uri = Uri.parse(business.getUrl());
+                    Intent openLink = new Intent(Intent.ACTION_VIEW, uri);
+                    fomonoAdapterObjectListener.onOpenLink(openLink);
                 });
             } else {
                 holder.eventUrl.setBackgroundResource(R.drawable.ic_fomono_grey);
@@ -262,12 +259,14 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             if(movie.getOverview() != null) { holder.eventDesc.setText(movie.getOverview());}
             else {holder.eventDesc.setVisibility(View.GONE);}
 
-            if(movie.getPosterPath() != null) {
-              //  Glide.with(mContext).load(movie.getBackdropPath()).diskCacheStrategy(DiskCacheStrategy.ALL).override(screenWidth, screenHeight).into(holder.eventMediaImage);
+            if(movie.getOrigBackdropPath() != null) {
                 Picasso.with(mContext).load(movie.getBackdropPath()).placeholder(R.drawable.ic_fomono_big).resize(screenWidth, 0).into(holder.eventMediaImage);
+            } else if(movie.getOrigPosterPath() != null) {
+                Picasso.with(mContext).load(movie.getPosterPath()).placeholder(R.drawable.ic_fomono_big).resize(screenWidth, 0).into(holder.eventMediaImage);
             } else {
                 holder.eventMediaImage.setVisibility(View.GONE);
             }
+
             //FIXME - Using distance for rating
             double ratingString = movie.getVoteAverage()/2;
             DecimalFormat numberFormat = new DecimalFormat("#.0");
@@ -299,16 +298,13 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         } else {
             holder.eventFavorited.setImageResource(R.drawable.ic_favorite_grey);
         }
-        holder.eventFavorited.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (favsUtil.isFavorited(fEvent)) {
-                    holder.eventFavorited.setImageResource(R.drawable.ic_favorite_grey);
-                    favsUtil.removeFromFavorites(fEvent);
-                } else {
-                    holder.eventFavorited.setImageResource(R.drawable.ic_favorite);
-                    favsUtil.addToFavorites(fEvent);
-                }
+        holder.eventFavorited.setOnClickListener(view -> {
+            if (favsUtil.isFavorited(fEvent)) {
+                holder.eventFavorited.setImageResource(R.drawable.ic_favorite_grey);
+                favsUtil.removeFromFavorites(fEvent);
+            } else {
+                holder.eventFavorited.setImageResource(R.drawable.ic_favorite);
+                favsUtil.addToFavorites(fEvent);
             }
         });
     }

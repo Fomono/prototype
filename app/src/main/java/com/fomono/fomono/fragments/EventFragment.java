@@ -37,28 +37,45 @@ import retrofit2.Response;
 public class EventFragment extends MainListFragment {
   //  private EventBriteClient client;
     private final static String TAG = "Event fragment";
-    int eventPage = 0;
-    String sortParameter;
+    private int eventPage = 0;
+    private String sortParameter = null;
+    private String searchParameter = null;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
+
+        searchParamDispText.setVisibility(View.GONE);
+
         InternetAlertDialogue internetAlertDialogue = new InternetAlertDialogue(mContext);
         if(internetAlertDialogue.checkForInternet()) {
-            populateEvents(eventPage++, null);
+            populateEvents(eventPage++, sortParameter, searchParameter);
         }
 
         rvList.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 if(internetAlertDialogue.checkForInternet()) {
-                    populateEvents(eventPage++, sortParameter);
+                    populateEvents(eventPage++, sortParameter, searchParameter);
                 }
             }
         });
 
+        searchParamDispText.setOnClickListener(v -> {
+            clear();
+            searchParameter = null;
+            populateEvents(eventPage++, sortParameter, searchParameter);
+            searchParamDispText.setVisibility(View.GONE);
+        });
+
         return view;
+    }
+    public void searchEventList(String query) {
+        clear();
+        searchParameter = query;
+        eventPage = 0;
+        populateEvents(eventPage++, sortParameter, searchParameter);
     }
 
     public void refreshEventList(String sortParam) {
@@ -66,10 +83,18 @@ public class EventFragment extends MainListFragment {
         clear();
 
         eventPage = 0;
-        populateEvents(eventPage++, sortParameter);
+        populateEvents(eventPage++, sortParameter, searchParameter);
     }
 
-    public void populateEvents(int page, String sortParam) {
+    public void populateEvents(int page, String sortParam, String searchQuery) {
+
+        if(searchQuery != null) {
+            searchParamDispText.setVisibility(View.VISIBLE);
+            searchParamDispText.setText(""+searchQuery+" X");
+        } else {
+            searchParamDispText.setVisibility(View.GONE);
+        }
+
         smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
         try {
             //get user filters for events
@@ -86,14 +111,15 @@ public class EventFragment extends MainListFragment {
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 String location = currentUser.getString("location");
                 int distance = currentUser.getInt("distance");
-                getEventList(page, null, location, categoriesString, distance, sortParam);
+                getEventList(page, searchQuery, location, categoriesString, distance, sortParam);
             });
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void getEventList(int page, String strQuery, String location, String categories, int distance, String sortParam) {
+    public void getEventList(int page, String strQuery, String location, String categories,
+                             int distance, String sortParam) {
 
         Map<String, String> data = new HashMap<>();
         data.put("token", getResources().getString(R.string.event_brite_user_key));
