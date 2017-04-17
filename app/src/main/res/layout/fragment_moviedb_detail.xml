@@ -37,20 +37,34 @@
             android:textSize="20dp"
             android:textStyle="bold" />
 
-        <ImageView
-            android:id="@+id/ivEventImage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/tvEventDate"
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
             android:layout_below="@id/tvEventDate"
-            app:srcCompat="@drawable/botaimage" />
+            android:id="@+id/rlEventImage"
+            android:layout_height="wrap_content">
 
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/ivEventImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                app:riv_border_color="@color/colorWhite"
+                app:riv_border_width="2dip"
+                app:riv_corner_radius="10dp"
+                app:riv_mutate_background="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true">
 
+            </com.makeramen.roundedimageview.RoundedImageView>
+        </RelativeLayout>
         <ImageButton
             android:id="@+id/ivFavoriteIcon"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_below="@id/ivEventImage"
+            android:layout_below="@id/rlEventImage"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="60dp"
             app:srcCompat="@drawable/ic_favorite_grey" />
@@ -70,7 +84,7 @@
             android:id="@+id/ivYesIcon"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_below="@id/ivEventImage"
+            android:layout_below="@id/rlEventImage"
             android:layout_marginRight="80dp"
             android:layout_toRightOf="@id/ivFavoriteIcon"
             app:srcCompat="@drawable/ic_yes" />
@@ -90,7 +104,7 @@
             android:id="@+id/ivNoIcon"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_below="@id/ivEventImage"
+            android:layout_below="@id/rlEventImage"
             android:layout_marginRight="80dp"
             android:layout_toRightOf="@id/ivYesIcon"
             app:srcCompat="@drawable/ic_no" />

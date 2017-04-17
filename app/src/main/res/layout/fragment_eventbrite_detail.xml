@@ -44,95 +44,82 @@
         </LinearLayout>
 
 
-        <ImageView
-            android:id="@+id/ivEventImage"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/llHeader"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            app:srcCompat="@drawable/botaimage" />
+        <RelativeLayout
+            android:id="@+id/rlEventImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/llHeader">
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/ivEventImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                app:riv_border_color="@color/colorWhite"
+                app:riv_border_width="2dip"
+                app:riv_corner_radius="10dp"
+                app:riv_mutate_background="true">
+
+            </com.makeramen.roundedimageview.RoundedImageView>
+        </RelativeLayout>
 
 
         <ImageButton
             android:id="@+id/ivFavoriteIcon"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_below="@id/ivEventImage"
-            android:layout_marginTop="5dp"
+            android:layout_below="@id/rlEventImage"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="60dp"
+            android:layout_marginTop="5dp"
             app:srcCompat="@drawable/ic_favorite_grey" />
 
         <TextView
             android:id="@+id/tvFavoriteLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/ivFavoriteIcon"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
             android:layout_below="@id/ivFavoriteIcon"
             android:text="Favorite"
             android:textSize="10dp"
             android:textStyle="bold" />
 
 
-        <ImageView
-            android:id="@+id/ivYesIcon"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_below="@id/ivEventImage"
-            android:layout_marginRight="80dp"
-            android:layout_toRightOf="@id/ivFavoriteIcon"
-            app:srcCompat="@drawable/ic_yes" />
 
-        <TextView
-            android:id="@+id/tvYesLabel"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/ivYesIcon"
-            android:layout_below="@id/ivYesIcon"
-            android:text="Interested/Going"
-            android:textSize="10dp"
-            android:textStyle="bold" />
-
-
-        <ImageView
-            android:id="@+id/ivNoIcon"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_below="@id/ivEventImage"
-            android:layout_marginRight="80dp"
-            android:layout_toRightOf="@id/ivYesIcon"
-            app:srcCompat="@drawable/ic_no" />
-
-        <TextView
-            android:id="@+id/tvNoLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/ivNoIcon"
-            android:layout_below="@id/ivNoIcon"
-            android:text="Not Interested"
-            android:textSize="10dp"
-            android:textStyle="bold" />
-
-
-        <TextView
+        <com.fomono.fomono.activities.ExpandableTextView
             android:id="@+id/tvDescription"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/tvFavoriteLabel"
+            android:layout_marginBottom="15dp"
             android:layout_marginTop="15dp"
             android:text='@{event.description.text}'
-            android:textSize="12dp" />
+            android:textColor="@color/colorBlack"
+            android:textSize="13sp" />
 
+
+        <View
+            android:id="@+id/spView01"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_below="@id/tvDescription"
+            android:layout_marginBottom="15dp"
+            android:background="@color/veryLightGrey" />
 
         <ImageView
             android:id="@+id/ivClockIcon"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/tvDescription"
-            android:layout_marginTop="30dp"
+            android:layout_below="@id/spView01"
             app:srcCompat="@drawable/ic_clock" />
 
         <TextView
@@ -140,11 +127,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/ivClockIcon"
-            android:layout_below="@id/tvDescription"
+            android:layout_below="@id/spView01"
             android:layout_marginRight="5dp"
             android:layout_toRightOf="@id/ivClockIcon"
             android:text='@{event.start.local}'
-            android:textSize="10dp" />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/tvClockCalendar"
@@ -156,13 +143,13 @@
             android:clickable="true"
             android:text="ADD TO CALENDAR"
             android:textColor="@color/twitterBlue"
-            android:textSize="10dp" />
+            android:textSize="13sp" />
 
 
         <ImageView
             android:id="@+id/ivLocationIcon"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/ivClockIcon"
             android:layout_marginTop="15dp"
@@ -175,8 +162,17 @@
             android:layout_alignTop="@id/ivLocationIcon"
             android:layout_below="@id/ivClockIcon"
             android:layout_toRightOf="@id/ivLocationIcon"
-            android:text='@{event.venue.name + "," + event.venue.address.address1 + ", "  + event.venue.address.city + ", " + event.venue.address.country + ", " + event.venue.address.postalCode}'
-            android:textSize="10dp" />
+            android:text='@{event.venue.name + ": " + event.venue.address.address1 + " "  + event.venue.address.city + " " + event.venue.address.country + " " + event.venue.address.postalCode}'
+            android:textSize="13sp" />
+
+
+        <View
+            android:id="@+id/spView02"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_below="@id/tvLocation"
+            android:layout_marginTop="15dp"
+            android:background="@color/veryLightGrey" />
 
 
         <TextView
@@ -184,11 +180,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/ivLocationIcon"
+            android:layout_below="@id/spView02"
             android:layout_marginTop="20dp"
             android:text="Go to the Event Site: "
             android:textColor="@color/black"
-            android:textSize="10dp" />
+            android:textSize="13sp" />
 
 
         <TextView
@@ -196,77 +192,76 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/tvSiteLinkLabel"
-            android:layout_below="@id/ivLocationIcon"
+            android:layout_below="@id/spView02"
             android:layout_toRightOf="@id/tvSiteLinkLabel"
             android:clickable="true"
             android:text="CLICK HERE"
             android:textColor="@color/twitterBlue"
-            android:textSize="10dp" />
+            android:textSize="13sp" />
 
-
-        <TextView
-            android:id="@+id/tvShareLabel"
+        <LinearLayout
+            android:id="@+id/llShare"
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/tvSiteLink"
-            android:layout_marginTop="20dp"
-            android:text="SHARE: "
-            android:textSize="10dp" />
+            android:layout_below="@id/tvSiteLinkLabel">
+
+            <TextView
+                android:id="@+id/tvShareLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="20dp"
+                android:text="SHARE: "
+                android:textSize="14sp" />
 
 
-        <ImageView
-            android:id="@+id/ivFBShareIcon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignTop="@id/tvSiteLink"
-            android:layout_below="@id/tvSiteLink"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="20dp"
-            android:layout_toRightOf="@id/tvShareLabel"
-            app:srcCompat="@drawable/ic_facebook" />
+            <ImageView
+                android:id="@+id/ivFBShareIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="20dp"
+                app:srcCompat="@drawable/ic_facebook" />
 
 
-        <ImageView
-            android:id="@+id/ivTwitterShareIcon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignTop="@id/ivFBShareIcon"
-            android:layout_below="@id/tvSiteLink"
-            android:layout_marginRight="15dp"
-            android:layout_toRightOf="@id/ivFBShareIcon"
-
-            app:srcCompat="@drawable/ic_twitter" />
+            <ImageView
+                android:id="@+id/ivTwitterShareIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="20dp"
+                app:srcCompat="@drawable/ic_twitter" />
 
 
-        <ImageView
-            android:id="@+id/ivEmailShareIcon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignTop="@id/ivFBShareIcon"
-            android:layout_below="@id/tvSiteLink"
-            android:layout_marginRight="15dp"
-            android:layout_toRightOf="@id/ivTwitterShareIcon"
-            app:srcCompat="@drawable/ic_email" />
+            <ImageView
+                android:id="@+id/ivEmailShareIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="20dp"
+                app:srcCompat="@drawable/ic_email" />
 
-        <ImageView
-            android:id="@+id/ivMessageShareIcon"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_alignTop="@id/ivFBShareIcon"
-            android:layout_below="@id/tvSiteLink"
-            android:layout_marginRight="15dp"
-            android:layout_toRightOf="@id/ivEmailShareIcon"
-            app:srcCompat="@drawable/ic_whatsapp" />
-
+            <ImageView
+                android:id="@+id/ivMessageShareIcon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="20dp"
+                app:srcCompat="@drawable/ic_whatsapp" />
+        </LinearLayout>
 
         <com.google.android.gms.maps.MapView
             android:id="@+id/mapEBView"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_below="@id/ivFBShareIcon"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="30dp"/>
+            android:layout_below="@id/llShare"
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="15dp" />
 
 
     </RelativeLayout>
