@@ -46,6 +46,7 @@ public class FomonoFilterActivity extends AppCompatActivity implements FomonoFil
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.title_activity_fomono_filter));
         //turn on back button
+        getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.ic_arrow_back));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
