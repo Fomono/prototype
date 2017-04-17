@@ -16,30 +16,35 @@ The following **required** functionality is completed:
 Home Page:
 * [X] User can see list of events, restaurants and movies. The list will show title, desc, media Image, etc
 * [X] User can scroll through events, restaurants, and movies using view group fragment implementation on home page
-* [X] User can make any item as favorite and it will show up under the favorite tab on the main page. The favorites are saved and loaded everytime user comes back to the app
+* [X] User can make any item as favorite and it will show up under the favorite tab on the main page. The favorites are saved and loaded every time user comes back to the app
 * [X] User can click on the Fomono icon and get directed to
-    * [X]	- eventbrite website/app for events
-    * [X]	- yelp website/app for restaurants, cafes, etc
-    * [X]	- the movie trailer for movies
+    * [X] eventbrite website/app for events
+    * [X] yelp website/app for restaurants, cafes, etc
+    * [X] the movie trailer for movies
 * [X] User can click anywhere on the list item and see more information in the detail page 
 * [X] User can get the results sorted by 
-    * [X]	-  best_match, date, distance for events
-    * [X]	-  best_match, distance, rating_count for restaurants
+    * [X] best_match, date, distance for events
+    * [X] best_match, distance, rating_count for restaurants
 * [X] User can get the movie lists which are "Playing now", "Popular" or "Top Rated"
 * [X] User can see details of each event in a fragment. Details include title, pic, data/time, price, location, description
 * [X] User can scroll endlessly on home page for more events
 
 Event Detail:
 * [X] When a particular view(Event,Eat,movie) is selected from the home page, user is taken to the detail page.
-* [X] The detail page’s data fields vary based on the type of the view selected.
-	* [X] For Events:  Event description, Event Date, Event Location etc
-   * [X] For Eats: Restaurant Rating, Location, Hours, Phone Number etc.
-   * [X] For Movies: Movie synopsis, Date in theatres, Genre etc.
+* [X] The detail page's data fields vary based on the type of the view selected.
+    * [X] For Events:  Event description, Event Date, Event Location etc
+    * [X] For Eats: Restaurant Rating, Location, Hours, Phone Number etc.
+    * [X] For Movies: Movie synopsis, Date in theatres, Genre etc.
 * [X] User can add an event to their calendar.
 
 Filters:
 * [X] User can configure filter criteria on settings page. filters will be broad category (tech, music, sports, etc)
 * [X] User should be able to set location
+
+Notifications:
+* [X] User can see push notifications sent to their device
+* [X] User can click a notification to go to detailed event/restaurant/movie
+
 
 The following **optional** features are implemented:
 
@@ -47,26 +52,26 @@ Login Page:
 * [X] User can login using Facebook
 * [X] User is asked permission to access his/her Facebook account to login.
 * [X] User can sign-up by registering to an account and setting up his/her own credentials on the application.
-      * [X] Name and Email are required fields.
- * [X] User can login by using the credentials setup.
-*  [X] User has an option to skip the sign-in and login as a guest
-      * [X] This user's preferences are saved as anonymous and subsequent access from the same device would pull that info.
-* [X] User’s session is preserved in the subsequent access to the application if they did not sign-out.
+    * [X] Name and Email are required fields.
+* [X] User can login by using the credentials setup.
+* [X] User has an option to skip the sign-in and login as a guest
+    * [X] This user's preferences are saved as anonymous and subsequent access from the same device would pull that info.
+* [X] User's session is preserved in the subsequent access to the application if they did not sign-out.
 
 User Profile Page:
 * [X] When a user is logged in through Facebook,  the user information like Name, email and Profile image and captured and saved into the application.
 * [X] User can eventually add/Update that information from the profile page
 * [X] User can save/cancel the request to  update the profile information
 * [X] User can upload a profile picture  by selecting one from the Photo Gallery or Google Photos.  
-	* [ ] User is asked permission to access the gallery.
-* [X] User can access the device’s camera from the profile page, click a picture and upload it.
-   * [X] User is asked permission to access the camera.
-   	* [ ] If a permission is granted the first time, subsequent requests should directly pull the camera
+    * [ ] User is asked permission to access the gallery.
+* [X] User can access the device's camera from the profile page, click a picture and upload it.
+    * [X] User is asked permission to access the camera.
+    * [ ] If a permission is granted the first time, subsequent requests should directly pull the camera
 
 Events Detail Page:
 * [X] For Events/Eats & Movies, User can share the events using Twitter, Mail & Messaging.
 * [X] For Eats/Events, User can view the location on a Map view.
-	   * [X] For the first time, user is asked permission to access their location information. If they deny, subsequent views will no               longer prompt the request for permission.
+    * [X] For the first time, user is asked permission to access their location information. If they deny, subsequent views will no longer prompt the request for permission.
 * [X] Clicking on map pin would show details of the event. Show directions when the the link on the map is clicked on. 
 * [X] User can mark an event as Favorite which will shows up in the Favorites View Pager tab.
 * [X] For Eats, user can view additional pictures in a horizontal scrollable view. 
@@ -75,40 +80,39 @@ Events Detail Page:
 * [ ] On movie details page, user can click to see trailer video
 
 Filters Page:
-* [X] User can search for specific events by query string, and filter them on home page
+* [ ] Filters are sorted alphabetically
+* [X] Filters are saved automatically everytime a change is made
+* [X] Filters are applied automatically when user returns home
 
 Home Page:
-* [ ] On home page, user can save events to favorites list
+* [X] User can search for specific events by query string
+* [X] On home page, user can save events to favorites list
 * [ ] On home page, user can choose to see only free or only paid events
 * [ ] On home page, user can see the list of restaurants which are "open_now"
 * [ ] On home page, user should be able to specify a date range for search events
 
 Notifications:
-* [X] User should be able to turn on/off notifications
-* [X] User can click a notification to go to detailed event/restaurant/movie
+* [ ] User should be able to turn on/off notifications
 
 
 The following **bonus** features are implemented:
 
 * [ ] User can see past event images/videos on the event details page from Facebook/Twitter/Instagram
 
-The following **additional** features are implemented:
-
-* [ ] Anything else...?
 
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
 
-Sprint 1 GIFs:
-1. http://i.imgur.com/vklmmJQ.gif
-2. http://i.imgur.com/qQpgA6L.gif
-3. http://i.imgur.com/gTk5kaL.gif
-
 Sprint 2 GIFs:
 1.
 2.
 3.
+
+Sprint 1 GIFs:
+1. http://i.imgur.com/vklmmJQ.gif
+2. http://i.imgur.com/qQpgA6L.gif
+3. http://i.imgur.com/gTk5kaL.gif
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
