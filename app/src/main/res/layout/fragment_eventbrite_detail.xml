@@ -93,7 +93,7 @@
 
 
 
-        <com.fomono.fomono.activities.ExpandableTextView
+        <com.fomono.fomono.supportclasses.ExpandableTextView
             android:id="@+id/tvDescription"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

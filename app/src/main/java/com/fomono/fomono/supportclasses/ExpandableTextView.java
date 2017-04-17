@@ -1,4 +1,4 @@
-package com.fomono.fomono.activities;
+package com.fomono.fomono.supportclasses;
 
 import android.content.Context;
 import android.content.res.TypedArray;
