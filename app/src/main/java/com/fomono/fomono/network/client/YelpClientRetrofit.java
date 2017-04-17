@@ -8,6 +8,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.fomono.fomono.models.eats.Business;
+import com.fomono.fomono.models.eats.BusinessDetail;
 import com.fomono.fomono.models.eats.YelpResponse;
 import com.fomono.fomono.models.eats.YelpTokenClass;
 import com.google.gson.Gson;
@@ -95,6 +96,12 @@ public class YelpClientRetrofit {
         })
         @GET("/v3/businesses/{business_id}")
         Call<Business> getYelpBusinessById(@Path("business_id") String id);
+
+        @Headers({
+                "Authorization: Bearer EHbNYMHOKBBlufnp61Eb2mO4gJ-Bmt4C8NWcGKyYDdVW5wTcEX5k_yUDyaTOTw7NvJhn-ws0OCcsEEXSQJixT4Wvf4JuYiF9qlpycTmsrBVk0URaftrXzKAKplvkWHYx",
+        })
+        @GET("/v3/businesses/{business_id}")
+        Call<BusinessDetail> getYelpBusinessDetailById(@Path("business_id") String id);
     }
 
 

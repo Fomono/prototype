@@ -1,32 +1,42 @@
 package com.fomono.fomono.fragments;
 
 import android.Manifest;
-import android.content.ContentResolver;
-import android.content.ContentValues;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
-import android.location.Geocoder;
+import android.location.Criteria;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.CalendarContract;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.fomono.fomono.R;
 import com.fomono.fomono.databinding.FragmentYelpDetailBinding;
 import com.fomono.fomono.models.eats.Business;
+import com.fomono.fomono.models.eats.BusinessDetail;
+import com.fomono.fomono.models.eats.Coordinates;
+import com.fomono.fomono.models.eats.Location;
+import com.fomono.fomono.models.eats.Open;
+import com.fomono.fomono.network.client.YelpClientRetrofit;
 import com.fomono.fomono.utils.DateUtils;
 import com.fomono.fomono.utils.FavoritesUtil;
+import com.fomono.fomono.utils.RoundedTransformation;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -35,28 +45,35 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
 
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.R.attr.x;
+import static android.content.ContentValues.TAG;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by Saranu on 4/6/17.
  */
 
 public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
-    FragmentYelpDetailBinding fragmentYelpDetailBinding;
+    FragmentYelpDetailBinding fragmentBinding;
 
     private GoogleMap googleMap;
     MapView mMapView;
+    YelpClientRetrofit yelpClientRetrofit;
     Business business;
+    ProgressDialog pd;
     ImageButton ibFavorite;
     FavoritesUtil favsUtil;
+    public int screenWidthDetail;
+    LinearLayout llGallery;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,35 +93,50 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        populateDetail(business);
 
     }
 
-
     //  @BindingAdapter({"imageUrl"})
-    private static void setImageUrl(ImageView view, String imageUrl) {
-        Glide.with(view.getContext()).load(imageUrl).placeholder(R.drawable.botaimage).
-                error(R.drawable.botaimage).into(view);
+    private static void setImageUrl(ImageView view, String imageUrl, int screenWidthDetail) {
+        //Glide.with(view.getContext()).load(imageUrl).placeholder(R.drawable.botaimage).
+        //      error(R.drawable.botaimage).into(view);
+        Picasso.with(view.getContext()).load(imageUrl).transform(new RoundedTransformation(6, 3)).
+                placeholder(R.drawable.ic_fomono_big).
+                resize(screenWidthDetail, 0).into(view);
+
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
 
-        fragmentYelpDetailBinding = DataBindingUtil.inflate(
+        fragmentBinding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_yelp_detail, parent, false);
-        View view = fragmentYelpDetailBinding.getRoot();
-        ButterKnife.bind(this,view);
 
-        fragmentYelpDetailBinding.tvSiteLink.setClickable(true);
-        fragmentYelpDetailBinding.tvSiteLink.setMovementMethod(LinkMovementMethod.getInstance());
-        String text = "<a href=" + business.getUrl() +  ">" + "CLICK HERE" + "</a>";
-        fragmentYelpDetailBinding.tvSiteLink.setText(Html.fromHtml(text));
+        View view = fragmentBinding.getRoot();
+        ButterKnife.bind(this, view);
+
+        fragmentBinding.tvSiteLink.setClickable(true);
+        fragmentBinding.tvSiteLink.setMovementMethod(LinkMovementMethod.getInstance());
+        String text = "<a href=" + business.getUrl() + ">" + "CLICK HERE" + "</a>";
+        fragmentBinding.tvSiteLink.setText(Html.fromHtml(text));
+
+        fragmentBinding.tvEventDate.setText("");
+        fragmentBinding.tvLocation.setText(getLocationAddress());
+        fragmentBinding.rbMovierating.setRating(Double.valueOf(business.getRating()).floatValue());
+        fragmentBinding.tvRatingText.setText(Double.valueOf(business.getRating()).toString());
+
+        DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
+        int pxWidth = displayMetrics.widthPixels;
+        screenWidthDetail = (int) (pxWidth / displayMetrics.density);
 
 
-        fragmentYelpDetailBinding.tvEventDate.setText(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
+        Log.d(TAG, "width is " + screenWidthDetail);
 
-        setImageUrl(fragmentYelpDetailBinding.ivEventImage, business.getImageUrl());
+        setImageUrl(fragmentBinding.ivEventImage, business.getImageUrl(), screenWidthDetail);
+
+        populateDetail();
+        getDetailsFromAPI();
 
         mMapView = (MapView) view.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
@@ -117,72 +149,34 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
             e.printStackTrace();
         }
 
-        mMapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap mMap) {
-                googleMap = mMap;
-
-                // For showing a move to my location button
-                if (ActivityCompat.checkSelfPermission(getContext(),
-                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                        && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    return;
-                }else {
-                    googleMap.setMyLocationEnabled(true);
-                }
-                LatLng latlng;
-                // For dropping a marker at a point on the Map
-
-                latlng = new LatLng(business.getCoordinates().getLatitude(), business.getCoordinates().getLongitude());
-                googleMap.addMarker(new MarkerOptions().position(latlng).title(business.getName()).snippet("Marker Desc"));
-                // snippet(event.getVenue().getAddress().getAddress1() + event.getVenue().getAddress().getCity() +
-                //   event.getVenue().getAddress().getCountry()  ));
+        populateAddressMap();
 
 
-                // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(latlng).zoom(12).build();
-                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-            }
-        });
-
-
-        fragmentYelpDetailBinding.tvClockCalendar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               // addToCalendar(movie.getReleaseDate(), movie.getReleaseDate());
-            }
-        });
-
-
-        fragmentYelpDetailBinding.ivMessageShareIcon.setOnClickListener(new View.OnClickListener() {
+        fragmentBinding.ivMessageShareIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent sendIntent = new Intent(Intent.ACTION_VIEW);
                 sendIntent.setData(Uri.parse("sms:"));
-                sendIntent.putExtra(business.getName(), x);
+                sendIntent.putExtra(business.getUrl(), x);
                 startActivity(sendIntent);
 
             }
         });
 
-        fragmentYelpDetailBinding.ivTwitterShareIcon.setOnClickListener(new View.OnClickListener() {
+        fragmentBinding.ivTwitterShareIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                try
-                {
+                try {
                     // Check if the Twitter app is installed on the phone.
                     getActivity().getPackageManager().getPackageInfo("com.twitter.android", 0);
                     Intent intent = new Intent(Intent.ACTION_SEND);
                     intent.setClassName("com.twitter.android", "com.twitter.android.composer.ComposerActivity");
                     intent.setType("text/plain");
-                    intent.putExtra(Intent.EXTRA_TEXT, business.getName());
+                    intent.putExtra(Intent.EXTRA_TEXT, business.getUrl());
                     startActivity(intent);
 
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     String url = "http://www.twitter.com/intent/tweet?url=YOURURL&text=YOURTEXT";
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     i.setData(Uri.parse(url));
@@ -192,21 +186,21 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
             }
         });
 
-        fragmentYelpDetailBinding.ivEmailShareIcon.setOnClickListener(new View.OnClickListener() {
+        fragmentBinding.ivEmailShareIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("plain/text");
-                intent.putExtra(Intent.EXTRA_EMAIL, new String[] { "some@email.address" });
-                intent.putExtra(Intent.EXTRA_SUBJECT, business.getName());
-                intent.putExtra(Intent.EXTRA_TEXT, business.getName());
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"some@email.address"});
+                intent.putExtra(Intent.EXTRA_SUBJECT, business.getName().toString());
+                intent.putExtra(Intent.EXTRA_TEXT, business.getUrl());
                 if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                     startActivity(Intent.createChooser(intent, ""));
                 }
             }
         });
 
-        ibFavorite = fragmentYelpDetailBinding.ivFavoriteIcon;
+        ibFavorite = fragmentBinding.ivFavoriteIcon;
         if (favsUtil.isFavorited(business)) {
             ibFavorite.setImageResource(R.drawable.ic_favorite);
         }
@@ -223,61 +217,156 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
             }
         });
 
-        return fragmentYelpDetailBinding.getRoot();
-    }
-
-
-    protected void populateDetail(Business b) {
-        fragmentYelpDetailBinding.setBusiness(b);
+        return fragmentBinding.getRoot();
 
     }
 
-    public void addToCalendar(String startDate, String endDate) {
-        long calID = 3;
-        long startMillis = 0;
-        long endMillis = 0;
-        startMillis = DateUtils.convertUTCtoMilliSeconds(startDate);
-        endMillis = DateUtils.convertUTCtoMilliSeconds(endDate);
+    private View insertPhoto(String url) {
+        LinearLayout layout = new LinearLayout(getApplicationContext());
+        layout.setLayoutParams(new ViewGroup.LayoutParams(400, 300));
+        layout.setGravity(Gravity.CENTER);
 
+        ImageView imageView = new ImageView(getApplicationContext());
+        imageView.setLayoutParams(new ViewGroup.LayoutParams(400, 300));
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-        ContentResolver cr = getActivity().getContentResolver();
-        ContentValues values = new ContentValues();
-        values.put(CalendarContract.Events.DTSTART, startMillis);
-        values.put(CalendarContract.Events.DTEND, endMillis);
-        values.put(CalendarContract.Events.TITLE, business.getName());
-        values.put(CalendarContract.Events.DESCRIPTION, business.getName());
-        values.put(CalendarContract.Events.CALENDAR_ID, calID);
-        values.put(CalendarContract.Events.EVENT_TIMEZONE, "UTC");
-        // TODO: Consider calling
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
-            long eventID = Long.parseLong(uri.getLastPathSegment());
-            Toast.makeText(getActivity(), "Added to Calendar",
-                    Toast.LENGTH_LONG).show();
+        setImageUrl(imageView,url,screenWidthDetail);
 
-            return;
-        }
+        layout.addView(imageView);
+        return layout;
     }
 
-    public LatLng getLocationFromAddress(String strAddress) {
 
-        Geocoder coder = new Geocoder(getContext());
-        try {
-            ArrayList<android.location.Address> adresses = (ArrayList<android.location.Address>) coder.getFromLocationName(strAddress, 50);
-            for (android.location.Address add : adresses) {
-                if (add.getCountryCode().equals("US") || add.getCountryCode().equals("USA") ) {//Controls to ensure it is right address such as country etc.
-                    double longitude = add.getLongitude();
-                    double latitude = add.getLatitude();
-                    return new LatLng(latitude,longitude);
+
+    private void getDetailsFromAPI() {
+
+        yelpClientRetrofit = YelpClientRetrofit.getNewInstance().getNewInstance();
+        Call<BusinessDetail> call = yelpClientRetrofit.YelpRetrofitClientFactory().getYelpBusinessDetailById
+                (business.getId());
+
+        pd = new ProgressDialog(getActivity());
+        pd.setTitle("Loading...");
+        pd.setMessage("Please wait.");
+        pd.setCancelable(false);
+        pd.show();
+
+        call.enqueue(new Callback<BusinessDetail>() {
+            @Override
+            public void onResponse(Call<BusinessDetail> call, Response<BusinessDetail> response) {
+                pd.dismiss();
+                BusinessDetail bDetail = response.body();
+                if (bDetail == null) {
+                    Log.d(TAG, "NO MATCH ");
+                } else {
+                    business.setBusinessDetail(bDetail);
+                    populateDetail();
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return  null;
+
+            @Override
+            public void onFailure(Call<BusinessDetail> call, Throwable t) {
+                pd.dismiss();
+                Log.d(TAG, "REQUEST Failed " + t.getMessage());
+            }
+        });
     }
+
+    private void populateDetail() {
+        fragmentBinding.setBusiness(business);
+        if(business.getBusinessDetail() !=null) {
+            fragmentBinding.tvHours.setText(createHoursOpenString());
+        }
+        if(business.getBusinessDetail() !=null && business.getBusinessDetail().getPhotos() !=null) {
+            for (String url : business.getBusinessDetail().getPhotos()) {
+                fragmentBinding.llGallery.addView(insertPhoto(url));
+            }
+        }else{
+           // fragmentBinding.hsvGallery.setVisibility(View.GONE);
+        }
+
+    }
+
+
+    private String getLocationAddress() {
+        String address = "";
+        Location l = business.getLocation();
+        address = l.getAddress1() + ", " + l.getCity() + ", " + l.getLocationState()
+                + ", " + l.getCountry() + ", " + l.getZipCode();
+        return address;
+    }
+
+    private String createHoursOpenString(){
+       String hoursOpen="";
+       List<Open> openList = business.getBusinessDetail().getHours().get(0).getOpen();
+       for(Open open : openList ) {
+           String startDate = DateUtils.convertMilitarytoStandard(open.getStart());
+           String endDate  =DateUtils.convertMilitarytoStandard(open.getEnd());
+           if (open.getDay() == 0) {
+               hoursOpen += "Monday: " + startDate + " - " + endDate + "\n";
+           } else if (open.getDay() == 1) {
+               hoursOpen += "Tuesday: " + startDate + " - " + endDate + "\n";;
+           } else if (open.getDay() == 2) {
+               hoursOpen += "Wednesday: " + startDate + " - " + endDate + "\n";;
+           } else if (open.getDay() == 3) {
+               hoursOpen += "Thursday: " + startDate + " - " + endDate + "\n";;
+           } else if (open.getDay() == 4) {
+               hoursOpen += "Friday: " + startDate + " - " + endDate+ "\n";;
+           } else if (open.getDay() == 5) {
+               hoursOpen += "Saturday: " + startDate + " - " + endDate+ "\n";;
+           } else if (open.getDay() == 6) {
+               hoursOpen += "Sunday: " + startDate + " - " + endDate+ "\n";;
+           }
+       }
+       return hoursOpen;
+    }
+
+    protected void populateAddressMap() {
+        //reset fragment's databinding
+        mMapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap mMap) {
+                googleMap = mMap;
+
+                LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+
+                Criteria locationCritera = new Criteria();
+                locationCritera.setAccuracy(Criteria.ACCURACY_COARSE);
+                locationCritera.setAltitudeRequired(false);
+                locationCritera.setBearingRequired(false);
+                locationCritera.setCostAllowed(true);
+                locationCritera.setPowerRequirement(Criteria.NO_REQUIREMENT);
+
+                // For showing a move to my location button
+                if (ActivityCompat.checkSelfPermission(getContext(),
+                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getContext(), "Please turn on your location", Toast.LENGTH_LONG).show();
+                    Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    getContext().startActivity(myIntent);
+                } else {
+                    googleMap.setMyLocationEnabled(true);
+                }
+                Coordinates coordinates;
+                LatLng ltlg;
+                // For dropping a marker at a point on the Map
+                if (business.getCoordinates() != null) {
+                    coordinates = business.getCoordinates();
+                    ltlg = new LatLng(coordinates.getLatitude(), coordinates.getLongitude());
+                    googleMap.addMarker(new MarkerOptions().position(ltlg).title(getLocationAddress()));
+
+                    // For zooming automatically to the location of the marker
+                    CameraPosition cameraPosition = new CameraPosition.Builder().target(ltlg).zoom(11).build();
+                    googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                } else {
+                    coordinates = null;
+                    ltlg = null;
+                }
+
+            }
+        });
+    }
+
+
 
     @Override
     public void onResume() {
