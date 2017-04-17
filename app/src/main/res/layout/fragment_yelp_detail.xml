@@ -96,6 +96,7 @@
             android:layout_below="@id/ivFavoriteIcon"
             android:layout_marginTop="15dp"
             android:layout_marginRight="5dp"
+            android:progressTint="#ebda57"
             android:theme="@style/RatingBar" />
 
         <TextView
