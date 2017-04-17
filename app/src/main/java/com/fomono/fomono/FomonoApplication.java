@@ -1,7 +1,6 @@
 package com.fomono.fomono;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.facebook.FacebookSdk;
 import com.fomono.fomono.models.db.Favorite;
@@ -20,11 +19,7 @@ import com.fomono.fomono.models.events.events.Original;
 import com.fomono.fomono.models.events.events.Start;
 import com.fomono.fomono.models.events.events.Venue;
 import com.fomono.fomono.models.movies.Movie;
-import com.fomono.fomono.utils.FavoritesUtil;
-import com.parse.LogInCallback;
 import com.parse.Parse;
-import com.parse.ParseAnonymousUtils;
-import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
@@ -99,23 +94,23 @@ public class FomonoApplication extends Application {
         ParseInstallation.getCurrentInstallation().saveInBackground();
 
         ParseUser.enableAutomaticUser();
-        ParseAnonymousUtils.logIn(new LogInCallback() {
-            @Override
-            public void done(ParseUser user, ParseException e) {
-                if (e != null) {
-                    Log.d("DEBUG", "Anonymous login failed.");
-                } else {
-                    Log.d("DEBUG", "Anonymous user logged in.");
-                    try {
-                        //update user from server
-                        user.fetch();
-                        FavoritesUtil.getInstance().initialize(ParseUser.getCurrentUser());
-                    } catch (ParseException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-            }
-        });
+//        ParseAnonymousUtils.logIn(new LogInCallback() {
+//            @Override
+//            public void done(ParseUser user, ParseException e) {
+//                if (e != null) {
+//                    Log.d("DEBUG", "Anonymous login failed.");
+//                } else {
+//                    Log.d("DEBUG", "Anonymous user logged in.");
+//                    try {
+//                        //update user from server
+//                        user.fetch();
+//                        FavoritesUtil.getInstance().initialize(ParseUser.getCurrentUser());
+//                    } catch (ParseException e1) {
+//                        e1.printStackTrace();
+//                    }
+//                }
+//            }
+//        });
 
     }
 }
