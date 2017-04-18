@@ -105,9 +105,11 @@ The following **bonus** features are implemented:
 Here's a walkthrough of implemented user stories:
 
 Sprint 2 GIFs:
-1.
-2.
-3.
+1. http://i.imgur.com/dcGdgRW.mp4
+2. http://i.imgur.com/m9HH960.mp4
+3. http://i.imgur.com/Or8Pds6.gif
+4. http://i.imgur.com/QFhSQGU.mp4
+5. http://i.imgur.com/W2roEKw.mp4
 
 Sprint 1 GIFs:
 1. http://i.imgur.com/vklmmJQ.gif
