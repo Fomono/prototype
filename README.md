@@ -110,6 +110,7 @@ Sprint 2 GIFs:
 3. http://i.imgur.com/Or8Pds6.gif
 4. http://i.imgur.com/QFhSQGU.mp4
 5. http://i.imgur.com/W2roEKw.mp4
+6. https://drive.google.com/open?id=0B57fdisjAQb3QUFkMTlEbk10cVU
 
 Sprint 1 GIFs:
 1. http://i.imgur.com/vklmmJQ.gif
