@@ -3,6 +3,7 @@ package com.fomono.fomono.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -22,6 +23,7 @@ public class UserProfileActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.title_activity_fomono_detail));
         //turn on back button
+        getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(UserProfileActivity.this, R.drawable.ic_arrow_back));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         UserProfileFragment userProfileFragment =

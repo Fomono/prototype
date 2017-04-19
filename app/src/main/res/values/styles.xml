@@ -12,8 +12,7 @@
         <item name="android:textStyle">italic</item>
     </style>
     <style name="RatingBar" parent="Theme.AppCompat">
-        <item name="colorControlNormal">@color/colorFomono</item>
-        <item name="colorControlActivated">@color/grey</item>
+        <item name="colorControlNormal">@color/grey</item>
     </style>
 
     <!-- Define your custom dialog theme here extending from base -->

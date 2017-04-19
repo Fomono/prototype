@@ -61,7 +61,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.R.attr.x;
 import static android.content.ContentValues.TAG;
 
 /**
@@ -174,9 +173,9 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
 
         DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
         int pxWidth = displayMetrics.widthPixels;
-        screenWidthDetail = (int)(pxWidth / displayMetrics.density);
+        screenWidthDetail = (int) (pxWidth / displayMetrics.density);
 
-        Log.d(TAG, "width is "+screenWidthDetail);
+        Log.d(TAG, "width is " + screenWidthDetail);
 
         Logo logo = event.getLogo();
         if (logo != null) {
@@ -212,11 +211,16 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
         fragmentEventbriteDetailBinding.ivMessageShareIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent sendIntent = new Intent(Intent.ACTION_VIEW);
-                sendIntent.setData(Uri.parse("sms:"));
-                sendIntent.putExtra(event.getUrl(), x);
-                startActivity(sendIntent);
-
+                Uri smsUri = Uri.parse("tel:" + "");
+                Intent intent = new Intent(Intent.ACTION_VIEW, smsUri);
+                intent.putExtra("address", "");
+                if (event.getName() != null && event.getUrl() != null) {
+                    intent.putExtra("sms_body", event.getName().getText() + "\n" + event.getUrl());
+                }
+                intent.setType("vnd.android-dir/mms-sms");//here setType will set the previous data null.
+                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(intent);
+                }
             }
         });
 
@@ -230,11 +234,17 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
                     Intent intent = new Intent(Intent.ACTION_SEND);
                     intent.setClassName("com.twitter.android", "com.twitter.android.composer.ComposerActivity");
                     intent.setType("text/plain");
-                    intent.putExtra(Intent.EXTRA_TEXT, event.getUrl());
+                    if (event.getUrl() != null) {
+                        intent.putExtra(Intent.EXTRA_TEXT, event.getUrl());
+                    }
                     startActivity(intent);
 
                 } catch (Exception e) {
-                    String url = "http://www.twitter.com/intent/tweet?url=YOURURL&text=YOURTEXT";
+                    String url = "";
+                    if (event.getUrl() != null) {
+                        url = "http://www.twitter.com/intent/tweet?url="
+                                + event.getUrl() + "&text=" + event.getName().getText();
+                    }
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     i.setData(Uri.parse(url));
                     startActivity(i);
@@ -252,7 +262,9 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
                 if (event.getName() != null) {
                     intent.putExtra(Intent.EXTRA_SUBJECT, event.getName().getText());
                 }
-                intent.putExtra(Intent.EXTRA_TEXT, event.getUrl());
+                if (event.getUrl() != null) {
+                    intent.putExtra(Intent.EXTRA_TEXT, event.getUrl());
+                }
                 if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                     startActivity(Intent.createChooser(intent, ""));
                 }

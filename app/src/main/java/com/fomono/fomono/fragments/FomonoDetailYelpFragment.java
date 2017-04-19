@@ -56,7 +56,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.R.attr.x;
 import static android.content.ContentValues.TAG;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -154,14 +153,20 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
         populateAddressMap();
 
 
+
         fragmentBinding.ivMessageShareIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent sendIntent = new Intent(Intent.ACTION_VIEW);
-                sendIntent.setData(Uri.parse("sms:"));
-                sendIntent.putExtra(business.getUrl(), x);
-                startActivity(sendIntent);
-
+                Uri smsUri = Uri.parse("tel:" + "");
+                Intent intent = new Intent(Intent.ACTION_VIEW, smsUri);
+                intent.putExtra("address", "");
+                if (business.getName() != null && business.getUrl() != null) {
+                    intent.putExtra("sms_body", business.getName() + "\n" + business.getUrl());
+                }
+                intent.setType("vnd.android-dir/mms-sms");//here setType will set the previous data null.
+                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(intent);
+                }
             }
         });
 
@@ -175,11 +180,17 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
                     Intent intent = new Intent(Intent.ACTION_SEND);
                     intent.setClassName("com.twitter.android", "com.twitter.android.composer.ComposerActivity");
                     intent.setType("text/plain");
-                    intent.putExtra(Intent.EXTRA_TEXT, business.getUrl());
+                    if (business.getUrl() != null) {
+                        intent.putExtra(Intent.EXTRA_TEXT, business.getUrl());
+                    }
                     startActivity(intent);
 
                 } catch (Exception e) {
-                    String url = "http://www.twitter.com/intent/tweet?url=YOURURL&text=YOURTEXT";
+                    String url = "";
+                    if (business.getUrl() != null) {
+                        url = "http://www.twitter.com/intent/tweet?url="
+                                + business.getUrl() + "&text=" + business.getName();
+                    }
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     i.setData(Uri.parse(url));
                     startActivity(i);
@@ -195,9 +206,11 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
                 intent.setType("plain/text");
                 intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"some@email.address"});
                 if (business.getName() != null) {
-                    intent.putExtra(Intent.EXTRA_SUBJECT, business.getName().toString());
+                    intent.putExtra(Intent.EXTRA_SUBJECT, business.getName());
                 }
-                intent.putExtra(Intent.EXTRA_TEXT, business.getUrl());
+                if (business.getUrl() != null) {
+                    intent.putExtra(Intent.EXTRA_TEXT, business.getUrl());
+                }
                 if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                     startActivity(Intent.createChooser(intent, ""));
                 }
@@ -301,26 +314,36 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
 
     private String createHoursOpenString(){
        String hoursOpen="";
-       List<Open> openList = business.getBusinessDetail().getHours().get(0).getOpen();
-       for(Open open : openList ) {
-           String startDate = DateUtils.convertMilitarytoStandard(open.getStart());
-           String endDate  =DateUtils.convertMilitarytoStandard(open.getEnd());
-           if (open.getDay() == 0) {
-               hoursOpen += "Monday: " + startDate + " - " + endDate + "\n";
-           } else if (open.getDay() == 1) {
-               hoursOpen += "Tuesday: " + startDate + " - " + endDate + "\n";;
-           } else if (open.getDay() == 2) {
-               hoursOpen += "Wednesday: " + startDate + " - " + endDate + "\n";;
-           } else if (open.getDay() == 3) {
-               hoursOpen += "Thursday: " + startDate + " - " + endDate + "\n";;
-           } else if (open.getDay() == 4) {
-               hoursOpen += "Friday: " + startDate + " - " + endDate+ "\n";;
-           } else if (open.getDay() == 5) {
-               hoursOpen += "Saturday: " + startDate + " - " + endDate+ "\n";;
-           } else if (open.getDay() == 6) {
-               hoursOpen += "Sunday: " + startDate + " - " + endDate+ "\n";;
-           }
-       }
+        if(business.getBusinessDetail()!=null && business.getBusinessDetail().getHours() !=null
+                && business.getBusinessDetail().getHours().get(0)!=null
+                && business.getBusinessDetail().getHours().get(0).getOpen() !=null) {
+            List<Open> openList = business.getBusinessDetail().getHours().get(0).getOpen();
+            for (Open open : openList) {
+                String startDate = DateUtils.convertMilitarytoStandard(open.getStart());
+                String endDate = DateUtils.convertMilitarytoStandard(open.getEnd());
+                if (open.getDay() == 0) {
+                    hoursOpen += "Monday: " + startDate + " - " + endDate + "\n";
+                } else if (open.getDay() == 1) {
+                    hoursOpen += "Tuesday: " + startDate + " - " + endDate + "\n";
+                    ;
+                } else if (open.getDay() == 2) {
+                    hoursOpen += "Wednesday: " + startDate + " - " + endDate + "\n";
+                    ;
+                } else if (open.getDay() == 3) {
+                    hoursOpen += "Thursday: " + startDate + " - " + endDate + "\n";
+                    ;
+                } else if (open.getDay() == 4) {
+                    hoursOpen += "Friday: " + startDate + " - " + endDate + "\n";
+                    ;
+                } else if (open.getDay() == 5) {
+                    hoursOpen += "Saturday: " + startDate + " - " + endDate + "\n";
+                    ;
+                } else if (open.getDay() == 6) {
+                    hoursOpen += "Sunday: " + startDate + " - " + endDate + "\n";
+                    ;
+                }
+            }
+        }
        return hoursOpen;
     }
 

@@ -34,7 +34,6 @@ import java.util.Set;
 
 import butterknife.ButterKnife;
 
-import static android.R.attr.x;
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.fomono.fomono.FomonoApplication.API_NAME_MOVIE_GENRE;
 
@@ -114,14 +113,20 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
 
         fragmentBinding.tvGenres.setText(getGenres());
 
+
         fragmentBinding.ivMessageShareIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent sendIntent = new Intent(Intent.ACTION_VIEW);
-                sendIntent.setData(Uri.parse("sms:"));
-                sendIntent.putExtra(movie.getTitle(), x);
-                startActivity(sendIntent);
-
+                Uri smsUri = Uri.parse("tel:" + "");
+                Intent intent = new Intent(Intent.ACTION_VIEW, smsUri);
+                intent.putExtra("address", "");
+                if (movie.getTitle() != null && movie.getTitle()!= null) {
+                    intent.putExtra("sms_body", movie.getTitle()+ "\n" + movie.getTitle());
+                }
+                intent.setType("vnd.android-dir/mms-sms");//here setType will set the previous data null.
+                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(intent);
+                }
             }
         });
 
@@ -129,20 +134,23 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
             @Override
             public void onClick(View v) {
 
-                try
-                {
+                try {
                     // Check if the Twitter app is installed on the phone.
                     getActivity().getPackageManager().getPackageInfo("com.twitter.android", 0);
                     Intent intent = new Intent(Intent.ACTION_SEND);
                     intent.setClassName("com.twitter.android", "com.twitter.android.composer.ComposerActivity");
                     intent.setType("text/plain");
-                    intent.putExtra(Intent.EXTRA_TEXT, movie.getTitle());
+                    if (movie.getTitle() != null) {
+                        intent.putExtra(Intent.EXTRA_TEXT, movie.getTitle());
+                    }
                     startActivity(intent);
 
-                }
-                catch (Exception e)
-                {
-                    String url = "http://www.twitter.com/intent/tweet?url=YOURURL&text=YOURTEXT";
+                } catch (Exception e) {
+                    String url = "";
+                    if (movie.getTitle() != null) {
+                        url = "http://www.twitter.com/intent/tweet?url="
+                                + movie.getTitle() + "&text=" + movie.getTitle();
+                    }
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     i.setData(Uri.parse(url));
                     startActivity(i);
@@ -156,9 +164,11 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("plain/text");
-                intent.putExtra(Intent.EXTRA_EMAIL, new String[] { "some@email.address" });
-                intent.putExtra(Intent.EXTRA_SUBJECT, movie.getTitle());
-                intent.putExtra(Intent.EXTRA_TEXT, movie.getTitle());
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"some@email.address"});
+                if (movie.getTitle() != null) {
+                    intent.putExtra(Intent.EXTRA_SUBJECT, movie.getTitle());
+                     intent.putExtra(Intent.EXTRA_TEXT, movie.getTitle());
+                }
                 if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                     startActivity(Intent.createChooser(intent, ""));
                 }
