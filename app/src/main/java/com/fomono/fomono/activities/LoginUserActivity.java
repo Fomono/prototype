@@ -157,8 +157,8 @@ public class LoginUserActivity extends AppCompatActivity {
                     Log.d("Login", "Cancelled Facebook login.");
                 } else if (user.isNew()) {
                     Log.d("Login", "Facebook Login Successful");
-                    //getUserDetailsFromFB();
-                    linkCurrentUsertoFB();
+                    getUserDetailsFromFB();
+                    //linkCurrentUsertoFB();
                     FavoritesUtil.getInstance().initialize(user);
                     homePageIntent();
                 } else {
