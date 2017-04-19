@@ -21,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 import com.fomono.fomono.R;
 import com.fomono.fomono.databinding.FragmentMoviedbDetailBinding;
 import com.fomono.fomono.models.movies.Movie;
@@ -48,6 +50,9 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
     ImageButton ibFavorite;
     FavoritesUtil favsUtil;
     String movieKey;
+    String movieDBURL = "https://www.themoviedb.org/movie?language=en";
+
+
 
 
 
@@ -94,8 +99,7 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
        // callYouTube();
         fragmentBinding.tvSiteLink.setClickable(true);
         fragmentBinding.tvSiteLink.setMovementMethod(LinkMovementMethod.getInstance());
-        String text = "<a href=" + "https://www.themoviedb.org/movie?language=en" +  ">" + "CLICK HERE" + "</a>";
-        fragmentBinding.tvSiteLink.setText(Html.fromHtml(text));
+        fragmentBinding.tvSiteLink.setText(Html.fromHtml("<a href=" + movieDBURL +  ">" + "CLICK HERE" + "</a>"));
 
         fragmentBinding.tvEventDate.setText("");
         fragmentBinding.tvRatingText.setText(Double.valueOf(movie.getVoteAverage()/2).toString()+ "/5");
@@ -192,8 +196,36 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
             }
         });
 
+        fragmentBinding.ivFBShareIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setupFacebookShareIntent();
+            }
+        });
+
         return fragmentBinding.getRoot();
+
     }
+
+    public void setupFacebookShareIntent() {
+        ShareDialog shareDialog;
+        shareDialog = new ShareDialog(this);
+
+        ShareLinkContent linkContent;
+
+        if(movie.getTitle()!=null ){
+            linkContent = new ShareLinkContent.Builder()
+                    .setContentTitle(movie.getTitle())
+                    .setContentUrl(Uri.parse(movieDBURL))
+                    .build();
+        }else{
+            linkContent = new ShareLinkContent.Builder()
+                    .build();
+        }
+
+        shareDialog.show(linkContent);
+    }
+
 
     private String getGenres() {
         String genres ="";

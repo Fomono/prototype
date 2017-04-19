@@ -25,6 +25,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
 import com.fomono.fomono.databinding.FragmentYelpDetailBinding;
@@ -234,8 +236,34 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
             }
         });
 
+        fragmentBinding.ivFBShareIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setupFacebookShareIntent();
+            }
+        });
+
         return fragmentBinding.getRoot();
 
+    }
+
+    public void setupFacebookShareIntent() {
+        ShareDialog shareDialog;
+        shareDialog = new ShareDialog(this);
+
+        ShareLinkContent linkContent;
+
+        if(business.getName()!=null && business.getUrl()!=null ){
+            linkContent = new ShareLinkContent.Builder()
+                    .setContentTitle(business.getName())
+                    .setContentUrl(Uri.parse(business.getUrl()))
+                    .build();
+        }else{
+            linkContent = new ShareLinkContent.Builder()
+                    .build();
+        }
+
+        shareDialog.show(linkContent);
     }
 
     private View insertPhoto(String url) {
@@ -343,6 +371,8 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
                     ;
                 }
             }
+        } else{
+            hoursOpen="Unavailable";
         }
        return hoursOpen;
     }
