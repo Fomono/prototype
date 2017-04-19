@@ -41,8 +41,12 @@ import com.fomono.fomono.network.client.MovieDBClientRetrofit;
 import com.fomono.fomono.network.client.YelpClientRetrofit;
 import com.fomono.fomono.services.UserService;
 import com.fomono.fomono.supportclasses.NavigationDrawerClass;
+import com.fomono.fomono.utils.FavoritesUtil;
 import com.fomono.fomono.utils.FilterUtil;
+import com.parse.GetCallback;
 import com.parse.ParseAnonymousUtils;
+import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.util.HashMap;
@@ -289,17 +293,34 @@ public class FomonoActivity extends AppCompatActivity implements EventSortFragme
         if (action != null && action.equals(ACTION_DETAIL)) {
             String apiName = intent.getStringExtra("apiName");
             String id = intent.getStringExtra("id");
-            switch (apiName) {
-                case FomonoApplication.API_NAME_EVENTS:
-                    handleLaunchEventDetail(id);
-                    break;
-                case FomonoApplication.API_NAME_EATS:
-                    handleLaunchBusinessDetail(id);
-                    break;
-                case FomonoApplication.API_NAME_MOVIES:
-                    handleLaunchMovieDetail(id);
-                    break;
+            //setup current user
+            ParseUser currentUser = ParseUser.getCurrentUser();
+            if (ParseAnonymousUtils.isLinked(currentUser)) {
+                FavoritesUtil.getInstance().initialize(currentUser);
+                handleLaunchDetailView(apiName, id);
+            } else {
+                currentUser.fetchInBackground(new GetCallback<ParseObject>() {
+                    @Override
+                    public void done(ParseObject object, ParseException e) {
+                        FavoritesUtil.getInstance().initialize(currentUser);
+                        handleLaunchDetailView(apiName, id);
+                    }
+                });
             }
+        }
+    }
+
+    private void handleLaunchDetailView(String apiName, String id) {
+        switch (apiName) {
+            case FomonoApplication.API_NAME_EVENTS:
+                handleLaunchEventDetail(id);
+                break;
+            case FomonoApplication.API_NAME_EATS:
+                handleLaunchBusinessDetail(id);
+                break;
+            case FomonoApplication.API_NAME_MOVIES:
+                handleLaunchMovieDetail(id);
+                break;
         }
     }
 

@@ -55,5 +55,12 @@ public class FavoritesFragment extends MainListFragment implements FavoritesUtil
         fomonoEvents.addAll(favoriteEvents);
         fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        FavoritesUtil.getInstance().removeListener(this);
+    }
 }
 

@@ -235,6 +235,9 @@ public class Event extends ParseObject implements Parcelable, FomonoEvent
             instance.venue.initializeForParse();
             instance.put("venue", instance.venue);
         }
+        if (instance.categoryId != null) {
+            instance.put("category_id", instance.categoryId);
+        }
     }
 
     public static void getListFromParse(List<Event> list, FindCallback<Event> callback) {
@@ -325,6 +328,9 @@ public class Event extends ParseObject implements Parcelable, FomonoEvent
             this.venue = (Venue) getParseObject("venue");
             this.venue.initializeFromParse();
         }
+        if (has("category_id")) {
+            this.categoryId = getString("category_id");
+        }
     }
 
     public void getFromParse(GetCallback<Event> callback) {
@@ -399,6 +405,9 @@ public class Event extends ParseObject implements Parcelable, FomonoEvent
             } else {
                 this.put("venue", event.venue);
             }
+        }
+        if (event.categoryId != null) {
+            this.put("category_id", event.categoryId);
         }
     }
 
@@ -671,6 +680,9 @@ public class Event extends ParseObject implements Parcelable, FomonoEvent
     }
 
     public String getCategoryId() {
+        if (categoryId == null) {
+            categoryId = getString("category_id");
+        }
         return categoryId;
     }
 

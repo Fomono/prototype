@@ -32,6 +32,8 @@ import com.fomono.fomono.R;
 import com.fomono.fomono.databinding.FragmentEventbriteDetailBinding;
 import com.fomono.fomono.models.events.events.Address;
 import com.fomono.fomono.models.events.events.Event;
+import com.fomono.fomono.models.events.events.Logo;
+import com.fomono.fomono.models.events.events.Start;
 import com.fomono.fomono.models.events.events.Venue;
 import com.fomono.fomono.models.user.User;
 import com.fomono.fomono.network.client.EventBriteClientRetrofit;
@@ -59,7 +61,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.R.attr.x;
 import static android.content.ContentValues.TAG;
 
 /**
@@ -163,18 +164,23 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
         String text = "<a href=" + event.getUrl() + ">" + "CLICK HERE" + "</a>";
         fragmentEventbriteDetailBinding.tvSiteLink.setText(Html.fromHtml(text));
 
-
-        fragmentEventbriteDetailBinding.tvEventDate.setText(DateUtils.getFormattedDateForHeader(event.getStart().getUtc()));
-        event.getStart().setLocal(DateUtils.getFormattedDate(event.getStart().getUtc()));
-
+        Start start = event.getStart();
+        if (start != null) {
+            fragmentEventbriteDetailBinding.tvEventDate.setText(DateUtils.getFormattedDateForHeader(start.getUtc()));
+            start.setLocal(DateUtils.getFormattedDate(start.getUtc()));
+            event.saveOrUpdate();
+        }
 
         DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
         int pxWidth = displayMetrics.widthPixels;
-        screenWidthDetail = (int)(pxWidth / displayMetrics.density);
+        screenWidthDetail = (int) (pxWidth / displayMetrics.density);
 
-        Log.d(TAG, "width is "+screenWidthDetail);
+        Log.d(TAG, "width is " + screenWidthDetail);
 
-        setImageUrl(fragmentEventbriteDetailBinding.ivEventImage, event.getLogo().getUrl(), screenWidthDetail);
+        Logo logo = event.getLogo();
+        if (logo != null) {
+            setImageUrl(fragmentEventbriteDetailBinding.ivEventImage, logo.getUrl(), screenWidthDetail);
+        }
 
         populateDetail(event);
 
@@ -195,7 +201,9 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
         fragmentEventbriteDetailBinding.tvClockCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addToCalendar(event.getStart().getUtc(), event.getEnd().getUtc());
+                if (event.getStart() != null && event.getEnd() != null) {
+                    addToCalendar(event.getStart().getUtc(), event.getEnd().getUtc());
+                }
             }
         });
 
@@ -203,11 +211,16 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
         fragmentEventbriteDetailBinding.ivMessageShareIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent sendIntent = new Intent(Intent.ACTION_VIEW);
-                sendIntent.setData(Uri.parse("sms:"));
-                sendIntent.putExtra(event.getUrl(), x);
-                startActivity(sendIntent);
-
+                Uri smsUri = Uri.parse("tel:" + "");
+                Intent intent = new Intent(Intent.ACTION_VIEW, smsUri);
+                intent.putExtra("address", "");
+                if (event.getName() != null && event.getUrl() != null) {
+                    intent.putExtra("sms_body", event.getName().getText() + "\n" + event.getUrl());
+                }
+                intent.setType("vnd.android-dir/mms-sms");//here setType will set the previous data null.
+                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(intent);
+                }
             }
         });
 
@@ -221,11 +234,17 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
                     Intent intent = new Intent(Intent.ACTION_SEND);
                     intent.setClassName("com.twitter.android", "com.twitter.android.composer.ComposerActivity");
                     intent.setType("text/plain");
-                    intent.putExtra(Intent.EXTRA_TEXT, event.getUrl());
+                    if (event.getUrl() != null) {
+                        intent.putExtra(Intent.EXTRA_TEXT, event.getUrl());
+                    }
                     startActivity(intent);
 
                 } catch (Exception e) {
-                    String url = "http://www.twitter.com/intent/tweet?url=YOURURL&text=YOURTEXT";
+                    String url = "";
+                    if (event.getUrl() != null) {
+                        url = "http://www.twitter.com/intent/tweet?url="
+                                + event.getUrl() + "&text=" + event.getName().getText();
+                    }
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     i.setData(Uri.parse(url));
                     startActivity(i);
@@ -240,8 +259,12 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("plain/text");
                 intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"some@email.address"});
-                intent.putExtra(Intent.EXTRA_SUBJECT, event.getName().getText());
-                intent.putExtra(Intent.EXTRA_TEXT, event.getUrl());
+                if (event.getName() != null) {
+                    intent.putExtra(Intent.EXTRA_SUBJECT, event.getName().getText());
+                }
+                if (event.getUrl() != null) {
+                    intent.putExtra(Intent.EXTRA_TEXT, event.getUrl());
+                }
                 if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                     startActivity(Intent.createChooser(intent, ""));
                 }
@@ -276,6 +299,9 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
 
     protected void populateAddressMap(Event e) {
         //reset fragment's databinding
+        if (event.getVenue() == null) {
+            return;
+        }
         Address address = event.getVenue().getAddress();
         fragmentEventbriteDetailBinding.setEvent(e);
         mMapView.getMapAsync(new OnMapReadyCallback() {
@@ -336,8 +362,12 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
         ContentValues values = new ContentValues();
         values.put(CalendarContract.Events.DTSTART, startMillis);
         values.put(CalendarContract.Events.DTEND, endMillis);
-        values.put(CalendarContract.Events.TITLE, event.getName().getText());
-        values.put(CalendarContract.Events.DESCRIPTION, event.getDescription().getText().toString());
+        if (event.getName() != null) {
+            values.put(CalendarContract.Events.TITLE, event.getName().getText());
+        }
+        if (event.getDescription() != null) {
+            values.put(CalendarContract.Events.DESCRIPTION, event.getDescription().getText().toString());
+        }
         values.put(CalendarContract.Events.CALENDAR_ID, calID);
         values.put(CalendarContract.Events.EVENT_TIMEZONE, "UTC");
         // TODO: Consider calling

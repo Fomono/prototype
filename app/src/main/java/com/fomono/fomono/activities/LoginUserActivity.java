@@ -97,6 +97,7 @@ public class LoginUserActivity extends AppCompatActivity {
         btnGuestLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FavoritesUtil.getInstance().initialize(ParseUser.getCurrentUser());
                 homePageIntent();
             }
         });
