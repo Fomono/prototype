@@ -27,6 +27,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
 import com.fomono.fomono.databinding.FragmentUserProfileBinding;
 import com.fomono.fomono.models.user.User;
@@ -88,17 +89,6 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
         Picasso.with(view.getContext()).load(imageUrl).transform(new RoundedTransformation(6, 3)).
                 placeholder(R.drawable.ic_fomono_big).
                 resize(screenSize, 0).into(view);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == 0) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                    && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                callCameraPhotoGallery();
-            }
-
-        }
     }
 
     @Override
@@ -187,14 +177,14 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
         if (ContextCompat.checkSelfPermission(this.getActivity(),
                 Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this.getActivity(), new String[]
-                    {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+                    {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, FomonoApplication.PERM_CAM_PROFILE_REQ_CODE);
         } else {
 
             callCameraPhotoGallery();
         }
     }
 
-    private void callCameraPhotoGallery() {
+    public void callCameraPhotoGallery() {
         if (photoType.equals(Properties.PHOTO_SELECT)) {
             pickPicture();
 
