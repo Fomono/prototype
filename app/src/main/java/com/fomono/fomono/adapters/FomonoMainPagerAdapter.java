@@ -8,6 +8,10 @@ import com.fomono.fomono.fragments.EatsFragment;
 import com.fomono.fomono.fragments.EventFragment;
 import com.fomono.fomono.fragments.FavoritesFragment;
 import com.fomono.fomono.fragments.MovieFragment;
+import com.fomono.fomono.models.FomonoEvent;
+import com.fomono.fomono.models.eats.Business;
+import com.fomono.fomono.models.events.events.Event;
+import com.fomono.fomono.models.movies.Movie;
 import com.fomono.fomono.utils.FilterUtil;
 
 /**
@@ -74,6 +78,16 @@ public class FomonoMainPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         return tabTitles.length;
+    }
+
+    public void refreshFomonoEvent(FomonoEvent fEvent, int fEventPosition) {
+        if (fEvent instanceof Event) {
+            eventFragment.updateFomonoEvent(fEvent, fEventPosition);
+        } else if (fEvent instanceof Business) {
+            eatsFragment.updateFomonoEvent(fEvent, fEventPosition);
+        } else if (fEvent instanceof Movie) {
+            movieFragment.updateFomonoEvent(fEvent, fEventPosition);
+        }
     }
 
 }

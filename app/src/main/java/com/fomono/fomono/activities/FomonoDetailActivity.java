@@ -25,11 +25,18 @@ import com.fomono.fomono.models.user.User;
 import com.parse.ParseUser;
 
 
-public class FomonoDetailActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
+public class FomonoDetailActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback,
+        FomonoDetailEventbriteFragment.FomonoEventUpdateListener,
+        FomonoDetailYelpFragment.FomonoEventUpdateListener,
+        FomonoDetailMoviedbFragment.FomonoEventUpdateListener {
 
     FomonoDetailEventbriteFragment fomonoDetailEventbriteFragment;
     FomonoDetailYelpFragment fomonoDetailYelpFragment;
     FomonoDetailMoviedbFragment fomonoDetailMoviedbFragment;
+
+    FomonoEvent fEvent;
+    int position;
+    boolean updated;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +51,9 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
         getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(FomonoDetailActivity.this, R.drawable.ic_arrow_back));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        FomonoEvent fEvent = i.getParcelableExtra("FOM_OBJ");
+        fEvent = i.getParcelableExtra("FOM_OBJ");
+        position = i.getIntExtra("position", -1);
+        updated = false;
 
         if (savedInstanceState == null && fEvent instanceof Event) {
             Event e = (Event) fEvent;
@@ -110,10 +119,30 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
 
         switch (id) {
             case android.R.id.home:
+                setFinishData();
                 finish();
                 break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        setFinishData();
+        super.onBackPressed();
+    }
+
+    private void setFinishData() {
+        Intent data = new Intent();
+        data.putExtra("updated", updated);
+        data.putExtra("position", position);
+        data.putExtra("fEvent", fEvent);
+        setResult(RESULT_OK, data);
+    }
+
+    @Override
+    public void onFomonoEventUpdated() {
+        updated = true;
     }
 }

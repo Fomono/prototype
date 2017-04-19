@@ -25,14 +25,17 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.bumptech.glide.Glide;
 import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
+import com.fomono.fomono.adapters.FomonoAdapter;
 import com.fomono.fomono.adapters.FomonoMainPagerAdapter;
 import com.fomono.fomono.databinding.ActivityFomonoBinding;
 import com.fomono.fomono.fragments.EatsFragment;
 import com.fomono.fomono.fragments.EatsSortFragment;
 import com.fomono.fomono.fragments.EventFragment;
 import com.fomono.fomono.fragments.EventSortFragment;
+import com.fomono.fomono.fragments.FavoritesFragment;
 import com.fomono.fomono.fragments.MovieFragment;
 import com.fomono.fomono.fragments.MovieSortFragment;
+import com.fomono.fomono.models.FomonoEvent;
 import com.fomono.fomono.models.eats.Business;
 import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.movies.Movie;
@@ -59,7 +62,9 @@ import retrofit2.Response;
 
 public class FomonoActivity extends AppCompatActivity implements EventSortFragment.OnFragmentInteractionListener,
                                                                  EatsSortFragment.OnFragmentInteractionListener,
-                                                                 MovieSortFragment.OnFragmentInteractionListener {
+                                                                 MovieSortFragment.OnFragmentInteractionListener,
+                                                                 FomonoAdapter.FomonoEventUpdateListener {
+    public static final int REQUEST_CODE_DETAILS = 20;
     private FomonoMainPagerAdapter fomonoMainPagerAdapter;
     private final static String TAG = "Fomono Activity";
     private NavigationView nvView;
@@ -403,5 +408,24 @@ public class FomonoActivity extends AppCompatActivity implements EventSortFragme
                 Log.d(TAG, "Getting movie by id failed " + t.getMessage());
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_DETAILS) {
+            boolean updated = data.getBooleanExtra("updated", false);
+            int position = data.getIntExtra("position", 0);
+            FomonoEvent fEvent = data.getParcelableExtra("fEvent");
+            if (updated) {
+                fomonoMainPagerAdapter.refreshFomonoEvent(fEvent, position);
+            }
+        }
+    }
+
+    @Override
+    public void onFomonoEventUpdated(FomonoEvent fEvent, String fragmentName) {
+        if (fragmentName.equals(FavoritesFragment.TAG)) {
+            fomonoMainPagerAdapter.refreshFomonoEvent(fEvent, -1);
+        }
     }
 }

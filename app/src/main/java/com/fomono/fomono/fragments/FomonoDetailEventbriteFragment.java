@@ -81,6 +81,10 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
     FavoritesUtil favsUtil;
     public int screenWidthDetail;
 
+    public interface FomonoEventUpdateListener {
+        void onFomonoEventUpdated();
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -293,6 +297,9 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
                 } else {
                     ibFavorite.setImageResource(R.drawable.ic_favorite);
                     favsUtil.addToFavorites(event);
+                }
+                if (getActivity() instanceof FomonoEventUpdateListener) {
+                    ((FomonoEventUpdateListener) getActivity()).onFomonoEventUpdated();
                 }
             }
         });
