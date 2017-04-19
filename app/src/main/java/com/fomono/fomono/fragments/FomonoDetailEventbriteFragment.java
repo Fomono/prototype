@@ -27,6 +27,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
 import com.fomono.fomono.databinding.FragmentEventbriteDetailBinding;
@@ -271,6 +273,13 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
             }
         });
 
+        fragmentEventbriteDetailBinding.ivFBShareIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setupFacebookShareIntent();
+            }
+        });
+
         ibFavorite = fragmentEventbriteDetailBinding.ivFavoriteIcon;
         if (favsUtil.isFavorited(event)) {
             ibFavorite.setImageResource(R.drawable.ic_favorite);
@@ -291,6 +300,26 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
         return fragmentEventbriteDetailBinding.getRoot();
     }
 
+    public void setupFacebookShareIntent() {
+        ShareDialog shareDialog;
+        shareDialog = new ShareDialog(this);
+
+        ShareLinkContent linkContent;
+
+        if(event.getName()!=null && event.getUrl()!=null && event.getDescription()!=null){
+            linkContent = new ShareLinkContent.Builder()
+                    .setContentTitle(event.getName().getText())
+                    .setContentDescription(
+                            event.getDescription().getText().toString())
+                    .setContentUrl(Uri.parse(event.getUrl()))
+                    .build();
+        }else{
+            linkContent = new ShareLinkContent.Builder()
+                    .build();
+        }
+
+        shareDialog.show(linkContent);
+    }
 
     protected void populateDetail(Event e) {
         fragmentEventbriteDetailBinding.setEvent(e);
