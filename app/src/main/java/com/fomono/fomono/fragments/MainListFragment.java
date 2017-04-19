@@ -106,7 +106,7 @@ public abstract class MainListFragment extends Fragment {
         gridLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
         rvList.setHasFixedSize(true);
         rvList.setLayoutManager(gridLayoutManager);
-        rvList.addItemDecoration(new RecyclerItemDecorator.SimpleDividerItemDecoration(getActivity()));
+    //    rvList.addItemDecoration(new RecyclerItemDecorator.SimpleDividerItemDecoration(getActivity()));
     }
 
     public void dataBindFragmentValues(FomonoMainListFragmentBinding binding) {

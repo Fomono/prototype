@@ -7,10 +7,13 @@ import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.sql.Time;
+import java.text.DateFormatSymbols;
 import com.bumptech.glide.Glide;
 import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
@@ -107,22 +110,12 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 holder.eventName.setVisibility(View.GONE);
             }
 
-            if (event.getDescription() != null) {
-                if (event.getDescription().getText() != null) {
-                    holder.eventDesc.setText(event.getDescription().getText().toString());
-                }
-            } else {
-                holder.eventDesc.setVisibility(View.GONE);
-            }
-
             int imageSet = 0;
             if (event.getLogo() != null) {
                 if (event.getLogo().getOriginal() != null) {
                     if (!TextUtils.isEmpty(event.getLogo().getOriginal().getUrl())) {
-                     //   Glide.with(mContext).load(event.getLogo().getOriginal().getUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).override(200, 350).into(holder.eventMediaImage);
-                     //   Glide.with(mContext).load(event.getLogo().getOriginal().getUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).override(screenWidth, screenHeight).into(holder.eventMediaImage);
-                         Picasso.with(mContext).load(event.getLogo().getOriginal().getUrl()).placeholder(R.drawable.ic_fomono_big).resize(screenWidth, 0).into(holder.eventMediaImage);
-                         imageSet = 1;
+                      Picasso.with(mContext).load(event.getLogo().getOriginal().getUrl()).placeholder(R.drawable.ic_fomono_big).resize(screenWidth, 0).into(holder.eventMediaImage);
+                      imageSet = 1;
                     }
                 }
             }
@@ -141,10 +134,15 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 if (!TextUtils.isEmpty(event.getStart().getLocal())) {
                     String localDateTime = event.getStart().getLocal();
                     localDateTime = localDateTime.replace('T', ' ');
-                    String[] dateString = localDateTime.trim().split("\\s+");
+                    String[] dateTimeString = localDateTime.trim().split("\\s+");
+                    String[] dateParams = dateTimeString[0].trim().split("-");
+                    String[] timeParams = dateTimeString[1].trim().split(":");
 
-                    //FIXME - This works. But now, format it to ex of : 8:30PM, 18th April 2017
-                    holder.eventDateTime.setText(dateString[0]);
+                    String TimeFollower = "AM";
+                    if(Integer.parseInt(timeParams[0]) > 12) {TimeFollower = "PM";}
+                    String monthName = new DateFormatSymbols().getMonths()[Integer.parseInt((dateParams[1])) - 1];
+                    holder.eventDateTime.setText(""+monthName " " +dateParams[2]+"th, " +timeParams[0]+":"+timeParams[1]+TimeFollower);
+                  //  holder.eventDateTime.setText(""+timeParams[0]+":"+timeParams[1]+TimeFollower+", "+dateParams[2]+"th "+monthName+" "+dateParams[0]);
                     DateViewSet = 1;
                 }
             }
@@ -153,7 +151,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             }
 
             if (event.getUrl() != null) {
-                holder.eventUrl.setBackgroundResource(R.drawable.ic_fomono_red);
+                holder.eventUrl.setBackgroundResource(R.drawable.ic_link);
                 holder.eventUrl.setOnClickListener(v -> {
                     Uri uri = Uri.parse(event.getUrl());
                     Intent openLink = new Intent(Intent.ACTION_VIEW, uri);
@@ -172,7 +170,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             if (catId != null) {
                 String category = ConfigUtil.getCategoryName(catId, FomonoApplication.API_NAME_EVENTS, mContext);
                 if (!TextUtils.isEmpty(category)) {
-                    holder.eventType.setText(category);
+                    holder.eventType.setText("#"+category);
                     holder.eventType.setVisibility(View.VISIBLE);
                 }
             }
@@ -192,8 +190,6 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             } else {
                 holder.eventName.setVisibility(View.GONE);
             }
-
-            holder.eventDesc.setVisibility(View.GONE);
 
             if (!TextUtils.isEmpty(business.getImageUrl())) {
                 // Glide.with(mContext).load(business.getImageUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).override(screenWidth, screenHeight / 2).into(holder.eventMediaImage);
@@ -219,7 +215,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             holder.eventDateTime.setText("" + business.getRating() + "/5, " + business.getReviewCount() + " Reviews");
 
             if (business.getUrl() != null) {
-                holder.eventUrl.setBackgroundResource(R.drawable.ic_fomono_red);
+                holder.eventUrl.setBackgroundResource(R.drawable.ic_link);
                 holder.eventUrl.setOnClickListener(v -> {
                     Uri uri = Uri.parse(business.getUrl());
                     Intent openLink = new Intent(Intent.ACTION_VIEW, uri);
@@ -240,7 +236,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 if (alias != null) {
                     String category = ConfigUtil.getCategoryName(alias, FomonoApplication.API_NAME_EATS, mContext);
                     if (!TextUtils.isEmpty(category)) {
-                        holder.eventType.setText(category);
+                        holder.eventType.setText("#"+category);
                         holder.eventType.setVisibility(View.VISIBLE);
                         break;
                     }
@@ -255,9 +251,6 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             if(movie.getOriginalTitle() != null) {
                 holder.eventName.setText(movie.getOriginalTitle());
             } else {holder.eventName.setVisibility(View.GONE);}
-
-            if(movie.getOverview() != null) { holder.eventDesc.setText(movie.getOverview());}
-            else {holder.eventDesc.setVisibility(View.GONE);}
 
             if(movie.getOrigBackdropPath() != null) {
                 Picasso.with(mContext).load(movie.getBackdropPath()).placeholder(R.drawable.ic_fomono_big).resize(screenWidth, 0).into(holder.eventMediaImage);
@@ -277,7 +270,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             holder.eventType.setVisibility(View.GONE);
 
             if(movie.getId() != -1) {
-                holder.eventUrl.setBackgroundResource(R.drawable.ic_fomono_red);
+                holder.eventUrl.setBackgroundResource(R.drawable.ic_link);
                 holder.eventUrl.setOnClickListener(v -> {
                     Intent movTrail = new Intent(mContext, FomonoTrailerActivity.class);
                     movTrail.putExtra(mContext.getResources().getString(R.string.MovieId), movie.getId());
