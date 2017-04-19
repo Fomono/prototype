@@ -232,9 +232,6 @@ public class UserService {
         if (fView.etAboutMe.getText() != null && !(fView.etAboutMe.getText().toString().equals(pUser.get("aboutMe")))) {
             pUser.put("aboutMe", fView.etAboutMe.getText().toString());
         }
-        if (fView.etLocation.getText() != null && !(fView.etLocation.getText().toString().equals(pUser.get("location")))) {
-            pUser.put("location", fView.etLocation.getText().toString());
-        }
         pUser.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

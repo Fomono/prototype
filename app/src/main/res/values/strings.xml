@@ -65,6 +65,9 @@
     <string name="signup_lastname">Last Name</string>
     <string name="signup_signup">Sign Up</string>
 
+    <string name="profile_save">Save</string>
+    <string name="profile_cancel">Cancel</string>
+
     <string-array name="FilterEventSortArray">
         <item>best_match</item>
         <item>date</item>
