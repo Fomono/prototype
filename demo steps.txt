@@ -1,0 +1,32 @@
+432px x 768px
+start app
+continue as guest
+go through events eats movies
+set current location, distance, filters
+go through events eats movies
+update location, distance
+go through events eats movies
+favorite one of each
+look at favorites
+click on link for one of each
+look at details for each
+share event to twitter
+click on link for each
+share food to mail
+remove movie from favorites
+look at favorites
+sign up
+see filters are still there
+see favorites are still there
+update filters
+update favorites
+close app
+open app
+see filters/favorites
+go to profile
+choose picture
+update name
+choose sorts for events eats movies
+search for each
+show notification
+click on notification
