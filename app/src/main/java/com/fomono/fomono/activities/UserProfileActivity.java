@@ -1,6 +1,5 @@
 package com.fomono.fomono.activities;
 
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,7 +15,8 @@ import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
 import com.fomono.fomono.fragments.UserProfileFragment;
 
-public class UserProfileActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
+public class UserProfileActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback,
+        UserProfileFragment.UserProfileUpdateListener {
 
     UserProfileFragment userProfileFragment;
 
@@ -24,10 +24,10 @@ public class UserProfileActivity extends AppCompatActivity implements ActivityCo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
-        Intent i = getIntent();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.tbFomono);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getString(R.string.title_activity_fomono_detail));
+        getSupportActionBar().setTitle(getString(R.string.title_activity_profile));
         //turn on back button
         getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(UserProfileActivity.this, R.drawable.ic_arrow_back));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -42,7 +42,7 @@ public class UserProfileActivity extends AppCompatActivity implements ActivityCo
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_detail, menu);
+        getMenuInflater().inflate(R.menu.menu_profile, menu);
 
         return true;
     }
@@ -70,5 +70,10 @@ public class UserProfileActivity extends AppCompatActivity implements ActivityCo
                 userProfileFragment.callCameraPhotoGallery();
             }
         }
+    }
+
+    @Override
+    public void onUpdateComplete() {
+        finish();
     }
 }

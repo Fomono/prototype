@@ -4,6 +4,7 @@
     <string name="notif_action_text">Take a look.</string>
     <string name="title_activity_fomono">FomonoActivity</string>
     <string name="title_activity_fomono_detail">Details</string>
+    <string name="title_activity_profile">User Profile</string>
     <string name="title_activity_fomono_filter">Filters</string>
     <string name="title_activity_favorite_fragment">FavoriteFragment</string>
     <string name="EventFeeFree">Free</string>

@@ -5,7 +5,6 @@ package com.fomono.fomono.fragments;
  */
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -23,7 +22,7 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -55,11 +54,16 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
     UserService uService;
     int screenSize;
 
+    public interface UserProfileUpdateListener {
+        void onUpdateComplete();
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         uService = UserService.getInstance();
         pUser = ParseUser.getCurrentUser();
+        user = uService.retriveUserFromParseUser(pUser);
     }
 
     public static UserProfileFragment newInstance() {
@@ -72,7 +76,6 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        user = uService.retriveUserFromParseUser(pUser);
         DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
         int pxWidth = displayMetrics.widthPixels;
         screenSize = (int) (pxWidth / displayMetrics.density);
@@ -80,8 +83,6 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
             String fileUrl = pUser.get("profilePicture").toString();
             setImageUrl(fragmentUserProfile.ivUserImage, fileUrl,screenSize);
         }
-        fragmentUserProfile.setUser(user);
-
     }
 
 
@@ -97,7 +98,14 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
         fragmentUserProfile = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_user_profile, parent, false);
         View view = fragmentUserProfile.getRoot();
+        fragmentUserProfile.setUser(user);
         ButterKnife.bind(this, view);
+        fragmentUserProfile.executePendingBindings();
+
+        //set selection to end of text
+        EditText etName = fragmentUserProfile.etFirstName;
+        int length = etName.getText().length();
+        etName.setSelection(length);
 
         fragmentUserProfile.ivCameraImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,16 +121,23 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
         fragmentUserProfile.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                View view = getActivity().getCurrentFocus();
-                if (view != null) {
-                    InputMethodManager imm = (InputMethodManager)
-                            getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                }
                 uService.saveParseUser(fragmentUserProfile);
                 Toast.makeText(getActivity(), "Successfully Saved",
                         Toast.LENGTH_LONG).show();
                 uService.setUserUpdated(true);
+
+                if (getActivity() instanceof UserProfileUpdateListener) {
+                    ((UserProfileUpdateListener) getActivity()).onUpdateComplete();
+                }
+            }
+        });
+
+        fragmentUserProfile.btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (getActivity() instanceof UserProfileUpdateListener) {
+                    ((UserProfileUpdateListener) getActivity()).onUpdateComplete();
+                }
             }
         });
 

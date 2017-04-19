@@ -53,7 +53,7 @@ public class UserService {
                 stream);
         byte[] imageBytes = stream.toByteArray();
         ParseFile file = new ParseFile("profile_picture_file", imageBytes);
-        ParseUser finalPUser = ParseUser.getCurrentUser();;
+        ParseUser finalPUser = ParseUser.getCurrentUser();
         file.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -70,6 +70,7 @@ public class UserService {
                 }
             }
         });
+        setUserUpdated(true);
         return (file.getUrl());
 
     }
