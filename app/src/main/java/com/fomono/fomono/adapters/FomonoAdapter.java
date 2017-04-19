@@ -141,7 +141,8 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     String TimeFollower = "AM";
                     if(Integer.parseInt(timeParams[0]) > 12) {TimeFollower = "PM";}
                     String monthName = new DateFormatSymbols().getMonths()[Integer.parseInt((dateParams[1])) - 1];
-                    holder.eventDateTime.setText(""+timeParams[0]+":"+timeParams[1]+TimeFollower+", "+dateParams[2]+"th "+monthName+" "+dateParams[0]);
+                    holder.eventDateTime.setText(""+monthName " " +dateParams[2]+"th, " +timeParams[0]+":"+timeParams[1]+TimeFollower);
+                  //  holder.eventDateTime.setText(""+timeParams[0]+":"+timeParams[1]+TimeFollower+", "+dateParams[2]+"th "+monthName+" "+dateParams[0]);
                     DateViewSet = 1;
                 }
             }
