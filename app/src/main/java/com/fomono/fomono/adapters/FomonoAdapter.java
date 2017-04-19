@@ -128,7 +128,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             } else {
                 holder.eventPrice.setText(R.string.EventFeeFree);
             }
-
+            holder.eventRatingBar.setVisibility(View.GONE);
             int DateViewSet = 0;
             if (event.getStart() != null) {
                 if (!TextUtils.isEmpty(event.getStart().getLocal())) {
@@ -141,7 +141,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     String TimeFollower = "AM";
                     if(Integer.parseInt(timeParams[0]) > 12) {TimeFollower = "PM";}
                     String monthName = new DateFormatSymbols().getMonths()[Integer.parseInt((dateParams[1])) - 1];
-                    holder.eventDateTime.setText(""+monthName " " +dateParams[2]+"th, " +timeParams[0]+":"+timeParams[1]+TimeFollower);
+                    holder.eventDateTime.setText(""+monthName+ " " +dateParams[2]+"th, " +timeParams[0]+":"+timeParams[1]+TimeFollower);
                   //  holder.eventDateTime.setText(""+timeParams[0]+":"+timeParams[1]+TimeFollower+", "+dateParams[2]+"th "+monthName+" "+dateParams[0]);
                     DateViewSet = 1;
                 }
@@ -211,8 +211,11 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             holder.eventType.setVisibility(View.GONE);
             setBusinessCategory(business, holder);
 
-            //FIXME - call this something else. We can reuse this field, or collapse it and show something else.
-            holder.eventDateTime.setText("" + business.getRating() + "/5, " + business.getReviewCount() + " Reviews");
+
+            holder.eventRatingBar.setRating(Double.valueOf(business.getRating()).floatValue());
+
+            if(business.getReviewCount() != null) holder.eventDateTime.setText(""+business.getReviewCount() + " Reviews");
+            else holder.eventDateTime.setVisibility(View.GONE);
 
             if (business.getUrl() != null) {
                 holder.eventUrl.setBackgroundResource(R.drawable.ic_link);
@@ -260,13 +263,14 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 holder.eventMediaImage.setVisibility(View.GONE);
             }
 
-            //FIXME - Using distance for rating
             double ratingString = movie.getVoteAverage()/2;
-            DecimalFormat numberFormat = new DecimalFormat("#.0");
-            holder.eventDistance.setText("" + numberFormat.format(ratingString) + "/5");
+            holder.eventRatingBar.setRating((float)(ratingString));
+
+            holder.eventDistance.setVisibility(View.GONE);
             holder.eventPrice.setVisibility(View.GONE);
 
-            if(movie.getReleaseDate() != null) {holder.eventDateTime.setText(mContext.getString(R.string.movie_release_date_string)+movie.getReleaseDate());}
+            holder.eventDateTime.setVisibility(View.GONE);
+          //  if(movie.getReleaseDate() != null) {holder.eventDateTime.setText(mContext.getString(R.string.movie_release_date_string)+movie.getReleaseDate());}
             holder.eventType.setVisibility(View.GONE);
 
             if(movie.getId() != -1) {

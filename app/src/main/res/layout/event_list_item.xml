@@ -71,13 +71,20 @@
 
                 </RelativeLayout>
 
+                <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/EventRatingBarId"
+                    android:layout_below="@id/EventMediaRelId"
+                    style="@style/Widget.MaterialRatingBar.RatingBar.Small" />
+
                 <TextView
                     android:id="@+id/EventDateTimeId"
                     android:layout_width="wrap_content"
                     android:layout_marginBottom="5dp"
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
-                    android:layout_below="@id/EventMediaRelId"
+                    android:layout_below="@id/EventRatingBarId"
                     android:text="DATETIME"/>
 
                 <TextView

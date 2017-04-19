@@ -13,6 +13,8 @@ import com.fomono.fomono.databinding.EventListItemBinding;
 import com.fomono.fomono.supportclasses.LinkifiedTextView;
 import com.makeramen.roundedimageview.RoundedImageView;
 
+import me.zhanghai.android.materialratingbar.MaterialRatingBar;
+
 /**
  * Created by jsaluja on 4/7/2017.
  */
@@ -27,6 +29,7 @@ public class ViewHolderEventsItem extends RecyclerView.ViewHolder {
     public TextView eventType;
     public ImageButton eventUrl;
     public ImageButton eventFavorited;
+    public MaterialRatingBar eventRatingBar;
 
     public ViewHolderEventsItem(EventListItemBinding binding) {
         super(binding.getRoot());
@@ -38,5 +41,6 @@ public class ViewHolderEventsItem extends RecyclerView.ViewHolder {
         eventType = binding.EventTypeId;
         eventUrl = binding.ImageLogoButtonId;
         eventFavorited = binding.ImageFavoriteButtonId;
+        eventRatingBar = binding.EventRatingBarId;
     }
 }
