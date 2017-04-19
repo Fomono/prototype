@@ -37,6 +37,7 @@ public class FomonoApplication extends Application {
     public static final String API_NAME_MOVIE_GENRE = "movies_genre";
     public static final String API_NAME_MOVIE_LANGUAGE = "movies_language";
 
+    public static final String APP_TAG = "Fomono";
 
     //permission request codes
     public static final int PERM_LOC_EVENT_REQ_CODE = 1;

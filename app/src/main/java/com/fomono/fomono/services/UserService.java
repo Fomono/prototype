@@ -9,8 +9,10 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 
+import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.databinding.FragmentUserProfileBinding;
 import com.fomono.fomono.models.user.User;
 import com.parse.ParseException;
@@ -20,6 +22,8 @@ import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -71,11 +75,11 @@ public class UserService {
     }
 
 
-    public Bitmap getBitMap(Context context, String filePath) {
+    public Bitmap getBitMap(Context context, String filePath, Uri uri) {
         Bitmap bitmap = null;
         int rotate = 0;
         try {
-            context.getContentResolver().notifyChange(Uri.parse(filePath), null);
+            context.getContentResolver().notifyChange(uri, null);
             File imageFile = new File(filePath);
             ExifInterface exif = new ExifInterface(
                     imageFile.getAbsolutePath());
@@ -99,11 +103,16 @@ public class UserService {
         }
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-        bitmap = BitmapFactory.decodeFile(filePath, options);
-        Matrix matrix = new Matrix();
-        if (rotate != 0) {
-            matrix.preRotate(rotate);
-            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        try {
+            InputStream input = context.getContentResolver().openInputStream(uri);
+            bitmap = BitmapFactory.decodeStream(input, null, options);
+            Matrix matrix = new Matrix();
+            if (rotate != 0) {
+                matrix.preRotate(rotate);
+                bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
         return bitmap;
     }
@@ -116,19 +125,35 @@ public class UserService {
         return cursor.getString(idx);
     }
 
-    public static File getOutputMediaFile() {
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "Gallery");
+    public static Uri getOutputMediaFileUri(Context context) {
+        // Only continue if the SD Card is mounted
+        if (isExternalStorageAvailable()) {
+            // Get safe storage directory for photos
+            // Use `getExternalFilesDir` on Context to access package-specific directories.
+            // This way, we don't need to request external read/write runtime permissions.
+            File mediaStorageDir = new File(
+                    context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), FomonoApplication.APP_TAG);
 
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                return null;
+            // Create the storage directory if it does not exist
+            if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
+                Log.d(FomonoApplication.APP_TAG, "failed to create directory");
             }
-        }
 
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        return new File(mediaStorageDir.getPath() + File.separator +
-                "IMG_" + timeStamp + ".jpg");
+            // Return the file target for the photo based on filename
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            File file = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
+
+            // wrap File object into a content provider
+            // required for API >= 24
+            // See http://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
+            return FileProvider.getUriForFile(context, "com.fomono.fomono.fileprovider", file);
+        }
+        return null;
+    }
+
+    public static boolean isExternalStorageAvailable() {
+        String state = Environment.getExternalStorageState();
+        return state.equals(Environment.MEDIA_MOUNTED);
     }
 
 

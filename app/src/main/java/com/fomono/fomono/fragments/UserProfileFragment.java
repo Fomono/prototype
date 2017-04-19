@@ -42,6 +42,10 @@ import static android.app.Activity.RESULT_OK;
 
 
 public class UserProfileFragment extends android.support.v4.app.Fragment implements PhotoAlertDialogFragment.PhotoAlertDialogFragmentListener {
+
+    public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+    public final static int SELECT_IMAGE_ACTIVITY_REQUEST_CODE = 200;
+
     FragmentUserProfileBinding fragmentUserProfile;
     User user;
     Uri file;
@@ -137,25 +141,28 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
 
     public void clickPicture() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        file = Uri.fromFile(uService.getOutputMediaFile());
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, file);
-        startActivityForResult(intent, 100);
+        file = UserService.getOutputMediaFileUri(getContext());
 
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set the image file name
 
+        // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
+        // So as long as the result is not null, it's safe to use the intent.
+        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+            // Start the image capture intent to take photo
+            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+        }
     }
 
     private void saveProfileImage(int requestCode) {
-        int rotate = 0;
         String filePath = null;
-        if (requestCode == 100) {
+        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             filePath = file.getPath();
-        } else if (requestCode == 200) {
+        } else if (requestCode == SELECT_IMAGE_ACTIVITY_REQUEST_CODE) {
             filePath = getPath(file);
         }
-        Bitmap bitmap = uService.getBitMap(getContext(), filePath);
+        Bitmap bitmap = uService.getBitMap(getContext(), filePath, file);
         fragmentUserProfile.ivUserImage.setImageBitmap(bitmap);
         uService.saveParseFile(bitmap);
-
     }
 
 
@@ -170,7 +177,7 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
     public void pickPicture() {
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, 200);
+        startActivityForResult(photoPickerIntent, SELECT_IMAGE_ACTIVITY_REQUEST_CODE);
 
     }
 
@@ -201,7 +208,7 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         if (resultCode == RESULT_OK) {
-            if (requestCode == 200) {
+            if (requestCode == SELECT_IMAGE_ACTIVITY_REQUEST_CODE) {
                 file = imageReturnedIntent.getData();
             }
             saveProfileImage(requestCode);
