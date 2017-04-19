@@ -29,9 +29,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.R.attr.data;
-import static android.R.attr.offset;
-
 /**
  * Created by jsaluja on 4/8/2017.
  */
@@ -176,5 +173,10 @@ public class EatsFragment extends MainListFragment {
                 smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
             }
         });
+    }
+
+    @Override
+    public String getFragmentName() {
+        return TAG;
     }
 }

@@ -7,13 +7,10 @@ import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.sql.Time;
-import java.text.DateFormatSymbols;
 import com.bumptech.glide.Glide;
 import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
@@ -27,6 +24,7 @@ import com.fomono.fomono.utils.ConfigUtil;
 import com.fomono.fomono.utils.FavoritesUtil;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormatSymbols;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -40,17 +38,23 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private static final String TAG = "Fomono Adapter";
     private int screenWidth;
     private FavoritesUtil favsUtil;
+    private String fragmentName;
 
     public interface FomonoAdapterObjectListener {
         void onOpenLink(Intent i);
     }
 
+    public interface FomonoEventUpdateListener {
+        void onFomonoEventUpdated(FomonoEvent fEvent, String fragmentName);
+    }
+
     FomonoAdapterObjectListener fomonoAdapterObjectListener;
 
-    public FomonoAdapter(Context context, ArrayList<FomonoEvent> fomonoEvents) {
+    public FomonoAdapter(Context context, ArrayList<FomonoEvent> fomonoEvents, String fragmentName) {
         mContext = context;
         mFomonoEvents = fomonoEvents;
         this.fomonoAdapterObjectListener = null;
+        this.fragmentName = fragmentName;
         this.favsUtil = FavoritesUtil.getInstance();
     }
 
@@ -302,6 +306,9 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             } else {
                 holder.eventFavorited.setImageResource(R.drawable.ic_favorite);
                 favsUtil.addToFavorites(fEvent);
+            }
+            if (mContext instanceof FomonoEventUpdateListener) {
+                ((FomonoEventUpdateListener) mContext).onFomonoEventUpdated(fEvent, fragmentName);
             }
         });
     }

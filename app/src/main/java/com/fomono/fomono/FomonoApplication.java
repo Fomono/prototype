@@ -44,6 +44,7 @@ public class FomonoApplication extends Application {
     public static final int PERM_LOC_BUS_REQ_CODE = 2;
     public static final int PERM_LOC_MOVIE_REQ_CODE = 3;
     public static final int PERM_LOC_FILTER_REQ_CODE = 4;
+    public static final int PERM_CAM_PROFILE_REQ_CODE = 5;
 
     final String CHANNEL_NAME = "pushChannelTest";
 

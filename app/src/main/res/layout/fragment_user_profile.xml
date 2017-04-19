@@ -232,47 +232,15 @@
             android:textStyle="bold" />
 
 
-        <View
-            android:id="@+id/spView06"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/etAboutMe"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="15dp"
-            android:background="@color/veryLightGrey" />
-
-
-        <TextView
-            android:id="@+id/tvLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/spView06"
-            android:layout_marginLeft="5dp"
-            android:text='Location'
-            android:textSize="15dp" />
-
-        <EditText
-            android:id="@+id/etLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvLocation"
-            android:layout_marginBottom="25dp"
-            android:layout_marginLeft="5dp"
-            android:background="@android:color/transparent"
-            android:text='@{user.location}'
-            android:textSize="20dp"
-            android:layout_marginTop="5dp"
-            android:textStyle="bold" />
-
-
         <Button
             android:id="@+id/btnSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/etLocation"
+            android:layout_below="@+id/etAboutMe"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="50dp"
             android:backgroundTint="@color/lightBlue"
-            android:text="SAVE"
+            android:text="@string/profile_save"
             android:textColor="@color/white"
             android:textSize="15sp" />
 
@@ -280,10 +248,10 @@
             android:id="@+id/btnCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/etLocation"
+            android:layout_alignTop="@+id/btnSave"
             android:layout_toEndOf="@id/btnSave"
             android:layout_toRightOf="@id/btnSave"
-            android:text="CANCEL"
+            android:text="@string/profile_cancel"
             android:textSize="15sp" />
 
 

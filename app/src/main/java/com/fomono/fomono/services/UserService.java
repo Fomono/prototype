@@ -53,7 +53,7 @@ public class UserService {
                 stream);
         byte[] imageBytes = stream.toByteArray();
         ParseFile file = new ParseFile("profile_picture_file", imageBytes);
-        ParseUser finalPUser = ParseUser.getCurrentUser();;
+        ParseUser finalPUser = ParseUser.getCurrentUser();
         file.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -70,6 +70,7 @@ public class UserService {
                 }
             }
         });
+        setUserUpdated(true);
         return (file.getUrl());
 
     }
@@ -230,9 +231,6 @@ public class UserService {
         }
         if (fView.etAboutMe.getText() != null && !(fView.etAboutMe.getText().toString().equals(pUser.get("aboutMe")))) {
             pUser.put("aboutMe", fView.etAboutMe.getText().toString());
-        }
-        if (fView.etLocation.getText() != null && !(fView.etLocation.getText().toString().equals(pUser.get("location")))) {
-            pUser.put("location", fView.etLocation.getText().toString());
         }
         pUser.saveInBackground(new SaveCallback() {
             @Override

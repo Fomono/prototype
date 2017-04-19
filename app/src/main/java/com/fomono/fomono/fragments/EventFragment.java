@@ -176,4 +176,9 @@ public class EventFragment extends MainListFragment {
             }
         });
     }
+
+    @Override
+    public String getFragmentName() {
+        return TAG;
+    }
 }

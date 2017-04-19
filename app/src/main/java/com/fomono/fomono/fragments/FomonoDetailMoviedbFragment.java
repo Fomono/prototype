@@ -52,7 +52,9 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
     String movieKey;
     String movieDBURL = "https://www.themoviedb.org/movie?language=en";
 
-
+    public interface FomonoEventUpdateListener {
+        void onFomonoEventUpdated();
+    }
 
 
 
@@ -192,6 +194,9 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
                 } else {
                     ibFavorite.setImageResource(R.drawable.ic_favorite);
                     favsUtil.addToFavorites(movie);
+                }
+                if (getActivity() instanceof FomonoEventUpdateListener) {
+                    ((FomonoEventUpdateListener) getActivity()).onFomonoEventUpdated();
                 }
             }
         });

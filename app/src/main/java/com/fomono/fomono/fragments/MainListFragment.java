@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.fomono.fomono.R;
+import com.fomono.fomono.activities.FomonoActivity;
 import com.fomono.fomono.activities.FomonoDetailActivity;
 import com.fomono.fomono.adapters.FomonoAdapter;
 import com.fomono.fomono.databinding.FomonoMainListFragmentBinding;
@@ -25,7 +27,6 @@ import com.fomono.fomono.network.client.MovieDBClientRetrofit;
 import com.fomono.fomono.network.client.YelpClientRetrofit;
 import com.fomono.fomono.supportclasses.EndlessRecyclerViewScrollListener;
 import com.fomono.fomono.supportclasses.ItemClickSupport;
-import com.fomono.fomono.supportclasses.RecyclerItemDecorator;
 
 import java.util.ArrayList;
 
@@ -65,7 +66,7 @@ public abstract class MainListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         fomonoEvents = new ArrayList<>();
-        fomonoAdapter = new FomonoAdapter(getActivity(), fomonoEvents);
+        fomonoAdapter = new FomonoAdapter(getActivity(), fomonoEvents, getFragmentName());
 
         eventBriteClientRetrofit = EventBriteClientRetrofit.getInstance();
         yelpClientRetrofit = YelpClientRetrofit.getInstance();
@@ -89,9 +90,10 @@ public abstract class MainListFragment extends Fragment {
 
         ItemClickSupport.addTo(rvList).setOnItemClickListener(
                 (recyclerView, position, v) -> {
-                    Intent showEatsDetails = new Intent(mContext, FomonoDetailActivity.class);
-                    showEatsDetails.putExtra("FOM_OBJ", fomonoEvents.get(position));
-                    mContext.startActivity(showEatsDetails);
+                    Intent showDetails = new Intent(mContext, FomonoDetailActivity.class);
+                    showDetails.putExtra("position", position);
+                    showDetails.putExtra("FOM_OBJ", fomonoEvents.get(position));
+                    ((AppCompatActivity) mContext).startActivityForResult(showDetails, FomonoActivity.REQUEST_CODE_DETAILS);
                 }
         );
 
@@ -122,4 +124,20 @@ public abstract class MainListFragment extends Fragment {
         fomonoAdapter.notifyItemRangeRemoved(0, size);
     }
 
+    public abstract String getFragmentName();
+
+    public void updateFomonoEvent(FomonoEvent fEvent, int position) {
+        if (position < 0) {
+            for (int i = 0; i < fomonoEvents.size(); i++) {
+                FomonoEvent curEvent = fomonoEvents.get(i);
+                if (curEvent.getStringId().equals(fEvent.getStringId()) && curEvent.getApiName().equals(fEvent.getApiName())) {
+                    position = i;
+                    break;
+                }
+            }
+        }
+        if (position >= 0) {
+            fomonoAdapter.notifyItemChanged(position);
+        }
+    }
 }
