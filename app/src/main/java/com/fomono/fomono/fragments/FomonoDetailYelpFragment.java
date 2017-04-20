@@ -78,6 +78,10 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
     public int screenWidthDetail;
     LinearLayout llGallery;
 
+    public interface FomonoEventUpdateListener {
+        void onFomonoEventUpdated();
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -232,6 +236,9 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
                 } else {
                     ibFavorite.setImageResource(R.drawable.ic_favorite);
                     favsUtil.addToFavorites(business);
+                }
+                if (getActivity() instanceof FomonoEventUpdateListener) {
+                    ((FomonoEventUpdateListener) getActivity()).onFomonoEventUpdated();
                 }
             }
         });

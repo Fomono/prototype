@@ -3,7 +3,8 @@
     <string name="app_name">Fomono</string>
     <string name="notif_action_text">Take a look.</string>
     <string name="title_activity_fomono">FomonoActivity</string>
-    <string name="title_activity_fomono_detail">Fomono</string>
+    <string name="title_activity_fomono_detail">Details</string>
+    <string name="title_activity_profile">User Profile</string>
     <string name="title_activity_fomono_filter">Filters</string>
     <string name="title_activity_favorite_fragment">FavoriteFragment</string>
     <string name="EventFeeFree">Free</string>
@@ -76,6 +77,10 @@
     <string name="movie_sort_val_one">playing_now</string>
     <string name="movie_sort_val_two">popular</string>
     <string name="movie_sort_val_three">top_rated</string>
+
+    <string name="profile_save">Save</string>
+    <string name="profile_cancel">Cancel</string>
+
 
     <string-array name="FilterEventSortArray">
         <item>best_match</item>

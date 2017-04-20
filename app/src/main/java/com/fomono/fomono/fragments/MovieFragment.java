@@ -1,6 +1,5 @@
 package com.fomono.fomono.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.fomono.fomono.R;
@@ -18,9 +16,7 @@ import com.fomono.fomono.models.movies.MovieResponse;
 import com.fomono.fomono.supportclasses.EndlessRecyclerViewScrollListener;
 import com.fomono.fomono.supportclasses.InternetAlertDialogue;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -289,5 +285,10 @@ public class MovieFragment extends MainListFragment {
                 }
             });
         }
+    }
+
+    @Override
+    public String getFragmentName() {
+        return TAG;
     }
 }

@@ -20,7 +20,7 @@ import java.util.List;
  */
 
 public class FavoritesFragment extends MainListFragment implements FavoritesUtil.FavoritesListener {
-    private final static String TAG = "Favorites fragment";
+    public final static String TAG = "Favorites fragment";
 
     @Nullable
     @Override
@@ -60,6 +60,11 @@ public class FavoritesFragment extends MainListFragment implements FavoritesUtil
         super.onDestroyView();
 
         FavoritesUtil.getInstance().removeListener(this);
+    }
+
+    @Override
+    public String getFragmentName() {
+        return TAG;
     }
 }
 
