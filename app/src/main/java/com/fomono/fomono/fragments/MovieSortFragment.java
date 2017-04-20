@@ -30,6 +30,7 @@ public class MovieSortFragment extends BaseSortFragment {
                              Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
+        sortText.setText("Preference");
         sortButton1.setText(getResources().getString(R.string.movie_sort_val_one));
         sortButton2.setText(getResources().getString(R.string.movie_sort_val_two));
         sortButton3.setText(getResources().getString(R.string.movie_sort_val_three));

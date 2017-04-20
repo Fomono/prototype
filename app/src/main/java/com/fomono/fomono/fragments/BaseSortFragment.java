@@ -23,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.fomono.fomono.R;
 import com.fomono.fomono.databinding.FragmentSortBinding;
@@ -31,7 +32,7 @@ public class BaseSortFragment extends DialogFragment {
 
     public RadioButton sortButton1, sortButton2, sortButton3;
     public RadioGroup sortRadioGroup;
-    String sortingParam;
+    public TextView sortText;
 
     public OnFragmentInteractionListener mListener;
 
@@ -62,6 +63,8 @@ public class BaseSortFragment extends DialogFragment {
         sortButton2 = binding.SortButton2Id;
         sortButton3 = binding.SortButton3Id;
         sortRadioGroup = binding.SortRadioGrp;
+        sortText = binding.SortTextId;
+
     }
 
     @Override
