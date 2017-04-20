@@ -42,7 +42,7 @@
     <string name="close_drawer">Close nav drawer</string>
     <string name="drawer_menu_timeline">Timeline</string>
     <string name="menu_sort">Sort</string>
-    <string name="FilterSortText">Sort results by:</string>
+    <string name="FilterSortText">Sort by</string>
     <string name="MovieSortFilterText">Pick a preference:</string>
     <string name="FilterEventSortButtonText">Search</string>
     <string name="FilterEatsSortButtonText">Sort</string>

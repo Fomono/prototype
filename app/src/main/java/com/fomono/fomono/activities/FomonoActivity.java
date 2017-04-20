@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
@@ -73,9 +75,9 @@ public class FomonoActivity extends AppCompatActivity implements BaseSortFragmen
     private ViewPager fomonoPager;
     private PagerSlidingTabStrip fomonoTabStrip;
     private int ActiveViewPagerPagePosition = 0;
-    private int eventSortFragmentParamPos = 0;
-    private int eatsSortFragmentParamPos = 0;
-    private int movieSortFragmentParamPos = 0;
+    private int eventSortRadioButtonSelected = -1;
+    private int eatsSortRadioButtonSelected = -1;
+    private int movieSortRadioButtonSelected = -1;
     private ImageView navHeaderProfileImage;
     private TextView tvNavName;
 
@@ -181,17 +183,17 @@ public class FomonoActivity extends AppCompatActivity implements BaseSortFragmen
 
                         FragmentManager fm = getSupportFragmentManager();
                         if (viewPagerFragment instanceof EventFragment) {
-                            EventSortFragment sortFragmentObject = EventSortFragment.newInstance(eventSortFragmentParamPos);
+                            EventSortFragment sortFragmentObject = EventSortFragment.newInstance(eventSortRadioButtonSelected);
                             sortFragmentObject.show(fm, "fragment_edit_name");
      //                       //FIXME - Insert events filter fragment here
 
                         } else if(viewPagerFragment instanceof EatsFragment) {
-                            EatsSortFragment sortFragmentObject = EatsSortFragment.newInstance(eatsSortFragmentParamPos);
+                            EatsSortFragment sortFragmentObject = EatsSortFragment.newInstance(eatsSortRadioButtonSelected);
                            sortFragmentObject.show(fm, "fragment_edit_name");
    //                         //FIXME - Insert eats filter fragment here
 
                         } else if(viewPagerFragment instanceof MovieFragment) {
-                            MovieSortFragment sortFragmentObject = MovieSortFragment.newInstance(movieSortFragmentParamPos);
+                            MovieSortFragment sortFragmentObject = MovieSortFragment.newInstance(movieSortRadioButtonSelected);
                             sortFragmentObject.show(fm, "fragment_edit_name");
                         }
                     } else {
@@ -210,7 +212,7 @@ public class FomonoActivity extends AppCompatActivity implements BaseSortFragmen
     }
 
     @Override
-    public void onFinishSortDialog(String sortString, int pos) {
+    public void onFinishSortDialog(String sortString, int radioButtonCheckedId) {
 
         String name = makeFragmentName(fomonoPager.getId(), ActiveViewPagerPagePosition);
         Fragment viewPagerFragment = getSupportFragmentManager().findFragmentByTag(name);
@@ -218,15 +220,15 @@ public class FomonoActivity extends AppCompatActivity implements BaseSortFragmen
         if (viewPagerFragment != null) {
             if (viewPagerFragment.isResumed()) {
                 if (viewPagerFragment instanceof EventFragment) {
-                    eventSortFragmentParamPos = pos;
+                    eventSortRadioButtonSelected = radioButtonCheckedId;
                     EventFragment mEventFragment = (EventFragment) viewPagerFragment;
                     mEventFragment.refreshEventList(sortString);
                 } else if (viewPagerFragment instanceof EatsFragment) {
-                    eatsSortFragmentParamPos = pos;
+                    eatsSortRadioButtonSelected = radioButtonCheckedId;
                     EatsFragment mEatsFragment = (EatsFragment) viewPagerFragment;
                     mEatsFragment.refreshEatsList(sortString);
                 } else if (viewPagerFragment instanceof MovieFragment) {
-                    movieSortFragmentParamPos = pos;
+                    movieSortRadioButtonSelected = radioButtonCheckedId;
                     MovieFragment mMovieFragment = (MovieFragment) viewPagerFragment;
                     mMovieFragment.refreshMovieList(sortString);
                 }
