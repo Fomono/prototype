@@ -27,10 +27,12 @@ import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
 import com.fomono.fomono.adapters.FomonoMainPagerAdapter;
 import com.fomono.fomono.databinding.ActivityFomonoBinding;
+import com.fomono.fomono.fragments.BaseSortFragment;
 import com.fomono.fomono.fragments.EatsFragment;
 import com.fomono.fomono.fragments.EatsSortFragment;
 import com.fomono.fomono.fragments.EventFragment;
 import com.fomono.fomono.fragments.EventSortFragment;
+import com.fomono.fomono.fragments.FavoritesFragment;
 import com.fomono.fomono.fragments.MovieFragment;
 import com.fomono.fomono.fragments.MovieSortFragment;
 import com.fomono.fomono.models.eats.Business;
@@ -57,9 +59,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class FomonoActivity extends AppCompatActivity implements EventSortFragment.OnFragmentInteractionListener,
-                                                                 EatsSortFragment.OnFragmentInteractionListener,
-                                                                 MovieSortFragment.OnFragmentInteractionListener {
+public class FomonoActivity extends AppCompatActivity implements BaseSortFragment.OnFragmentInteractionListener {
     private FomonoMainPagerAdapter fomonoMainPagerAdapter;
     private final static String TAG = "Fomono Activity";
     private NavigationView nvView;
@@ -180,10 +180,12 @@ public class FomonoActivity extends AppCompatActivity implements EventSortFragme
                         if (viewPagerFragment instanceof EventFragment) {
                             EventSortFragment sortFragmentObject = EventSortFragment.newInstance(eventSortFragmentParamPos);
                             sortFragmentObject.show(fm, "fragment_edit_name");
+     //                       //FIXME - Insert events filter fragment here
 
                         } else if(viewPagerFragment instanceof EatsFragment) {
                             EatsSortFragment sortFragmentObject = EatsSortFragment.newInstance(eatsSortFragmentParamPos);
-                            sortFragmentObject.show(fm, "fragment_edit_name");
+                           sortFragmentObject.show(fm, "fragment_edit_name");
+   //                         //FIXME - Insert eats filter fragment here
 
                         } else if(viewPagerFragment instanceof MovieFragment) {
                             MovieSortFragment sortFragmentObject = MovieSortFragment.newInstance(movieSortFragmentParamPos);
@@ -206,6 +208,7 @@ public class FomonoActivity extends AppCompatActivity implements EventSortFragme
 
     @Override
     public void onFinishSortDialog(String sortString, int pos) {
+
         String name = makeFragmentName(fomonoPager.getId(), ActiveViewPagerPagePosition);
         Fragment viewPagerFragment = getSupportFragmentManager().findFragmentByTag(name);
 
@@ -226,6 +229,7 @@ public class FomonoActivity extends AppCompatActivity implements EventSortFragme
                 }
             }
         }
+
     }
 
     @Override

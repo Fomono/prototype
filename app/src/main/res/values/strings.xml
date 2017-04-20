@@ -64,6 +64,19 @@
     <string name="signup_lastname">Last Name</string>
     <string name="signup_signup">Sign Up</string>
 
+
+    <string name="event_sort_val_one">best_match</string>
+    <string name="event_sort_val_two">date</string>
+    <string name="event_sort_val_three">distance</string>
+
+    <string name="eats_sort_val_one">best_match</string>
+    <string name="eats_sort_val_two">distance</string>
+    <string name="eats_sort_val_three">rating_count</string>
+
+    <string name="movie_sort_val_one">playing_now</string>
+    <string name="movie_sort_val_two">popular</string>
+    <string name="movie_sort_val_three">top_rated</string>
+
     <string-array name="FilterEventSortArray">
         <item>best_match</item>
         <item>date</item>
@@ -75,9 +88,9 @@
         <item>rating_count</item>
     </string-array>
     <string-array name="FilterMovieSortArray">
-        <item>Playing Now</item>
-        <item>Popular</item>
-        <item>Top Rated</item>
+        <item>playing_now</item>
+        <item>popular</item>
+        <item>top_rated</item>
     </string-array>
 
 </resources>

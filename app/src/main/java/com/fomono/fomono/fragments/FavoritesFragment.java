@@ -28,7 +28,6 @@ public class FavoritesFragment extends MainListFragment implements FavoritesUtil
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         searchParamDispText.setVisibility(View.GONE);
-
         InternetAlertDialogue internetAlertDialogue = new InternetAlertDialogue(mContext);
         if (internetAlertDialogue.checkForInternet()) {
             populateFavorites();
@@ -45,7 +44,7 @@ public class FavoritesFragment extends MainListFragment implements FavoritesUtil
 
     @Override
     public void onFavoritesLoaded(List<Favorite> favorites) {
-        smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
+        smoothProgressBar.setVisibility(ProgressBar.GONE);
 
         clear();
         List<FomonoEvent> favoriteEvents = new ArrayList<>();

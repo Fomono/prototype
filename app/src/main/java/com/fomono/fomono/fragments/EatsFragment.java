@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.fomono.fomono.FomonoApplication;
+import com.fomono.fomono.R;
 import com.fomono.fomono.models.db.Filter;
 import com.fomono.fomono.models.eats.Business;
 import com.fomono.fomono.models.eats.YelpResponse;
@@ -40,6 +41,7 @@ public class EatsFragment extends MainListFragment {
     private final static String TAG = "Eats fragment";
     private String sortParameter = null;
     private String searchParameter = null;
+    private int buttonSelected = 1;
 
     @Nullable
     @Override
@@ -48,7 +50,6 @@ public class EatsFragment extends MainListFragment {
 
         searchParamDispText.setVisibility(View.GONE);
 
-        InternetAlertDialogue internetAlertDialogue = new InternetAlertDialogue(mContext);
         if(internetAlertDialogue.checkForInternet()) {
             int offset = fomonoEvents.size();
             populateEats(offset, null, searchParameter);
@@ -57,10 +58,9 @@ public class EatsFragment extends MainListFragment {
         rvList.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                if(internetAlertDialogue.checkForInternet()) {
-                    int offset = fomonoEvents.size();
-                    populateEats(offset, sortParameter, searchParameter);
-                }
+                int offset = fomonoEvents.size();
+                populateEats(offset, sortParameter, searchParameter);
+
             }
         });
 
@@ -87,35 +87,37 @@ public class EatsFragment extends MainListFragment {
 
     public void populateEats(int offset, String sortParameter, String searchQuery) {
 
-        if(searchQuery != null) {
-            searchParamDispText.setVisibility(View.VISIBLE);
-            searchParamDispText.setText(""+searchQuery+" X");
-        } else {
-            searchParamDispText.setVisibility(View.GONE);
-        }
+        if(internetAlertDialogue.checkForInternet()) {
+            if (searchQuery != null) {
+                searchParamDispText.setVisibility(View.VISIBLE);
+                searchParamDispText.setText("" + searchQuery + " X");
+            } else {
+                searchParamDispText.setVisibility(View.GONE);
+            }
 
-        smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
-        try {
-            //get user filters for yelp
-            FilterUtil.getInstance().getFilters(FomonoApplication.API_NAME_EATS, (filters, e) -> {
-                String categoriesString = "";
-                if (filters != null) {
-                    Filter.initializeFromList(filters);
-                    categoriesString = FilterUtil.getInstance().buildCategoriesString(filters);
-                }
-                //default to our own set of filter categories
-                if (TextUtils.isEmpty(categoriesString)) {
-                    categoriesString = FilterUtil.getInstance().getDefaultFilterString(FomonoApplication.API_NAME_EATS, mContext);
-                }
-                ParseUser currentUser = ParseUser.getCurrentUser();
-                String location = currentUser.getString("location");
-                int distance = currentUser.getInt("distance");
-                //gotta convert distance because yelp uses meters, and maxes out at 40,000 meters.
-                int distanceInMeters = Math.min(40000, NumberUtil.convertToMeters(distance));
-                getYelpBusinesses(getActivity(), location, categoriesString, distanceInMeters, offset, sortParameter, searchQuery);
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
+            smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
+            try {
+                //get user filters for yelp
+                FilterUtil.getInstance().getFilters(FomonoApplication.API_NAME_EATS, (filters, e) -> {
+                    String categoriesString = "";
+                    if (filters != null) {
+                        Filter.initializeFromList(filters);
+                        categoriesString = FilterUtil.getInstance().buildCategoriesString(filters);
+                    }
+                    //default to our own set of filter categories
+                    if (TextUtils.isEmpty(categoriesString)) {
+                        categoriesString = FilterUtil.getInstance().getDefaultFilterString(FomonoApplication.API_NAME_EATS, mContext);
+                    }
+                    ParseUser currentUser = ParseUser.getCurrentUser();
+                    String location = currentUser.getString("location");
+                    int distance = currentUser.getInt("distance");
+                    //gotta convert distance because yelp uses meters, and maxes out at 40,000 meters.
+                    int distanceInMeters = Math.min(40000, NumberUtil.convertToMeters(distance));
+                    getYelpBusinesses(getActivity(), location, categoriesString, distanceInMeters, offset, sortParameter, searchQuery);
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -141,6 +143,9 @@ public class EatsFragment extends MainListFragment {
         }
 
         if((sortParam != null) && !(sortParam.equals(""))) {
+            if(sortParam.equals("rating_count")) {
+                sortParam = "review_count";
+            }
             data.put("sort_by", sortParam);
         }
 
@@ -167,13 +172,13 @@ public class EatsFragment extends MainListFragment {
                 } catch(Exception e) {
                     e.printStackTrace();
                 }
-                smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                smoothProgressBar.setVisibility(ProgressBar.GONE);
             }
 
             @Override
             public void onFailure(Call<YelpResponse> call, Throwable t) {
                 Log.d(TAG, "REQUEST Failed " + t.getMessage() );
-                smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                smoothProgressBar.setVisibility(ProgressBar.GONE);
             }
         });
     }

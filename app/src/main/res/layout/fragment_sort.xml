@@ -6,5 +6,73 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:context="com.fomono.fomono.fragments.FilterFragment">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/SortTextId"
+            android:textSize="15sp"
+            android:textColor="@color/colorWhite"
+            android:text="@string/FilterSortText"
+            android:layout_alignParentTop="true"/>
+
+        <LinearLayout
+            android:id="@+id/SortButtonLinId"
+            android:layout_width="wrap_content"
+            android:layout_below="@id/SortTextId"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:weightSum="3">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/colorFomono"
+                android:background="@color/colorWhite"
+                android:layout_weight="1"
+                android:textAllCaps="false"
+                android:text="best_match"
+                android:id="@+id/SortButton1Id"
+                />
+
+            <View
+                android:id="@+id/vSep1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorFomono"
+                android:visibility="visible" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/colorFomono"
+                android:background="@color/colorWhite"
+                android:layout_weight="1"
+                android:textAllCaps="false"
+                android:text="best_match"
+                android:id="@+id/SortButton2Id"
+                />
+
+            <View
+                android:id="@+id/vSep2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorFomono"
+                android:visibility="visible" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/colorFomono"
+                android:background="@color/colorWhite"
+                android:layout_weight="1"
+                android:textAllCaps="false"
+                android:text="best_match"
+                android:id="@+id/SortButton3Id"
+                />
+        </LinearLayout>
+
     </RelativeLayout>
 </layout>
