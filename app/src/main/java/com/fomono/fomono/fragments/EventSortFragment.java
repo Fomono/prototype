@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 
 import com.fomono.fomono.R;
@@ -25,14 +26,14 @@ public class EventSortFragment extends BaseSortFragment {
 
     String sortingParam;
     int sortingParamPos=0;
+    int prevSortingParamId=0;
 
-    public static EventSortFragment newInstance(int previousSortingParamPos) {
+    public static EventSortFragment newInstance(int selectedRadioButton) {
         EventSortFragment fragment = new EventSortFragment();
         Bundle args = new Bundle();
-        args.putInt("previous_spinner_pos", previousSortingParamPos);
+        args.putInt("previous_pos", selectedRadioButton);
         fragment.setArguments(args);
         return fragment;
-
     }
 
     @Override
@@ -40,12 +41,28 @@ public class EventSortFragment extends BaseSortFragment {
                              Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        sortButton1.setBackground(ContextCompat.getDrawable(getActivity(), R.color.colorGrey));
 
         sortButton1.setText(getResources().getString(R.string.event_sort_val_one));
         sortButton2.setText(getResources().getString(R.string.event_sort_val_two));
         sortButton3.setText(getResources().getString(R.string.event_sort_val_three));
 
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            prevSortingParamId = bundle.getInt("previous_pos", 0);
+        }
+
+        if(prevSortingParamId != -1) {
+            RadioButton prevChecked = (RadioButton) view.findViewById(prevSortingParamId);
+            prevChecked.setChecked(true);
+        }
+
+        sortRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            if(checkedId != prevSortingParamId) {
+                RadioButton r = (RadioButton) view.findViewById(checkedId);
+                mListener.onFinishSortDialog(r.getText().toString(), checkedId);
+                dismiss();
+            }
+        });
         return view;
     }
 }
