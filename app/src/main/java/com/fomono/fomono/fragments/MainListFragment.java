@@ -3,9 +3,11 @@ package com.fomono.fomono.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -13,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -26,6 +30,7 @@ import com.fomono.fomono.network.client.EventBriteClientRetrofit;
 import com.fomono.fomono.network.client.MovieDBClientRetrofit;
 import com.fomono.fomono.network.client.YelpClientRetrofit;
 import com.fomono.fomono.supportclasses.EndlessRecyclerViewScrollListener;
+import com.fomono.fomono.supportclasses.InternetAlertDialogue;
 import com.fomono.fomono.supportclasses.ItemClickSupport;
 
 import java.util.ArrayList;
@@ -53,6 +58,7 @@ public abstract class MainListFragment extends Fragment {
     public YelpClientRetrofit yelpClientRetrofit;
     MovieDBClientRetrofit movieDBClientRetrofit;
     public TextView searchParamDispText;
+    InternetAlertDialogue internetAlertDialogue;
 
 
 
@@ -77,6 +83,7 @@ public abstract class MainListFragment extends Fragment {
         dataBindFragmentValues(binding);
 
         mContext = view.getContext();
+        internetAlertDialogue = new InternetAlertDialogue(mContext);
         //Implementing the smooth progress bar. The loading is so fast that the bar never shows up
         progressBar.setIndeterminateDrawable(new SmoothProgressDrawable.Builder(getActivity()).interpolator(new AccelerateInterpolator()).build());
         smoothProgressBar.setSmoothProgressDrawableBackgroundDrawable(
@@ -84,9 +91,8 @@ public abstract class MainListFragment extends Fragment {
                         getResources().getIntArray(R.array.pocket_background_colors),
                         ((SmoothProgressDrawable) smoothProgressBar.getIndeterminateDrawable()).getStrokeWidth()));
 
-        progressBar.setVisibility(ProgressBar.INVISIBLE);
+        progressBar.setVisibility(ProgressBar.GONE);
         setupRecycleAdapter();
-
 
         ItemClickSupport.addTo(rvList).setOnItemClickListener(
                 (recyclerView, position, v) -> {

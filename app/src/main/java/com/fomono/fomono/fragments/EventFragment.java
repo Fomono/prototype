@@ -2,6 +2,7 @@ package com.fomono.fomono.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -40,6 +41,7 @@ public class EventFragment extends MainListFragment {
     private int eventPage = 0;
     private String sortParameter = null;
     private String searchParameter = null;
+    private int buttonSelected = 1;
 
     @Nullable
     @Override
@@ -48,7 +50,6 @@ public class EventFragment extends MainListFragment {
 
         searchParamDispText.setVisibility(View.GONE);
 
-        InternetAlertDialogue internetAlertDialogue = new InternetAlertDialogue(mContext);
         if(internetAlertDialogue.checkForInternet()) {
             populateEvents(eventPage++, sortParameter, searchParameter);
         }
@@ -76,6 +77,7 @@ public class EventFragment extends MainListFragment {
         searchParameter = query;
         eventPage = 0;
         populateEvents(eventPage++, sortParameter, searchParameter);
+
     }
 
     public void refreshEventList(String sortParam) {
@@ -88,33 +90,35 @@ public class EventFragment extends MainListFragment {
 
     public void populateEvents(int page, String sortParam, String searchQuery) {
 
-        if(searchQuery != null) {
-            searchParamDispText.setVisibility(View.VISIBLE);
-            searchParamDispText.setText(""+searchQuery+" X");
-        } else {
-            searchParamDispText.setVisibility(View.GONE);
-        }
+        if(internetAlertDialogue.checkForInternet()) {
+            if (searchQuery != null) {
+                searchParamDispText.setVisibility(View.VISIBLE);
+                searchParamDispText.setText("" + searchQuery + " X");
+            } else {
+                searchParamDispText.setVisibility(View.GONE);
+            }
 
-        smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
-        try {
-            //get user filters for events
-            FilterUtil.getInstance().getFilters(FomonoApplication.API_NAME_EVENTS, (filters, e) -> {
-                String categoriesString = "";
-                if (filters != null) {
-                    Filter.initializeFromList(filters);
-                    categoriesString = FilterUtil.getInstance().buildCategoriesString(filters);
-                }
-                //default to our own set of filter categories
-                if (TextUtils.isEmpty(categoriesString)) {
-                    categoriesString = FilterUtil.getInstance().getDefaultFilterString(FomonoApplication.API_NAME_EVENTS, mContext);
-                }
-                ParseUser currentUser = ParseUser.getCurrentUser();
-                String location = currentUser.getString("location");
-                int distance = currentUser.getInt("distance");
-                getEventList(page, searchQuery, location, categoriesString, distance, sortParam);
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
+            smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
+            try {
+                //get user filters for events
+                FilterUtil.getInstance().getFilters(FomonoApplication.API_NAME_EVENTS, (filters, e) -> {
+                    String categoriesString = "";
+                    if (filters != null) {
+                        Filter.initializeFromList(filters);
+                        categoriesString = FilterUtil.getInstance().buildCategoriesString(filters);
+                    }
+                    //default to our own set of filter categories
+                    if (TextUtils.isEmpty(categoriesString)) {
+                        categoriesString = FilterUtil.getInstance().getDefaultFilterString(FomonoApplication.API_NAME_EVENTS, mContext);
+                    }
+                    ParseUser currentUser = ParseUser.getCurrentUser();
+                    String location = currentUser.getString("location");
+                    int distance = currentUser.getInt("distance");
+                    getEventList(page, searchQuery, location, categoriesString, distance, sortParam);
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -138,6 +142,7 @@ public class EventFragment extends MainListFragment {
         }
 
         if((sortParam != null) && !(sortParam.equals(""))) {
+            if(sortParam.equals("best_match")) {sortParam = "best";}
             data.put("sort_by", sortParam);
         }
 
@@ -166,13 +171,13 @@ public class EventFragment extends MainListFragment {
                     fomonoEvents.addAll(events);
                     fomonoAdapter.notifyItemRangeInserted(fomonoAdapter.getItemCount(), fomonoEvents.size());
                 }
-                smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                smoothProgressBar.setVisibility(ProgressBar.GONE);
             }
 
             @Override
             public void onFailure(Call<EventBriteResponse> call, Throwable t) {
                 Log.d(TAG, "REQUEST Failed " + t.getMessage());
-                smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                smoothProgressBar.setVisibility(ProgressBar.GONE);
             }
         });
     }

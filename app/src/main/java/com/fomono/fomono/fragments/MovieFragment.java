@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -34,6 +35,7 @@ public class MovieFragment extends MainListFragment {
     public int moviePage = 1;
     private String sortParameter = null;
     private String searchParameter = null;
+    private int buttonSelected = 1;
 
     @Nullable
     @Override
@@ -42,17 +44,12 @@ public class MovieFragment extends MainListFragment {
 
         searchParamDispText.setVisibility(View.GONE);
 
-        InternetAlertDialogue internetAlertDialogue = new InternetAlertDialogue(mContext);
-        if (internetAlertDialogue.checkForInternet()) {
-            populateMovies(moviePage++, null, searchParameter);
-        }
+        populateMovies(moviePage++, null, searchParameter);
 
         rvList.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                if(internetAlertDialogue.checkForInternet()) {
-                    populateMovies(moviePage++, sortParameter, searchParameter);
-                }
+                populateMovies(moviePage++, sortParameter, searchParameter);
             }
         });
         searchParamDispText.setOnClickListener(v -> {
@@ -80,15 +77,18 @@ public class MovieFragment extends MainListFragment {
 
     public void populateMovies(int page, String sortParameter, String strQuery) {
 
-        if(strQuery != null) {
-            searchParamDispText.setVisibility(View.VISIBLE);
-            searchParamDispText.setText(""+strQuery+" X");
-        } else {
-            searchParamDispText.setVisibility(View.GONE);
-        }
+        if (internetAlertDialogue.checkForInternet()) {
+            if(strQuery != null) {
+                searchParamDispText.setVisibility(View.VISIBLE);
+                searchParamDispText.setText(""+strQuery+" X");
+            } else {
+                searchParamDispText.setVisibility(View.GONE);
+            }
 
-        smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
-        getMoviesNowPlaying(strQuery, page, sortParameter);
+            smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
+            getMoviesNowPlaying(strQuery, page, sortParameter);
+
+        }
     }
 
     public void getMoviesNowPlaying(String stringQuery, int page, String sortParam) {
@@ -119,18 +119,18 @@ public class MovieFragment extends MainListFragment {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                    smoothProgressBar.setVisibility(ProgressBar.GONE);
                 }
 
                 @Override
                 public void onFailure(Call<MovieResponse> call, Throwable t) {
                     Log.d(TAG, "REQUEST Failed " + t.getMessage());
-                    smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                    smoothProgressBar.setVisibility(ProgressBar.GONE);
                 }
             });
 
         } else if((sortParam != null) && !(sortParam.equals(""))) {
-            if (sortParam.equals("Playing Now")) {
+            if (sortParam.equals("playing_now")) {
                 Call<MovieResponse> callMovie = movieDBClientRetrofit.MovieDBRetrofitClientFactory()
                         .getNowPlayingMoviesFromServer(data);
 
@@ -151,17 +151,17 @@ public class MovieFragment extends MainListFragment {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                        smoothProgressBar.setVisibility(ProgressBar.GONE);
                     }
 
                     @Override
                     public void onFailure(Call<MovieResponse> call, Throwable t) {
                         Log.d(TAG, "REQUEST Failed " + t.getMessage());
-                        smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                        smoothProgressBar.setVisibility(ProgressBar.GONE);
                     }
                 });
 
-            } else if (sortParam.equals("Popular")) {
+            } else if (sortParam.equals("popular")) {
                 Call<MovieResponse> callMovie = movieDBClientRetrofit.MovieDBRetrofitClientFactory()
                         .getPopularMoviesFromServer(data);
 
@@ -182,17 +182,17 @@ public class MovieFragment extends MainListFragment {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                        smoothProgressBar.setVisibility(ProgressBar.GONE);
                     }
 
                     @Override
                     public void onFailure(Call<MovieResponse> call, Throwable t) {
                         Log.d(TAG, "REQUEST Failed " + t.getMessage());
-                        smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                        smoothProgressBar.setVisibility(ProgressBar.GONE);
                     }
                 });
 
-            } else if (sortParam.equals("Top Rated")) {
+            } else if (sortParam.equals("top_rated")) {
                 Call<MovieResponse> callMovie = movieDBClientRetrofit.MovieDBRetrofitClientFactory()
                         .getTopRatedMoviesFromServer(data);
 
@@ -213,13 +213,13 @@ public class MovieFragment extends MainListFragment {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                        smoothProgressBar.setVisibility(ProgressBar.GONE);
                     }
 
                     @Override
                     public void onFailure(Call<MovieResponse> call, Throwable t) {
                         Log.d(TAG, "REQUEST Failed " + t.getMessage());
-                        smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                        smoothProgressBar.setVisibility(ProgressBar.GONE);
                     }
                 });
 
@@ -244,13 +244,13 @@ public class MovieFragment extends MainListFragment {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                        smoothProgressBar.setVisibility(ProgressBar.GONE);
                     }
 
                     @Override
                     public void onFailure(Call<MovieResponse> call, Throwable t) {
                         Log.d(TAG, "REQUEST Failed " + t.getMessage());
-                        smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                        smoothProgressBar.setVisibility(ProgressBar.GONE);
                     }
                 });
             }
@@ -275,13 +275,13 @@ public class MovieFragment extends MainListFragment {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                    smoothProgressBar.setVisibility(ProgressBar.GONE);
                 }
 
                 @Override
                 public void onFailure(Call<MovieResponse> call, Throwable t) {
                     Log.d(TAG, "REQUEST Failed " + t.getMessage());
-                    smoothProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                    smoothProgressBar.setVisibility(ProgressBar.GONE);
                 }
             });
         }
