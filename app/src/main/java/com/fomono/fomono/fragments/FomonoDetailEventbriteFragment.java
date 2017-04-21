@@ -208,9 +208,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
         fragmentEventbriteDetailBinding.tvClockCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (event.getStart() != null && event.getEnd() != null) {
-                    addToCalendar(event.getStart().getLocal(), event.getEnd().getLocal());
-                }
+                addToCalendar();
             }
         });
 
@@ -387,7 +385,12 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
         });
     }
 
-    public void addToCalendar(String startDate, String endDate) {
+    public void addToCalendar() {
+        if (event.getStart() == null || event.getEnd() == null) {
+            return;
+        }
+        String startDate = event.getStart().getLocal();
+        String endDate = event.getEnd().getLocal();
         long calID = 3;
         long startMillis = 0;
         long endMillis = 0;
@@ -415,8 +418,8 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
             long eventID = Long.parseLong(uri.getLastPathSegment());
             Toast.makeText(getActivity(), "Added to Calendar",
                     Toast.LENGTH_LONG).show();
-
-            return;
+        } else {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_CALENDAR}, FomonoApplication.PERM_CAL_EVENT_REQ_CODE);
         }
     }
 
