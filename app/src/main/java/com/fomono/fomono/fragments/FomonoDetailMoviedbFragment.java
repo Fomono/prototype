@@ -33,6 +33,7 @@ import com.fomono.fomono.utils.FavoritesUtil;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import butterknife.ButterKnife;
 
@@ -103,23 +104,21 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
         fragmentBinding.tvSiteLink.setMovementMethod(LinkMovementMethod.getInstance());
         fragmentBinding.tvSiteLink.setText(Html.fromHtml("<a href=" + movieDBURL +  ">" + "CLICK HERE" + "</a>"));
 
-        fragmentBinding.tvEventDate.setText("");
+        //fragmentBinding.tvEventDate.setText("");
         fragmentBinding.tvRatingText.setText(Double.valueOf(movie.getVoteAverage()/2).toString()+ "/5");
 
-        setImageUrl(fragmentBinding.ivEventImage, movie.getPosterPath());
+        setImageUrl(fragmentBinding.ivEventImage, movie.getBackdropPath());
         fragmentBinding.rbMovierating.setRating
                 (Double.valueOf(movie.getVoteAverage()/2).floatValue());
 
         fragmentBinding.tvClockCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addToCalendar(movie.getReleaseDate(), movie.getReleaseDate());
+                addToCalendar(movie.getReleaseDate());
             }
         });
 
         fragmentBinding.tvGenres.setText(getGenres());
-
-
         fragmentBinding.ivMessageShareIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -208,6 +207,13 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
             }
         });
 
+
+        if(movie.isAdult()){
+            fragmentBinding.tvAdult.setText("Yes");
+        }else{
+            fragmentBinding.tvAdult.setText("No");
+        }
+
         return fragmentBinding.getRoot();
 
     }
@@ -260,26 +266,22 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
 
     }
 
-    public void addToCalendar(String startDate, String endDate) {
+    public void addToCalendar(String startDate) {
         long calID = 3;
         long startMillis = 0;
         long endMillis = 0;
-        startMillis = DateUtils.convertUTCtoMilliSeconds(startDate);
-        endMillis = DateUtils.convertUTCtoMilliSeconds(endDate);
+        startMillis = DateUtils.convertMovieDatetoMilliSeconds(startDate);
 
 
         ContentResolver cr = getActivity().getContentResolver();
         ContentValues values = new ContentValues();
         values.put(CalendarContract.Events.DTSTART, startMillis);
-        values.put(CalendarContract.Events.DTEND, endMillis);
+        values.put(CalendarContract.Events.DTEND, startMillis+7200000 );
         values.put(CalendarContract.Events.TITLE, movie.getTitle());
         values.put(CalendarContract.Events.DESCRIPTION, movie.getOverview());
         values.put(CalendarContract.Events.CALENDAR_ID, calID);
-        values.put(CalendarContract.Events.EVENT_TIMEZONE, "UTC");
-        // TODO: Consider calling
+        values.put(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().getID());
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
             Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
             long eventID = Long.parseLong(uri.getLastPathSegment());
             Toast.makeText(getActivity(), "Added to Calendar",

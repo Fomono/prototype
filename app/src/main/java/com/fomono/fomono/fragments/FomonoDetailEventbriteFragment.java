@@ -57,6 +57,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -172,8 +173,8 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
 
         Start start = event.getStart();
         if (start != null) {
-            fragmentEventbriteDetailBinding.tvEventDate.setText(DateUtils.getFormattedDateForHeader(start.getUtc()));
-            start.setLocal(DateUtils.getFormattedDate(start.getUtc()));
+            fragmentEventbriteDetailBinding.tvEventDate.setText(DateUtils.
+                    getFormattedDateForHeader(start.getLocal()));
             event.saveOrUpdate();
         }
 
@@ -208,7 +209,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
             @Override
             public void onClick(View v) {
                 if (event.getStart() != null && event.getEnd() != null) {
-                    addToCalendar(event.getStart().getUtc(), event.getEnd().getUtc());
+                    addToCalendar(event.getStart().getLocal(), event.getEnd().getLocal());
                 }
             }
         });
@@ -390,14 +391,15 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
         long calID = 3;
         long startMillis = 0;
         long endMillis = 0;
-        startMillis = DateUtils.convertUTCtoMilliSeconds(startDate);
-        endMillis = DateUtils.convertUTCtoMilliSeconds(endDate);
+        startMillis = DateUtils.convertEventDatetoMilliSeconds(startDate);
+        endMillis = DateUtils.convertEventDatetoMilliSeconds(endDate);
 
 
         ContentResolver cr = getActivity().getContentResolver();
         ContentValues values = new ContentValues();
         values.put(CalendarContract.Events.DTSTART, startMillis);
         values.put(CalendarContract.Events.DTEND, endMillis);
+        values.put(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().getID());
         if (event.getName() != null) {
             values.put(CalendarContract.Events.TITLE, event.getName().getText());
         }
@@ -405,7 +407,6 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
             values.put(CalendarContract.Events.DESCRIPTION, event.getDescription().getText().toString());
         }
         values.put(CalendarContract.Events.CALENDAR_ID, calID);
-        values.put(CalendarContract.Events.EVENT_TIMEZONE, "UTC");
         // TODO: Consider calling
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
