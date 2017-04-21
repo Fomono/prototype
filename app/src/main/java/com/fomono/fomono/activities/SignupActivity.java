@@ -60,7 +60,7 @@ public class SignupActivity extends AppCompatActivity {
         user.signUpInBackground(new SignUpCallback() {
             public void done(ParseException e) {
                 if (e == null) {
-                    FavoritesUtil.getInstance().initialize(user);
+                    FavoritesUtil.getInstance();
                     homePageIntent();
                 } else {
                     Toast.makeText(SignupActivity.this,"Signup failed"+e.getMessage(), Toast.LENGTH_LONG).show();

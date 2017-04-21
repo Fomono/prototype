@@ -45,6 +45,8 @@ public class FomonoApplication extends Application {
     public static final int PERM_LOC_MOVIE_REQ_CODE = 3;
     public static final int PERM_LOC_FILTER_REQ_CODE = 4;
     public static final int PERM_CAM_PROFILE_REQ_CODE = 5;
+    public static final int PERM_CAL_EVENT_REQ_CODE = 6;
+    public static final int PERM_CAL_MOVIE_REQ_CODE = 7;
 
     final String CHANNEL_NAME = "pushChannelTest";
 
@@ -106,7 +108,7 @@ public class FomonoApplication extends Application {
 //                    try {
 //                        //update user from server
 //                        user.fetch();
-//                        FavoritesUtil.getInstance().initialize(ParseUser.getCurrentUser());
+//                        FavoritesUtil.getInstance();
 //                    } catch (ParseException e1) {
 //                        e1.printStackTrace();
 //                    }

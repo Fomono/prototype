@@ -294,19 +294,25 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
 
     public void setEventFavorited(ViewHolderEventsItem holder, FomonoEvent fEvent) {
-        if (favsUtil.isFavorited(fEvent)) {
-            holder.eventFavorited.setImageResource(R.drawable.ic_favorite);
-        } else {
-            holder.eventFavorited.setImageResource(R.drawable.ic_favorite_grey);
-        }
-        holder.eventFavorited.setOnClickListener(view -> {
-            if (favsUtil.isFavorited(fEvent)) {
-                holder.eventFavorited.setImageResource(R.drawable.ic_favorite_grey);
-                favsUtil.removeFromFavorites(fEvent);
-            } else {
+        favsUtil.isFavorited(fEvent, isFavorited -> {
+            if (isFavorited) {
                 holder.eventFavorited.setImageResource(R.drawable.ic_favorite);
-                favsUtil.addToFavorites(fEvent);
+            } else {
+                holder.eventFavorited.setImageResource(R.drawable.ic_favorite_grey);
             }
+        });
+
+        holder.eventFavorited.setOnClickListener(view -> {
+            favsUtil.isFavorited(fEvent, isFavorited -> {
+                if (isFavorited) {
+                    holder.eventFavorited.setImageResource(R.drawable.ic_favorite_grey);
+                    favsUtil.removeFromFavorites(fEvent);
+                } else {
+                    holder.eventFavorited.setImageResource(R.drawable.ic_favorite);
+                    favsUtil.addToFavorites(fEvent);
+                }
+            });
+
             if (mContext instanceof FomonoEventUpdateListener) {
                 ((FomonoEventUpdateListener) mContext).onFomonoEventUpdated(fEvent, fragmentName);
             }
