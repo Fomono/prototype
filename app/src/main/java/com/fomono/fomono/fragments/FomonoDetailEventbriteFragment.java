@@ -284,19 +284,24 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
         });
 
         ibFavorite = fragmentEventbriteDetailBinding.ivFavoriteIcon;
-        if (favsUtil.isFavorited(event)) {
-            ibFavorite.setImageResource(R.drawable.ic_favorite);
-        }
+        favsUtil.isFavorited(event, isFavorited -> {
+            if (isFavorited) {
+                ibFavorite.setImageResource(R.drawable.ic_favorite);
+            }
+        });
+
         ibFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (favsUtil.isFavorited(event)) {
-                    ibFavorite.setImageResource(R.drawable.ic_favorite_grey);
-                    favsUtil.removeFromFavorites(event);
-                } else {
-                    ibFavorite.setImageResource(R.drawable.ic_favorite);
-                    favsUtil.addToFavorites(event);
-                }
+                favsUtil.isFavorited(event, isFavorited -> {
+                    if (isFavorited) {
+                        ibFavorite.setImageResource(R.drawable.ic_favorite_grey);
+                        favsUtil.removeFromFavorites(event);
+                    } else {
+                        ibFavorite.setImageResource(R.drawable.ic_favorite);
+                        favsUtil.addToFavorites(event);
+                    }
+                });
                 if (getActivity() instanceof FomonoEventUpdateListener) {
                     ((FomonoEventUpdateListener) getActivity()).onFomonoEventUpdated();
                 }

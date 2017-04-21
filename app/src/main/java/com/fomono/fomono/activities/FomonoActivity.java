@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,14 +19,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.bumptech.glide.Glide;
 import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
-import com.fomono.fomono.adapters.FomonoAdapter;
 import com.fomono.fomono.adapters.FomonoMainPagerAdapter;
 import com.fomono.fomono.databinding.ActivityFomonoBinding;
 import com.fomono.fomono.fragments.BaseSortFragment;
@@ -130,8 +127,10 @@ public class FomonoActivity extends AppCompatActivity implements BaseSortFragmen
         });
 
         navHeaderProfileImage.setOnClickListener(v -> {
-            Intent profileIntent = new Intent(FomonoActivity.this, UserProfileActivity.class);
-            startActivity(profileIntent);
+            if (!ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser())) {
+                Intent profileIntent = new Intent(FomonoActivity.this, UserProfileActivity.class);
+                startActivity(profileIntent);
+            }
         });
 
         //clear filter dirty flags here since we're creating a new fomono activity and everything will be refreshed
@@ -305,13 +304,13 @@ public class FomonoActivity extends AppCompatActivity implements BaseSortFragmen
             //setup current user
             ParseUser currentUser = ParseUser.getCurrentUser();
             if (ParseAnonymousUtils.isLinked(currentUser)) {
-                FavoritesUtil.getInstance().initialize(currentUser);
+                FavoritesUtil.getInstance();
                 handleLaunchDetailView(apiName, id);
             } else {
                 currentUser.fetchInBackground(new GetCallback<ParseObject>() {
                     @Override
                     public void done(ParseObject object, ParseException e) {
-                        FavoritesUtil.getInstance().initialize(currentUser);
+                        FavoritesUtil.getInstance();
                         handleLaunchDetailView(apiName, id);
                     }
                 });

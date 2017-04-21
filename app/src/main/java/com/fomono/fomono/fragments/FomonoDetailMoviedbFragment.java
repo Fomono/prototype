@@ -182,19 +182,25 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
         });
 
         ibFavorite = fragmentBinding.ivFavoriteIcon;
-        if (favsUtil.isFavorited(movie)) {
-            ibFavorite.setImageResource(R.drawable.ic_favorite);
-        }
+        favsUtil.isFavorited(movie, isFavorited -> {
+            if (isFavorited) {
+                ibFavorite.setImageResource(R.drawable.ic_favorite);
+            }
+        });
+
         ibFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (favsUtil.isFavorited(movie)) {
-                    ibFavorite.setImageResource(R.drawable.ic_favorite_grey);
-                    favsUtil.removeFromFavorites(movie);
-                } else {
-                    ibFavorite.setImageResource(R.drawable.ic_favorite);
-                    favsUtil.addToFavorites(movie);
-                }
+                favsUtil.isFavorited(movie, isFavorited -> {
+                    if (isFavorited) {
+                        ibFavorite.setImageResource(R.drawable.ic_favorite_grey);
+                        favsUtil.removeFromFavorites(movie);
+                    } else {
+                        ibFavorite.setImageResource(R.drawable.ic_favorite);
+                        favsUtil.addToFavorites(movie);
+                    }
+                });
+
                 if (getActivity() instanceof FomonoEventUpdateListener) {
                     ((FomonoEventUpdateListener) getActivity()).onFomonoEventUpdated();
                 }

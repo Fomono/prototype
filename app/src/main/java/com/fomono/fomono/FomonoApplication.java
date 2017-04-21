@@ -108,7 +108,7 @@ public class FomonoApplication extends Application {
 //                    try {
 //                        //update user from server
 //                        user.fetch();
-//                        FavoritesUtil.getInstance().initialize(ParseUser.getCurrentUser());
+//                        FavoritesUtil.getInstance();
 //                    } catch (ParseException e1) {
 //                        e1.printStackTrace();
 //                    }
