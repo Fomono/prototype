@@ -156,6 +156,9 @@ public class FavoritesUtil {
     }
 
     private void isFavoritedLoaded(FomonoEvent fEvent, IsFavoritedListener listener) {
+        if (listener == null) {
+            return;
+        }
         String id = fEvent.getStringId();
         String apiName = fEvent.getApiName();
         if (!favoritesMap.containsKey(apiName)) {

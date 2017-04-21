@@ -4,39 +4,48 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/fomonoDrawerLayoutId"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        tools:context="com.fomono.fomono.activities.FomonoActivity">
+        tools:context="com.fomono.fomono.activities.FomonoActivity" >
 
-        <android.support.v4.widget.DrawerLayout
-            android:id="@+id/fomonoDrawerLayoutId"
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/fomonoMainPagerContentId"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:background="@color/colorWhite"
+            android:layout_height="wrap_content">
 
-            <RelativeLayout
-                android:id="@+id/fomonoMainPagerContentId"
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/appBar"
                 android:layout_width="match_parent"
-                android:background="@color/colorWhite"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true"
+                android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/fomonoToolbarId"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:background="@color/colorFomono"
+                    android:title="@string/title_activity_fomono"
                     android:theme="@style/AppTheme.AppBarOverlay"
-                    app:layout_scrollFlags="scroll|enterAlways"/>
+                    android:background="@color/colorFomono"
+                    app:titleTextColor="@android:color/white"
+                    app:layout_scrollFlags="scroll|enterAlways" />
+
+            </android.support.design.widget.AppBarLayout>
+
+            <LinearLayout
+                android:id="@+id/llContent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
                 <com.astuetz.PagerSlidingTabStrip
                     android:id="@+id/fomonoTabsId"
                     app:pstsShouldExpand="false"
                     app:pstsTextAllCaps="true"
-                    android:layout_below="@id/fomonoToolbarId"
                     android:textColor="@color/colorFomono"
                     app:pstsUnderlineColor="@color/colorFomono"
                     app:pstsIndicatorColor="@color/colorFomono"
@@ -45,23 +54,23 @@
 
                 <android.support.v4.view.ViewPager
                     android:id="@+id/fomonoViewpagerId"
-                    android:layout_below="@id/fomonoTabsId"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/white" />
 
-            </RelativeLayout>
+            </LinearLayout>
 
-            <android.support.design.widget.NavigationView
-                android:id="@+id/fomonoNavViewId"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:background="@android:color/white"
-                app:itemIconTint="@color/nav_item_color_scheme"
-                app:itemTextColor="@color/nav_item_color_scheme"
-                app:menu="@menu/main_drawer_menu" />
+        </android.support.design.widget.CoordinatorLayout>
 
-        </android.support.v4.widget.DrawerLayout>
-    </RelativeLayout>
+        <android.support.design.widget.NavigationView
+            android:id="@+id/fomonoNavViewId"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@android:color/white"
+            app:itemIconTint="@color/nav_item_color_scheme"
+            app:itemTextColor="@color/nav_item_color_scheme"
+            app:menu="@menu/main_drawer_menu" />
+
+    </android.support.v4.widget.DrawerLayout>
 </layout>
