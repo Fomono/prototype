@@ -8,19 +8,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/abFomono"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            android:background="@android:color/transparent"
+            >
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/tbFomono"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorFomono"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:titleTextColor="@android:color/white" />
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/transparent"
+            app:layout_scrollFlags="scroll|enterAlways"/>
+
+        </android.support.design.widget.AppBarLayout>
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tbFomono">
-
+            android:layout_height="wrap_content">
             <FrameLayout
                 android:id="@+id/fragmentDetail"
                 android:layout_width="match_parent"

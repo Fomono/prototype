@@ -31,8 +31,7 @@ public class DateUtils {
 
 
     public static String getFormattedDateForHeader(String strDate){
-        DateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        DateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         Date date = null;
         try {
             date = utcFormat.parse(strDate);
@@ -47,12 +46,22 @@ public class DateUtils {
 
     }
 
+    public static long convertMovieDatetoMilliSeconds(String strDate){
 
-    public static long convertUTCtoMilliSeconds(String strDate){
+        SimpleDateFormat sdf = new  SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        try {
+            date = sdf.parse(strDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date.getTime();
+    }
 
-        SimpleDateFormat sdf = new  SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 
+    public static long convertEventDatetoMilliSeconds(String strDate){
+
+        SimpleDateFormat sdf = new  SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         Date date = null;
         try {
             date = sdf.parse(strDate);

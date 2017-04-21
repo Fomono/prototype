@@ -17,30 +17,9 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 
-        <TextView
-            android:id="@+id/tvEventDate"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:text="May 10"
-            android:textColor="@color/twitterBlue"
-            android:textSize="20dp"
-            android:textStyle="bold" />
-
-
-        <TextView
-            android:id="@+id/tvEventName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/tvEventDate"
-            android:text='@{movie.title}'
-            android:textSize="20dp"
-            android:textStyle="bold" />
-
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_below="@id/tvEventDate"
             android:id="@+id/rlEventImage"
             android:layout_height="wrap_content">
 
@@ -199,7 +178,7 @@
             android:layout_below="@id/tvGenresLabel"
             android:layout_toRightOf="@id/tvAdultLabel"
             android:layout_alignTop="@id/tvAdultLabel"
-            android:text="@{Boolean.toString(movie.adult)}"
+            android:text=""
             android:textSize="13sp" />
 
 
