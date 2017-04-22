@@ -92,7 +92,9 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
         final ImageView imageView = (ImageView) findViewById(R.id.backdrop);
         if(fEvent instanceof Event) {
             Event e = (Event) fEvent;
-            Glide.with(this).load(e.getLogo().getUrl()).centerCrop().into(imageView);
+            if (e.getLogo() != null) {
+                Glide.with(this).load(e.getLogo().getUrl()).centerCrop().into(imageView);
+            }
         } else if(fEvent instanceof Movie){
             Movie m = (Movie) fEvent;
             Glide.with(this).load(m.getBackdropPath()).centerCrop().into(imageView);
