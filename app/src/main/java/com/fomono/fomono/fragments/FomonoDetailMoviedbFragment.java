@@ -108,7 +108,6 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
         //fragmentBinding.tvEventDate.setText("");
         fragmentBinding.tvRatingText.setText(Double.valueOf(movie.getVoteAverage()/2).toString()+ "/5");
 
-        setImageUrl(fragmentBinding.ivEventImage, movie.getBackdropPath());
         fragmentBinding.rbMovierating.setRating
                 (Double.valueOf(movie.getVoteAverage()/2).floatValue());
 

@@ -16,15 +16,11 @@ import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.facebook.share.model.ShareLinkContent;
@@ -34,14 +30,14 @@ import com.fomono.fomono.R;
 import com.fomono.fomono.databinding.FragmentEventbriteDetailBinding;
 import com.fomono.fomono.models.events.events.Address;
 import com.fomono.fomono.models.events.events.Event;
-import com.fomono.fomono.models.events.events.Logo;
 import com.fomono.fomono.models.events.events.Start;
 import com.fomono.fomono.models.events.events.Venue;
 import com.fomono.fomono.models.user.User;
 import com.fomono.fomono.network.client.EventBriteClientRetrofit;
+import com.fomono.fomono.utils.ConfigUtil;
 import com.fomono.fomono.utils.DateUtils;
 import com.fomono.fomono.utils.FavoritesUtil;
-import com.fomono.fomono.utils.RoundedTransformation;
+import com.fomono.fomono.utils.StringUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -51,7 +47,6 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.ParseUser;
-import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -80,7 +75,6 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
     ProgressDialog pd;
     ImageButton ibFavorite;
     FavoritesUtil favsUtil;
-    public int screenWidthDetail;
 
     public interface FomonoEventUpdateListener {
         void onFomonoEventUpdated();
@@ -125,11 +119,13 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
             public void onResponse(Call<Venue> call, Response<Venue> response) {
                 pd.dismiss();
                 Address address = response.body().getAddress();
+                Venue venue = response.body();
                 if (address == null) {
                     Log.d(TAG, "MO MATCH ");
                 } else {
                     e.setVenue(response.body());
                     e.saveOrUpdate();
+                    generateAddressString(venue);
                     populateAddressMap(e);
                 }
 
@@ -146,47 +142,72 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
 
     }
 
-    //  @BindingAdapter({"imageUrl"})
-    private static void setImageUrl(ImageView view, String imageUrl, int screenWidthDetail) {
-        //Glide.with(view.getContext()).load(imageUrl).placeholder(R.drawable.botaimage).
-        //      error(R.drawable.botaimage).into(view);
-        Picasso.with(view.getContext()).load(imageUrl).transform(new RoundedTransformation(6, 3)).
-                placeholder(R.drawable.ic_fomono_big).
-                resize(screenWidthDetail, 0).into(view);
-
+    private void generateAddressString(Venue venue) {
+            String eventAddress ="";
+            if(venue.getName()!= null){
+                eventAddress += event.getVenue().getName() + ":" +"\n";
+            }
+            if(venue.getAddress()!= null && venue.getAddress().getAddress1()!=null){
+                eventAddress += " " + venue.getAddress().getAddress1();
+            }
+            if(venue.getAddress()!= null && venue.getAddress().getCity()!=null){
+                eventAddress += " " + venue.getAddress().getCity();
+            }
+            if(venue.getAddress()!= null && venue.getAddress().getCountry()!=null){
+                eventAddress += " " + venue.getAddress().getCountry();
+            }
+            if(venue.getAddress()!= null && venue.getAddress().getPostalCode()!=null){
+                eventAddress += " " +venue.getAddress().getPostalCode();
+            }
+            fragmentEventbriteDetailBinding.tvLocation.setText(eventAddress);
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
+       Start start = event.getStart();
+       String eventAddress="";
 
-        fragmentEventbriteDetailBinding = DataBindingUtil.inflate(
+       fragmentEventbriteDetailBinding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_eventbrite_detail, parent, false);
 
         View view = fragmentEventbriteDetailBinding.getRoot();
         ButterKnife.bind(this, view);
+        if(event.getDescription() !=null){
+            String eventDesc = event.getDescription().getText().toString();
+            fragmentEventbriteDetailBinding.tvDescription.setText(StringUtil.stripNewlinesExtraSpaces(eventDesc));
+        }
 
-        fragmentEventbriteDetailBinding.tvSiteLink.setClickable(true);
-        fragmentEventbriteDetailBinding.tvSiteLink.setMovementMethod(LinkMovementMethod.getInstance());
-        String text = "<a href=" + event.getUrl() + ">" + "CLICK HERE" + "</a>";
-        fragmentEventbriteDetailBinding.tvSiteLink.setText(Html.fromHtml(text));
+        fragmentEventbriteDetailBinding.ivSiteLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                intent.setData(Uri.parse(event.getUrl()));
+                startActivity(intent);
+            }
+        });
 
-        Start start = event.getStart();
-        if (start != null) {
+       //{event.venue.name  + ":" + "\n" + event.venue.address.address1 + " " + event.venue.address.city  +
+       // " " + event.venue.address.country  + " " + event.venue.address.postalCode }'
+
+
+       if (event.getCategoryId() != null) {
+           String category = ConfigUtil.getCategoryName(event.getCategoryId(),
+                   FomonoApplication.API_NAME_EVENTS, getContext());
+                fragmentEventbriteDetailBinding.tvCategory.setText("#"+category);
+       }else{
+                fragmentEventbriteDetailBinding.tvCategory.setVisibility(View.GONE);
+
+       }
+
+       if (start != null && start.getLocal() != null) {
+            fragmentEventbriteDetailBinding.tvClockEventDate.
+                    setText(DateUtils.convertEventDatetoDisplayFormat(start.getLocal()));
             fragmentEventbriteDetailBinding.tvEventDate.setText(DateUtils.
                     getFormattedDateForHeader(start.getLocal()));
             event.saveOrUpdate();
-        }
-
-        DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
-        int pxWidth = displayMetrics.widthPixels;
-        screenWidthDetail = (int) (pxWidth / displayMetrics.density);
-
-        Log.d(TAG, "width is " + screenWidthDetail);
-
-        Logo logo = event.getLogo();
-        if (logo != null) {
-            setImageUrl(fragmentEventbriteDetailBinding.ivEventImage, logo.getUrl(), screenWidthDetail);
         }
 
         populateDetail(event);
@@ -205,7 +226,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
         getAddressFromAPI(event);
 
 
-        fragmentEventbriteDetailBinding.tvClockCalendar.setOnClickListener(new View.OnClickListener() {
+        fragmentEventbriteDetailBinding.ivCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addToCalendar();

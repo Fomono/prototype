@@ -104,7 +104,9 @@
         <activity
             android:name=".activities.FomonoActivity"
             android:label="@string/title_activity_fomono" />
-        <activity android:name=".activities.FomonoDetailActivity"/>
+        <activity android:name=".activities.FomonoDetailActivity"
+            android:theme="@style/AppThemeDetail"
+        />
         <activity android:name=".activities.FomonoFilterActivity" />
         <activity android:name=".activities.FomonoTrailerActivity" />
         <activity android:name=".activities.UserProfileActivity" />

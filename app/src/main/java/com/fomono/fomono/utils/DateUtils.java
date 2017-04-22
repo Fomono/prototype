@@ -39,10 +39,10 @@ public class DateUtils {
             e.printStackTrace();
         }
 
-        DateFormat pstFormat = new SimpleDateFormat("MMM dd");
-        pstFormat.setTimeZone(TimeZone.getTimeZone("PST"));
+        DateFormat pstFormat = new SimpleDateFormat("MMM" + "\n" + "dd" +
+        "\n");
 
-        return pstFormat.format(date);
+        return pstFormat.format(date).toUpperCase();
 
     }
 
@@ -69,6 +69,22 @@ public class DateUtils {
             e.printStackTrace();
         }
         return date.getTime();
+    }
+
+
+    public static String convertEventDatetoDisplayFormat(String strDate){
+
+        SimpleDateFormat sdf = new  SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        SimpleDateFormat sdfDisplay = new  SimpleDateFormat("dd-MMM-yyyy hh:mm a");
+
+
+        Date date = null;
+        try {
+            date = sdf.parse(strDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return sdfDisplay.format(date);
     }
 
     public static String convertMilitarytoStandard(String mTime){

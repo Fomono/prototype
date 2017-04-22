@@ -13,41 +13,44 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp">
+        android:background="@color/white">
 
-
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/llHeader"
             android:layout_width="wrap_content"
-            android:id="@+id/rlEventImage"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:weightSum="5">
 
-            <com.makeramen.roundedimageview.RoundedImageView
-                android:id="@+id/ivEventImage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:adjustViewBounds="true"
-                android:scaleType="fitXY"
-                app:riv_border_color="@color/colorWhite"
-                app:riv_border_width="2dip"
-                app:riv_corner_radius="10dp"
-                app:riv_mutate_background="true"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:transitionName="main_image">
+            <TextView
+                android:id="@+id/tvEventDate"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:layout_weight="2"
+                android:text=""
+                android:textColor="@color/twitterBlue"
+                android:textSize="15sp" />
 
-            </com.makeramen.roundedimageview.RoundedImageView>
-        </RelativeLayout>
+            <TextView
+                android:id="@+id/tvEventName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="20dp"
+                android:layout_weight="3"
+                android:text='@{movie.title ?? ""}'
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+  </LinearLayout>
 
         <ImageButton
             android:id="@+id/ivFavoriteIcon"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_below="@id/rlEventImage"
-            android:layout_centerVertical="true"
+            android:layout_below="@id/llHeader"
             android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="60dp"
             android:layout_marginTop="5dp"
@@ -57,9 +60,9 @@
             android:id="@+id/tvFavoriteLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
             android:layout_below="@id/ivFavoriteIcon"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:text="Favorite"
             android:textSize="10sp"
             android:textStyle="bold" />
@@ -70,8 +73,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/ivFavoriteIcon"
-            android:layout_marginTop="15dp"
             android:layout_marginRight="5dp"
+            android:layout_marginTop="15dp"
             android:theme="@style/RatingBar" />
 
         <TextView
@@ -80,10 +83,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/ivFavoriteIcon"
             android:layout_marginTop="25dp"
-            android:layout_toRightOf="@id/rbMovierating"
             android:layout_toEndOf="@id/rbMovierating"
+            android:layout_toRightOf="@id/rbMovierating"
             android:textSize="25dp" />
-
 
 
         <com.fomono.fomono.supportclasses.ExpandableTextView
@@ -115,7 +117,6 @@
             android:layout_below="@id/spView01"
             android:layout_marginTop="20dp"
             app:srcCompat="@drawable/ic_clock" />
-
 
 
         <TextView
@@ -155,12 +156,12 @@
             android:id="@+id/tvGenres"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/ivClockIcon"
-            android:textStyle="bold"
-            android:layout_toRightOf="@id/tvGenresLabel"
             android:layout_alignTop="@id/tvGenresLabel"
+            android:layout_below="@id/ivClockIcon"
+            android:layout_toRightOf="@id/tvGenresLabel"
             android:text="N/A"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:textStyle="bold" />
 
 
         <TextView
@@ -176,9 +177,9 @@
             android:id="@+id/tvAdult"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignTop="@id/tvAdultLabel"
             android:layout_below="@id/tvGenresLabel"
             android:layout_toRightOf="@id/tvAdultLabel"
-            android:layout_alignTop="@id/tvAdultLabel"
             android:text=""
             android:textSize="13sp" />
 
@@ -196,9 +197,9 @@
             android:id="@+id/tvLanguage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignTop="@id/tvLanguageLabel"
             android:layout_below="@id/tvAdultLabel"
             android:layout_toRightOf="@id/tvLanguageLabel"
-            android:layout_alignTop="@id/tvLanguageLabel"
             android:text='@{movie.originalLanguage }'
             android:textSize="13sp" />
 
@@ -239,10 +240,10 @@
 
         <LinearLayout
             android:id="@+id/llShare"
-            android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvSiteLinkLabel">
+            android:layout_below="@id/tvSiteLinkLabel"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tvShareLabel"
@@ -258,8 +259,8 @@
                 android:id="@+id/ivFBShareIcon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginRight="15dp"
                 android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
                 android:layout_marginTop="20dp"
                 app:srcCompat="@drawable/ic_facebook" />
 
@@ -268,8 +269,8 @@
                 android:id="@+id/ivTwitterShareIcon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginRight="15dp"
                 android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
                 android:layout_marginTop="20dp"
                 app:srcCompat="@drawable/ic_twitter" />
 
@@ -278,8 +279,8 @@
                 android:id="@+id/ivEmailShareIcon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginRight="15dp"
                 android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
                 android:layout_marginTop="20dp"
                 app:srcCompat="@drawable/ic_email" />
 
@@ -287,8 +288,8 @@
                 android:id="@+id/ivMessageShareIcon"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:layout_marginRight="15dp"
                 android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
                 android:layout_marginTop="20dp"
                 app:srcCompat="@drawable/ic_whatsapp" />
         </LinearLayout>
