@@ -140,8 +140,6 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
 
         Log.d(TAG, "width is " + screenWidthDetail);
 
-        setImageUrl(fragmentBinding.ivEventImage, business.getImageUrl(), screenWidthDetail);
-
         populateDetail();
         getDetailsFromAPI();
 
