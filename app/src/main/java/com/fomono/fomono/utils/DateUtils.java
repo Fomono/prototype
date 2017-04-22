@@ -30,6 +30,37 @@ public class DateUtils {
     }
 
 
+    public static String getFormattedMonthForHeader(String strDate){
+        DateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        Date date = null;
+        try {
+            date = utcFormat.parse(strDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        DateFormat pstFormat = new SimpleDateFormat("MMM");
+
+        return pstFormat.format(date).toUpperCase();
+
+    }
+
+    public static String getFormattedDayForHeader(String strDate){
+        DateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        Date date = null;
+        try {
+            date = utcFormat.parse(strDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        DateFormat pstFormat = new SimpleDateFormat("dd");
+
+        return pstFormat.format(date).toUpperCase();
+
+    }
+
+
     public static String getFormattedDateForHeader(String strDate){
         DateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         Date date = null;
@@ -40,12 +71,11 @@ public class DateUtils {
         }
 
         DateFormat pstFormat = new SimpleDateFormat("MMM" + "\n" + "dd" +
-        "\n");
+                "\n");
 
         return pstFormat.format(date).toUpperCase();
 
     }
-
     public static long convertMovieDatetoMilliSeconds(String strDate){
 
         SimpleDateFormat sdf = new  SimpleDateFormat("yyyy-MM-dd");

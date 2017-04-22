@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -101,10 +102,7 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
 
     }
 
-    //  @BindingAdapter({"imageUrl"})
     private static void setImageUrl(ImageView view, String imageUrl, int screenWidthDetail) {
-        //Glide.with(view.getContext()).load(imageUrl).placeholder(R.drawable.botaimage).
-        //      error(R.drawable.botaimage).into(view);
         Picasso.with(view.getContext()).load(imageUrl).transform(new RoundedTransformation(6, 3)).
                 placeholder(R.drawable.ic_fomono_big).
                 resize(screenWidthDetail, 0).into(view);
@@ -121,10 +119,24 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
         View view = fragmentBinding.getRoot();
         ButterKnife.bind(this, view);
 
-         fragmentBinding.tvLocation.setText(getLocationAddress());
+        fragmentBinding.tvLocation.setText(getLocationAddress());
         fragmentBinding.rbRating.setRating(Double.valueOf(business.getRating()).floatValue());
         fragmentBinding.tvRatingText.setText(Double.valueOf(business.getRating()).toString() + "/5");
+        fragmentBinding.tvPhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                int checkPermission = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE);
+                if (checkPermission != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(getActivity(),
+                            new String[]{Manifest.permission.CALL_PHONE},1);
+                }else {
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:" + business.getPhone()));
+                    startActivity(callIntent);
+                }
+            }
+        });
         fragmentBinding.ivSiteLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -367,22 +379,16 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
                     hoursOpen += "Monday: " + startDate + " - " + endDate + "\n";
                 } else if (open.getDay() == 1) {
                     hoursOpen += "Tuesday: " + startDate + " - " + endDate + "\n";
-                    ;
                 } else if (open.getDay() == 2) {
                     hoursOpen += "Wednesday: " + startDate + " - " + endDate + "\n";
-                    ;
                 } else if (open.getDay() == 3) {
                     hoursOpen += "Thursday: " + startDate + " - " + endDate + "\n";
-                    ;
                 } else if (open.getDay() == 4) {
                     hoursOpen += "Friday: " + startDate + " - " + endDate + "\n";
-                    ;
                 } else if (open.getDay() == 5) {
                     hoursOpen += "Saturday: " + startDate + " - " + endDate + "\n";
-                    ;
                 } else if (open.getDay() == 6) {
                     hoursOpen += "Sunday: " + startDate + " - " + endDate + "\n";
-                    ;
                 }
             }
         } else{
