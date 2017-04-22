@@ -57,7 +57,8 @@
                 app:riv_mutate_background="true"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true">
+                android:layout_alignParentStart="true"
+                android:transitionName="main_image">
 
             </com.makeramen.roundedimageview.RoundedImageView>
         </RelativeLayout>
