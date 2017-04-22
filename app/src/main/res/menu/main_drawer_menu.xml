@@ -10,8 +10,8 @@
                     android:id="@+id/drawerFilterId"
                     app:showAsAction="always"
                     android:orderInCategory="3"
-                    android:icon="@drawable/ic_filter"
-                    android:title="@string/drawer_menu_filters"/>
+                    android:icon="@drawable/ic_settings"
+                    android:title="@string/drawer_menu_settings"/>
 
                 <item
                     android:id="@+id/drawerAboutId"
