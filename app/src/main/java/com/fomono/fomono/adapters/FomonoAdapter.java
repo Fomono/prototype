@@ -1,19 +1,27 @@
 package com.fomono.fomono.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
+import com.fomono.fomono.activities.FomonoActivity;
+import com.fomono.fomono.activities.FomonoDetailActivity;
 import com.fomono.fomono.activities.FomonoTrailerActivity;
 import com.fomono.fomono.databinding.EventListItemBinding;
 import com.fomono.fomono.models.FomonoEvent;
@@ -28,11 +36,13 @@ import java.text.DateFormatSymbols;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import me.zhanghai.android.materialratingbar.MaterialRatingBar;
+
 /**
  * Created by Saranu on 4/6/17.
  */
 
-public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolderEventsItem> {
     private Context mContext;
     private ArrayList<FomonoEvent> mFomonoEvents;
     private static final String TAG = "Fomono Adapter";
@@ -62,9 +72,9 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         this.fomonoAdapterObjectListener = listener;
     }
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolderEventsItem onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        RecyclerView.ViewHolder viewHolder;
+        ViewHolderEventsItem viewHolder;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         EventListItemBinding binding = DataBindingUtil.inflate(inflater, R.layout.event_list_item, parent, false);
         viewHolder = new ViewHolderEventsItem(binding);
@@ -73,8 +83,8 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        ViewHolderEventsItem vhItem = (ViewHolderEventsItem) viewHolder;
+    public void onBindViewHolder(ViewHolderEventsItem viewHolder, int position) {
+        ViewHolderEventsItem vhItem = viewHolder;
         configureViewHolderEventsItem(vhItem, position);
     }
 
@@ -84,9 +94,9 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     @Override
-    public void onViewRecycled(RecyclerView.ViewHolder holder) {
+    public void onViewRecycled(ViewHolderEventsItem holder) {
         super.onViewRecycled(holder);
-        ViewHolderEventsItem vhImage = (ViewHolderEventsItem) holder;
+        ViewHolderEventsItem vhImage = holder;
         Glide.clear(vhImage.eventMediaImage);
     }
 
@@ -317,5 +327,43 @@ public class FomonoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 ((FomonoEventUpdateListener) mContext).onFomonoEventUpdated(fEvent, fragmentName);
             }
         });
+    }
+
+    public final class ViewHolderEventsItem extends RecyclerView.ViewHolder {
+
+        TextView eventName;
+        TextView eventDistance;
+        ImageView eventMediaImage;
+        TextView eventPrice;
+        TextView eventDateTime;
+        TextView eventType;
+        ImageButton eventUrl;
+        ImageButton eventFavorited;
+        MaterialRatingBar eventRatingBar;
+
+        public ViewHolderEventsItem(EventListItemBinding binding) {
+            super(binding.getRoot());
+            eventName = binding.EventNameId;
+            eventDistance = binding.EventDistanceId;
+            eventMediaImage = binding.EventMediaImageId;
+            eventPrice = binding.EventPriceId;
+            eventDateTime = binding.EventDateTimeId;
+            eventType = binding.EventTypeId;
+            eventUrl = binding.ImageLogoButtonId;
+            eventFavorited = binding.ImageFavoriteButtonId;
+            eventRatingBar = binding.EventRatingBarId;
+
+            binding.EventlistCardWrapperId.setOnClickListener(view -> {
+                Intent showDetails = new Intent(mContext, FomonoDetailActivity.class);
+                int position = getAdapterPosition();
+                showDetails.putExtra("position", position);
+                showDetails.putExtra("FOM_OBJ", mFomonoEvents.get(position));
+                ActivityOptionsCompat options = ActivityOptionsCompat.
+                        makeSceneTransitionAnimation((Activity) mContext, eventMediaImage, "main_image");
+                //TODO: uncomment after image loading for details is fixed to load from memory instead of network
+//                ((AppCompatActivity) mContext).startActivityForResult(showDetails, FomonoActivity.REQUEST_CODE_DETAILS, options.toBundle());
+                ((AppCompatActivity) mContext).startActivityForResult(showDetails, FomonoActivity.REQUEST_CODE_DETAILS);
+            });
+        }
     }
 }
