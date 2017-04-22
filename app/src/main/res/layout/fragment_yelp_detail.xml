@@ -211,7 +211,7 @@
             android:textStyle="bold"
             android:textColor="@color/colorGreen"
             android:text='@{business.price}'
-            android:textSize="18sp" />
+            android:textSize="15sp" />
 
         <View
             android:id="@+id/spView04"

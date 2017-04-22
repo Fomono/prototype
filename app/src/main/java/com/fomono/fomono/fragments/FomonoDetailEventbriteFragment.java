@@ -148,7 +148,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
                 eventAddress += event.getVenue().getName() + ":" +"\n";
             }
             if(venue.getAddress()!= null && venue.getAddress().getAddress1()!=null){
-                eventAddress += " " + venue.getAddress().getAddress1();
+                eventAddress += venue.getAddress().getAddress1();
             }
             if(venue.getAddress()!= null && venue.getAddress().getCity()!=null){
                 eventAddress += " " + venue.getAddress().getCity();
@@ -176,6 +176,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
         if(event.getDescription() !=null){
             String eventDesc = event.getDescription().getText().toString();
             fragmentEventbriteDetailBinding.tvDescription.setText(StringUtil.stripNewlinesExtraSpaces(eventDesc));
+
         }
 
         fragmentEventbriteDetailBinding.ivSiteLink.setOnClickListener(new View.OnClickListener() {
@@ -188,11 +189,6 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
                 startActivity(intent);
             }
         });
-
-       //{event.venue.name  + ":" + "\n" + event.venue.address.address1 + " " + event.venue.address.city  +
-       // " " + event.venue.address.country  + " " + event.venue.address.postalCode }'
-
-
        if (event.getCategoryId() != null) {
            String category = ConfigUtil.getCategoryName(event.getCategoryId(),
                    FomonoApplication.API_NAME_EVENTS, getContext());
@@ -205,8 +201,10 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
        if (start != null && start.getLocal() != null) {
             fragmentEventbriteDetailBinding.tvClockEventDate.
                     setText(DateUtils.convertEventDatetoDisplayFormat(start.getLocal()));
-            fragmentEventbriteDetailBinding.tvEventDate.setText(DateUtils.
-                    getFormattedDateForHeader(start.getLocal()));
+            fragmentEventbriteDetailBinding.tvEventMonth.setText(DateUtils.
+                    getFormattedMonthForHeader(start.getLocal()));
+           fragmentEventbriteDetailBinding.tvEventDay.setText(DateUtils.
+                   getFormattedDayForHeader(start.getLocal()));
             event.saveOrUpdate();
         }
 
