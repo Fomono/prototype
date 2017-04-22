@@ -39,7 +39,7 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
         public String releaseDate;
         @SerializedName("genre_ids")
         @Expose
-        public List<Long> genreIds = null;
+        public List<Integer> genreIds = null;
         @SerializedName("id")
         @Expose
         public long id = -1;
@@ -285,14 +285,14 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
         this.releaseDate = releaseDate;
     }
 
-    public List<Long> getGenreIds() {
+    public List<Integer> getGenreIds() {
         if (genreIds == null) {
             genreIds = getList("genre_ids");
         }
         return genreIds;
     }
 
-    public void setGenreIds(List<Long> genreIds) {
+    public void setGenreIds(List<Integer> genreIds) {
         this.genreIds = genreIds;
     }
 
@@ -427,7 +427,7 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
         this.adult = in.readByte() != 0;
         this.overview = in.readString();
         this.releaseDate = in.readString();
-        this.genreIds = new ArrayList<Long>();
+        this.genreIds = new ArrayList<>();
         in.readList(this.genreIds, Long.class.getClassLoader());
         this.id = in.readLong();
         this.originalTitle = in.readString();

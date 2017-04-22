@@ -2,7 +2,7 @@ package com.fomono.fomono.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -17,7 +17,6 @@ import com.fomono.fomono.models.db.Filter;
 import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.events.events.EventBriteResponse;
 import com.fomono.fomono.supportclasses.EndlessRecyclerViewScrollListener;
-import com.fomono.fomono.supportclasses.InternetAlertDialogue;
 import com.fomono.fomono.utils.FilterUtil;
 import com.parse.ParseUser;
 
@@ -54,10 +53,10 @@ public class EventFragment extends MainListFragment {
             populateEvents(eventPage++, sortParameter, searchParameter);
         }
 
-        rvList.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
+        rvList.addOnScrollListener(new EndlessRecyclerViewScrollListener((LinearLayoutManager) rvList.getLayoutManager()) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                if(internetAlertDialogue.checkForInternet()) {
+                if (internetAlertDialogue.checkForInternet()) {
                     populateEvents(eventPage++, sortParameter, searchParameter);
                 }
             }

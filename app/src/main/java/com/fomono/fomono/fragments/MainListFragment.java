@@ -5,8 +5,8 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.fomono.fomono.R;
 import com.fomono.fomono.adapters.FomonoAdapter;
 import com.fomono.fomono.databinding.FomonoMainListFragmentBinding;
+import com.fomono.fomono.decorators.SpacesItemDecoration;
 import com.fomono.fomono.models.FomonoEvent;
 import com.fomono.fomono.network.client.EventBriteClientRetrofit;
 import com.fomono.fomono.network.client.MovieDBClientRetrofit;
@@ -40,7 +41,6 @@ public abstract class MainListFragment extends Fragment {
     public ArrayList<FomonoEvent> fomonoEvents;
     public FomonoAdapter fomonoAdapter;
     public RecyclerView rvList;
-    public StaggeredGridLayoutManager gridLayoutManager;
     public EndlessRecyclerViewScrollListener scrollListener;
     Context mContext;
     public ProgressBar progressBar;
@@ -92,10 +92,10 @@ public abstract class MainListFragment extends Fragment {
 
     public void setupRecycleAdapter() {
         rvList.setAdapter(fomonoAdapter);
-        gridLayoutManager = new StaggeredGridLayoutManager(NUM_GRID_COLUMNS, StaggeredGridLayoutManager.VERTICAL);
-        gridLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         rvList.setHasFixedSize(true);
-        rvList.setLayoutManager(gridLayoutManager);
+        rvList.setLayoutManager(layoutManager);
+        rvList.addItemDecoration(new SpacesItemDecoration(1, getResources().getDimensionPixelSize(R.dimen.event_list_main_rel_padding), true));
     //    rvList.addItemDecoration(new RecyclerItemDecorator.SimpleDividerItemDecoration(getActivity()));
     }
 

@@ -35,6 +35,8 @@ import com.squareup.picasso.Picasso;
 import java.text.DateFormatSymbols;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
@@ -215,7 +217,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
             if (business.getDistance() != null) {
                 //have to convert meters to miles
                 distance = (business.getDistance() * 0.000621);
-                DecimalFormat numberFormat = new DecimalFormat("#.000");
+                DecimalFormat numberFormat = new DecimalFormat("#.0");
                 holder.eventDistance.setText("" + numberFormat.format(distance) + " mi");
             }
 
@@ -286,6 +288,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
             holder.eventDateTime.setVisibility(View.GONE);
           //  if(movie.getReleaseDate() != null) {holder.eventDateTime.setText(mContext.getString(R.string.movie_release_date_string)+movie.getReleaseDate());}
             holder.eventType.setVisibility(View.GONE);
+            setMovieCategories(movie, holder);
 
             if(movie.getId() != -1) {
                 holder.eventUrl.setBackgroundResource(R.drawable.ic_link);
@@ -300,6 +303,27 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
         }
 
         setEventFavorited(holder, movie);
+    }
+
+    private void setMovieCategories(Movie movie, ViewHolderEventsItem holder) {
+        List<Integer> genreIds = movie.getGenreIds();
+        StringBuilder sb = new StringBuilder();
+        if (genreIds != null) {
+            Properties genres = ConfigUtil.getCategoriesMap(FomonoApplication.API_NAME_MOVIE_GENRE, mContext);
+            for (int i = 0; i < genreIds.size(); i++) {
+                int genreId = genreIds.get(i);
+                String genre = (String) genres.get(String.valueOf(genreId));
+                if (!TextUtils.isEmpty(genre)) {
+                    if (i > 0) {
+                        sb.append(", ");
+                    }
+                    sb.append("#");
+                    sb.append(genre);
+                }
+            }
+            holder.eventType.setText(sb.toString());
+            holder.eventType.setVisibility(View.VISIBLE);
+        }
     }
 
 
