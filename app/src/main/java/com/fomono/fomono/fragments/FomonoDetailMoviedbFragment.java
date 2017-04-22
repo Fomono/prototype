@@ -252,7 +252,7 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
         } catch (IOException e) {
             e.printStackTrace();
         }
-        for(Long genreId : movie.getGenreIds()) {
+        for(Integer genreId : movie.getGenreIds()) {
                 for (Map.Entry<String, String> entry : genreSet){
                     if(genreId.toString().equals(entry.getKey())){
                         if(movie.getGenreIds().size()-1 != movie.getGenreIds().indexOf(genreId)) {

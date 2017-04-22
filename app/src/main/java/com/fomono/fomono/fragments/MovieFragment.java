@@ -2,10 +2,10 @@ package com.fomono.fomono.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -14,7 +14,6 @@ import com.fomono.fomono.R;
 import com.fomono.fomono.models.movies.Movie;
 import com.fomono.fomono.models.movies.MovieResponse;
 import com.fomono.fomono.supportclasses.EndlessRecyclerViewScrollListener;
-import com.fomono.fomono.supportclasses.InternetAlertDialogue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,7 +45,7 @@ public class MovieFragment extends MainListFragment {
 
         populateMovies(moviePage++, null, searchParameter);
 
-        rvList.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
+        rvList.addOnScrollListener(new EndlessRecyclerViewScrollListener((LinearLayoutManager) rvList.getLayoutManager()) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 populateMovies(moviePage++, sortParameter, searchParameter);

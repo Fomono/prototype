@@ -3,6 +3,7 @@ package com.fomono.fomono.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -12,12 +13,10 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.fomono.fomono.FomonoApplication;
-import com.fomono.fomono.R;
 import com.fomono.fomono.models.db.Filter;
 import com.fomono.fomono.models.eats.Business;
 import com.fomono.fomono.models.eats.YelpResponse;
 import com.fomono.fomono.supportclasses.EndlessRecyclerViewScrollListener;
-import com.fomono.fomono.supportclasses.InternetAlertDialogue;
 import com.fomono.fomono.utils.FilterUtil;
 import com.fomono.fomono.utils.NumberUtil;
 import com.parse.ParseUser;
@@ -52,7 +51,7 @@ public class EatsFragment extends MainListFragment {
             populateEats(offset, null, searchParameter);
         }
 
-        rvList.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
+        rvList.addOnScrollListener(new EndlessRecyclerViewScrollListener((LinearLayoutManager) rvList.getLayoutManager()) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 int offset = fomonoEvents.size();

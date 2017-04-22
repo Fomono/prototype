@@ -49,6 +49,20 @@ public class ConfigUtil {
         return (Set<Map.Entry<String, String>>)(Set<?>)properties.entrySet();
     }
 
+    public static Properties getCategoriesMap(String apiName, Context context) {
+        Properties properties = new Properties();
+        AssetManager assetManager = context.getAssets();
+        String fileName = getPropertiesFileName(apiName);
+        InputStream inputStream = null;
+        try {
+            inputStream = assetManager.open(fileName);
+            properties.load(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return properties;
+    }
+
     public static String getPropertiesFileName(String apiName) {
         String fileName = "";
         switch (apiName) {
