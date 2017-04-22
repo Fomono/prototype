@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.fragments.EatsFragment;
 import com.fomono.fomono.fragments.EventFragment;
 import com.fomono.fomono.fragments.FavoritesFragment;
@@ -88,6 +89,18 @@ public class FomonoMainPagerAdapter extends FragmentPagerAdapter {
         } else if (fEvent instanceof Movie) {
             movieFragment.updateFomonoEvent(fEvent, fEventPosition);
         }
+    }
+
+    public String getApiName(int position) {
+        switch (position) {
+            case 0:
+                return FomonoApplication.API_NAME_EVENTS;
+            case 1:
+                return FomonoApplication.API_NAME_EATS;
+            case 2:
+                return FomonoApplication.API_NAME_MOVIES;
+        }
+        return "";
     }
 
 }

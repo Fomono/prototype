@@ -50,6 +50,9 @@ public class FomonoFilterActivity extends AppCompatActivity implements FomonoFil
         getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(FomonoFilterActivity.this, R.drawable.ic_arrow_back));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        if (processIntent()) {
+            return;
+        }
 
         if (savedInstanceState == null) {
             userPrefsFragment = UserPreferencesFragment.newInstance();
@@ -58,6 +61,16 @@ public class FomonoFilterActivity extends AppCompatActivity implements FomonoFil
                     .commit();
             currentFilterPage = -1;
         }
+    }
+
+    private boolean processIntent() {
+        Intent intent = getIntent();
+        if (intent.hasExtra("apiName")) {
+            String apiName = intent.getStringExtra("apiName");
+            showFilterFragment(apiName, true);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -85,7 +98,7 @@ public class FomonoFilterActivity extends AppCompatActivity implements FomonoFil
     public void onComplete(int resultCode) {
         if (resultCode == UserPreferencesFragment.CODE_FILTERS) {
             //show event filters fragment
-            showFilterFragment(FomonoApplication.API_NAME_EVENTS);
+            showFilterFragment(FomonoApplication.API_NAME_EVENTS, false);
         }
     }
 
@@ -95,7 +108,7 @@ public class FomonoFilterActivity extends AppCompatActivity implements FomonoFil
      *
      * @param apiName
      */
-    private void showFilterFragment(String apiName) {
+    private void showFilterFragment(String apiName, boolean showSingle) {
         final String title = getApiTitle(apiName);
         final boolean lastPage = isLastPage(apiName);
         try {
@@ -107,7 +120,7 @@ public class FomonoFilterActivity extends AppCompatActivity implements FomonoFil
                 }
                 //get list of categories
                 List<ICategory> categories = FilterUtil.getInstance().getCategories(apiName, FomonoFilterActivity.this);
-                filtersFragment = FomonoFilterFragment.newInstance(title, apiName, categories, lastPage, objects);
+                filtersFragment = FomonoFilterFragment.newInstance(title, apiName, categories, lastPage, objects, showSingle);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.flContent, filtersFragment)
                         .commit();
@@ -152,13 +165,12 @@ public class FomonoFilterActivity extends AppCompatActivity implements FomonoFil
     public void onSubmit(int resultCode) {
         switch (resultCode) {
             case FomonoFilterFragment.CODE_DONE:
-                Intent i = new Intent(this, FomonoActivity.class);
-                startActivity(i);
+                finish();
                 break;
             case FomonoFilterFragment.CODE_CANCEL:
                 if (currentFilterPage > 0) {
                     //show previous filter page
-                    showFilterFragment(FILTER_PAGES[currentFilterPage - 1]);
+                    showFilterFragment(FILTER_PAGES[currentFilterPage - 1], false);
                 } else {
                     if (userPrefsFragment == null) {
                         userPrefsFragment = UserPreferencesFragment.newInstance();
@@ -171,7 +183,7 @@ public class FomonoFilterActivity extends AppCompatActivity implements FomonoFil
                 break;
             case FomonoFilterFragment.CODE_NEXT:
                 //show food filters fragment
-                showFilterFragment(FomonoApplication.API_NAME_EATS);
+                showFilterFragment(FomonoApplication.API_NAME_EATS, false);
                 break;
         }
     }

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.fomono.fomono.R;
 import com.fomono.fomono.adapters.FiltersAdapter;
 import com.fomono.fomono.databinding.FragmentCategoryFilterBinding;
+import com.fomono.fomono.decorators.SpacesItemDecoration;
 import com.fomono.fomono.models.ICategory;
 import com.fomono.fomono.models.db.Filter;
 import com.parse.ParseUser;
@@ -46,8 +47,9 @@ public class FomonoFilterFragment extends Fragment {
     String apiName;
     boolean lastPage;
     ParseUser user;
+    boolean showSinglePage;
 
-    public static FomonoFilterFragment newInstance(String title, String apiName, List<ICategory> categories, boolean lastPage, List<Filter> filters) {
+    public static FomonoFilterFragment newInstance(String title, String apiName, List<ICategory> categories, boolean lastPage, List<Filter> filters, boolean showSinglePage) {
         FomonoFilterFragment fragment = new FomonoFilterFragment();
         Bundle args = new Bundle();
         args.putString("title", title);
@@ -55,6 +57,7 @@ public class FomonoFilterFragment extends Fragment {
         args.putParcelableArrayList("categories", (ArrayList<ICategory>)categories);
         args.putBoolean("lastPage", lastPage);
         args.putParcelableArrayList("filters", (ArrayList<Filter>)filters);
+        args.putBoolean("showSinglePage", showSinglePage);
         fragment.setArguments(args);
         return fragment;
     }
@@ -85,6 +88,7 @@ public class FomonoFilterFragment extends Fragment {
         categories = getArguments().getParcelableArrayList("categories");
         lastPage = getArguments().getBoolean("lastPage");
         apiName = getArguments().getString("apiName");
+        showSinglePage = getArguments().getBoolean("showSinglePage");
         List<Filter> filters = getArguments().getParcelableArrayList("filters");
         //build map for filters
         Map<String, Filter> filtersMap = new HashMap<>();
@@ -101,33 +105,46 @@ public class FomonoFilterFragment extends Fragment {
         btnNext = binding.btnNext;
         btnCancel = binding.btnCancel;
 
-        if (lastPage) {
+        if (lastPage || showSinglePage) {
             btnNext.setText(getString(R.string.btn_done));
         }
 
         // Set layout manager to position the items
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 3);
         rvFilters.setLayoutManager(layoutManager);
+        int spacing = getResources().getDimensionPixelSize(R.dimen.filter_item_spacing);
+        rvFilters.addItemDecoration(new SpacesItemDecoration(3, spacing, true));
         rvFilters.setAdapter(adptFilters);
 
         tvTitle.setText(title);
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FilterFragmentListener listener = (FilterFragmentListener) getActivity();
-                if (lastPage) {
+        if (showSinglePage) {
+            btnNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FilterFragmentListener listener = (FilterFragmentListener) getActivity();
                     listener.onSubmit(CODE_DONE);
-                } else {
-                    listener.onSubmit(CODE_NEXT);
                 }
-            }
-        });
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FilterFragmentListener listener = (FilterFragmentListener) getActivity();
-                listener.onSubmit(CODE_CANCEL);
-            }
-        });
+            });
+            btnCancel.setVisibility(View.GONE);
+        } else {
+            btnNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FilterFragmentListener listener = (FilterFragmentListener) getActivity();
+                    if (lastPage) {
+                        listener.onSubmit(CODE_DONE);
+                    } else {
+                        listener.onSubmit(CODE_NEXT);
+                    }
+                }
+            });
+            btnCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FilterFragmentListener listener = (FilterFragmentListener) getActivity();
+                    listener.onSubmit(CODE_CANCEL);
+                }
+            });
+        }
     }
 }

@@ -71,7 +71,7 @@ public class FomonoActivity extends AppCompatActivity implements BaseSortFragmen
     private Toolbar toolbar;
     private ViewPager fomonoPager;
     private PagerSlidingTabStrip fomonoTabStrip;
-    private int ActiveViewPagerPagePosition = 0;
+    private int activeViewPagerPagePosition = 0;
     private int eventSortRadioButtonSelected = -1;
     private int eatsSortRadioButtonSelected = -1;
     private int movieSortRadioButtonSelected = -1;
@@ -117,7 +117,7 @@ public class FomonoActivity extends AppCompatActivity implements BaseSortFragmen
 
             @Override
             public void onPageSelected(int position) {
-                ActiveViewPagerPagePosition = position;
+                activeViewPagerPagePosition = position;
             }
 
             @Override
@@ -173,7 +173,7 @@ public class FomonoActivity extends AppCompatActivity implements BaseSortFragmen
         }
         switch (item.getItemId()) {
             case R.id.menuSortId:
-                String name = makeFragmentName(fomonoPager.getId(), ActiveViewPagerPagePosition);
+                String name = makeFragmentName(fomonoPager.getId(), activeViewPagerPagePosition);
                 Fragment viewPagerFragment = getSupportFragmentManager().findFragmentByTag(name);
 
                 if (viewPagerFragment != null) {
@@ -183,17 +183,15 @@ public class FomonoActivity extends AppCompatActivity implements BaseSortFragmen
                         FragmentManager fm = getSupportFragmentManager();
                         if (viewPagerFragment instanceof EventFragment) {
                             EventSortFragment sortFragmentObject = EventSortFragment.newInstance(eventSortRadioButtonSelected);
-                            sortFragmentObject.show(fm, "fragment_edit_name");
-     //                       //FIXME - Insert events filter fragment here
+                            sortFragmentObject.show(fm, "fragment_sort");
 
                         } else if(viewPagerFragment instanceof EatsFragment) {
                             EatsSortFragment sortFragmentObject = EatsSortFragment.newInstance(eatsSortRadioButtonSelected);
-                           sortFragmentObject.show(fm, "fragment_edit_name");
-   //                         //FIXME - Insert eats filter fragment here
+                           sortFragmentObject.show(fm, "fragment_sort");
 
                         } else if(viewPagerFragment instanceof MovieFragment) {
                             MovieSortFragment sortFragmentObject = MovieSortFragment.newInstance(movieSortRadioButtonSelected);
-                            sortFragmentObject.show(fm, "fragment_edit_name");
+                            sortFragmentObject.show(fm, "fragment_sort");
                         }
                     } else {
                         Log.d(TAG, "Fragment not resumed");
@@ -202,7 +200,16 @@ public class FomonoActivity extends AppCompatActivity implements BaseSortFragmen
                     fomonoMainPagerAdapter.refreshFragments();
                 }
                 return true;
-            default:return super.onOptionsItemSelected(item);
+            case R.id.menuFilter:
+                String apiName = fomonoMainPagerAdapter.getApiName(activeViewPagerPagePosition);
+                if (apiName.equals(FomonoApplication.API_NAME_EVENTS) || apiName.equals(FomonoApplication.API_NAME_EATS)) {
+                    Intent filterIntent = new Intent(this, FomonoFilterActivity.class);
+                    filterIntent.putExtra("apiName", apiName);
+                    startActivity(filterIntent);
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -213,7 +220,7 @@ public class FomonoActivity extends AppCompatActivity implements BaseSortFragmen
     @Override
     public void onFinishSortDialog(String sortString, int radioButtonCheckedId) {
 
-        String name = makeFragmentName(fomonoPager.getId(), ActiveViewPagerPagePosition);
+        String name = makeFragmentName(fomonoPager.getId(), activeViewPagerPagePosition);
         Fragment viewPagerFragment = getSupportFragmentManager().findFragmentByTag(name);
 
         if (viewPagerFragment != null) {
@@ -245,7 +252,7 @@ public class FomonoActivity extends AppCompatActivity implements BaseSortFragmen
             @Override
             public boolean onQueryTextSubmit(String query) {
 
-                String name = makeFragmentName(fomonoPager.getId(), ActiveViewPagerPagePosition);
+                String name = makeFragmentName(fomonoPager.getId(), activeViewPagerPagePosition);
                 Fragment viewPagerFragment = getSupportFragmentManager().findFragmentByTag(name);
 
                 if (viewPagerFragment != null) {
