@@ -127,20 +127,12 @@ public class UserService {
     }
 
     public static Uri getOutputMediaFileUri(Context context) {
-        // Only continue if the SD Card is mounted
         if (isExternalStorageAvailable()) {
-            // Get safe storage directory for photos
-            // Use `getExternalFilesDir` on Context to access package-specific directories.
-            // This way, we don't need to request external read/write runtime permissions.
             File mediaStorageDir = new File(
                     context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), FomonoApplication.APP_TAG);
-
-            // Create the storage directory if it does not exist
-            if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
+         if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
                 Log.d(FomonoApplication.APP_TAG, "failed to create directory");
             }
-
-            // Return the file target for the photo based on filename
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
             File file = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
 

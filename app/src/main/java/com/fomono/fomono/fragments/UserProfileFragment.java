@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -36,16 +37,21 @@ import com.fomono.fomono.utils.RoundedTransformation;
 import com.parse.ParseUser;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.app.Activity.RESULT_OK;
 
 
-public class UserProfileFragment extends android.support.v4.app.Fragment implements PhotoAlertDialogFragment.PhotoAlertDialogFragmentListener {
+public class UserProfileFragment extends android.support.v4.app.Fragment implements
+        PhotoAlertDialogFragment.PhotoAlertDialogFragmentListener {
 
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     public final static int SELECT_IMAGE_ACTIVITY_REQUEST_CODE = 200;
 
+    @BindView(R.id.ivUserImage) ImageView ivUserImage;
     FragmentUserProfileBinding fragmentUserProfile;
     User user;
     Uri file;
@@ -53,6 +59,7 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
     ParseUser pUser;
     UserService uService;
     int screenSize;
+
 
     public interface UserProfileUpdateListener {
         void onUpdateComplete();
@@ -87,7 +94,14 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
 
 
     private static void setImageUrl(ImageView view, String imageUrl,int screenSize) {
-        Picasso.with(view.getContext()).load(imageUrl).transform(new RoundedTransformation(6, 3)).
+        Picasso.with(view.getContext()).load(imageUrl).transform(new RoundedTransformation(10, 3)).
+                placeholder(R.drawable.ic_fomono_big).
+                resize(screenSize, 0).into(view);
+    }
+
+    private static void setImageUrlFile(ImageView view, String imageUrl,int screenSize) {
+        screenSize = screenSize +200;
+        Picasso.with(view.getContext()).load(new File(imageUrl)).transform(new RoundedTransformation(10, 3)).
                 placeholder(R.drawable.ic_fomono_big).
                 resize(screenSize, 0).into(view);
     }
@@ -98,6 +112,7 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
         fragmentUserProfile = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_user_profile, parent, false);
         View view = fragmentUserProfile.getRoot();
+        view.setBackgroundColor(Color.TRANSPARENT);
         fragmentUserProfile.setUser(user);
         ButterKnife.bind(this, view);
         fragmentUserProfile.executePendingBindings();
@@ -148,12 +163,8 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         file = UserService.getOutputMediaFileUri(getContext());
 
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set the image file name
-
-        // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
-        // So as long as the result is not null, it's safe to use the intent.
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, file);
         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-            // Start the image capture intent to take photo
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
         }
     }
@@ -165,8 +176,10 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
         } else if (requestCode == SELECT_IMAGE_ACTIVITY_REQUEST_CODE) {
             filePath = getPath(file);
         }
+
+        setImageUrlFile(fragmentUserProfile.ivUserImage, filePath,screenSize);
         Bitmap bitmap = uService.getBitMap(getContext(), filePath, file);
-        fragmentUserProfile.ivUserImage.setImageBitmap(bitmap);
+      //  fragmentUserProfile.ivUserImage.setImageBitmap(bitmap);
         uService.saveParseFile(bitmap);
     }
 
