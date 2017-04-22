@@ -12,8 +12,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -123,15 +121,20 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
         View view = fragmentBinding.getRoot();
         ButterKnife.bind(this, view);
 
-        fragmentBinding.tvSiteLink.setClickable(true);
-        fragmentBinding.tvSiteLink.setMovementMethod(LinkMovementMethod.getInstance());
-        String text = "<a href=" + business.getUrl() + ">" + "CLICK HERE" + "</a>";
-        fragmentBinding.tvSiteLink.setText(Html.fromHtml(text));
-
-        fragmentBinding.tvEventDate.setText("");
-        fragmentBinding.tvLocation.setText(getLocationAddress());
-        fragmentBinding.rbMovierating.setRating(Double.valueOf(business.getRating()).floatValue());
+         fragmentBinding.tvLocation.setText(getLocationAddress());
+        fragmentBinding.rbRating.setRating(Double.valueOf(business.getRating()).floatValue());
         fragmentBinding.tvRatingText.setText(Double.valueOf(business.getRating()).toString() + "/5");
+
+        fragmentBinding.ivSiteLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                intent.setData(Uri.parse(business.getUrl()));
+                startActivity(intent);
+            }
+        });
 
         DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
         int pxWidth = displayMetrics.widthPixels;

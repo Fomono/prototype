@@ -15,87 +15,77 @@
         android:layout_height="match_parent"
         android:background="@color/white"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp">
+        android:paddingRight="10dp"
+        android:clipToPadding="false">
 
-        <LinearLayout
-            android:id="@+id/llHeader"
+
+        <TextView
+            android:id="@+id/tvEventName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:weightSum="5">
-
-            <TextView
-                android:id="@+id/tvEventDate"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:layout_weight="2"
-                android:text=""
-                android:textColor="@color/twitterBlue"
-                android:textSize="15sp" />
-           <TextView
-                android:id="@+id/tvEventName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginRight="20dp"
-                android:layout_weight="3"
-                android:text='@{business.name ?? ""}'
-                android:textColor="@color/colorBlack"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
+            android:layout_marginRight="20dp"
+            android:text='@{business.name ?? ""}'
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/colorBlack"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <ImageButton
             android:id="@+id/ivFavoriteIcon"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_below="@id/llHeader"
-            android:layout_centerVertical="true"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/tvEventName"
             android:layout_centerHorizontal="true"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="60dp"
-            android:layout_marginTop="5dp"
+            android:background="@color/colorWhite"
             app:srcCompat="@drawable/ic_favorite_grey" />
 
         <TextView
             android:id="@+id/tvFavoriteLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
             android:layout_below="@id/ivFavoriteIcon"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:text="Favorite"
-            android:textSize="10sp"
+            android:textSize="10dp"
             android:textStyle="bold" />
 
 
-
-        <me.zhanghai.android.materialratingbar.MaterialRatingBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/rbMovierating"
-        android:layout_below="@id/EventMediaRelId"
-        style="@style/Widget.MaterialRatingBar.RatingBar.Small" />
+        <RatingBar
+            android:id="@+id/rbRating"
+            style="?android:attr/ratingBarStyleIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvFavoriteLabel"
+            android:layout_centerHorizontal="true"
+            android:max="5"
+            android:progressTint="@color/colorFomono"
+            android:rating="3.5"
+            android:scaleX="1"
+            android:scaleY="1"
+            android:transformPivotX="0dp"
+            android:transformPivotY="0dp" />
 
 
         <TextView
             android:id="@+id/tvRatingText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/ivFavoriteIcon"
-            android:layout_marginTop="25dp"
-            android:layout_toRightOf="@id/rbMovierating"
-            android:layout_toEndOf="@id/rbMovierating"
-            android:textSize="25dp" />
+            android:layout_below="@id/tvFavoriteLabel"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@id/rbRating"
+            android:layout_toRightOf="@id/rbRating"
+            android:textSize="15dp" />
 
 
         <View
             android:id="@+id/spView01"
             android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:layout_below="@id/rbMovierating"
+            android:layout_height="8dp"
+            android:layout_below="@id/rbRating"
+            android:layout_marginStart="-10dp"
+            android:layout_marginEnd="-10dp"
             android:layout_marginTop="15dp"
             android:background="@color/veryLightGrey" />
 
@@ -115,10 +105,10 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/ivLocationIcon"
             android:layout_below="@id/spView01"
+            android:textColor="@color/colorBlack"
             android:layout_toRightOf="@id/ivLocationIcon"
             android:text="Golden Gate Park, San Francisco, CA"
             android:textSize="13sp" />
-
 
 
         <ImageView
@@ -136,18 +126,34 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvLocation"
-            android:layout_toRightOf="@id/ivPhone"
             android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/ivPhone"
             android:text='@{business.phone}'
             android:textSize="13sp" />
+
+        <HorizontalScrollView
+            android:id="@+id/hsvGallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ivPhone"
+            android:layout_marginTop="20dp">
+
+            <LinearLayout
+                android:id="@+id/llGallery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
 
 
 
         <View
-            android:id="@+id/spView02"
+            android:id="@+id/spView00"
             android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:layout_below="@id/tvPhone"
+            android:layout_height="8dp"
+            android:layout_below="@id/hsvGallery"
+            android:layout_marginLeft="-10dp"
+            android:layout_marginRight="-10dp"
             android:layout_marginTop="15dp"
             android:background="@color/veryLightGrey" />
 
@@ -155,11 +161,13 @@
             android:id="@+id/tvHoursLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/spView02"
+            android:layout_below="@id/spView00"
             android:layout_marginTop="10dp"
             android:text='Hours:'
-            android:textStyle="bold"
-            android:textSize="14sp" />
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
 
         <TextView
@@ -167,7 +175,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvHoursLabel"
-            android:layout_toRightOf="@id/tvHours"
+            android:layout_centerHorizontal="true"
             android:text=''
             android:textSize="13sp" />
 
@@ -175,18 +183,45 @@
         <View
             android:id="@+id/spView03"
             android:layout_width="match_parent"
-            android:layout_height="3dp"
+            android:layout_height="8dp"
             android:layout_below="@id/tvHours"
+            android:layout_marginLeft="-10dp"
+            android:layout_marginRight="-10dp"
+            android:layout_marginBottom="15dp"
             android:layout_marginTop="15dp"
             android:background="@color/veryLightGrey" />
+
+
+        <TextView
+            android:id="@+id/tvPriceLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/spView03"
+            android:layout_centerHorizontal="true"
+            android:text='Price:  '
+            android:textSize="15sp" />
+
 
         <TextView
             android:id="@+id/tvPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tvPriceLabel"
             android:layout_below="@id/spView03"
-            android:text='@{"Price: " + business.price}'
-            android:textSize="13sp" />
+            android:textStyle="bold"
+            android:textColor="@color/colorGreen"
+            android:text='@{business.price}'
+            android:textSize="18sp" />
+
+        <View
+            android:id="@+id/spView04"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:layout_below="@id/tvPrice"
+            android:layout_marginLeft="-10dp"
+            android:layout_marginRight="-10dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/veryLightGrey" />
 
 
         <TextView
@@ -194,33 +229,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/tvPrice"
+            android:layout_below="@id/spView04"
             android:layout_marginTop="20dp"
-            android:text="Go to the Site: "
+            android:text="Go to the Event Site "
             android:textColor="@color/black"
             android:textSize="13sp" />
 
 
-        <TextView
-            android:id="@+id/tvSiteLink"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/ivSiteLink"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_alignTop="@id/tvSiteLinkLabel"
-            android:layout_below="@id/tvPhone"
-            android:layout_toRightOf="@id/tvSiteLinkLabel"
+            android:layout_below="@id/tvPrice"
+            android:layout_toEndOf="@id/tvSiteLinkLabel"
             android:clickable="true"
-            android:text="CLICK HERE"
-            android:textColor="@color/twitterBlue"
-            android:textSize="13sp" />
+            app:srcCompat="@drawable/ic_globe" />
 
 
 
         <LinearLayout
             android:id="@+id/llShare"
-            android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvSiteLinkLabel">
+            android:layout_below="@id/tvSiteLinkLabel"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tvShareLabel"
@@ -236,8 +269,8 @@
                 android:id="@+id/ivFBShareIcon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginRight="15dp"
                 android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
                 android:layout_marginTop="20dp"
                 app:srcCompat="@drawable/ic_facebook" />
 
@@ -246,8 +279,8 @@
                 android:id="@+id/ivTwitterShareIcon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginRight="15dp"
                 android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
                 android:layout_marginTop="20dp"
                 app:srcCompat="@drawable/ic_twitter" />
 
@@ -256,8 +289,8 @@
                 android:id="@+id/ivEmailShareIcon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginRight="15dp"
                 android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
                 android:layout_marginTop="20dp"
                 app:srcCompat="@drawable/ic_email" />
 
@@ -265,33 +298,19 @@
                 android:id="@+id/ivMessageShareIcon"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:layout_marginRight="15dp"
                 android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
                 android:layout_marginTop="20dp"
                 app:srcCompat="@drawable/ic_whatsapp" />
         </LinearLayout>
-
-        <HorizontalScrollView
-            android:id="@+id/hsvGallery"
-            android:layout_marginTop="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/llShare">
-            <LinearLayout
-                android:id="@+id/llGallery"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" />
-        </HorizontalScrollView>
-
 
         <com.google.android.gms.maps.MapView
             android:id="@+id/mapView"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:layout_below="@id/hsvGallery"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"/>
+            android:layout_below="@id/llShare"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp" />
 
     </RelativeLayout>
 </layout>
