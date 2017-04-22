@@ -21,14 +21,14 @@ public class MainActivity extends AppCompatActivity {
 
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (ParseAnonymousUtils.isLinked(currentUser)) {
-            FavoritesUtil.getInstance().initialize(currentUser);
+            FavoritesUtil.getInstance();
             Intent i = new Intent(this, LoginUserActivity.class);
             startActivity(i);
         } else {
             currentUser.fetchInBackground(new GetCallback<ParseObject>() {
                 @Override
                 public void done(ParseObject object, ParseException e) {
-                    FavoritesUtil.getInstance().initialize(currentUser);
+                    FavoritesUtil.getInstance();
                     Intent i = new Intent(MainActivity.this, FomonoActivity.class);
                     startActivity(i);
                 }

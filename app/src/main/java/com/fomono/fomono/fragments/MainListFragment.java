@@ -1,28 +1,20 @@
 package com.fomono.fomono.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.fomono.fomono.R;
-import com.fomono.fomono.activities.FomonoActivity;
-import com.fomono.fomono.activities.FomonoDetailActivity;
 import com.fomono.fomono.adapters.FomonoAdapter;
 import com.fomono.fomono.databinding.FomonoMainListFragmentBinding;
 import com.fomono.fomono.models.FomonoEvent;
@@ -31,7 +23,6 @@ import com.fomono.fomono.network.client.MovieDBClientRetrofit;
 import com.fomono.fomono.network.client.YelpClientRetrofit;
 import com.fomono.fomono.supportclasses.EndlessRecyclerViewScrollListener;
 import com.fomono.fomono.supportclasses.InternetAlertDialogue;
-import com.fomono.fomono.supportclasses.ItemClickSupport;
 
 import java.util.ArrayList;
 
@@ -93,15 +84,6 @@ public abstract class MainListFragment extends Fragment {
 
         progressBar.setVisibility(ProgressBar.GONE);
         setupRecycleAdapter();
-
-        ItemClickSupport.addTo(rvList).setOnItemClickListener(
-                (recyclerView, position, v) -> {
-                    Intent showDetails = new Intent(mContext, FomonoDetailActivity.class);
-                    showDetails.putExtra("position", position);
-                    showDetails.putExtra("FOM_OBJ", fomonoEvents.get(position));
-                    ((AppCompatActivity) mContext).startActivityForResult(showDetails, FomonoActivity.REQUEST_CODE_DETAILS);
-                }
-        );
 
         fomonoAdapter.setCustomObjectListener(i -> startActivity(i));
 

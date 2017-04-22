@@ -42,9 +42,7 @@
                 android:textColor="@color/colorBlack"
                 android:textSize="20sp"
                 android:textStyle="bold" />
-
-
-        </LinearLayout>
+  </LinearLayout>
 
         <ImageButton
             android:id="@+id/ivFavoriteIcon"

@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
+import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
 import com.fomono.fomono.databinding.FragmentMoviedbDetailBinding;
 import com.fomono.fomono.models.movies.Movie;
@@ -113,7 +114,7 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
         fragmentBinding.tvClockCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addToCalendar(movie.getReleaseDate());
+                addToCalendar();
             }
         });
 
@@ -180,19 +181,25 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
         });
 
         ibFavorite = fragmentBinding.ivFavoriteIcon;
-        if (favsUtil.isFavorited(movie)) {
-            ibFavorite.setImageResource(R.drawable.ic_favorite);
-        }
+        favsUtil.isFavorited(movie, isFavorited -> {
+            if (isFavorited) {
+                ibFavorite.setImageResource(R.drawable.ic_favorite);
+            }
+        });
+
         ibFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (favsUtil.isFavorited(movie)) {
-                    ibFavorite.setImageResource(R.drawable.ic_favorite_grey);
-                    favsUtil.removeFromFavorites(movie);
-                } else {
-                    ibFavorite.setImageResource(R.drawable.ic_favorite);
-                    favsUtil.addToFavorites(movie);
-                }
+                favsUtil.isFavorited(movie, isFavorited -> {
+                    if (isFavorited) {
+                        ibFavorite.setImageResource(R.drawable.ic_favorite_grey);
+                        favsUtil.removeFromFavorites(movie);
+                    } else {
+                        ibFavorite.setImageResource(R.drawable.ic_favorite);
+                        favsUtil.addToFavorites(movie);
+                    }
+                });
+
                 if (getActivity() instanceof FomonoEventUpdateListener) {
                     ((FomonoEventUpdateListener) getActivity()).onFomonoEventUpdated();
                 }
@@ -265,12 +272,12 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
 
     }
 
-    public void addToCalendar(String startDate) {
+    public void addToCalendar() {
+        String startDate = movie.getReleaseDate();
         long calID = 3;
         long startMillis = 0;
         long endMillis = 0;
         startMillis = DateUtils.convertMovieDatetoMilliSeconds(startDate);
-
 
         ContentResolver cr = getActivity().getContentResolver();
         ContentValues values = new ContentValues();
@@ -285,8 +292,8 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
             long eventID = Long.parseLong(uri.getLastPathSegment());
             Toast.makeText(getActivity(), "Added to Calendar",
                     Toast.LENGTH_LONG).show();
-
-            return;
+        } else {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_CALENDAR}, FomonoApplication.PERM_CAL_MOVIE_REQ_CODE);
         }
     }
 }

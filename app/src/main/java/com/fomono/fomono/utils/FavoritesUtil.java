@@ -1,6 +1,7 @@
 package com.fomono.fomono.utils;
 
 import android.support.annotation.NonNull;
+import android.support.v4.util.Pair;
 
 import com.fomono.fomono.models.FomonoEvent;
 import com.fomono.fomono.models.db.Favorite;
@@ -35,14 +36,21 @@ public class FavoritesUtil {
     private Map<String, Map<String, Favorite>> favoritesMap;
     private boolean loaded;
     private List<FavoritesListener> listeners;
+    private List<Pair<FomonoEvent, IsFavoritedListener>> isFavoritedListeners; //list of temporary listeners for one time callbacks
 
     private FavoritesUtil() {
         loaded = false;
         listeners = new ArrayList<>();
+        isFavoritedListeners = new ArrayList<>();
+        initialize(ParseUser.getCurrentUser());
     }
 
     public interface FavoritesListener {
         void onFavoritesLoaded(List<Favorite> favorites);
+    }
+
+    public interface IsFavoritedListener {
+        void onIsFavorited(Boolean isFavorited);
     }
 
     public void initialize(ParseUser user) {
@@ -76,6 +84,7 @@ public class FavoritesUtil {
                     }
                 }
                 loaded = true;
+                notifiyIsFavoritedListeners();
                 notifyListeners();
             }
         });
@@ -137,17 +146,38 @@ public class FavoritesUtil {
         notifyListeners();
     }
 
-    public boolean isFavorited(FomonoEvent fEvent) {
+    public void isFavorited(FomonoEvent fEvent, IsFavoritedListener listener) {
+        if (!loaded) {
+            Pair<FomonoEvent, IsFavoritedListener> pair = new Pair<>(fEvent, listener);
+            isFavoritedListeners.add(pair);
+            return;
+        }
+        isFavoritedLoaded(fEvent, listener);
+    }
+
+    private void isFavoritedLoaded(FomonoEvent fEvent, IsFavoritedListener listener) {
+        if (listener == null) {
+            return;
+        }
         String id = fEvent.getStringId();
         String apiName = fEvent.getApiName();
         if (!favoritesMap.containsKey(apiName)) {
-            return false;
+            listener.onIsFavorited(false);
+            return;
         }
         Favorite f = favoritesMap.get(apiName).get(id);
         if (f == null) {
-            return false;
+            listener.onIsFavorited(false);
+            return;
         }
-        return true;
+        listener.onIsFavorited(true);
+    }
+
+    private void notifiyIsFavoritedListeners() {
+        for (Pair<FomonoEvent, IsFavoritedListener> p : isFavoritedListeners) {
+            isFavoritedLoaded(p.first, p.second);
+        }
+        isFavoritedListeners.clear();
     }
 
     public void getFavoritesWhenLoaded(@NonNull FavoritesListener listener) {

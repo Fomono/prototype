@@ -222,19 +222,25 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
         });
 
         ibFavorite = fragmentBinding.ivFavoriteIcon;
-        if (favsUtil.isFavorited(business)) {
-            ibFavorite.setImageResource(R.drawable.ic_favorite);
-        }
+        favsUtil.isFavorited(business, isFavorited -> {
+            if (isFavorited) {
+                ibFavorite.setImageResource(R.drawable.ic_favorite);
+            }
+        });
+
         ibFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (favsUtil.isFavorited(business)) {
-                    ibFavorite.setImageResource(R.drawable.ic_favorite_grey);
-                    favsUtil.removeFromFavorites(business);
-                } else {
-                    ibFavorite.setImageResource(R.drawable.ic_favorite);
-                    favsUtil.addToFavorites(business);
-                }
+                favsUtil.isFavorited(business, isFavorited -> {
+                    if (isFavorited) {
+                        ibFavorite.setImageResource(R.drawable.ic_favorite_grey);
+                        favsUtil.removeFromFavorites(business);
+                    } else {
+                        ibFavorite.setImageResource(R.drawable.ic_favorite);
+                        favsUtil.addToFavorites(business);
+                    }
+                });
+
                 if (getActivity() instanceof FomonoEventUpdateListener) {
                     ((FomonoEventUpdateListener) getActivity()).onFomonoEventUpdated();
                 }

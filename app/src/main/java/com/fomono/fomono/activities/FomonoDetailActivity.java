@@ -126,6 +126,16 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
             ParseUser user = ParseUser.getCurrentUser();
             user.put(User.LOC_PERM_SEEN, true);
             user.saveInBackground();
+        } else if (requestCode == FomonoApplication.PERM_CAL_EVENT_REQ_CODE || requestCode == FomonoApplication.PERM_CAL_MOVIE_REQ_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //add to calendar
+                if (requestCode == FomonoApplication.PERM_CAL_EVENT_REQ_CODE && fomonoDetailEventbriteFragment != null) {
+                    fomonoDetailEventbriteFragment.addToCalendar();
+                }
+                if (requestCode == FomonoApplication.PERM_CAL_MOVIE_REQ_CODE && fomonoDetailMoviedbFragment != null) {
+                    fomonoDetailMoviedbFragment.addToCalendar();
+                }
+            }
         }
     }
 

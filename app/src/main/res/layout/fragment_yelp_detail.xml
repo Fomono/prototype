@@ -32,8 +32,7 @@
                 android:text=""
                 android:textColor="@color/twitterBlue"
                 android:textSize="15sp" />
-
-            <TextView
+           <TextView
                 android:id="@+id/tvEventName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -44,7 +43,6 @@
                 android:textColor="@color/colorBlack"
                 android:textSize="20sp"
                 android:textStyle="bold" />
-
 
         </LinearLayout>
 
