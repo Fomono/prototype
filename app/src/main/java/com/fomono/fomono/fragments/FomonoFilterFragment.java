@@ -34,6 +34,8 @@ public class FomonoFilterFragment extends Fragment {
     public static final int CODE_CANCEL = 2;
     public static final int CODE_DONE = 3;
 
+    public static final int NUM_COLUMNS = 3;
+
     FragmentCategoryFilterBinding binding;
     RecyclerView rvFilters;
     Button btnNext;
@@ -107,10 +109,10 @@ public class FomonoFilterFragment extends Fragment {
         }
 
         // Set layout manager to position the items
-        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 3);
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), NUM_COLUMNS);
         rvFilters.setLayoutManager(layoutManager);
         int spacing = getResources().getDimensionPixelSize(R.dimen.filter_item_spacing);
-        rvFilters.addItemDecoration(new SpacesItemDecoration(3, spacing, true));
+        rvFilters.addItemDecoration(new SpacesItemDecoration(NUM_COLUMNS, spacing, true));
         rvFilters.setAdapter(adptFilters);
 
         if (showSinglePage) {
@@ -122,6 +124,7 @@ public class FomonoFilterFragment extends Fragment {
                 }
             });
             btnCancel.setVisibility(View.GONE);
+            binding.vDivider.setVisibility(View.GONE);
         } else {
             btnNext.setOnClickListener(new View.OnClickListener() {
                 @Override

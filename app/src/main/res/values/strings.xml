@@ -5,7 +5,7 @@
     <string name="title_activity_fomono">FomonoActivity</string>
     <string name="title_activity_fomono_detail">Details</string>
     <string name="title_activity_profile">User Profile</string>
-    <string name="title_activity_fomono_filter">Settings</string>
+    <string name="title_activity_fomono_filter">Filter</string>
     <string name="title_activity_favorite_fragment">FavoriteFragment</string>
     <string name="EventFeeFree">Free</string>
     <string name="EventFeePaid">Paid</string>

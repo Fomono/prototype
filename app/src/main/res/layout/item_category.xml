@@ -10,9 +10,11 @@
 
         <ToggleButton
             android:id="@+id/tbCategory"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="@color/colorWhite"
+            android:fontFamily="sans-serif-light"
+            android:textStyle="normal"
             android:padding="2dp"
             android:textSize="@dimen/toggle_button_text_size"
             android:clickable="true"
