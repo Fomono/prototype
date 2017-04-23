@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
 import com.fomono.fomono.fragments.FomonoDetailEventbriteFragment;
@@ -93,14 +94,23 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
         if(fEvent instanceof Event) {
             Event e = (Event) fEvent;
             if (e.getLogo() != null) {
-                Glide.with(this).load(e.getLogo().getUrl()).centerCrop().into(imageView);
+                Glide.with(this).load(e.getLogo().getUrl())
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .centerCrop()
+                        .into(imageView);
             }
         } else if(fEvent instanceof Movie){
             Movie m = (Movie) fEvent;
-            Glide.with(this).load(m.getBackdropPath()).centerCrop().into(imageView);
+            Glide.with(this).load(m.getBackdropPath())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .centerCrop()
+                    .into(imageView);
         } else if(fEvent instanceof Business){
             Business b = (Business) fEvent;
-            Glide.with(this).load(b.getImageUrl()).centerCrop().into(imageView);
+            Glide.with(this).load(b.getImageUrl())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .centerCrop()
+                    .into(imageView);
         }
     }
 

@@ -37,6 +37,7 @@
                         android:adjustViewBounds="true"
                         android:scaleType="fitXY"
                         android:layout_alignParentTop="true"
+                        android:foreground="?android:attr/selectableItemBackground"
                         android:transitionName="main_image">
 
                     </ImageView>

@@ -1,7 +1,6 @@
 package com.fomono.fomono.fragments;
 
 import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -58,7 +57,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.content.ContentValues.TAG;
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by Saranu on 4/6/17.
@@ -71,7 +69,6 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
     MapView mMapView;
     YelpClientRetrofit yelpClientRetrofit;
     Business business;
-    ProgressDialog pd;
     ImageButton ibFavorite;
     FavoritesUtil favsUtil;
     public int screenWidthDetail;
@@ -164,7 +161,7 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
         mMapView.onResume(); // needed to get the map to display immediately
 
         try {
-            MapsInitializer.initialize(getActivity().getApplicationContext());
+            MapsInitializer.initialize(getContext());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -293,11 +290,11 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
     }
 
     private View insertPhoto(String url) {
-        LinearLayout layout = new LinearLayout(getApplicationContext());
+        LinearLayout layout = new LinearLayout(getContext());
         layout.setLayoutParams(new ViewGroup.LayoutParams(400, 300));
         layout.setGravity(Gravity.CENTER);
 
-        ImageView imageView = new ImageView(getApplicationContext());
+        ImageView imageView = new ImageView(getContext());
         imageView.setLayoutParams(new ViewGroup.LayoutParams(400, 300));
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
@@ -315,16 +312,9 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
         Call<BusinessDetail> call = yelpClientRetrofit.YelpRetrofitClientFactory().getYelpBusinessDetailById
                 (business.getId());
 
-        pd = new ProgressDialog(getActivity());
-        pd.setTitle("Loading...");
-        pd.setMessage("Please wait.");
-        pd.setCancelable(false);
-        pd.show();
-
         call.enqueue(new Callback<BusinessDetail>() {
             @Override
             public void onResponse(Call<BusinessDetail> call, Response<BusinessDetail> response) {
-                pd.dismiss();
                 BusinessDetail bDetail = response.body();
                 if (bDetail == null) {
                     Log.d(TAG, "NO MATCH ");
@@ -336,7 +326,6 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
 
             @Override
             public void onFailure(Call<BusinessDetail> call, Throwable t) {
-                pd.dismiss();
                 Log.d(TAG, "REQUEST Failed " + t.getMessage());
             }
         });

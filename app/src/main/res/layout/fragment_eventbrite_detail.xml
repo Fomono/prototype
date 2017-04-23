@@ -172,7 +172,7 @@
             android:layout_height="18dp"
             android:layout_below="@id/spView01"
             android:layout_toRightOf="@id/tvClockEventDate"
-            app:srcCompat="@drawable/ic_calendar" />
+            app:srcCompat="@drawable/ic_date_range" />
 
         <TextView
             android:id="@+id/tvCalendar"

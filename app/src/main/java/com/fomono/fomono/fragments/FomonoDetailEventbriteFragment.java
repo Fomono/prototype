@@ -1,7 +1,6 @@
 package com.fomono.fomono.fragments;
 
 import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -72,7 +71,6 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
     MapView mMapView;
     EventBriteClientRetrofit eventBriteClientRetrofit;
     Event event;
-    ProgressDialog pd;
     ImageButton ibFavorite;
     FavoritesUtil favsUtil;
 
@@ -108,16 +106,10 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
         data.put("token", getResources().getString(R.string.eventbrite_api_key));
         Call<Venue> call = eventBriteClientRetrofit.EBRetrofitClientFactory().
                 getVenueFromServer(e.getVenueId(), data);
-        pd = new ProgressDialog(getActivity());
-        pd.setTitle("Loading...");
-        pd.setMessage("Please wait.");
-        pd.setCancelable(false);
-        pd.show();
 
         call.enqueue(new Callback<Venue>() {
             @Override
             public void onResponse(Call<Venue> call, Response<Venue> response) {
-                pd.dismiss();
                 Address address = response.body().getAddress();
                 Venue venue = response.body();
                 if (address == null) {
@@ -128,14 +120,11 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
                     generateAddressString(venue);
                     populateAddressMap(e);
                 }
-
             }
 
             @Override
             public void onFailure(Call<Venue> call, Throwable t) {
-                pd.dismiss();
                 Log.d(TAG, "REQUEST Failed " + t.getMessage());
-
             }
         });
 
@@ -176,7 +165,6 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
         if(event.getDescription() !=null){
             String eventDesc = event.getDescription().getText().toString();
             fragmentEventbriteDetailBinding.tvDescription.setText(StringUtil.stripNewlinesExtraSpaces(eventDesc));
-
         }
 
         fragmentEventbriteDetailBinding.ivSiteLink.setOnClickListener(new View.OnClickListener() {
@@ -205,7 +193,6 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
                     getFormattedMonthForHeader(start.getLocal()));
            fragmentEventbriteDetailBinding.tvEventDay.setText(DateUtils.
                    getFormattedDayForHeader(start.getLocal()));
-            event.saveOrUpdate();
         }
 
         populateDetail(event);
@@ -216,7 +203,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
         mMapView.onResume(); // needed to get the map to display immediately
 
         try {
-            MapsInitializer.initialize(getActivity().getApplicationContext());
+            MapsInitializer.initialize(getContext());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -327,7 +314,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
             }
         });
 
-        return fragmentEventbriteDetailBinding.getRoot();
+        return view;
     }
 
     public void setupFacebookShareIntent() {
@@ -486,7 +473,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        mMapView.onLowMemory();
+//        mMapView.onLowMemory();
     }
 
     public void enableMapLocation() {
