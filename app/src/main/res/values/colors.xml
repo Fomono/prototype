@@ -43,6 +43,6 @@
     <color name="veryLightGrey">#E5E5E5</color>
     <color name="darkGrey">#A9A9A9</color>
 
-    <color name="hintColor">#757575</color>
+    <color name="hintColor">#BDBDBD</color>
     <color name="greySecondaryText">#757575</color>
 </resources>

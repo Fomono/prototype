@@ -2,22 +2,26 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
-            android:padding="10dp"
             android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/tvLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginStart="20dp"
                 android:textSize="@dimen/user_preference_header_text_size"
                 android:textColor="@color/colorFomono"
                 android:textStyle="bold"
                 android:layout_alignParentTop="true"
+                android:drawableStart="@drawable/ic_location_pin_settings"
+                android:drawablePadding="5dp"
                 android:text="@string/pref_location" />
 
             <TextView
@@ -25,30 +29,46 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvLocation"
+                android:textColor="@color/colorBlack"
                 android:textSize="@dimen/user_preference_desc_text_size"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="22dp"
+                android:layout_marginEnd="20dp"
                 android:text="@string/pref_curr_location" />
-
-            <ImageButton
-                android:id="@+id/ibUseMyLocation"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_below="@+id/tvLocation"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignBottom="@+id/tvLocationCurr"
-                android:src="@drawable/ic_my_location"
-                android:background="@android:color/transparent"/>
 
             <EditText
                 android:id="@+id/etLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ibUseMyLocation"
                 android:textSize="@dimen/user_preference_desc_text_size"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="20dp"
                 android:maxLines="1"
-                android:hint="@string/pref_loc_hint" />
+                android:hint="@string/pref_loc_hint"
+                android:textColor="@color/colorBlack"
+                android:textColorHint="@color/hintColor"
+                android:layout_below="@+id/tvLocationCurr"
+                android:layout_toStartOf="@+id/ibUseMyLocation" />
+
+            <ImageButton
+                android:id="@+id/ibUseMyLocation"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignBottom="@+id/etLocation"
+                android:layout_marginBottom="5dp"
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/ic_my_location"
+                android:background="@android:color/transparent"/>
+
+            <View
+                android:id="@+id/vDivider1"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="30dp"
+                android:background="@color/colorGrey"
+                android:layout_below="@+id/etLocation" />
 
             <TextView
                 android:id="@+id/tvDistance"
@@ -57,8 +77,11 @@
                 android:textSize="@dimen/user_preference_header_text_size"
                 android:textColor="@color/colorFomono"
                 android:textStyle="bold"
-                android:layout_below="@+id/etLocation"
-                android:layout_marginTop="10dp"
+                android:drawableStart="@drawable/ic_zoom_out"
+                android:drawablePadding="5dp"
+                android:layout_below="@+id/vDivider1"
+                android:layout_marginTop="30dp"
+                android:layout_marginStart="20dp"
                 android:text="@string/pref_distance" />
 
             <TextView
@@ -66,64 +89,84 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvDistance"
+                android:textColor="@color/colorBlack"
                 android:textSize="@dimen/user_preference_desc_text_size"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="22dp"
+                android:layout_marginEnd="20dp"
                 android:text="@string/pref_distance_desc" />
 
             <Spinner
                 android:id="@+id/spDistance"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/tvDistanceDesc"
-                android:layout_alignParentRight="true"
-                android:background="@color/colorGrey"
-                android:layout_alignParentEnd="true"
-                android:layout_toRightOf="@+id/tvDistanceDesc"
-                android:layout_toEndOf="@+id/tvDistanceDesc" />
-
-            <android.support.v7.widget.CardView
-                android:layout_width="wrap_content"
+                android:gravity="left"
                 android:layout_below="@+id/tvDistanceDesc"
-                android:elevation="2dp"
-                android:layout_marginTop="10dp"
-                android:layout_height="wrap_content">
-                <LinearLayout
-                    android:id="@+id/llFilters"
-                    android:orientation="vertical"
-                    android:clickable="true"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp" />
 
-                    <TextView
-                        android:id="@+id/tvFilters"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/user_preference_header_text_size"
-                        android:textColor="@color/colorFomono"
-                        android:textStyle="bold"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/pref_filters" />
+            <View
+                android:id="@+id/vDivider2"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/colorGrey"
+                android:layout_below="@+id/spDistance" />
 
-                    <TextView
-                        android:id="@+id/tvFiltersDesc"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:textSize="@dimen/user_preference_desc_text_size"
-                        android:text="@string/pref_filters_desc" />
+            <RelativeLayout
+                android:id="@+id/rlFilters"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:layout_below="@+id/vDivider2">
 
-                    <TextView
-                        android:id="@+id/tvFiltersSelected"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/hintColor"
-                        android:textSize="@dimen/user_preference_desc_text_size"
-                        android:layout_marginTop="10dp"
-                        tools:text="{num} selected" />
+                <TextView
+                    android:id="@+id/tvFilters"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/user_preference_header_text_size"
+                    android:textColor="@color/colorFomono"
+                    android:textStyle="bold"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginStart="20dp"
+                    android:drawableStart="@drawable/ic_logo_invert"
+                    android:drawablePadding="8dp"
+                    android:text="@string/pref_filters" />
 
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
+                <TextView
+                    android:id="@+id/tvFiltersDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvFilters"
+                    android:textColor="@color/colorBlack"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="22dp"
+                    android:layout_marginEnd="20dp"
+                    android:textSize="@dimen/user_preference_desc_text_size"
+                    android:text="@string/pref_filters_desc" />
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    app:srcCompat="@drawable/ic_navigate_next"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="20dp" />
+
+                <TextView
+                    android:id="@+id/tvFiltersSelected"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvFiltersDesc"
+                    android:textColor="@color/hintColor"
+                    android:textSize="@dimen/user_preference_desc_text_size"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="22dp"
+                    android:layout_marginEnd="20dp"
+                    tools:text="{num} selected" />
+            </RelativeLayout>
 
         </RelativeLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 </layout>
