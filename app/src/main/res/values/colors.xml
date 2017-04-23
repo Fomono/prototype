@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#EF5350</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="colorWhite">#ffffff</color>
-    <color name="colorBlack">#000000</color>
-    <color name="colorFomono">#e7665d</color>
-    <color name="colorFomonoSecondary">#e4a29e</color>
-    <color name="colorFomonoDavid">#e97e54</color>
-    <color name="colorGrey">#e3e1e1</color>
-    <color name="colorDarkGrey">#e4e3e2</color>
+    <color name="colorPrimary">#FF5722</color>
+    <color name="colorPrimaryDark">#E64A19</color>
+    <color name="colorAccent">#FF9800</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#212121</color>
+    <color name="colorFomono">#FF5722</color>
+    <color name="colorFomonoSecondary">#FFCCBC</color>
+    <color name="colorGrey">#BDBDBD</color>
+    <color name="colorDarkGrey">#757575</color>
     <color name="colorGreen">#228b22</color>
     <color name="colorTransparent">#00555555</color>
 
@@ -44,5 +43,5 @@
     <color name="veryLightGrey">#E5E5E5</color>
     <color name="darkGrey">#A9A9A9</color>
 
-    <color name="hintColor">#A9A9A9</color>
+    <color name="hintColor">#757575</color>
 </resources>
