@@ -125,6 +125,8 @@ public class FomonoFilterActivity extends AppCompatActivity implements FomonoFil
                         .replace(R.id.flContent, filtersFragment)
                         .commit();
                 currentFilterPage = getFilterPage(apiName);
+
+                getSupportActionBar().setTitle(title);
             });
         } catch (Exception e) {
             e.printStackTrace();
