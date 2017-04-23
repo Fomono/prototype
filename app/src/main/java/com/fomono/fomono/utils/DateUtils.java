@@ -104,8 +104,8 @@ public class DateUtils {
 
     public static String convertEventDatetoDisplayFormat(String strDate){
 
-        SimpleDateFormat sdf = new  SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        SimpleDateFormat sdfDisplay = new  SimpleDateFormat("dd-MMM-yyyy hh:mm a");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        SimpleDateFormat sdfDisplay = new SimpleDateFormat("dd-MMM-yyyy hh:mm a");
 
 
         Date date = null;
@@ -128,5 +128,18 @@ public class DateUtils {
         }
 
         return standardFormat.format(date);
+    }
+
+    public static String convertEventDateListItemDisplayFormat(String strDate) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        SimpleDateFormat sdfDisplay = new SimpleDateFormat("EEE, MMM dd, hh:mm a");
+
+        Date date = null;
+        try {
+            date = sdf.parse(strDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return sdfDisplay.format(date);
     }
 }

@@ -31,10 +31,10 @@ import com.fomono.fomono.models.eats.Business;
 import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.movies.Movie;
 import com.fomono.fomono.utils.ConfigUtil;
+import com.fomono.fomono.utils.DateUtils;
 import com.fomono.fomono.utils.FavoritesUtil;
 import com.squareup.picasso.Picasso;
 
-import java.text.DateFormatSymbols;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -152,20 +152,14 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
                 holder.eventPrice.setText(R.string.EventFeeFree);
             }
             holder.eventRatingBar.setVisibility(View.GONE);
+            holder.tvRatingCount.setVisibility(View.GONE);
+
             int DateViewSet = 0;
             if (event.getStart() != null) {
                 if (!TextUtils.isEmpty(event.getStart().getLocal())) {
                     String localDateTime = event.getStart().getLocal();
-                    localDateTime = localDateTime.replace('T', ' ');
-                    String[] dateTimeString = localDateTime.trim().split("\\s+");
-                    String[] dateParams = dateTimeString[0].trim().split("-");
-                    String[] timeParams = dateTimeString[1].trim().split(":");
+                    holder.eventDateTime.setText(DateUtils.convertEventDateListItemDisplayFormat(localDateTime));
 
-                    String TimeFollower = "AM";
-                    if(Integer.parseInt(timeParams[0]) > 12) {TimeFollower = "PM";}
-                    String monthName = new DateFormatSymbols().getMonths()[Integer.parseInt((dateParams[1])) - 1];
-                    holder.eventDateTime.setText(""+monthName+ " " +dateParams[2]+"th, " +timeParams[0]+":"+timeParams[1]+TimeFollower);
-                  //  holder.eventDateTime.setText(""+timeParams[0]+":"+timeParams[1]+TimeFollower+", "+dateParams[2]+"th "+monthName+" "+dateParams[0]);
                     DateViewSet = 1;
                 }
             }
@@ -235,10 +229,13 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
             setBusinessCategory(business, holder);
 
 
+            holder.eventDateTime.setVisibility(View.GONE);
             holder.eventRatingBar.setRating(Double.valueOf(business.getRating()).floatValue());
-
-            if(business.getReviewCount() != null) holder.eventDateTime.setText(""+business.getReviewCount() + " Reviews");
-            else holder.eventDateTime.setVisibility(View.GONE);
+            if (business.getReviewCount() != null) {
+                holder.tvRatingCount.setText(""+business.getReviewCount() + " Reviews");
+            } else {
+                holder.tvRatingCount.setVisibility(View.GONE);
+            }
 
             if (business.getUrl() != null) {
                 holder.eventUrl.setBackgroundResource(R.drawable.ic_link);
@@ -288,6 +285,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
 
             double ratingString = movie.getVoteAverage()/2;
             holder.eventRatingBar.setRating((float)(ratingString));
+            holder.tvRatingCount.setVisibility(View.GONE);
 
             holder.eventDistance.setVisibility(View.GONE);
             holder.eventPrice.setVisibility(View.GONE);
@@ -371,6 +369,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
         ImageButton eventUrl;
         ImageButton eventFavorited;
         MaterialRatingBar eventRatingBar;
+        TextView tvRatingCount;
 
         public ViewHolderEventsItem(EventListItemBinding binding) {
             super(binding.getRoot());
@@ -383,6 +382,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
             eventUrl = binding.ImageLogoButtonId;
             eventFavorited = binding.ImageFavoriteButtonId;
             eventRatingBar = binding.EventRatingBarId;
+            tvRatingCount = binding.tvRatingCount;
 
             binding.EventlistCardWrapperId.setOnClickListener(view -> {
                 Intent showDetails = new Intent(mContext, FomonoDetailActivity.class);

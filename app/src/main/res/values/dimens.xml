@@ -12,7 +12,8 @@
     <dimen name="toggle_button_text_size">12sp</dimen>
     <dimen name="user_preference_header_text_size">20sp</dimen>
     <dimen name="user_preference_desc_text_size">15sp</dimen>
-    <dimen name="event_list_main_rel_padding">8dp</dimen>
-    <dimen name="event_list_divider_param">1dp</dimen>
+    <dimen name="event_list_main_rel_padding">12dp</dimen>
+    <dimen name="event_list_main_image_padding">0dp</dimen>
+    <dimen name="event_list_divider_param">0.5dp</dimen>
     <dimen name="filter_item_spacing">10dp</dimen>
 </resources>

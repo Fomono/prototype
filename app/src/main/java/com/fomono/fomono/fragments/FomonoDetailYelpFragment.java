@@ -344,7 +344,7 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
         }else{
            // fragmentBinding.hsvGallery.setVisibility(View.GONE);
         }
-
+        fragmentBinding.executePendingBindings();
     }
 
 
