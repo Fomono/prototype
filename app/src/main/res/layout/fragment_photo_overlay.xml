@@ -1,52 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_alignParentBottom="true">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true">
 
     <Button
+        android:id="@+id/btnTakePhoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
         android:text="Take Photo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:textAllCaps="false"
         android:textColor="@color/black"
-        android:textSize="15sp"
-        android:textAllCaps="false"
-        android:id="@+id/btnTakePhoto" />
-
+        android:textSize="15sp" />
 
     <View
+        android:id="@+id/seperatorview"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_below="@id/btnTakePhoto"
-        android:background="@android:color/darker_gray"
-        android:id="@+id/seperatorview" />
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray" />
 
     <Button
+        android:id="@+id/btnSelectPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
         android:text="Select Photo"
-        android:layout_width="match_parent"
-        android:layout_below="@id/seperatorview"
-        android:layout_height="wrap_content"
-        android:textSize="15sp"
         android:textAllCaps="false"
-        android:id="@+id/btnSelectPhoto" />
-
+        android:textSize="15sp" />
 
     <View
+        android:id="@+id/seperatorview2"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_below="@id/btnSelectPhoto"
-        android:background="@android:color/darker_gray"
-        android:id="@+id/seperatorview2" />
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray" />
 
 
     <Button
-        android:text="Cancel"
+        android:id="@+id/btnCancel"
         android:layout_width="match_parent"
-        android:textSize="15dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/seperatorview2"
+        android:background="@color/colorWhite"
+        android:text="Cancel"
         android:textAllCaps="false"
-        android:id="@+id/btnCancel" />
+        android:textSize="15dp" />
 
-
-</RelativeLayout>
+</LinearLayout>

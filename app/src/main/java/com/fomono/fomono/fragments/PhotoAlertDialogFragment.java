@@ -5,6 +5,7 @@ package com.fomono.fomono.fragments;
  */
 
 import android.app.Dialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -55,6 +56,8 @@ public class PhotoAlertDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View fView = inflater.inflate(R.layout.fragment_photo_overlay, container);
+        getDialog().getWindow().setBackgroundDrawableResource(R.drawable.layout_rounded_corners);
+        fView.setBackgroundColor(Color.TRANSPARENT);
         Bundle bundle = this.getArguments();
         ButterKnife.bind(this,fView);
         return fView;

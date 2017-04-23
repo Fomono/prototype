@@ -3,6 +3,7 @@ package com.fomono.fomono.activities;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -25,12 +26,16 @@ public class UserProfileActivity extends AppCompatActivity implements ActivityCo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.tbFomono);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getString(R.string.title_activity_profile));
-        //turn on back button
-        getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(UserProfileActivity.this, R.drawable.ic_arrow_back));
+        getSupportActionBar().setHomeAsUpIndicator
+                (ContextCompat.getDrawable(UserProfileActivity.this, R.drawable.ic_arrow_back));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        CollapsingToolbarLayout collapsingToolbar =
+                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
 
         userProfileFragment = UserProfileFragment.newInstance();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
