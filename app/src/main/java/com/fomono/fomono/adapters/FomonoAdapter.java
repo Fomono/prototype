@@ -18,6 +18,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.Target;
 import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
 import com.fomono.fomono.activities.FomonoActivity;
@@ -130,8 +132,13 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
             if (event.getLogo() != null) {
                 if (event.getLogo().getOriginal() != null) {
                     if (!TextUtils.isEmpty(event.getLogo().getOriginal().getUrl())) {
-                      Picasso.with(mContext).load(event.getLogo().getOriginal().getUrl()).placeholder(R.drawable.ic_fomono_big).resize(screenWidth, 0).into(holder.eventMediaImage);
-                      imageSet = 1;
+//                        Picasso.with(mContext).load(event.getLogo().getOriginal().getUrl()).placeholder(R.drawable.ic_fomono_big).resize(screenWidth, 0).into(holder.eventMediaImage);
+                        Glide.with(mContext).load(event.getLogo().getOriginal().getUrl())
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .fitCenter()
+                                .override(screenWidth, Target.SIZE_ORIGINAL)
+                                .into(holder.eventMediaImage);
+                        imageSet = 1;
                     }
                 }
             }
@@ -384,9 +391,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
                 showDetails.putExtra("FOM_OBJ", mFomonoEvents.get(position));
                 ActivityOptionsCompat options = ActivityOptionsCompat.
                         makeSceneTransitionAnimation((Activity) mContext, eventMediaImage, "main_image");
-                //TODO: uncomment after image loading for details is fixed to load from memory instead of network
-//                ((AppCompatActivity) mContext).startActivityForResult(showDetails, FomonoActivity.REQUEST_CODE_DETAILS, options.toBundle());
-                ((AppCompatActivity) mContext).startActivityForResult(showDetails, FomonoActivity.REQUEST_CODE_DETAILS);
+                ((AppCompatActivity) mContext).startActivityForResult(showDetails, FomonoActivity.REQUEST_CODE_DETAILS, options.toBundle());
             });
         }
     }
