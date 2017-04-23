@@ -99,9 +99,10 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
                 resize(screenSize, 0).into(view);
     }
 
-    private static void setImageUrlFile(ImageView view, String imageUrl,int screenSize) {
+    private static void setImageUrlFile(ImageView view, Uri imageUrl,int screenSize) {
         screenSize = screenSize+200;
-        Picasso.with(view.getContext()).load(new File(imageUrl)).transform(new RoundedTransformation(10, 3)).
+       // imageUrl = (new File(imageUrl)).getAbsolutePath();
+        Picasso.with(view.getContext()).load(imageUrl).transform(new RoundedTransformation(10, 3)).
                 placeholder(R.drawable.ic_fomono_big).
                 resize(screenSize, 0).into(view);
     }
@@ -177,9 +178,17 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
             filePath = getPath(file);
         }
 
-        setImageUrlFile(fragmentUserProfile.ivUserImage, filePath,screenSize);
         Bitmap bitmap = uService.getBitMap(getContext(), filePath, file);
-      //  fragmentUserProfile.ivUserImage.setImageBitmap(bitmap);
+
+        String FILENAME = "image.png";
+        String PATH = "/sdcard/"+ FILENAME;
+        File f = new File(PATH);
+        Uri file = Uri.fromFile(f);
+        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+            setImageUrlFile(fragmentUserProfile.ivUserImage, file, screenSize);
+        }
+
+        //  fragmentUserProfile.ivUserImage.setImageBitmap(bitmap);
         uService.saveParseFile(bitmap);
     }
 
