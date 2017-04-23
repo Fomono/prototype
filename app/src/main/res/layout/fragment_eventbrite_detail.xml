@@ -82,11 +82,11 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@id/llHeader"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
             android:layout_marginEnd="-10dp"
             android:layout_marginStart="-10dp"
-            android:background="@color/colorGrey" />
+            android:background="@color/veryLightGrey" />
 
 
         <com.fomono.fomono.supportclasses.ExpandableTextView
@@ -110,7 +110,7 @@
             android:layout_marginBottom="15dp"
             android:layout_marginEnd="-10dp"
             android:layout_marginStart="-10dp"
-            android:background="@color/colorGrey" />
+            android:background="@color/veryLightGrey" />
 
         <ImageView
             android:id="@+id/ivClockIcon"
@@ -129,7 +129,8 @@
             android:layout_below="@id/spView01"
             android:layout_marginRight="20dp"
             android:layout_toRightOf="@id/ivClockIcon"
-            android:textColor="@color/colorDarkGrey"
+            android:textColor="@color/greySecondaryText"
+            android:textStyle="bold"
             android:text=''
             android:textSize="13sp" />
 
@@ -176,23 +177,36 @@
             android:textColor="@color/black"
             android:textSize="13sp" />
 
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/mapEBView"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_below="@id/tvLocation"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="15dp" />
 
         <View
             android:id="@+id/spView02"
             android:layout_width="match_parent"
             android:layout_height="8dp"
-            android:layout_below="@id/mapEBView"
+            android:layout_below="@id/tvLocation"
             android:layout_marginEnd="-10dp"
             android:layout_marginStart="-10dp"
             android:layout_marginTop="15dp"
-            android:background="@color/colorGrey" />
+            android:background="@color/veryLightGrey" />
+
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mapEBView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_below="@id/spView02"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp" />
+
+
+        <View
+            android:id="@+id/spView04"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_below="@id/mapEBView"
+            android:layout_marginEnd="-10dp"
+            android:layout_marginStart="-10dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/veryLightGrey" />
 
 
         <TextView
@@ -200,72 +214,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/spView02"
+            android:layout_centerInParent="true"
+            android:layout_below="@id/spView04"
             android:layout_marginTop="20dp"
             android:text="Event Brite  "
             android:textColor="@color/black"
             android:textSize="13sp" />
-
 
         <ImageView
             android:id="@+id/ivSiteLink"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_alignTop="@id/tvSiteLinkLabel"
-            android:layout_below="@id/spView02"
+            android:layout_below="@id/spView04"
             android:layout_toEndOf="@id/tvSiteLinkLabel"
+            android:layout_marginBottom="20dp"
             android:clickable="true"
             app:srcCompat="@drawable/ic_globe" />
-
-
-        <LinearLayout
-            android:id="@+id/llShare"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvSiteLinkLabel"
-            android:orientation="horizontal">
-
-              <ImageView
-                android:id="@+id/ivFBShareIcon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="20dp"
-                app:srcCompat="@drawable/ic_facebook" />
-
-
-            <ImageView
-                android:id="@+id/ivTwitterShareIcon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="20dp"
-                app:srcCompat="@drawable/ic_twitter" />
-
-
-            <ImageView
-                android:id="@+id/ivEmailShareIcon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="20dp"
-                app:srcCompat="@drawable/ic_email" />
-
-            <ImageView
-                android:id="@+id/ivMessageShareIcon"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="20dp"
-                app:srcCompat="@drawable/ic_whatsapp" />
-        </LinearLayout>
-
-
-
 
     </RelativeLayout>
 </layout>

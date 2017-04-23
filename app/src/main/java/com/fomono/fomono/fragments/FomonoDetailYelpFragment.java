@@ -24,8 +24,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.widget.ShareDialog;
 import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
 import com.fomono.fomono.databinding.FragmentYelpDetailBinding;
@@ -65,6 +63,15 @@ import static android.content.ContentValues.TAG;
  */
 
 public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
+
+    public static final String OPEN_NOW = "Open now";
+    public static final String CLOSED ="Closed now";
+    public static final String UNAVAILABLE ="Unavailable";
+    public static final int ZERO = 0;
+    public static final int ONE =1;
+    public static final int TEN =10;
+
+
     FragmentYelpDetailBinding fragmentBinding;
 
     private GoogleMap googleMap;
@@ -101,14 +108,6 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
 
     }
 
-    private static void setImageUrl(ImageView view, String imageUrl, int screenWidthDetail) {
-        Picasso.with(view.getContext()).load(imageUrl).transform(new RoundedTransformation(6, 3)).
-                placeholder(R.drawable.ic_fomono_big).
-                resize(screenWidthDetail, 0).into(view);
-
-    }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
 
@@ -120,45 +119,28 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
 
         fragmentBinding.tvLocation.setText(getLocationAddress());
         fragmentBinding.rbRating.setRating(Double.valueOf(business.getRating()).floatValue());
-        fragmentBinding.tvPhone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                int checkPermission = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE);
-                if (checkPermission != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(getActivity(),
-                            new String[]{Manifest.permission.CALL_PHONE},1);
-                }else {
-                    Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:" + business.getPhone()));
-                    startActivity(callIntent);
-                }
-            }
-        });
-        fragmentBinding.ivSiteLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_VIEW);
-                intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                intent.setData(Uri.parse(business.getUrl()));
-                startActivity(intent);
-            }
-        });
-
-        DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
-        int pxWidth = displayMetrics.widthPixels;
-        screenWidthDetail = (int) (pxWidth / displayMetrics.density);
 
 
-        Log.d(TAG, "width is " + screenWidthDetail);
+        //SetupListeners
+        setSourceSiteLinkIntentListener();
+        setPhoneCallIntentListener();
+        setFavoriteIconListener();
 
-        populateDetail();
-        getDetailsFromAPI();
+
+        calculateScreenDimensions();
+        populateBindingDetail();
+        getAdditionalDetailFromAPI();
+        initializeMap(view,savedInstanceState);
+        populateAddressOnMap();
+
+        return fragmentBinding.getRoot();
+
+    }
+
+    private void initializeMap(View view, Bundle savedInstanceState) {
 
         mMapView = (MapView) view.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
-
         mMapView.onResume(); // needed to get the map to display immediately
 
         try {
@@ -166,73 +148,27 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
-        populateAddressMap();
+    private void calculateScreenDimensions() {
+        DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
+        int pxWidth = displayMetrics.widthPixels;
+        screenWidthDetail = (int) (pxWidth / displayMetrics.density);
+    }
 
-
-
-        fragmentBinding.ivMessageShareIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Uri smsUri = Uri.parse("tel:" + "");
-                Intent intent = new Intent(Intent.ACTION_VIEW, smsUri);
-                intent.putExtra("address", "");
-                if (business.getName() != null && business.getUrl() != null) {
-                    intent.putExtra("sms_body", business.getName() + "\n" + business.getUrl());
-                }
-                intent.setType("vnd.android-dir/mms-sms");//here setType will set the previous data null.
-                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    startActivity(intent);
-                }
+    private void setSourceSiteLinkIntentListener() {
+        fragmentBinding.ivSiteLink.setOnClickListener(v -> {
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.addCategory(Intent.CATEGORY_BROWSABLE);
+            if(business.getUrl()!=null) {
+                intent.setData(Uri.parse(business.getUrl()));
             }
+            startActivity(intent);
         });
+    }
 
-        fragmentBinding.ivTwitterShareIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                try {
-                    // Check if the Twitter app is installed on the phone.
-                    getActivity().getPackageManager().getPackageInfo("com.twitter.android", 0);
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.setClassName("com.twitter.android", "com.twitter.android.composer.ComposerActivity");
-                    intent.setType("text/plain");
-                    if (business.getUrl() != null) {
-                        intent.putExtra(Intent.EXTRA_TEXT, business.getUrl());
-                    }
-                    startActivity(intent);
-
-                } catch (Exception e) {
-                    String url = "";
-                    if (business.getUrl() != null) {
-                        url = "http://www.twitter.com/intent/tweet?url="
-                                + business.getUrl() + "&text=" + business.getName();
-                    }
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(url));
-                    startActivity(i);
-
-                }
-            }
-        });
-
-        fragmentBinding.ivEmailShareIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("plain/text");
-                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"some@email.address"});
-                if (business.getName() != null) {
-                    intent.putExtra(Intent.EXTRA_SUBJECT, business.getName());
-                }
-                if (business.getUrl() != null) {
-                    intent.putExtra(Intent.EXTRA_TEXT, business.getUrl());
-                }
-                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    startActivity(Intent.createChooser(intent, ""));
-                }
-            }
-        });
+    private void setFavoriteIconListener() {
 
         ibFavorite = fragmentBinding.ivFavoriteIcon;
         favsUtil.isFavorited(business, isFavorited -> {
@@ -241,56 +177,51 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
             }
         });
 
-        ibFavorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                favsUtil.isFavorited(business, isFavorited -> {
-                    if (isFavorited) {
-                        ibFavorite.setImageResource(R.drawable.ic_favorite_grey);
-                        favsUtil.removeFromFavorites(business);
-                    } else {
-                        ibFavorite.setImageResource(R.drawable.ic_favorite);
-                        favsUtil.addToFavorites(business);
-                    }
-                });
-
-                if (getActivity() instanceof FomonoEventUpdateListener) {
-                    ((FomonoEventUpdateListener) getActivity()).onFomonoEventUpdated();
+        ibFavorite.setOnClickListener(view -> {
+            favsUtil.isFavorited(business, isFavorited -> {
+                if (isFavorited) {
+                    ibFavorite.setImageResource(R.drawable.ic_favorite_grey);
+                    favsUtil.removeFromFavorites(business);
+                } else {
+                    ibFavorite.setImageResource(R.drawable.ic_favorite);
+                    favsUtil.addToFavorites(business);
                 }
+            });
+
+            if (getActivity() instanceof FomonoEventUpdateListener) {
+                ((FomonoEventUpdateListener) getActivity()).onFomonoEventUpdated();
             }
         });
+    }
 
-        fragmentBinding.ivFBShareIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setupFacebookShareIntent();
+    private void setPhoneCallIntentListener() {
+
+        fragmentBinding.tvPhone.setOnClickListener(v -> {
+
+            int checkPermission = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE);
+            if (checkPermission != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.CALL_PHONE},ONE);
+            }else {
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                if(business.getPhone()!=null) {
+                    callIntent.setData(Uri.parse("tel:" + business.getPhone()));
+                }
+                startActivity(callIntent);
             }
         });
+    }
 
-        return fragmentBinding.getRoot();
+
+    private static void setImageUrl(ImageView view, String imageUrl, int screenWidthDetail) {
+        Picasso.with(view.getContext()).load(imageUrl).transform(new RoundedTransformation(6, 3)).
+                placeholder(R.drawable.ic_fomono_big).
+                resize(screenWidthDetail, ZERO).into(view);
 
     }
 
-    public void setupFacebookShareIntent() {
-        ShareDialog shareDialog;
-        shareDialog = new ShareDialog(this);
 
-        ShareLinkContent linkContent;
-
-        if(business.getName()!=null && business.getUrl()!=null ){
-            linkContent = new ShareLinkContent.Builder()
-                    .setContentTitle(business.getName())
-                    .setContentUrl(Uri.parse(business.getUrl()))
-                    .build();
-        }else{
-            linkContent = new ShareLinkContent.Builder()
-                    .build();
-        }
-
-        shareDialog.show(linkContent);
-    }
-
-    private View insertPhoto(String url) {
+    private View insertPictureIntoScrollView(String url) {
         LinearLayout layout = new LinearLayout(getContext());
         layout.setLayoutParams(new ViewGroup.LayoutParams(415, 300));
         layout.setGravity(Gravity.CENTER);
@@ -307,7 +238,7 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
 
 
 
-    private void getDetailsFromAPI() {
+    private void getAdditionalDetailFromAPI() {
 
         yelpClientRetrofit = YelpClientRetrofit.getInstance();
         Call<BusinessDetail> call = yelpClientRetrofit.YelpRetrofitClientFactory().getYelpBusinessDetailById
@@ -321,7 +252,7 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
                     Log.d(TAG, "NO MATCH ");
                 } else {
                     business.setBusinessDetail(bDetail);
-                    populateDetail();
+                    populateBindingDetail();
                 }
             }
 
@@ -332,24 +263,28 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
         });
     }
 
-    private void populateDetail() {
+    private void populateBindingDetail() {
+
         fragmentBinding.setBusiness(business);
         if(business.getBusinessDetail() !=null) {
             fragmentBinding.tvHours.setText(createHoursOpenString());
             if(checkIfOpen()){
-                fragmentBinding.tvOpenNow.setText("Open Now");
+                fragmentBinding.tvOpenNow.setText(OPEN_NOW);
                 fragmentBinding.tvOpenNow.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorGreen));
             }else{
-                fragmentBinding.tvOpenNow.setText("Closed");
+                fragmentBinding.tvOpenNow.setText(CLOSED);
                 fragmentBinding.tvOpenNow.setTextColor(Color.RED);
             }
         }
-        if(business.getBusinessDetail() !=null && business.getBusinessDetail().getPhotos() !=null) {
-            for (String url : business.getBusinessDetail().getPhotos()) {
-                fragmentBinding.llGallery.addView(insertPhoto(url));
+        if(business.getBusinessDetail() !=null) {
+            if (business.getBusinessDetail().getPhotos() != null) {
+                for (String url : business.getBusinessDetail().getPhotos()) {
+                    fragmentBinding.llGallery.addView(insertPictureIntoScrollView(url));
+                }
+            } else {
+                fragmentBinding.hsvGallery.setVisibility(View.GONE);
+
             }
-        }else{
-           // fragmentBinding.hsvGallery.setVisibility(View.GONE);
         }
         fragmentBinding.executePendingBindings();
     }
@@ -357,9 +292,11 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
 
     private String getLocationAddress() {
         String address = "";
-        Location l = business.getLocation();
-        address = l.getAddress1() + ", " + l.getCity() + ", " + l.getLocationState()
-                + ", " + l.getCountry() + ", " + l.getZipCode();
+        if( business.getLocation()!=null) {
+            Location l = business.getLocation();
+            address = l.getAddress1() + ", " + l.getCity() + ", " + l.getLocationState()
+                    + ", " + l.getCountry() + ", " + l.getZipCode();
+        }
         return address;
     }
 
@@ -367,15 +304,27 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
     private boolean checkIfOpen() {
 
         if (business.getBusinessDetail() != null && business.getBusinessDetail().getHours() != null
-                && business.getBusinessDetail().getHours().get(0) != null
-                && business.getBusinessDetail().getHours().get(0).getOpen() != null) {
-            List<Open> openList = business.getBusinessDetail().getHours().get(0).getOpen();
+                && business.getBusinessDetail().getHours().get(ZERO) != null
+                && business.getBusinessDetail().getHours().get(ZERO).getOpen() != null) {
+            List<Open> openList = business.getBusinessDetail().getHours().get(ZERO).getOpen();
 
             for (Open open : openList) {
-                if (open.getDay() >= 0 && open.getStart() != null && open.getEnd() != null) {
-                    int dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1;
-                    int currentTime = Integer.parseInt(String.valueOf(Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) +
-                            String.valueOf(Calendar.getInstance().get(Calendar.MINUTE))) ;
+                if (open.getDay() >= ZERO && open.getStart() != null && open.getEnd() != null) {
+                    int dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - ONE;
+                    String hourOfDay;
+                    String minOfDay;
+                    if(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) <TEN){
+                        hourOfDay = ZERO + String.valueOf(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+                    } else{
+                        hourOfDay = String.valueOf(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+                    }
+
+                    if(Calendar.getInstance().get(Calendar.MINUTE) <TEN){
+                        minOfDay = ZERO + String.valueOf(Calendar.getInstance().get(Calendar.MINUTE));
+                    } else{
+                        minOfDay = String.valueOf(Calendar.getInstance().get(Calendar.MINUTE));
+                    }
+                    int currentTime = Integer.parseInt(hourOfDay+minOfDay) ;
                     int startHour = Integer.parseInt(open.getStart());
                     int endHour = Integer.parseInt(open.getEnd());
 
@@ -391,14 +340,14 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
     private String createHoursOpenString(){
        String hoursOpen="";
         if(business.getBusinessDetail()!=null && business.getBusinessDetail().getHours() !=null
-                && business.getBusinessDetail().getHours().get(0)!=null
-                && business.getBusinessDetail().getHours().get(0).getOpen() !=null) {
-            List<Open> openList = business.getBusinessDetail().getHours().get(0).getOpen();
+                && business.getBusinessDetail().getHours().get(ZERO)!=null
+                && business.getBusinessDetail().getHours().get(ZERO).getOpen() !=null) {
+            List<Open> openList = business.getBusinessDetail().getHours().get(ZERO).getOpen();
             for (Open open : openList) {
                 String startDate = DateUtils.convertMilitarytoStandard(open.getStart());
                 String endDate = DateUtils.convertMilitarytoStandard(open.getEnd());
 
-                if (open.getDay() == 0) {
+                if (open.getDay() == ZERO) {
                     hoursOpen += "Monday: " + startDate + " - " + endDate + "\n";
                 } else if (open.getDay() == 1) {
                     hoursOpen += "Tuesday: " + startDate + " - " + endDate + "\n";
@@ -415,12 +364,12 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
                 }
             }
         } else{
-            hoursOpen="Unavailable";
+            hoursOpen=UNAVAILABLE;
         }
        return hoursOpen;
     }
 
-    protected void populateAddressMap() {
+    protected void populateAddressOnMap() {
         //reset fragment's databinding
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
@@ -451,10 +400,10 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
                 Coordinates coordinates;
                 LatLng ltlg;
                 // For dropping a marker at a point on the Map
-                if (business.getCoordinates() != null) {
+                if (business.getCoordinates() != null && business.getName()!=null ) {
                     coordinates = business.getCoordinates();
                     ltlg = new LatLng(coordinates.getLatitude(), coordinates.getLongitude());
-                    googleMap.addMarker(new MarkerOptions().position(ltlg).title(getLocationAddress()));
+                    googleMap.addMarker(new MarkerOptions().position(ltlg).title(business.getName()).snippet(getLocationAddress()));
 
                     // For zooming automatically to the location of the marker
                     CameraPosition cameraPosition = new CameraPosition.Builder().target(ltlg).zoom(11).build();
