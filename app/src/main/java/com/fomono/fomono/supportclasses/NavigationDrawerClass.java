@@ -60,8 +60,6 @@ public class NavigationDrawerClass {
                 break;
         }
 
-        menuItem.setChecked(true);
-     //   mContext.setTitle(menuItem.getTitle());
         mDrawer.closeDrawers();
     }
 
