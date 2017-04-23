@@ -33,7 +33,6 @@ import com.fomono.fomono.models.events.events.Start;
 import com.fomono.fomono.models.events.events.Venue;
 import com.fomono.fomono.models.user.User;
 import com.fomono.fomono.network.client.EventBriteClientRetrofit;
-import com.fomono.fomono.utils.ConfigUtil;
 import com.fomono.fomono.utils.DateUtils;
 import com.fomono.fomono.utils.FavoritesUtil;
 import com.fomono.fomono.utils.StringUtil;
@@ -177,14 +176,6 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
                 startActivity(intent);
             }
         });
-       if (event.getCategoryId() != null) {
-           String category = ConfigUtil.getCategoryName(event.getCategoryId(),
-                   FomonoApplication.API_NAME_EVENTS, getContext());
-                fragmentEventbriteDetailBinding.tvCategory.setText("#"+category);
-       }else{
-                fragmentEventbriteDetailBinding.tvCategory.setVisibility(View.GONE);
-
-       }
 
        if (start != null && start.getLocal() != null) {
             fragmentEventbriteDetailBinding.tvClockEventDate.

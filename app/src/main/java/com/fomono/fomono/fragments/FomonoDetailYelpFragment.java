@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.location.Criteria;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -49,6 +50,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.ParseUser;
 import com.squareup.picasso.Picasso;
 
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -118,7 +120,6 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
 
         fragmentBinding.tvLocation.setText(getLocationAddress());
         fragmentBinding.rbRating.setRating(Double.valueOf(business.getRating()).floatValue());
-        fragmentBinding.tvRatingText.setText(Double.valueOf(business.getRating()).toString() + "/5");
         fragmentBinding.tvPhone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -291,7 +292,7 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
 
     private View insertPhoto(String url) {
         LinearLayout layout = new LinearLayout(getContext());
-        layout.setLayoutParams(new ViewGroup.LayoutParams(400, 300));
+        layout.setLayoutParams(new ViewGroup.LayoutParams(415, 300));
         layout.setGravity(Gravity.CENTER);
 
         ImageView imageView = new ImageView(getContext());
@@ -364,6 +365,21 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
             for (Open open : openList) {
                 String startDate = DateUtils.convertMilitarytoStandard(open.getStart());
                 String endDate = DateUtils.convertMilitarytoStandard(open.getEnd());
+
+                if(open.getDay() >= 0 && open.getStart()!=null && open.getEnd()!=null) {
+                    int dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+                    int currentTime = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+                    int startHour = Integer.parseInt(open.getStart().substring(0, 2));
+                    int endHour = Integer.parseInt(open.getEnd().substring(0, 2));
+
+                    if (dayOfWeek == open.getDay() && currentTime < endHour && currentTime > startHour) {
+                        fragmentBinding.tvOpenNow.setText("Open Now");
+                        fragmentBinding.tvOpenNow.setTextColor(Color.GREEN);
+                    } else {
+                        fragmentBinding.tvOpenNow.setText("Closed");
+                        fragmentBinding.tvOpenNow.setTextColor(Color.RED);
+                    }
+                }
                 if (open.getDay() == 0) {
                     hoursOpen += "Monday: " + startDate + " - " + endDate + "\n";
                 } else if (open.getDay() == 1) {

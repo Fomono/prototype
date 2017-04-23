@@ -33,11 +33,10 @@ import com.fomono.fomono.databinding.FragmentUserProfileBinding;
 import com.fomono.fomono.models.user.User;
 import com.fomono.fomono.properties.Properties;
 import com.fomono.fomono.services.UserService;
+import com.fomono.fomono.supportclasses.BitmapScaler;
 import com.fomono.fomono.utils.RoundedTransformation;
 import com.parse.ParseUser;
 import com.squareup.picasso.Picasso;
-
-import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -179,11 +178,8 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
         }
 
         Bitmap bitmap = uService.getBitMap(getContext(), filePath, file);
+        Bitmap resizedBitmap = BitmapScaler.scaleToFitWidth(bitmap, screenSize);
 
-        String FILENAME = "image.png";
-        String PATH = "/sdcard/"+ FILENAME;
-        File f = new File(PATH);
-        Uri file = Uri.fromFile(f);
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             setImageUrlFile(fragmentUserProfile.ivUserImage, file, screenSize);
         }
