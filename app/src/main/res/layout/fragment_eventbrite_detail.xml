@@ -37,7 +37,7 @@
                     android:layout_width="wrap_content"
                     android:text="MAY"
                     android:layout_centerHorizontal="true"
-                    android:textColor="@color/red"
+                    android:textColor="@color/colorAccent"
                     android:textSize="10sp" />
 
 
@@ -162,6 +162,7 @@
             android:layout_below="@id/spView01"
             android:layout_marginRight="20dp"
             android:layout_toRightOf="@id/ivClockIcon"
+            android:textColor="@color/colorDarkGrey"
             android:text=''
             android:textSize="13sp" />
 
@@ -255,6 +256,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_marginTop="20dp"
                 android:text="SHARE: "
+                android:textColor="@color/colorDarkGrey"
                 android:textSize="14sp" />
 
 

@@ -59,7 +59,7 @@
             android:layout_below="@id/tvFavoriteLabel"
             android:layout_centerHorizontal="true"
             android:max="5"
-            android:progressTint="@color/colorFomono"
+            android:progressTint="@color/colorAccent"
             android:rating="3.5"
             android:scaleX="1"
             android:scaleY="1"
