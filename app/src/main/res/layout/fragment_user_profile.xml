@@ -16,8 +16,7 @@
         android:background="@color/white"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:theme="@style/AppThemeUserProfile">
-
+>
         <ImageView
             android:id="@+id/ivUserImage"
             android:layout_width="wrap_content"
@@ -56,10 +55,10 @@
             android:layout_below="@id/tvFirstNameLabel"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
-            android:background="@android:color/transparent"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:text='@{user.firstName}'
+            android:backgroundTint="@color/colorTransparent"
             android:textSize="20dp"
             android:textStyle="bold" />
 
@@ -93,6 +92,7 @@
             android:text='@{user.lastName}'
             android:focusable="true"
             android:focusableInTouchMode="true"
+            android:backgroundTint="@color/colorTransparent"
             android:textSize="20dp"
             android:textStyle="bold" />
 
@@ -125,6 +125,7 @@
             android:layout_marginTop="5dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
+            android:backgroundTint="@color/colorTransparent"
             android:text='@{user.email}'
             android:textSize="20dp"
             android:textStyle="bold" />
@@ -158,6 +159,8 @@
             android:text='@{user.phonenNumber}'
             android:focusable="true"
             android:focusableInTouchMode="true"
+            android:backgroundTint="@color/colorTransparent"
+            android:maxLength="20"
             android:textSize="20dp"
             android:textStyle="bold" />
 
@@ -192,6 +195,7 @@
             android:focusableInTouchMode="true"
             android:gravity="top|left"
             android:text='@{user.aboutMe}'
+            android:backgroundTint="@color/colorTransparent"
             android:lines="4"
             android:textSize="20dp"
             android:textStyle="bold" />
