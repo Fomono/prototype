@@ -336,6 +336,13 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
         fragmentBinding.setBusiness(business);
         if(business.getBusinessDetail() !=null) {
             fragmentBinding.tvHours.setText(createHoursOpenString());
+            if(checkIfOpen()){
+                fragmentBinding.tvOpenNow.setText("Open Now");
+                fragmentBinding.tvOpenNow.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorGreen));
+            }else{
+                fragmentBinding.tvOpenNow.setText("Closed");
+                fragmentBinding.tvOpenNow.setTextColor(Color.RED);
+            }
         }
         if(business.getBusinessDetail() !=null && business.getBusinessDetail().getPhotos() !=null) {
             for (String url : business.getBusinessDetail().getPhotos()) {
@@ -356,6 +363,31 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
         return address;
     }
 
+
+    private boolean checkIfOpen() {
+
+        if (business.getBusinessDetail() != null && business.getBusinessDetail().getHours() != null
+                && business.getBusinessDetail().getHours().get(0) != null
+                && business.getBusinessDetail().getHours().get(0).getOpen() != null) {
+            List<Open> openList = business.getBusinessDetail().getHours().get(0).getOpen();
+
+            for (Open open : openList) {
+                if (open.getDay() >= 0 && open.getStart() != null && open.getEnd() != null) {
+                    int dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1;
+                    int currentTime = Integer.parseInt(String.valueOf(Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) +
+                            String.valueOf(Calendar.getInstance().get(Calendar.MINUTE))) ;
+                    int startHour = Integer.parseInt(open.getStart());
+                    int endHour = Integer.parseInt(open.getEnd());
+
+                    if (dayOfWeek == open.getDay() && currentTime < endHour && currentTime > startHour) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     private String createHoursOpenString(){
        String hoursOpen="";
         if(business.getBusinessDetail()!=null && business.getBusinessDetail().getHours() !=null
@@ -366,20 +398,6 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
                 String startDate = DateUtils.convertMilitarytoStandard(open.getStart());
                 String endDate = DateUtils.convertMilitarytoStandard(open.getEnd());
 
-                if(open.getDay() >= 0 && open.getStart()!=null && open.getEnd()!=null) {
-                    int dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-                    int currentTime = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-                    int startHour = Integer.parseInt(open.getStart().substring(0, 2));
-                    int endHour = Integer.parseInt(open.getEnd().substring(0, 2));
-
-                    if (dayOfWeek == open.getDay() && currentTime < endHour && currentTime > startHour) {
-                        fragmentBinding.tvOpenNow.setText("Open Now");
-                        fragmentBinding.tvOpenNow.setTextColor(Color.GREEN);
-                    } else {
-                        fragmentBinding.tvOpenNow.setText("Closed");
-                        fragmentBinding.tvOpenNow.setTextColor(Color.RED);
-                    }
-                }
                 if (open.getDay() == 0) {
                     hoursOpen += "Monday: " + startDate + " - " + endDate + "\n";
                 } else if (open.getDay() == 1) {

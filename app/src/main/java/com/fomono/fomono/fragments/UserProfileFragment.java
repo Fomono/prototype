@@ -180,11 +180,8 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
         Bitmap bitmap = uService.getBitMap(getContext(), filePath, file);
         Bitmap resizedBitmap = BitmapScaler.scaleToFitWidth(bitmap, screenSize);
 
-        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-            setImageUrlFile(fragmentUserProfile.ivUserImage, file, screenSize);
-        }
+        fragmentUserProfile.ivUserImage.setImageBitmap(resizedBitmap);
 
-        //  fragmentUserProfile.ivUserImage.setImageBitmap(bitmap);
         uService.saveParseFile(bitmap);
     }
 
