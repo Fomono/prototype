@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.fomono.fomono.R;
 import com.fomono.fomono.adapters.FiltersAdapter;
@@ -37,7 +36,6 @@ public class FomonoFilterFragment extends Fragment {
 
     FragmentCategoryFilterBinding binding;
     RecyclerView rvFilters;
-    TextView tvTitle;
     Button btnNext;
     Button btnCancel;
 
@@ -101,7 +99,6 @@ public class FomonoFilterFragment extends Fragment {
 
     private void setupViews() {
         rvFilters = binding.rvFilters;
-        tvTitle = binding.tvTitle;
         btnNext = binding.btnNext;
         btnCancel = binding.btnCancel;
 
@@ -116,7 +113,6 @@ public class FomonoFilterFragment extends Fragment {
         rvFilters.addItemDecoration(new SpacesItemDecoration(3, spacing, true));
         rvFilters.setAdapter(adptFilters);
 
-        tvTitle.setText(title);
         if (showSinglePage) {
             btnNext.setOnClickListener(new View.OnClickListener() {
                 @Override
