@@ -33,7 +33,6 @@ import com.fomono.fomono.models.movies.Movie;
 import com.fomono.fomono.utils.ConfigUtil;
 import com.fomono.fomono.utils.DateUtils;
 import com.fomono.fomono.utils.FavoritesUtil;
-import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -209,8 +208,12 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
             }
 
             if (!TextUtils.isEmpty(business.getImageUrl())) {
-                // Glide.with(mContext).load(business.getImageUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).override(screenWidth, screenHeight / 2).into(holder.eventMediaImage);
-                Picasso.with(mContext).load(business.getImageUrl()).placeholder(R.drawable.ic_fomono_big).resize(screenWidth, 0).into(holder.eventMediaImage);
+//                Picasso.with(mContext).load(business.getImageUrl()).placeholder(R.drawable.ic_fomono_big).resize(screenWidth, 0).into(holder.eventMediaImage);
+                Glide.with(mContext).load(business.getImageUrl())
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .fitCenter()
+                        .override(screenWidth, Target.SIZE_ORIGINAL)
+                        .into(holder.eventMediaImage);
             } else {
                 holder.eventMediaImage.setVisibility(View.GONE);
             }
@@ -276,9 +279,19 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
             } else {holder.eventName.setVisibility(View.GONE);}
 
             if(movie.getOrigBackdropPath() != null) {
-                Picasso.with(mContext).load(movie.getBackdropPath()).placeholder(R.drawable.ic_fomono_big).resize(screenWidth, 0).into(holder.eventMediaImage);
+//                Picasso.with(mContext).load(movie.getBackdropPath()).placeholder(R.drawable.ic_fomono_big).resize(screenWidth, 0).into(holder.eventMediaImage);
+                Glide.with(mContext).load(movie.getBackdropPath())
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .fitCenter()
+                        .override(screenWidth, Target.SIZE_ORIGINAL)
+                        .into(holder.eventMediaImage);
             } else if(movie.getOrigPosterPath() != null) {
-                Picasso.with(mContext).load(movie.getPosterPath()).placeholder(R.drawable.ic_fomono_big).resize(screenWidth, 0).into(holder.eventMediaImage);
+//                Picasso.with(mContext).load(movie.getPosterPath()).placeholder(R.drawable.ic_fomono_big).resize(screenWidth, 0).into(holder.eventMediaImage);
+                Glide.with(mContext).load(movie.getPosterPath())
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .fitCenter()
+                        .override(screenWidth, Target.SIZE_ORIGINAL)
+                        .into(holder.eventMediaImage);
             } else {
                 holder.eventMediaImage.setVisibility(View.GONE);
             }
