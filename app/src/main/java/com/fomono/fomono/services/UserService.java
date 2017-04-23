@@ -162,8 +162,8 @@ public class UserService {
             if (pUser.get("email") != null) {
                 user.setEmail(pUser.get("email").toString());
             }
-            if (pUser.get("phone") != null) {
-                user.setPhonenNumber(Long.parseLong(pUser.get("phone").toString()));
+            if (pUser.get("phone") != null && pUser.get("phone")!= "") {
+                user.setPhonenNumber(pUser.get("phone").toString());
             }
             if (pUser.get("gender") != null) {
                 user.setGender(pUser.get("gender").toString());
@@ -218,10 +218,7 @@ public class UserService {
         if (fView.etPhone.getText() != null && !(fView.etPhone.getText().toString().equals(pUser.get("phone")))) {
             pUser.put("phone", fView.etPhone.getText().toString());
         }
-        if (fView.etGender.getText() != null && !(fView.etGender.getText().toString().equals(pUser.get("gender")))) {
-            pUser.put("gender", fView.etGender.getText().toString());
-        }
-        if (fView.etAboutMe.getText() != null && !(fView.etAboutMe.getText().toString().equals(pUser.get("aboutMe")))) {
+          if (fView.etAboutMe.getText() != null && !(fView.etAboutMe.getText().toString().equals(pUser.get("aboutMe")))) {
             pUser.put("aboutMe", fView.etAboutMe.getText().toString());
         }
         pUser.saveInBackground(new SaveCallback() {
