@@ -58,7 +58,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.content.ContentValues.TAG;
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by Saranu on 4/6/17.
@@ -164,7 +163,7 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
         mMapView.onResume(); // needed to get the map to display immediately
 
         try {
-            MapsInitializer.initialize(getActivity().getApplicationContext());
+            MapsInitializer.initialize(getContext());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -293,11 +292,11 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
     }
 
     private View insertPhoto(String url) {
-        LinearLayout layout = new LinearLayout(getApplicationContext());
+        LinearLayout layout = new LinearLayout(getContext());
         layout.setLayoutParams(new ViewGroup.LayoutParams(400, 300));
         layout.setGravity(Gravity.CENTER);
 
-        ImageView imageView = new ImageView(getApplicationContext());
+        ImageView imageView = new ImageView(getContext());
         imageView.setLayoutParams(new ViewGroup.LayoutParams(400, 300));
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 

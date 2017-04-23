@@ -38,7 +38,6 @@ import java.util.TimeZone;
 
 import butterknife.ButterKnife;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.fomono.fomono.FomonoApplication.API_NAME_MOVIE_GENRE;
 
 /**
@@ -248,7 +247,7 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
         String genres ="";
         Set<Map.Entry<String, String>> genreSet = null;
         try {
-            genreSet = ConfigUtil.getCategories(API_NAME_MOVIE_GENRE, getApplicationContext());
+            genreSet = ConfigUtil.getCategories(API_NAME_MOVIE_GENRE, getContext());
         } catch (IOException e) {
             e.printStackTrace();
         }

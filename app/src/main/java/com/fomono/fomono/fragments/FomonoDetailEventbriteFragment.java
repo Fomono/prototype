@@ -216,7 +216,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
         mMapView.onResume(); // needed to get the map to display immediately
 
         try {
-            MapsInitializer.initialize(getActivity().getApplicationContext());
+            MapsInitializer.initialize(getContext());
         } catch (Exception e) {
             e.printStackTrace();
         }

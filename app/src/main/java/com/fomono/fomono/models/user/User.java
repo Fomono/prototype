@@ -14,7 +14,7 @@ public class User implements Parcelable{
     String firstName;
     String lastName;
     String email;
-    long phonenNumber;
+    String phonenNumber;
     String gender;
     String aboutMe;
     String location;
@@ -52,11 +52,11 @@ public class User implements Parcelable{
         this.email = email;
     }
 
-    public long getPhonenNumber() {
+    public String getPhonenNumber() {
         return phonenNumber;
     }
 
-    public void setPhonenNumber(long phonenNumber) {
+    public void setPhonenNumber(String phonenNumber) {
         this.phonenNumber = phonenNumber;
     }
 
@@ -96,7 +96,7 @@ public class User implements Parcelable{
         dest.writeString(this.firstName);
         dest.writeString(this.lastName);
         dest.writeString(this.email);
-        dest.writeLong(this.phonenNumber);
+        dest.writeString(this.phonenNumber);
         dest.writeString(this.gender);
         dest.writeString(this.aboutMe);
         dest.writeString(this.location);
@@ -107,7 +107,7 @@ public class User implements Parcelable{
         this.firstName = in.readString();
         this.lastName = in.readString();
         this.email = in.readString();
-        this.phonenNumber = in.readLong();
+        this.phonenNumber = in.readString();
         this.gender = in.readString();
         this.aboutMe = in.readString();
         this.location = in.readString();
