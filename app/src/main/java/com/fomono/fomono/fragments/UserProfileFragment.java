@@ -33,11 +33,10 @@ import com.fomono.fomono.databinding.FragmentUserProfileBinding;
 import com.fomono.fomono.models.user.User;
 import com.fomono.fomono.properties.Properties;
 import com.fomono.fomono.services.UserService;
+import com.fomono.fomono.supportclasses.BitmapScaler;
 import com.fomono.fomono.utils.RoundedTransformation;
 import com.parse.ParseUser;
 import com.squareup.picasso.Picasso;
-
-import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -99,9 +98,10 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
                 resize(screenSize, 0).into(view);
     }
 
-    private static void setImageUrlFile(ImageView view, String imageUrl,int screenSize) {
-        screenSize = screenSize +200;
-        Picasso.with(view.getContext()).load(new File(imageUrl)).transform(new RoundedTransformation(10, 3)).
+    private static void setImageUrlFile(ImageView view, Uri imageUrl,int screenSize) {
+        screenSize = screenSize+200;
+       // imageUrl = (new File(imageUrl)).getAbsolutePath();
+        Picasso.with(view.getContext()).load(imageUrl).transform(new RoundedTransformation(10, 3)).
                 placeholder(R.drawable.ic_fomono_big).
                 resize(screenSize, 0).into(view);
     }
@@ -177,9 +177,11 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
             filePath = getPath(file);
         }
 
-        setImageUrlFile(fragmentUserProfile.ivUserImage, filePath,screenSize);
         Bitmap bitmap = uService.getBitMap(getContext(), filePath, file);
-      //  fragmentUserProfile.ivUserImage.setImageBitmap(bitmap);
+        Bitmap resizedBitmap = BitmapScaler.scaleToFitWidth(bitmap, screenSize);
+
+        fragmentUserProfile.ivUserImage.setImageBitmap(resizedBitmap);
+
         uService.saveParseFile(bitmap);
     }
 

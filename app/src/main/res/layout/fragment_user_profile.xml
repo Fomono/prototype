@@ -15,8 +15,8 @@
         android:layout_height="match_parent"
         android:background="@color/white"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp">
-
+        android:paddingRight="10dp"
+>
         <ImageView
             android:id="@+id/ivUserImage"
             android:layout_width="wrap_content"
@@ -55,8 +55,10 @@
             android:layout_below="@id/tvFirstNameLabel"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
-            android:background="@android:color/transparent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:text='@{user.firstName}'
+            android:backgroundTint="@color/colorTransparent"
             android:textSize="20dp"
             android:textStyle="bold" />
 
@@ -87,8 +89,10 @@
             android:layout_below="@id/tvLastNameLabel"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
-            android:background="@android:color/transparent"
             android:text='@{user.lastName}'
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:backgroundTint="@color/colorTransparent"
             android:textSize="20dp"
             android:textStyle="bold" />
 
@@ -119,7 +123,9 @@
             android:layout_below="@id/tvEmail"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
-            android:background="@android:color/transparent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:backgroundTint="@color/colorTransparent"
             android:text='@{user.email}'
             android:textSize="20dp"
             android:textStyle="bold" />
@@ -150,8 +156,11 @@
             android:layout_below="@id/tvPhone"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
-            android:background="@android:color/transparent"
-            android:text='@{Long.toString(user.phonenNumber)}'
+            android:text='@{user.phonenNumber}'
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:backgroundTint="@color/colorTransparent"
+            android:maxLength="20"
             android:textSize="20dp"
             android:textStyle="bold" />
 
@@ -167,42 +176,10 @@
 
 
         <TextView
-            android:id="@+id/tvGender"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/spView04"
-            android:layout_marginLeft="5dp"
-            android:text='Gender'
-            android:textSize="15dp" />
-
-        <EditText
-            android:id="@+id/etGender"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvGender"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:background="@android:color/transparent"
-            android:text='@{user.gender}'
-            android:textSize="20dp"
-            android:textStyle="bold" />
-
-
-        <View
-            android:id="@+id/spView05"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/etGender"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="15dp"
-            android:background="@color/veryLightGrey" />
-
-
-        <TextView
             android:id="@+id/tvAboutMe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/spView05"
+            android:layout_below="@id/spView04"
             android:layout_marginLeft="5dp"
             android:text="About me"
             android:textSize="15dp" />
@@ -214,8 +191,12 @@
             android:layout_below="@id/tvAboutMe"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
-            android:background="@android:color/transparent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="top|left"
             android:text='@{user.aboutMe}'
+            android:backgroundTint="@color/colorTransparent"
+            android:lines="4"
             android:textSize="20dp"
             android:textStyle="bold" />
 
@@ -241,6 +222,7 @@
             android:layout_toRightOf="@id/btnSave"
             android:text="@string/profile_cancel"
             android:textSize="15sp" />
+
 
 
     </RelativeLayout>

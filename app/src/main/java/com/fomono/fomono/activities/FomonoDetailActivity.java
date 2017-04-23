@@ -168,10 +168,52 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
                 setFinishData();
                 finish();
                 break;
+            case R.id.menuShare:
+                callShareIntent();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void callShareIntent() {
+        Intent sharingIntent = null;
+        Event e = null;
+        Business b = null;
+        Movie m = null;
+        String subjectShare="";
+        String bodyShare="";
+
+        if (fEvent != null) {
+            if (fEvent instanceof Event) {
+                e = (Event) fEvent;
+                if (e.getName() != null && e.getDescription() != null) {
+                    subjectShare = e.getName().getText();
+                    bodyShare = e.getDescription().getText().toString();
+                }
+            } else if (fEvent instanceof Business) {
+                b = (Business) fEvent;
+                if (b.getName() != null && b.getUrl() != null) {
+                    subjectShare = b.getName();
+                    bodyShare = b.getUrl();
+                }
+                else if (fEvent instanceof Movie) {
+                    m = (Movie) fEvent;
+                    if (m.getTitle() != null && m.getOverview() != null) {
+                        subjectShare = m.getTitle();
+                        bodyShare = m.getOverview();
+                    }
+                }
+            }
+            sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+            sharingIntent.setType("text/plain");
+            sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subjectShare);
+            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, bodyShare);
+            startActivity(Intent.createChooser(sharingIntent, "Share via"));
+
+        }
+    }
+
 
     @Override
     public void onBackPressed() {

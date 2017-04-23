@@ -1,14 +1,15 @@
 package com.fomono.fomono.services;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.media.ExifInterface;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 
@@ -75,15 +76,16 @@ public class UserService {
 
     }
 
-
+    @TargetApi(24)
     public Bitmap getBitMap(Context context, String filePath, Uri uri) {
         Bitmap bitmap = null;
         int rotate = 0;
+        InputStream in;
+
         try {
-            context.getContentResolver().notifyChange(uri, null);
-            File imageFile = new File(filePath);
-            ExifInterface exif = new ExifInterface(
-                    imageFile.getAbsolutePath());
+            in = context.getContentResolver().openInputStream(uri);
+            ExifInterface exif = new ExifInterface(in);
+
             int orientation = exif.getAttributeInt(
                     ExifInterface.TAG_ORIENTATION,
                     ExifInterface.ORIENTATION_NORMAL);
@@ -162,8 +164,8 @@ public class UserService {
             if (pUser.get("email") != null) {
                 user.setEmail(pUser.get("email").toString());
             }
-            if (pUser.get("phone") != null) {
-                user.setPhonenNumber(Long.parseLong(pUser.get("phone").toString()));
+            if (pUser.get("phone") != null && pUser.get("phone")!= "") {
+                user.setPhonenNumber(pUser.get("phone").toString());
             }
             if (pUser.get("gender") != null) {
                 user.setGender(pUser.get("gender").toString());
@@ -218,10 +220,7 @@ public class UserService {
         if (fView.etPhone.getText() != null && !(fView.etPhone.getText().toString().equals(pUser.get("phone")))) {
             pUser.put("phone", fView.etPhone.getText().toString());
         }
-        if (fView.etGender.getText() != null && !(fView.etGender.getText().toString().equals(pUser.get("gender")))) {
-            pUser.put("gender", fView.etGender.getText().toString());
-        }
-        if (fView.etAboutMe.getText() != null && !(fView.etAboutMe.getText().toString().equals(pUser.get("aboutMe")))) {
+          if (fView.etAboutMe.getText() != null && !(fView.etAboutMe.getText().toString().equals(pUser.get("aboutMe")))) {
             pUser.put("aboutMe", fView.etAboutMe.getText().toString());
         }
         pUser.saveInBackground(new SaveCallback() {

@@ -44,4 +44,5 @@
     <color name="darkGrey">#A9A9A9</color>
 
     <color name="hintColor">#BDBDBD</color>
+    <color name="greySecondaryText">#757575</color>
 </resources>
