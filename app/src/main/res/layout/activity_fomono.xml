@@ -53,7 +53,7 @@
                     app:pstsUnderlineColor="@color/colorFomono"
                     app:pstsIndicatorColor="@color/colorWhite"
                     app:pstsUnderlineHeight="0dp"
-                    app:pstsIndicatorHeight="2dp"
+                    app:pstsIndicatorHeight="3dp"
                     android:layout_width="match_parent"
                     android:layout_height="48dp" />
 
