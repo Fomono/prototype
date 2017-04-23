@@ -96,22 +96,16 @@ public class FiltersAdapter extends RecyclerView.Adapter<FiltersAdapter.ViewHold
         }
 
         if (viewHolder.tbCategory.isChecked()) {
-            viewHolder.tbCategory.setTextColor(ContextCompat.getColor(context, R.color.colorWhite));
-            viewHolder.tbCategory.setBackgroundColor(ContextCompat.getColor(context, R.color.colorFomono));
-            viewHolder.tbCategory.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+            setToggleOn(viewHolder.tbCategory);
         } else {
-            viewHolder.tbCategory.setTextColor(ContextCompat.getColor(context, R.color.colorBlack));
-            viewHolder.tbCategory.setBackgroundColor(ContextCompat.getColor(context, R.color.colorFomonoSecondary));
-            viewHolder.tbCategory.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+            setToggleOff(viewHolder.tbCategory);
         }
 
         //attach listener
         viewHolder.tbCategory.setOnCheckedChangeListener((compoundButton, b) -> {
             //update user's selected filters
             if (b) {
-                viewHolder.tbCategory.setTextColor(ContextCompat.getColor(context, R.color.colorWhite));
-                viewHolder.tbCategory.setBackgroundColor(ContextCompat.getColor(context, R.color.colorFomono));
-                viewHolder.tbCategory.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+                setToggleOn(viewHolder.tbCategory);
                 //store new user filter, but first check for dupe
                 FilterUtil.getInstance().addFilter(category.getParamName(), category.getId(), category.getApiName(), new GetCallback<Filter>() {
                     @Override
@@ -120,14 +114,24 @@ public class FiltersAdapter extends RecyclerView.Adapter<FiltersAdapter.ViewHold
                     }
                 });
             } else {
-                viewHolder.tbCategory.setTextColor(ContextCompat.getColor(context, R.color.colorBlack));
-                viewHolder.tbCategory.setBackgroundColor(ContextCompat.getColor(context, R.color.colorFomonoSecondary));
-                viewHolder.tbCategory.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+                setToggleOff(viewHolder.tbCategory);
                 //delete existing user filter
                 filters.remove(category.getId());
                 FilterUtil.getInstance().removeFilter(category.getParamName(), category.getId(), category.getApiName());
             }
         });
+    }
+
+    private void setToggleOn(ToggleButton tb) {
+        tb.setTextColor(ContextCompat.getColor(context, R.color.colorWhite));
+        tb.setBackgroundColor(ContextCompat.getColor(context, R.color.colorFomono));
+        tb.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+    }
+
+    private void setToggleOff(ToggleButton tb) {
+        tb.setTextColor(ContextCompat.getColor(context, R.color.colorBlack));
+        tb.setBackgroundColor(ContextCompat.getColor(context, R.color.colorFomonoSecondary));
+        tb.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
     }
 
     @Override

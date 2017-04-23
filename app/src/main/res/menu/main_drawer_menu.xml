@@ -11,18 +11,18 @@
             android:icon="@drawable/ic_settings"
             android:title="@string/drawer_menu_settings"/>
 
-        <item
-            android:id="@+id/drawerAboutId"
-            app:showAsAction="always"
-            android:orderInCategory="2"
-            android:icon="@drawable/ic_info_outline"
-            android:title="@string/drawer_menu_about" />
-
         <item android:id="@+id/drawerSignOutId"
-            android:orderInCategory="3"
+            android:orderInCategory="2"
             android:icon="@drawable/ic_signout"
             android:title="@string/drawer_menu_signout"
             app:showAsAction="always"/>
+
+        <item
+            android:id="@+id/drawerAboutId"
+            app:showAsAction="always"
+            android:orderInCategory="5"
+            android:icon="@drawable/ic_info_outline"
+            android:title="@string/drawer_menu_about" />
 
     </group>
 </menu>

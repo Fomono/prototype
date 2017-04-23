@@ -20,7 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,7 +50,7 @@ public class UserPreferencesFragment extends Fragment {
     EditText etLocation;
     Spinner spDistance;
     TextView tvFiltersSelected;
-    LinearLayout llFilters;
+    RelativeLayout rlFilters;
 
     ParseUser user;
 
@@ -93,7 +93,7 @@ public class UserPreferencesFragment extends Fragment {
         etLocation = binding.etLocation;
         spDistance = binding.spDistance;
         tvFiltersSelected = binding.tvFiltersSelected;
-        llFilters = binding.llFilters;
+        rlFilters = binding.rlFilters;
 
         //set use my location
         ibUseMyLocation.setOnClickListener(new View.OnClickListener() {
@@ -141,7 +141,7 @@ public class UserPreferencesFragment extends Fragment {
         for (int i = 0; i < ALLOWED_DISTANCES.length; i++) {
             distanceStrs[i] = getString(R.string.pref_distance_value, ALLOWED_DISTANCES[i]);
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, distanceStrs);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.item_spinner, distanceStrs);
         spDistance.setAdapter(adapter);
         //get selection
         int distance = user.getInt("distance");
@@ -163,7 +163,7 @@ public class UserPreferencesFragment extends Fragment {
         });
 
         //set on click listener for filters
-        llFilters.setOnClickListener(new View.OnClickListener() {
+        rlFilters.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 UserPreferencesListener listener = (UserPreferencesListener) getActivity();
