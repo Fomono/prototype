@@ -7,6 +7,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowContentTransitions">true</item>
+        <item name="android:textViewStyle">@style/AppTextViewStyle</item>
     </style>
 
 
@@ -137,7 +138,9 @@
         <item name="colorControlHighlight">@color/colorFomono</item>
     </style>
 
-
+    <style name="AppTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:textColor">@color/colorBlack</item>
+    </style>
 
     <style name="ProgressBar.Horizontal" parent="@android:style/Widget.Holo.ProgressBar.Horizontal"></style>
 
