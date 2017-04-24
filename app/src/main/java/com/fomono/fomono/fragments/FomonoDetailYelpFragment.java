@@ -294,8 +294,8 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
         String address = "";
         if( business.getLocation()!=null) {
             Location l = business.getLocation();
-            address = l.getAddress1() + ", " + l.getCity() + ", " + l.getLocationState()
-                    + ", " + l.getCountry() + ", " + l.getZipCode();
+            address = l.getAddress1() + " " + l.getCity() + " " + l.getLocationState()
+                    + " " + l.getCountry() + " " + l.getZipCode();
         }
         return address;
     }
