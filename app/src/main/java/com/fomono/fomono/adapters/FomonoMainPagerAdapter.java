@@ -70,6 +70,30 @@ public class FomonoMainPagerAdapter extends FragmentPagerAdapter {
         FilterUtil.getInstance().clearDirty();
     }
 
+    public void performSearch(String query) {
+        if (eventFragment != null) {
+            eventFragment.searchEventList(query);
+        }
+        if (eatsFragment != null) {
+            eatsFragment.searchEatsList(query);
+        }
+        if (movieFragment != null) {
+            movieFragment.searchMovieList(query);
+        }
+    }
+
+    public void clearSearch() {
+        if (eventFragment != null) {
+            eventFragment.clearSearch();
+        }
+        if (eatsFragment != null) {
+            eatsFragment.clearSearch();
+        }
+        if (movieFragment != null) {
+            movieFragment.clearSearch();
+        }
+    }
+
     //Return the tab title
     @Override
     public CharSequence getPageTitle(int position) {

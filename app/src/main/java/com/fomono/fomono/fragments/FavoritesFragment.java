@@ -27,7 +27,6 @@ public class FavoritesFragment extends MainListFragment implements FavoritesUtil
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        searchParamDispText.setVisibility(View.GONE);
         InternetAlertDialogue internetAlertDialogue = new InternetAlertDialogue(mContext);
         if (internetAlertDialogue.checkForInternet()) {
             populateFavorites();
@@ -60,6 +59,10 @@ public class FavoritesFragment extends MainListFragment implements FavoritesUtil
         super.onDestroyView();
 
         FavoritesUtil.getInstance().removeListener(this);
+    }
+
+    @Override
+    public void clearSearch() {
     }
 
     @Override

@@ -41,8 +41,6 @@ public class MovieFragment extends MainListFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        searchParamDispText.setVisibility(View.GONE);
-
         populateMovies(moviePage++, null, searchParameter);
 
         rvList.addOnScrollListener(new EndlessRecyclerViewScrollListener((LinearLayoutManager) rvList.getLayoutManager()) {
@@ -51,39 +49,27 @@ public class MovieFragment extends MainListFragment {
                 populateMovies(moviePage++, sortParameter, searchParameter);
             }
         });
-        searchParamDispText.setOnClickListener(v -> {
-            clear();
-            searchParameter = null;
-            populateMovies(moviePage++, null, searchParameter);
-            searchParamDispText.setVisibility(View.GONE);
-        });
         return view;
     }
 
     public void searchMovieList(String query) {
         clear();
+        moviePage = 1;
         searchParameter = query;
-        populateMovies(moviePage, sortParameter, searchParameter);
+        populateMovies(moviePage++, sortParameter, searchParameter);
     }
 
     public void refreshMovieList(String sortParam) {
         sortParameter = sortParam;
         clear();
         moviePage = 1;
-        populateMovies(moviePage, sortParameter, searchParameter);
+        populateMovies(moviePage++, sortParameter, searchParameter);
     }
 
 
     public void populateMovies(int page, String sortParameter, String strQuery) {
 
         if (internetAlertDialogue.checkForInternet()) {
-            if(strQuery != null) {
-                searchParamDispText.setVisibility(View.VISIBLE);
-                searchParamDispText.setText(""+strQuery+" X");
-            } else {
-                searchParamDispText.setVisibility(View.GONE);
-            }
-
             smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
             getMoviesNowPlaying(strQuery, page, sortParameter);
 
@@ -284,6 +270,17 @@ public class MovieFragment extends MainListFragment {
                 }
             });
         }
+    }
+
+    @Override
+    public void clearSearch() {
+        if (searchParameter == null) {
+            return;
+        }
+        clear();
+        moviePage = 1;
+        searchParameter = null;
+        populateMovies(moviePage++, null, searchParameter);
     }
 
     @Override

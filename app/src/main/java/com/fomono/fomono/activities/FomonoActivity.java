@@ -25,6 +25,7 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.bumptech.glide.Glide;
 import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
+import com.fomono.fomono.adapters.FomonoAdapter;
 import com.fomono.fomono.adapters.FomonoMainPagerAdapter;
 import com.fomono.fomono.databinding.ActivityFomonoBinding;
 import com.fomono.fomono.fragments.BaseSortFragment;
@@ -60,7 +61,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class FomonoActivity extends AppCompatActivity implements BaseSortFragment.OnFragmentInteractionListener {
+public class FomonoActivity extends AppCompatActivity implements BaseSortFragment.OnFragmentInteractionListener,
+        FomonoAdapter.FomonoEventUpdateListener {
+
     public static final int REQUEST_CODE_DETAILS = 20;
     private FomonoMainPagerAdapter fomonoMainPagerAdapter;
     private final static String TAG = "Fomono Activity";
@@ -251,24 +254,7 @@ public class FomonoActivity extends AppCompatActivity implements BaseSortFragmen
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-
-                String name = makeFragmentName(fomonoPager.getId(), activeViewPagerPagePosition);
-                Fragment viewPagerFragment = getSupportFragmentManager().findFragmentByTag(name);
-
-                if (viewPagerFragment != null) {
-                    if (viewPagerFragment.isResumed()) {
-                        if (viewPagerFragment instanceof EventFragment) {
-                            EventFragment mEventFragment = (EventFragment) viewPagerFragment;
-                            mEventFragment.searchEventList(query);
-                        } else if (viewPagerFragment instanceof EatsFragment) {
-                            EatsFragment mEatsFragment = (EatsFragment) viewPagerFragment;
-                            mEatsFragment.searchEatsList(query);
-                        } else if (viewPagerFragment instanceof MovieFragment) {
-                            MovieFragment mMovieFragment = (MovieFragment) viewPagerFragment;
-                            mMovieFragment.searchMovieList(query);
-                        }
-                    }
-                }
+                fomonoMainPagerAdapter.performSearch(query);
                 searchView.clearFocus();
                 return true;
             }
@@ -278,6 +264,34 @@ public class FomonoActivity extends AppCompatActivity implements BaseSortFragmen
                 return false;
             }
         });
+
+        //set back button handler for search view
+        MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                searchView.onActionViewExpanded();
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                searchView.onActionViewCollapsed();
+                //clear search results
+                fomonoMainPagerAdapter.clearSearch();
+                return true;
+            }
+        });
+
+        // Get the search close button image view
+//        ImageView closeButton = (ImageView) searchView.findViewById(R.id.search_close_btn);
+//        // Set on click listener
+//        closeButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -432,6 +446,7 @@ public class FomonoActivity extends AppCompatActivity implements BaseSortFragmen
         }
     }
 
+    @Override
     public void onFomonoEventUpdated(FomonoEvent fEvent, String fragmentName) {
         if (fragmentName.equals(FavoritesFragment.TAG)) {
             fomonoMainPagerAdapter.refreshFomonoEvent(fEvent, -1);
