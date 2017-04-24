@@ -169,11 +169,8 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
             if (event.getUrl() != null) {
                 holder.eventUrl.setBackgroundResource(R.drawable.ic_link);
                 holder.eventUrl.setOnClickListener(v -> {
-                    Uri uri = Uri.parse(event.getUrl());
-                    Intent openLink = new Intent(Intent.ACTION_VIEW, uri);
-                    fomonoAdapterObjectListener.onOpenLink(openLink);
-           //         mContext.startActivity(openLink);
-                });
+                    callShareIntent(event);
+                    });
             } else {
                 holder.eventUrl.setBackgroundResource(R.drawable.ic_fomono_grey);
              //   holder.eventUrl.setVisibility(View.GONE);
@@ -193,6 +190,44 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
 
             setEventFavorited(holder, event);
         }
+
+    }
+
+    private void callShareIntent(FomonoEvent fEvent) {
+
+            Intent sharingIntent = null;
+            Event e = null;
+            Business b = null;
+            Movie m = null;
+            String subjectShare = "";
+            String bodyShare = "";
+
+            if (fEvent != null) {
+                if (fEvent instanceof Event) {
+                    e = (Event) fEvent;
+                    if (e.getName() != null && e.getDescription() != null) {
+                        subjectShare = e.getName().getText();
+                        bodyShare = e.getDescription().getText().toString();
+                    }
+                } else if (fEvent instanceof Business) {
+                    b = (Business) fEvent;
+                    if (b.getName() != null && b.getUrl() != null) {
+                        subjectShare = b.getName();
+                        bodyShare = b.getUrl();
+                    }
+                } else if (fEvent instanceof Movie) {
+                    m = (Movie) fEvent;
+                    if (m.getTitle() != null && m.getOverview() != null) {
+                        subjectShare = m.getTitle();
+                        bodyShare = m.getOverview();
+                    }
+                }
+            }
+                sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subjectShare);
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, bodyShare);
+                fomonoAdapterObjectListener.onOpenLink(Intent.createChooser(sharingIntent, "Share via"));
 
     }
 
@@ -243,9 +278,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
             if (business.getUrl() != null) {
                 holder.eventUrl.setBackgroundResource(R.drawable.ic_link);
                 holder.eventUrl.setOnClickListener(v -> {
-                    Uri uri = Uri.parse(business.getUrl());
-                    Intent openLink = new Intent(Intent.ACTION_VIEW, uri);
-                    fomonoAdapterObjectListener.onOpenLink(openLink);
+                    callShareIntent(business);
                 });
             } else {
                 holder.eventUrl.setBackgroundResource(R.drawable.ic_fomono_grey);
@@ -311,9 +344,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
             if(movie.getId() != -1) {
                 holder.eventUrl.setBackgroundResource(R.drawable.ic_link);
                 holder.eventUrl.setOnClickListener(v -> {
-                    Intent movTrail = new Intent(mContext, FomonoTrailerActivity.class);
-                    movTrail.putExtra(mContext.getResources().getString(R.string.MovieId), movie.getId());
-                    fomonoAdapterObjectListener.onOpenLink(movTrail);
+                    callShareIntent(movie);
                 });
             } else {
                 holder.eventUrl.setBackgroundResource(R.drawable.ic_fomono_grey);

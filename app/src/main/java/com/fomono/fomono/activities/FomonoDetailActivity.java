@@ -214,7 +214,8 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
                 if (b.getName() != null && b.getUrl() != null) {
                     subjectShare = b.getName();
                     bodyShare = b.getUrl();
-                } else if (fEvent instanceof Movie) {
+                }
+            } else if (fEvent instanceof Movie) {
                     m = (Movie) fEvent;
                     if (m.getTitle() != null && m.getOverview() != null) {
                         subjectShare = m.getTitle();
@@ -229,8 +230,6 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
             startActivity(Intent.createChooser(sharingIntent, "Share via"));
 
         }
-    }
-
 
     private void playYouTubeVideo(long movie) {
 
