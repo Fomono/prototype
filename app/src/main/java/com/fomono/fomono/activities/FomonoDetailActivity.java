@@ -243,7 +243,7 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
             @Override
             public void onResponse(retrofit2.Call<VideoResponse> call, retrofit2.Response<VideoResponse> response) {
                 VideoResponse vResponse = response.body();
-                if (vResponse.getResults() != null && vResponse.getResults().get(0) != null) {
+                if (vResponse.getResults() != null && !vResponse.getResults().isEmpty() && vResponse.getResults().get(0) != null) {
                     String videoKey = vResponse.getResults().get(0).getKey();
                     cueYouTubeTrailer(videoKey);
                 }
@@ -276,6 +276,7 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
                     }
 
                 });
+
     }
 
 
