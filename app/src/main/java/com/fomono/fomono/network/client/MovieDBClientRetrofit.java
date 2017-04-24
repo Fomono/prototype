@@ -2,6 +2,7 @@ package com.fomono.fomono.network.client;
 
 import com.fomono.fomono.models.movies.Movie;
 import com.fomono.fomono.models.movies.MovieResponse;
+import com.fomono.fomono.models.movies.VideoResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -75,6 +76,8 @@ public class MovieDBClientRetrofit {
         @GET("/3/movie/{movie_id}")
         Call<Movie> getMovieById(@Path("movie_id") String id, @QueryMap Map<String, String> options);
 
+        @GET("/3/movie/{movie_id}/videos")
+        Call<VideoResponse> getMovieVideosById(@Path("movie_id") String id, @QueryMap Map<String, String> options);
 
         @GET("/3/search/movie")
         Call<MovieResponse> getSearchMoviesFromServer(@QueryMap Map<String, String> options);

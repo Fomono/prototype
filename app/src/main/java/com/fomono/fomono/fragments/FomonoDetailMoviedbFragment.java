@@ -3,7 +3,6 @@ package com.fomono.fomono.fragments;
 import android.Manifest;
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
@@ -11,18 +10,12 @@ import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.widget.ShareDialog;
 import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
 import com.fomono.fomono.databinding.FragmentMoviedbDetailBinding;
@@ -45,13 +38,14 @@ import static com.fomono.fomono.FomonoApplication.API_NAME_MOVIE_GENRE;
  */
 
 public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment {
-    FragmentMoviedbDetailBinding fragmentBinding;
+    public static final String MOVIE_OBJ="movie_obj";
+    public static final String YES="Yes";
+    public static final String NO="No";
 
+    FragmentMoviedbDetailBinding fragmentBinding;
     Movie movie;
     ImageButton ibFavorite;
     FavoritesUtil favsUtil;
-    String movieKey;
-    String movieDBURL = "https://www.themoviedb.org/movie?language=en";
 
     public interface FomonoEventUpdateListener {
         void onFomonoEventUpdated();
@@ -59,11 +53,10 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
 
 
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        movie = getArguments().getParcelable("movie_obj");
+        movie = getArguments().getParcelable(MOVIE_OBJ);
         favsUtil = FavoritesUtil.getInstance();
 
     }
@@ -71,7 +64,7 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
     public static FomonoDetailMoviedbFragment newInstance(Movie movie) {
         FomonoDetailMoviedbFragment fomonoDetailMoviedbFragment = new FomonoDetailMoviedbFragment();
         Bundle args = new Bundle();
-        args.putParcelable("movie_obj", movie);
+        args.putParcelable(MOVIE_OBJ, movie);
         fomonoDetailMoviedbFragment.setArguments(args);
         return fomonoDetailMoviedbFragment;
     }
@@ -83,14 +76,6 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
 
     }
 
-
-    //  @BindingAdapter({"imageUrl"})
-    private static void setImageUrl(ImageView view, String imageUrl) {
-        Glide.with(view.getContext()).load(imageUrl).placeholder(R.drawable.ic_fomono_big).
-                error(R.drawable.ic_fomono_big).into(view);
-    }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
 
@@ -99,85 +84,34 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
         View view = fragmentBinding.getRoot();
         ButterKnife.bind(this,view);
 
-       // callYouTube();
-        fragmentBinding.tvSiteLink.setClickable(true);
-        fragmentBinding.tvSiteLink.setMovementMethod(LinkMovementMethod.getInstance());
-        fragmentBinding.tvSiteLink.setText(Html.fromHtml("<a href=" + movieDBURL +  ">" + "CLICK HERE" + "</a>"));
 
-        //fragmentBinding.tvEventDate.setText("");
-        fragmentBinding.tvRatingText.setText(Double.valueOf(movie.getVoteAverage()/2).toString()+ "/5");
-
-        fragmentBinding.rbMovierating.setRating
+        fragmentBinding.rbRating.setRating
                 (Double.valueOf(movie.getVoteAverage()/2).floatValue());
-
-        fragmentBinding.tvClockCalendar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addToCalendar();
-            }
-        });
-
         fragmentBinding.tvGenres.setText(getGenres());
-        fragmentBinding.ivMessageShareIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Uri smsUri = Uri.parse("tel:" + "");
-                Intent intent = new Intent(Intent.ACTION_VIEW, smsUri);
-                intent.putExtra("address", "");
-                if (movie.getTitle() != null && movie.getTitle()!= null) {
-                    intent.putExtra("sms_body", movie.getTitle()+ "\n" + movie.getTitle());
-                }
-                intent.setType("vnd.android-dir/mms-sms");//here setType will set the previous data null.
-                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    startActivity(intent);
-                }
-            }
-        });
 
-        fragmentBinding.ivTwitterShareIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                try {
-                    // Check if the Twitter app is installed on the phone.
-                    getActivity().getPackageManager().getPackageInfo("com.twitter.android", 0);
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.setClassName("com.twitter.android", "com.twitter.android.composer.ComposerActivity");
-                    intent.setType("text/plain");
-                    if (movie.getTitle() != null) {
-                        intent.putExtra(Intent.EXTRA_TEXT, movie.getTitle());
-                    }
-                    startActivity(intent);
+        //setListeners
+        setAddToCalendarListener();
+        setFavoriteIconListener();
 
-                } catch (Exception e) {
-                    String url = "";
-                    if (movie.getTitle() != null) {
-                        url = "http://www.twitter.com/intent/tweet?url="
-                                + movie.getTitle() + "&text=" + movie.getTitle();
-                    }
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(url));
-                    startActivity(i);
 
-                }
-            }
-        });
+        setAdultValue();
 
-        fragmentBinding.ivEmailShareIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("plain/text");
-                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"some@email.address"});
-                if (movie.getTitle() != null) {
-                    intent.putExtra(Intent.EXTRA_SUBJECT, movie.getTitle());
-                     intent.putExtra(Intent.EXTRA_TEXT, movie.getTitle());
-                }
-                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    startActivity(Intent.createChooser(intent, ""));
-                }
-            }
-        });
+        return fragmentBinding.getRoot();
+
+    }
+
+    private void setAdultValue() {
+
+        if(movie.isAdult()){
+            fragmentBinding.tvAdult.setText(YES);
+        }else{
+            fragmentBinding.tvAdult.setText(NO);
+        }
+    }
+
+
+    private void setFavoriteIconListener() {
 
         ibFavorite = fragmentBinding.ivFavoriteIcon;
         favsUtil.isFavorited(movie, isFavorited -> {
@@ -186,61 +120,27 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
             }
         });
 
-        ibFavorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                favsUtil.isFavorited(movie, isFavorited -> {
-                    if (isFavorited) {
-                        ibFavorite.setImageResource(R.drawable.ic_favorite_grey);
-                        favsUtil.removeFromFavorites(movie);
-                    } else {
-                        ibFavorite.setImageResource(R.drawable.ic_favorite);
-                        favsUtil.addToFavorites(movie);
-                    }
-                });
-
-                if (getActivity() instanceof FomonoEventUpdateListener) {
-                    ((FomonoEventUpdateListener) getActivity()).onFomonoEventUpdated();
+        ibFavorite.setOnClickListener(view1 -> {
+            favsUtil.isFavorited(movie, isFavorited -> {
+                if (isFavorited) {
+                    ibFavorite.setImageResource(R.drawable.ic_favorite_grey);
+                    favsUtil.removeFromFavorites(movie);
+                } else {
+                    ibFavorite.setImageResource(R.drawable.ic_favorite);
+                    favsUtil.addToFavorites(movie);
                 }
+            });
+
+            if (getActivity() instanceof FomonoEventUpdateListener) {
+                ((FomonoEventUpdateListener) getActivity()).onFomonoEventUpdated();
             }
         });
-
-        fragmentBinding.ivFBShareIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setupFacebookShareIntent();
-            }
-        });
-
-
-        if(movie.isAdult()){
-            fragmentBinding.tvAdult.setText("Yes");
-        }else{
-            fragmentBinding.tvAdult.setText("No");
-        }
-
-        return fragmentBinding.getRoot();
-
     }
 
-    public void setupFacebookShareIntent() {
-        ShareDialog shareDialog;
-        shareDialog = new ShareDialog(this);
-
-        ShareLinkContent linkContent;
-
-        if(movie.getTitle()!=null ){
-            linkContent = new ShareLinkContent.Builder()
-                    .setContentTitle(movie.getTitle())
-                    .setContentUrl(Uri.parse(movieDBURL))
-                    .build();
-        }else{
-            linkContent = new ShareLinkContent.Builder()
-                    .build();
-        }
-
-        shareDialog.show(linkContent);
+    private void setAddToCalendarListener() {
+        fragmentBinding.tvCalendar.setOnClickListener(v -> addToCalendar());
     }
+
 
 
     private String getGenres() {

@@ -10,8 +10,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -25,8 +27,18 @@ import com.fomono.fomono.models.FomonoEvent;
 import com.fomono.fomono.models.eats.Business;
 import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.movies.Movie;
+import com.fomono.fomono.models.movies.VideoResponse;
 import com.fomono.fomono.models.user.User;
+import com.fomono.fomono.network.client.MovieDBClientRetrofit;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import com.parse.ParseUser;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static android.content.ContentValues.TAG;
 
 
 public class FomonoDetailActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback,
@@ -37,7 +49,6 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
     FomonoDetailEventbriteFragment fomonoDetailEventbriteFragment;
     FomonoDetailYelpFragment fomonoDetailYelpFragment;
     FomonoDetailMoviedbFragment fomonoDetailMoviedbFragment;
-
     FomonoEvent fEvent;
     int position;
     boolean updated;
@@ -70,6 +81,7 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.fragmentDetail, fomonoDetailEventbriteFragment);
             ft.commit();
+            findViewById(R.id.youtube_fragment).setVisibility(View.GONE);
         } else if (savedInstanceState == null && fEvent instanceof Business) {
             Business b = (Business) fEvent;
             loadImage(b);
@@ -77,6 +89,7 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.fragmentDetail, fomonoDetailYelpFragment);
             ft.commit();
+            findViewById(R.id.youtube_fragment).setVisibility(View.GONE);
 
         } else if (savedInstanceState == null && fEvent instanceof Movie) {
             Movie m = (Movie) fEvent;
@@ -86,12 +99,17 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
             ft.replace(R.id.fragmentDetail, fomonoDetailMoviedbFragment);
             ft.commit();
 
+
+            playYouTubeVideo(m.getId());
+
+
         }
     }
 
+
     private void loadImage(FomonoEvent fEvent) {
         final ImageView imageView = (ImageView) findViewById(R.id.backdrop);
-        if(fEvent instanceof Event) {
+        if (fEvent instanceof Event) {
             Event e = (Event) fEvent;
             if (e.getLogo() != null) {
                 Glide.with(this).load(e.getLogo().getUrl())
@@ -99,13 +117,13 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
                         .centerCrop()
                         .into(imageView);
             }
-        } else if(fEvent instanceof Movie){
+        } else if (fEvent instanceof Movie) {
             Movie m = (Movie) fEvent;
             Glide.with(this).load(m.getBackdropPath())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .centerCrop()
                     .into(imageView);
-        } else if(fEvent instanceof Business){
+        } else if (fEvent instanceof Business) {
             Business b = (Business) fEvent;
             Glide.with(this).load(b.getImageUrl())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -181,8 +199,8 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
         Event e = null;
         Business b = null;
         Movie m = null;
-        String subjectShare="";
-        String bodyShare="";
+        String subjectShare = "";
+        String bodyShare = "";
 
         if (fEvent != null) {
             if (fEvent instanceof Event) {
@@ -197,7 +215,7 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
                     subjectShare = b.getName();
                     bodyShare = b.getUrl();
                 }
-                else if (fEvent instanceof Movie) {
+            } else if (fEvent instanceof Movie) {
                     m = (Movie) fEvent;
                     if (m.getTitle() != null && m.getOverview() != null) {
                         subjectShare = m.getTitle();
@@ -212,6 +230,53 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
             startActivity(Intent.createChooser(sharingIntent, "Share via"));
 
         }
+
+    private void playYouTubeVideo(long movie) {
+
+        MovieDBClientRetrofit movieDBClientRetrofit = MovieDBClientRetrofit.getInstance();
+
+        Map<String, String> data = new HashMap<>();
+        data.put("api_key", getResources().getString(R.string.movieDB_api_key));
+        retrofit2.Call<VideoResponse> callMovie = movieDBClientRetrofit.MovieDBRetrofitClientFactory()
+                .getMovieVideosById(Long.toString(movie), data);
+        callMovie.enqueue(new retrofit2.Callback<VideoResponse>() {
+            @Override
+            public void onResponse(retrofit2.Call<VideoResponse> call, retrofit2.Response<VideoResponse> response) {
+                VideoResponse vResponse = response.body();
+                if (vResponse.getResults() != null && !vResponse.getResults().isEmpty() && vResponse.getResults().get(0) != null) {
+                    String videoKey = vResponse.getResults().get(0).getKey();
+                    cueYouTubeTrailer(videoKey);
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<VideoResponse> call, Throwable t) {
+                Log.d(TAG, "Getting movie by id failed " + t.getMessage());
+            }
+        });
+    }
+
+    private void cueYouTubeTrailer(String videoKey) {
+
+        YouTubePlayerSupportFragment youtubeFragment = (YouTubePlayerSupportFragment)
+                getSupportFragmentManager().findFragmentById(R.id.youtube_fragment);
+        youtubeFragment.initialize(getResources().getString(R.string.youTube_api_key),
+                new YouTubePlayer.OnInitializedListener() {
+                    @Override
+                    public void onInitializationSuccess(YouTubePlayer.Provider provider,
+                                                        YouTubePlayer youTubePlayer, boolean b) {
+                        // do any work here to cue video, play video, etc.
+                        youTubePlayer.cueVideo(videoKey);
+                    }
+
+                    @Override
+                    public void onInitializationFailure(YouTubePlayer.Provider provider,
+                                                        YouTubeInitializationResult youTubeInitializationResult) {
+
+                    }
+
+                });
+
     }
 
 
