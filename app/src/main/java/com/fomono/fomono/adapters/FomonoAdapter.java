@@ -17,9 +17,6 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.target.Target;
 import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
 import com.fomono.fomono.activities.FomonoActivity;
@@ -32,6 +29,7 @@ import com.fomono.fomono.models.movies.Movie;
 import com.fomono.fomono.utils.ConfigUtil;
 import com.fomono.fomono.utils.DateUtils;
 import com.fomono.fomono.utils.FavoritesUtil;
+import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -97,7 +95,8 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
     public void onViewRecycled(ViewHolderEventsItem holder) {
         super.onViewRecycled(holder);
         ViewHolderEventsItem vhImage = holder;
-        Glide.clear(vhImage.eventMediaImage);
+//        Glide.clear(vhImage.eventMediaImage);
+        vhImage.eventMediaImage.setImageResource(0);
     }
 
     private void configureViewHolderEventsItem(ViewHolderEventsItem holder, int position) {
@@ -128,12 +127,16 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
             if (event.getLogo() != null) {
                 if (event.getLogo().getOriginal() != null) {
                     if (!TextUtils.isEmpty(event.getLogo().getOriginal().getUrl())) {
-//                        Picasso.with(mContext).load(event.getLogo().getOriginal().getUrl()).placeholder(R.drawable.ic_fomono_big).resize(screenWidth, 0).into(holder.eventMediaImage);
-                        Glide.with(mContext).load(event.getLogo().getOriginal().getUrl())
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .fitCenter()
-                                .override(screenWidth, Target.SIZE_ORIGINAL)
+                        Picasso.with(mContext).load(event.getLogo().getOriginal().getUrl())
+                                .placeholder(R.drawable.ic_image_placeholder)
+                                .resize(screenWidth, 0)
                                 .into(holder.eventMediaImage);
+//                        Glide.with(mContext).load(event.getLogo().getOriginal().getUrl())
+//                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                                .fitCenter()
+//                                .override(screenWidth, Target.SIZE_ORIGINAL)
+//                                .placeholder(R.drawable.ic_image_placeholder)
+//                                .into(holder.eventMediaImage);
                         imageSet = 1;
                     }
                 }
@@ -169,7 +172,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
                     callShareIntent(event);
                     });
             } else {
-                holder.eventUrl.setBackgroundResource(R.drawable.ic_fomono_grey);
+                holder.eventUrl.setBackgroundResource(R.drawable.ic_image_placeholder);
              //   holder.eventUrl.setVisibility(View.GONE);
             }
 
@@ -240,12 +243,16 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
             }
 
             if (!TextUtils.isEmpty(business.getImageUrl())) {
-//                Picasso.with(mContext).load(business.getImageUrl()).placeholder(R.drawable.ic_fomono_big).resize(screenWidth, 0).into(holder.eventMediaImage);
-                Glide.with(mContext).load(business.getImageUrl())
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .fitCenter()
-                        .override(screenWidth, Target.SIZE_ORIGINAL)
+                Picasso.with(mContext).load(business.getImageUrl())
+                        .placeholder(R.drawable.ic_image_placeholder)
+                        .resize(screenWidth, 0)
                         .into(holder.eventMediaImage);
+//                Glide.with(mContext).load(business.getImageUrl())
+//                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                        .fitCenter()
+//                        .override(screenWidth, Target.SIZE_ORIGINAL)
+//                        .placeholder(R.drawable.ic_image_placeholder)
+//                        .into(holder.eventMediaImage);
             } else {
                 holder.eventMediaImage.setVisibility(View.GONE);
             }
@@ -278,7 +285,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
                     callShareIntent(business);
                 });
             } else {
-                holder.eventUrl.setBackgroundResource(R.drawable.ic_fomono_grey);
+                holder.eventUrl.setBackgroundResource(R.drawable.ic_image_placeholder);
             }
         }
 
@@ -309,19 +316,27 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
             } else {holder.eventName.setVisibility(View.GONE);}
 
             if(movie.getOrigBackdropPath() != null) {
-//                Picasso.with(mContext).load(movie.getBackdropPath()).placeholder(R.drawable.ic_fomono_big).resize(screenWidth, 0).into(holder.eventMediaImage);
-                Glide.with(mContext).load(movie.getBackdropPath())
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .fitCenter()
-                        .override(screenWidth, Target.SIZE_ORIGINAL)
+                Picasso.with(mContext).load(movie.getBackdropPath())
+                        .placeholder(R.drawable.ic_image_placeholder)
+                        .resize(screenWidth, 0)
                         .into(holder.eventMediaImage);
+//                Glide.with(mContext).load(movie.getBackdropPath())
+//                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                        .fitCenter()
+//                        .override(screenWidth, Target.SIZE_ORIGINAL)
+//                        .placeholder(R.drawable.ic_image_placeholder)
+//                        .into(holder.eventMediaImage);
             } else if(movie.getOrigPosterPath() != null) {
-//                Picasso.with(mContext).load(movie.getPosterPath()).placeholder(R.drawable.ic_fomono_big).resize(screenWidth, 0).into(holder.eventMediaImage);
-                Glide.with(mContext).load(movie.getPosterPath())
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .fitCenter()
-                        .override(screenWidth, Target.SIZE_ORIGINAL)
+                Picasso.with(mContext).load(movie.getPosterPath())
+                        .placeholder(R.drawable.ic_image_placeholder)
+                        .resize(screenWidth, 0)
                         .into(holder.eventMediaImage);
+//                Glide.with(mContext).load(movie.getPosterPath())
+//                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                        .fitCenter()
+//                        .override(screenWidth, Target.SIZE_ORIGINAL)
+//                        .placeholder(R.drawable.ic_image_placeholder)
+//                        .into(holder.eventMediaImage);
             } else {
                 holder.eventMediaImage.setVisibility(View.GONE);
             }
@@ -344,7 +359,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
                     callShareIntent(movie);
                 });
             } else {
-                holder.eventUrl.setBackgroundResource(R.drawable.ic_fomono_grey);
+                holder.eventUrl.setBackgroundResource(R.drawable.ic_image_placeholder);
             }
         }
 
@@ -432,9 +447,8 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
                 showDetails.putExtra("FOM_OBJ", mFomonoEvents.get(position));
                 ActivityOptionsCompat options = ActivityOptionsCompat.
                         makeSceneTransitionAnimation((Activity) mContext, eventMediaImage, "main_image");
-                //((AppCompatActivity) mContext).startActivityForResult(showDetails, FomonoActivity.REQUEST_CODE_DETAILS, options.toBundle());
+//                ((AppCompatActivity) mContext).startActivityForResult(showDetails, FomonoActivity.REQUEST_CODE_DETAILS, options.toBundle());
                 ((AppCompatActivity) mContext).startActivityForResult(showDetails, FomonoActivity.REQUEST_CODE_DETAILS);
-
             });
         }
     }

@@ -15,23 +15,31 @@
         android:layout_height="match_parent"
         android:background="@color/white"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
->
-        <ImageView
+        android:paddingRight="10dp">
+
+        <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/ivUserImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
             android:adjustViewBounds="true"
-            android:background="@drawable/layout_rounded_corners"
-            android:scaleType="fitXY" />
+            android:scaleType="fitXY"
+            app:riv_border_color="@color/colorWhite"
+            app:riv_border_width="2dp"
+            app:riv_corner_radius="100dp"
+            app:riv_mutate_background="true"
+            android:src="@drawable/default_user_image">
+
+        </com.makeramen.roundedimageview.RoundedImageView>
 
 
         <ImageView
             android:id="@+id/ivCameraImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
+            android:layout_marginRight="-10dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignBottom="@+id/ivUserImage"
+            android:layout_alignRight="@+id/ivUserImage"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
             app:srcCompat="@drawable/ic_photo_camera" />
@@ -50,7 +58,7 @@
 
         <EditText
             android:id="@+id/etFirstName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvFirstNameLabel"
             android:layout_marginLeft="5dp"
@@ -84,7 +92,7 @@
 
         <EditText
             android:id="@+id/etLastName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvLastNameLabel"
             android:layout_marginLeft="5dp"
@@ -118,7 +126,7 @@
 
         <EditText
             android:id="@+id/etEmail"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvEmail"
             android:layout_marginLeft="5dp"
@@ -151,12 +159,12 @@
 
         <EditText
             android:id="@+id/etPhone"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvPhone"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
-            android:text='@{user.phonenNumber}'
+            android:text='@{user.phoneNumber}'
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:backgroundTint="@color/colorTransparent"
@@ -186,7 +194,7 @@
 
         <EditText
             android:id="@+id/etAboutMe"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvAboutMe"
             android:layout_marginLeft="5dp"

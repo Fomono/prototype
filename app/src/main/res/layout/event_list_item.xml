@@ -35,8 +35,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="true"
-                        android:scaleType="fitXY"
+                        android:scaleType="fitCenter"
                         android:layout_alignParentTop="true"
+                        android:background="@color/placeholder_bg"
                         android:foreground="?android:attr/selectableItemBackground"
                         android:transitionName="main_image">
 
@@ -95,18 +96,19 @@
 
                 <RatingBar
                     android:id="@+id/EventRatingBarId"
-                    style="?android:attr/ratingBarStyleIndicator"
+                    style="?android:attr/ratingBarStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/EventNameId"
                     android:numStars="5"
                     android:progressTint="@color/colorFomono"
-                    android:scaleX="0.4"
-                    android:scaleY="0.4"
+                    android:scaleX="1"
+                    android:scaleY="1"
                     android:transformPivotX="0dp"
                     android:transformPivotY="0dp"
+                    android:layout_marginTop="1dp"
                     android:layout_marginStart="@dimen/event_list_main_rel_padding"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginBottom="10dp"
 
                     />
 
@@ -116,8 +118,8 @@
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
                     android:layout_toEndOf="@+id/EventRatingBarId"
-                    android:layout_alignBottom="@+id/EventRatingBarId"
-                    android:layout_marginStart="5dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_below="@+id/EventNameId"
                     tools:text="300 Reviews"/>
 
                 <TextView
@@ -127,7 +129,7 @@
                     android:textStyle="italic"
                     android:text="DISTANCE"
                     android:layout_marginEnd="@dimen/event_list_main_rel_padding"
-                    android:layout_above="@+id/EventLineId"
+                    android:layout_below="@+id/EventNameId"
                     android:layout_marginBottom="5dp"
                     android:layout_alignParentEnd="true" />
 

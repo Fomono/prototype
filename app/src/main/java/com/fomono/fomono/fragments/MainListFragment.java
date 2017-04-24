@@ -93,7 +93,7 @@ public abstract class MainListFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         rvList.setHasFixedSize(true);
         rvList.setLayoutManager(layoutManager);
-        rvList.addItemDecoration(new SpacesItemDecoration(1, getResources().getDimensionPixelSize(R.dimen.event_list_main_rel_padding), true));
+        rvList.addItemDecoration(new SpacesItemDecoration(1, getResources().getDimensionPixelSize(R.dimen.event_list_main_card_margin), true));
     //    rvList.addItemDecoration(new RecyclerItemDecorator.SimpleDividerItemDecoration(getActivity()));
     }
 
