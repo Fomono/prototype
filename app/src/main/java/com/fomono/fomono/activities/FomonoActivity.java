@@ -251,6 +251,15 @@ public class FomonoActivity extends AppCompatActivity implements BaseSortFragmen
         getMenuInflater().inflate(R.menu.menu_fomono, menu);
         MenuItem searchItem = menu.findItem(R.id.menuSearchId);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+//
+//        View searchPlate = searchView.findViewById(android.support.v7.appcompat.R.id.search_plate);
+//        searchPlate.setBackgroundColor(ContextCompat.getColor(this, R.color.colorWhite));
+
+//        int searchEditId = android.support.v7.appcompat.R.id.search_src_text;
+//        EditText et = (EditText) searchView.findViewById(searchEditId);
+//        et.setHintTextColor(ContextCompat.getColor(this, R.color.hintColor));
+
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
