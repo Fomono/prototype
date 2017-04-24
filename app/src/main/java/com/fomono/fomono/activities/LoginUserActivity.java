@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,7 +50,7 @@ import java.util.List;
 
 public class LoginUserActivity extends AppCompatActivity {
     Button btnFB;
-    Button btnFomono;
+    ImageView ivLoginFomono;
     TextView btnSignup;
     Profile mFbProfile;
     ParseUser parseUser;
@@ -72,7 +73,7 @@ public class LoginUserActivity extends AppCompatActivity {
         uService = UserService.getInstance();
 
         btnFB = (Button) findViewById(R.id.btnFB);
-        btnFomono = (Button) findViewById(R.id.btnFomono);
+        ivLoginFomono = (ImageView) findViewById(R.id.ivLoginFomono);
         btnSignup = (TextView) findViewById(R.id.btnSignup) ;
         mFbProfile = Profile.getCurrentProfile();
         etUserId = (EditText) findViewById(R.id.etUserId);
@@ -112,10 +113,11 @@ public class LoginUserActivity extends AppCompatActivity {
         });
 
         //Fomono Login
-        btnFomono.setOnClickListener(new View.OnClickListener() {
+        ivLoginFomono.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    loginWithFomono(etUserId.getText().toString(), etPassword.getText().toString() );
+                Intent i = new Intent(LoginUserActivity.this,SigninActivity.class);
+                startActivity(i);
             }
         });
 

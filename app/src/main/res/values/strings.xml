@@ -82,6 +82,7 @@
     <string name="profile_save">Save</string>
     <string name="profile_cancel">Cancel</string>
     <string name="menu_share">Share</string>
+    <string name="welcome">Welcome to Fomono</string>
 
 
     <string-array name="FilterEventSortArray">
