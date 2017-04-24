@@ -38,13 +38,14 @@ import static com.fomono.fomono.FomonoApplication.API_NAME_MOVIE_GENRE;
  */
 
 public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment {
-    FragmentMoviedbDetailBinding fragmentBinding;
+    public static final String MOVIE_OBJ="movie_obj";
+    public static final String YES="Yes";
+    public static final String NO="No";
 
+    FragmentMoviedbDetailBinding fragmentBinding;
     Movie movie;
     ImageButton ibFavorite;
     FavoritesUtil favsUtil;
-    String movieKey;
-    String movieDBURL = "https://www.themoviedb.org/movie?language=en";
 
     public interface FomonoEventUpdateListener {
         void onFomonoEventUpdated();
@@ -55,7 +56,7 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        movie = getArguments().getParcelable("movie_obj");
+        movie = getArguments().getParcelable(MOVIE_OBJ);
         favsUtil = FavoritesUtil.getInstance();
 
     }
@@ -63,7 +64,7 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
     public static FomonoDetailMoviedbFragment newInstance(Movie movie) {
         FomonoDetailMoviedbFragment fomonoDetailMoviedbFragment = new FomonoDetailMoviedbFragment();
         Bundle args = new Bundle();
-        args.putParcelable("movie_obj", movie);
+        args.putParcelable(MOVIE_OBJ, movie);
         fomonoDetailMoviedbFragment.setArguments(args);
         return fomonoDetailMoviedbFragment;
     }
@@ -86,16 +87,31 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
 
         fragmentBinding.rbRating.setRating
                 (Double.valueOf(movie.getVoteAverage()/2).floatValue());
-
-        fragmentBinding.tvCalendar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addToCalendar();
-            }
-        });
-
         fragmentBinding.tvGenres.setText(getGenres());
 
+
+        //setListeners
+        setAddToCalendarListener();
+        setFavoriteIconListener();
+
+
+        setAdultValue();
+
+        return fragmentBinding.getRoot();
+
+    }
+
+    private void setAdultValue() {
+
+        if(movie.isAdult()){
+            fragmentBinding.tvAdult.setText(YES);
+        }else{
+            fragmentBinding.tvAdult.setText(NO);
+        }
+    }
+
+
+    private void setFavoriteIconListener() {
 
         ibFavorite = fragmentBinding.ivFavoriteIcon;
         favsUtil.isFavorited(movie, isFavorited -> {
@@ -104,35 +120,27 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
             }
         });
 
-        ibFavorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                favsUtil.isFavorited(movie, isFavorited -> {
-                    if (isFavorited) {
-                        ibFavorite.setImageResource(R.drawable.ic_favorite_grey);
-                        favsUtil.removeFromFavorites(movie);
-                    } else {
-                        ibFavorite.setImageResource(R.drawable.ic_favorite);
-                        favsUtil.addToFavorites(movie);
-                    }
-                });
-
-                if (getActivity() instanceof FomonoEventUpdateListener) {
-                    ((FomonoEventUpdateListener) getActivity()).onFomonoEventUpdated();
+        ibFavorite.setOnClickListener(view1 -> {
+            favsUtil.isFavorited(movie, isFavorited -> {
+                if (isFavorited) {
+                    ibFavorite.setImageResource(R.drawable.ic_favorite_grey);
+                    favsUtil.removeFromFavorites(movie);
+                } else {
+                    ibFavorite.setImageResource(R.drawable.ic_favorite);
+                    favsUtil.addToFavorites(movie);
                 }
+            });
+
+            if (getActivity() instanceof FomonoEventUpdateListener) {
+                ((FomonoEventUpdateListener) getActivity()).onFomonoEventUpdated();
             }
         });
-
-
-        if(movie.isAdult()){
-            fragmentBinding.tvAdult.setText("Yes");
-        }else{
-            fragmentBinding.tvAdult.setText("No");
-        }
-
-        return fragmentBinding.getRoot();
-
     }
+
+    private void setAddToCalendarListener() {
+        fragmentBinding.tvCalendar.setOnClickListener(v -> addToCalendar());
+    }
+
 
 
     private String getGenres() {
