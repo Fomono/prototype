@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.fomono.fomono.R;
@@ -14,7 +14,7 @@ import com.parse.ParseUser;
 
 
 public class SigninActivity extends AppCompatActivity {
-    Button btnSignin;
+    ImageView ivSignin;
     EditText etUserId;
     EditText etPassword;
 
@@ -22,13 +22,13 @@ public class SigninActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
-        btnSignin = (Button)  findViewById(R.id.btnSignin);
+        ivSignin = (ImageView)  findViewById(R.id.ivSignin);
         etUserId = (EditText) findViewById(R.id.etUserId);
         etPassword = (EditText) findViewById(R.id.etPassword);
 
 
         //Fomono Login
-        btnSignin.setOnClickListener(new View.OnClickListener() {
+        ivSignin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loginWithFomono(etUserId.getText().toString(), etPassword.getText().toString() );

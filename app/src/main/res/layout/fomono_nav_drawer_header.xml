@@ -25,7 +25,7 @@
             app:riv_mutate_background="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:src="@drawable/ic_android"
+            android:src="@drawable/ic_profile_guest"
             android:id="@+id/fomonoNavImageId"
             android:layout_alignParentStart="true">
 
