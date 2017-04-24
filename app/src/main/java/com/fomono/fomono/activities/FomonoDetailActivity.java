@@ -33,7 +33,6 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import com.parse.ParseUser;
-import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -172,7 +171,7 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
                     fomonoDetailYelpFragment.enableMapLocation();
                 }
                 if (requestCode == FomonoApplication.PERM_LOC_MOVIE_REQ_CODE && fomonoDetailMoviedbFragment != null) {
-                    //TODO
+                    //nothing to do here
                 }
             }
 
@@ -188,6 +187,13 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
                 }
                 if (requestCode == FomonoApplication.PERM_CAL_MOVIE_REQ_CODE && fomonoDetailMoviedbFragment != null) {
                     fomonoDetailMoviedbFragment.addToCalendar();
+                }
+            }
+        } else if (requestCode == FomonoApplication.PERM_PHO_BUS_REQ_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //launch phone
+                if (fomonoDetailYelpFragment != null) {
+                    fomonoDetailYelpFragment.launchPhone();
                 }
             }
         }
