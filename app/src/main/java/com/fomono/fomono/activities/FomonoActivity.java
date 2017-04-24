@@ -282,16 +282,6 @@ public class FomonoActivity extends AppCompatActivity implements BaseSortFragmen
             }
         });
 
-        // Get the search close button image view
-//        ImageView closeButton = (ImageView) searchView.findViewById(R.id.search_close_btn);
-//        // Set on click listener
-//        closeButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
-
         return super.onCreateOptionsMenu(menu);
     }
 

@@ -2,59 +2,91 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:context="com.fomono.fomono.fragments.FilterFragment">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/tvSortTitle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/SortTextId"
-            android:textSize="15sp"
-            android:textColor="@color/colorWhite"
             android:text="@string/FilterSortText"
-            android:layout_alignParentTop="true"/>
-
+            android:textSize="20sp"
+            android:background="@color/colorWhite"
+            android:fontFamily="sans-serif-medium"
+            android:paddingTop="20dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="10dp" />
 
         <RadioGroup
             android:id="@+id/SortRadioGrp"
-            android:layout_below="@id/SortTextId"
-            android:layout_width="wrap_content"
-            android:padding="3dp"
-            android:layout_height="wrap_content" >
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorWhite"
-                android:layout_weight="1"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingStart="40dp"
+                android:paddingEnd="40dp"
+                android:background="@drawable/sort_radio_selector"
+                android:button="@android:color/transparent"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:textColor="@color/colorBlack"
+                android:fontFamily="sans-serif-light"
+                android:textSize="20sp"
+                android:gravity="left"
                 android:textAllCaps="false"
-                android:text="top"
+                tools:text="top"
                 android:id="@+id/SortButton1Id"
                 />
 
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorWhite"
-                android:layout_weight="1"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingStart="40dp"
+                android:paddingEnd="40dp"
+                android:background="@drawable/sort_radio_selector"
+                android:button="@android:color/transparent"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:textColor="@color/colorBlack"
+                android:fontFamily="sans-serif-light"
+                android:textSize="20sp"
+                android:gravity="left"
                 android:textAllCaps="false"
-                android:text="best_match"
+                tools:text="best_match"
                 android:id="@+id/SortButton2Id"
                 />
 
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorWhite"
-                android:layout_weight="1"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingStart="40dp"
+                android:paddingEnd="40dp"
+                android:background="@drawable/sort_radio_selector"
+                android:button="@android:color/transparent"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:textColor="@color/colorBlack"
+                android:fontFamily="sans-serif-light"
+                android:textSize="20sp"
+                android:gravity="left"
                 android:textAllCaps="false"
-                android:text="best_match"
+                tools:text="something"
                 android:id="@+id/SortButton3Id"
                 />
 
         </RadioGroup>
 
-    </RelativeLayout>
+        <View android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:background="@color/colorWhite" />
+
+    </LinearLayout>
 </layout>

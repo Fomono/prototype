@@ -124,7 +124,7 @@ public class FiltersAdapter extends RecyclerView.Adapter<FiltersAdapter.ViewHold
 
     private void setToggleOn(ToggleButton tb) {
         tb.setTextColor(ContextCompat.getColor(context, R.color.colorWhite));
-        tb.setBackgroundColor(ContextCompat.getColor(context, R.color.colorFomono));
+        tb.setBackgroundColor(ContextCompat.getColor(context, R.color.colorAccent));
         tb.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
     }
 
