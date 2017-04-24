@@ -37,7 +37,7 @@ import retrofit2.Response;
 public class EventFragment extends MainListFragment {
   //  private EventBriteClient client;
     private final static String TAG = "Event fragment";
-    private int eventPage = 0;
+    private int eventPage = 1;
     private String sortParameter = null;
     private String searchParameter = null;
     private int buttonSelected = 1;
@@ -65,15 +65,14 @@ public class EventFragment extends MainListFragment {
     public void searchEventList(String query) {
         clear();
         searchParameter = query;
-        eventPage = 0;
+        eventPage = 1;
         populateEvents(eventPage++, sortParameter, searchParameter);
     }
 
     public void refreshEventList(String sortParam) {
         sortParameter = sortParam;
         clear();
-
-        eventPage = 0;
+        eventPage = 1;
         populateEvents(eventPage++, sortParameter, searchParameter);
     }
 
@@ -124,7 +123,6 @@ public class EventFragment extends MainListFragment {
         }
 
         if((sortParam != null) && !(sortParam.equals(""))) {
-            if(sortParam.equals("best_match")) {sortParam = "best";}
             data.put("sort_by", sortParam);
         }
 
@@ -175,7 +173,7 @@ public class EventFragment extends MainListFragment {
         }
         clear();
         searchParameter = null;
-        eventPage = 0;
+        eventPage = 1;
         populateEvents(eventPage++, sortParameter, searchParameter);
     }
 

@@ -1,19 +1,10 @@
 package com.fomono.fomono.fragments;
 
-import android.content.Context;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.content.ContextCompat;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.RadioButton;
-import android.widget.Spinner;
 
 import com.fomono.fomono.R;
 
@@ -41,7 +32,6 @@ public class EventSortFragment extends BaseSortFragment {
                              Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-
         sortButton1.setText(getResources().getString(R.string.event_sort_val_one));
         sortButton2.setText(getResources().getString(R.string.event_sort_val_two));
         sortButton3.setText(getResources().getString(R.string.event_sort_val_three));
@@ -49,6 +39,10 @@ public class EventSortFragment extends BaseSortFragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             prevSortingParamId = bundle.getInt("previous_pos", 0);
+        }
+        if (prevSortingParamId <= 0) {
+            //default to "best"
+            prevSortingParamId = R.id.SortButton1Id;
         }
 
         if(prevSortingParamId != -1) {
@@ -58,11 +52,23 @@ public class EventSortFragment extends BaseSortFragment {
 
         sortRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             if(checkedId != prevSortingParamId) {
-                RadioButton r = (RadioButton) view.findViewById(checkedId);
-                mListener.onFinishSortDialog(r.getText().toString(), checkedId);
-                dismiss();
+                String sortString = getSortString(checkedId);
+                mListener.onFinishSortDialog(sortString, checkedId);
             }
         });
         return view;
+    }
+
+    private String getSortString(int buttonId) {
+        switch (buttonId) {
+            case R.id.SortButton1Id:
+                return "best";
+            case R.id.SortButton2Id:
+                return "-date";     // the "-" in front is because we want descending order of date for most recent first
+            case R.id.SortButton3Id:
+                return "distance";
+            default:
+                return "";
+        }
     }
 }

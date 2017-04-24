@@ -1,26 +1,10 @@
 package com.fomono.fomono.fragments;
 
-import android.content.Context;
-import android.databinding.DataBindingUtil;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
-import android.widget.Spinner;
 
 import com.fomono.fomono.R;
 
@@ -50,6 +34,10 @@ public class EatsSortFragment extends BaseSortFragment {
         if (bundle != null) {
             prevSortingParamId = bundle.getInt("previous_pos", 0);
         }
+        if (prevSortingParamId <= 0) {
+            //default to "best_match"
+            prevSortingParamId = R.id.SortButton1Id;
+        }
 
         if(prevSortingParamId != -1) {
             RadioButton prevChecked = (RadioButton) view.findViewById(prevSortingParamId);
@@ -58,12 +46,24 @@ public class EatsSortFragment extends BaseSortFragment {
 
         sortRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             if(checkedId != prevSortingParamId) {
-                RadioButton r = (RadioButton) view.findViewById(checkedId);
-                mListener.onFinishSortDialog(r.getText().toString(), checkedId);
-                dismiss();
+                String sortString = getSortString(checkedId);
+                mListener.onFinishSortDialog(sortString, checkedId);
             }
         });
 
         return view;
+    }
+
+    private String getSortString(int buttonId) {
+        switch (buttonId) {
+            case R.id.SortButton1Id:
+                return "best_match";
+            case R.id.SortButton2Id:
+                return "distance";
+            case R.id.SortButton3Id:
+                return "review_count";
+            default:
+                return "";
+        }
     }
 }

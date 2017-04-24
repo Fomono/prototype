@@ -43,7 +43,7 @@
     <string name="drawer_menu_timeline">Timeline</string>
     <string name="menu_sort">Sort</string>
     <string name="menu_filter">Filter</string>
-    <string name="FilterSortText">Sort by</string>
+    <string name="FilterSortText">Sort by:</string>
     <string name="MovieSortFilterText">Pick a preference:</string>
     <string name="FilterEventSortButtonText">Search</string>
     <string name="FilterEatsSortButtonText">Sort</string>
@@ -51,7 +51,7 @@
     <string name="drawer_menu_signout">Sign Out</string>
     <string name="drawer_menu_signin">Sign In</string>
     <string name="guest_name">Guest User</string>
-    <string name="search">menu_search</string>
+    <string name="search">Search</string>
 
     <string name="login_username">Username</string>
     <string name="login_password">Password</string>
@@ -67,17 +67,17 @@
     <string name="signup_signup">Sign Up</string>
 
 
-    <string name="event_sort_val_one">best_match</string>
-    <string name="event_sort_val_two">date</string>
-    <string name="event_sort_val_three">distance</string>
+    <string name="event_sort_val_one">Best Match</string>
+    <string name="event_sort_val_two">Date</string>
+    <string name="event_sort_val_three">Distance</string>
 
-    <string name="eats_sort_val_one">best_match</string>
-    <string name="eats_sort_val_two">distance</string>
-    <string name="eats_sort_val_three">rating_count</string>
+    <string name="eats_sort_val_one">Best Match</string>
+    <string name="eats_sort_val_two">Distance</string>
+    <string name="eats_sort_val_three">Rating Count</string>
 
-    <string name="movie_sort_val_one">playing_now</string>
-    <string name="movie_sort_val_two">popular</string>
-    <string name="movie_sort_val_three">top_rated</string>
+    <string name="movie_sort_val_one">Now Playing</string>
+    <string name="movie_sort_val_two">Popular</string>
+    <string name="movie_sort_val_three">Top Rated</string>
 
     <string name="profile_save">Save</string>
     <string name="profile_cancel">Cancel</string>
