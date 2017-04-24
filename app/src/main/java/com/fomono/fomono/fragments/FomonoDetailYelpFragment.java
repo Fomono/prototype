@@ -201,17 +201,20 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
             int checkPermission = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE);
             if (checkPermission != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.CALL_PHONE},ONE);
-            }else {
-                Intent callIntent = new Intent(Intent.ACTION_CALL);
-                if(business.getPhone()!=null) {
-                    callIntent.setData(Uri.parse("tel:" + business.getPhone()));
-                }
-                startActivity(callIntent);
+                        new String[]{Manifest.permission.CALL_PHONE}, FomonoApplication.PERM_PHO_BUS_REQ_CODE);
+            } else {
+                launchPhone();
             }
         });
     }
 
+    public void launchPhone() {
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+        if(business.getPhone()!=null) {
+            callIntent.setData(Uri.parse("tel:" + business.getPhone()));
+        }
+        startActivity(callIntent);
+    }
 
     private static void setImageUrl(ImageView view, String imageUrl, int screenWidthDetail) {
         Picasso.with(view.getContext()).load(imageUrl).transform(new RoundedTransformation(6, 3)).
