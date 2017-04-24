@@ -11,6 +11,7 @@
     <color name="colorDarkGrey">#757575</color>
     <color name="colorGreen">#228b22</color>
     <color name="colorTransparent">#00555555</color>
+    <color name="placeholder_bg">#363A3E</color>
 
     <color name="gplus_color_1">#3e802f</color>
     <color name="gplus_color_2">#f4b400</color>

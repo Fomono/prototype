@@ -10,14 +10,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
 import com.fomono.fomono.fragments.FomonoDetailEventbriteFragment;
@@ -34,6 +33,8 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import com.parse.ParseUser;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -52,6 +53,7 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
     FomonoEvent fEvent;
     int position;
     boolean updated;
+    int screenWidth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,7 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        screenWidth = calculateScreenWidth();
 
         fEvent = i.getParcelableExtra("FOM_OBJ");
         position = i.getIntExtra("position", -1);
@@ -106,29 +109,50 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
         }
     }
 
+    private int calculateScreenWidth() {
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        int pxWidth = displayMetrics.widthPixels;
+        return (int) (pxWidth / displayMetrics.density);
+    }
 
     private void loadImage(FomonoEvent fEvent) {
+        int height = (int) (getResources().getDimension(R.dimen.detail_top_bar_height) / getResources().getDisplayMetrics().density);
         final ImageView imageView = (ImageView) findViewById(R.id.backdrop);
         if (fEvent instanceof Event) {
             Event e = (Event) fEvent;
             if (e.getLogo() != null) {
-                Glide.with(this).load(e.getLogo().getUrl())
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                Picasso.with(this).load(e.getLogo().getUrl())
+                        .placeholder(R.drawable.ic_image_placeholder)
+                        .resize(screenWidth, height)
                         .centerCrop()
                         .into(imageView);
+//                Glide.with(this).load(e.getLogo().getUrl())
+//                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                        .centerCrop()
+//                        .into(imageView);
             }
         } else if (fEvent instanceof Movie) {
             Movie m = (Movie) fEvent;
-            Glide.with(this).load(m.getBackdropPath())
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+            Picasso.with(this).load(m.getBackdropPath())
+                    .placeholder(R.drawable.ic_image_placeholder)
+                    .resize(screenWidth, height)
                     .centerCrop()
                     .into(imageView);
+//            Glide.with(this).load(m.getBackdropPath())
+//                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                    .centerCrop()
+//                    .into(imageView);
         } else if (fEvent instanceof Business) {
             Business b = (Business) fEvent;
-            Glide.with(this).load(b.getImageUrl())
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+            Picasso.with(this).load(b.getImageUrl())
+                    .placeholder(R.drawable.ic_image_placeholder)
+                    .resize(screenWidth, height)
                     .centerCrop()
                     .into(imageView);
+//            Glide.with(this).load(b.getImageUrl())
+//                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                    .centerCrop()
+//                    .into(imageView);
         }
     }
 
@@ -184,7 +208,7 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
         switch (id) {
             case android.R.id.home:
                 setFinishData();
-                finish();
+                finishAfterTransition();
                 break;
             case R.id.menuShare:
                 callShareIntent();

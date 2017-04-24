@@ -215,7 +215,7 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
 
     private static void setImageUrl(ImageView view, String imageUrl, int screenWidthDetail) {
         Picasso.with(view.getContext()).load(imageUrl).transform(new RoundedTransformation(6, 3)).
-                placeholder(R.drawable.ic_fomono_big).
+                placeholder(R.drawable.ic_image_placeholder).
                 resize(screenWidthDetail, ZERO).into(view);
 
     }

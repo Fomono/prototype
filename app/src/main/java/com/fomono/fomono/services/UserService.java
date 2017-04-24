@@ -165,7 +165,7 @@ public class UserService {
                 user.setEmail(pUser.get("email").toString());
             }
             if (pUser.get("phone") != null && pUser.get("phone")!= "") {
-                user.setPhonenNumber(pUser.get("phone").toString());
+                user.setPhoneNumber(pUser.get("phone").toString());
             }
             if (pUser.get("gender") != null) {
                 user.setGender(pUser.get("gender").toString());

@@ -93,17 +93,21 @@ public class UserProfileFragment extends android.support.v4.app.Fragment impleme
 
 
     private static void setImageUrl(ImageView view, String imageUrl,int screenSize) {
-        Picasso.with(view.getContext()).load(imageUrl).transform(new RoundedTransformation(10, 3)).
-                placeholder(R.drawable.ic_fomono_big).
-                resize(screenSize, 0).into(view);
+        Picasso.with(view.getContext()).load(imageUrl)
+                .transform(new RoundedTransformation(10, 3))
+                .placeholder(R.drawable.default_user_image)
+                .resize(screenSize, 0)
+                .into(view);
     }
 
     private static void setImageUrlFile(ImageView view, Uri imageUrl,int screenSize) {
         screenSize = screenSize+200;
        // imageUrl = (new File(imageUrl)).getAbsolutePath();
-        Picasso.with(view.getContext()).load(imageUrl).transform(new RoundedTransformation(10, 3)).
-                placeholder(R.drawable.ic_fomono_big).
-                resize(screenSize, 0).into(view);
+        Picasso.with(view.getContext()).load(imageUrl)
+                .transform(new RoundedTransformation(10, 3))
+                .placeholder(R.drawable.default_user_image)
+                .resize(screenSize, 0)
+                .into(view);
     }
 
     @Override

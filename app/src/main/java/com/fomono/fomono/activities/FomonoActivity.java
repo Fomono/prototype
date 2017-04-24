@@ -152,7 +152,11 @@ public class FomonoActivity extends AppCompatActivity implements BaseSortFragmen
         }
         if (user.get("profilePicture") != null) {
             String fileUrl = user.get("profilePicture").toString();
+//            Picasso.with(this).load(fileUrl)
+//                    .placeholder(R.drawable.default_user_image)
+//                    .into(navHeaderProfileImage);
             Glide.with(this).load(fileUrl)
+//                    .placeholder(R.drawable.default_user_image)
                     .into(navHeaderProfileImage);
         }
     }
