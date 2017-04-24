@@ -32,14 +32,5 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_gravity="bottom|left"
-            android:id="@+id/SearchParamDisplayTextId"
-            android:textColor="@color/colorWhite"
-            android:background="@color/colorFomono"
-            android:textSize="@dimen/SearchPrefDisplayTextSize"
-            android:layout_height="wrap_content" />
-
     </RelativeLayout>
 </layout>

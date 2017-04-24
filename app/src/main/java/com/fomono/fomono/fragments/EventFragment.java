@@ -47,8 +47,6 @@ public class EventFragment extends MainListFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        searchParamDispText.setVisibility(View.GONE);
-
         if(internetAlertDialogue.checkForInternet()) {
             populateEvents(eventPage++, sortParameter, searchParameter);
         }
@@ -62,13 +60,6 @@ public class EventFragment extends MainListFragment {
             }
         });
 
-        searchParamDispText.setOnClickListener(v -> {
-            clear();
-            searchParameter = null;
-            populateEvents(eventPage++, sortParameter, searchParameter);
-            searchParamDispText.setVisibility(View.GONE);
-        });
-
         return view;
     }
     public void searchEventList(String query) {
@@ -76,7 +67,6 @@ public class EventFragment extends MainListFragment {
         searchParameter = query;
         eventPage = 0;
         populateEvents(eventPage++, sortParameter, searchParameter);
-
     }
 
     public void refreshEventList(String sortParam) {
@@ -90,13 +80,6 @@ public class EventFragment extends MainListFragment {
     public void populateEvents(int page, String sortParam, String searchQuery) {
 
         if(internetAlertDialogue.checkForInternet()) {
-            if (searchQuery != null) {
-                searchParamDispText.setVisibility(View.VISIBLE);
-                searchParamDispText.setText("" + searchQuery + " X");
-            } else {
-                searchParamDispText.setVisibility(View.GONE);
-            }
-
             smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
             try {
                 //get user filters for events
@@ -162,6 +145,10 @@ public class EventFragment extends MainListFragment {
         call.enqueue(new Callback<EventBriteResponse>() {
             @Override
             public void onResponse(Call<EventBriteResponse> call, Response<EventBriteResponse> response) {
+                if (response == null || response.body() == null) {
+                    Log.d(TAG, "Events response body is empty!");
+                    return;
+                }
                 ArrayList<Event> events = response.body().getEvents();
                 if (events == null || events.isEmpty()) {
                     Log.d(TAG, "No events fetched!!");
@@ -179,6 +166,17 @@ public class EventFragment extends MainListFragment {
                 smoothProgressBar.setVisibility(ProgressBar.GONE);
             }
         });
+    }
+
+    @Override
+    public void clearSearch() {
+        if (searchParameter == null) {
+            return;
+        }
+        clear();
+        searchParameter = null;
+        eventPage = 0;
+        populateEvents(eventPage++, sortParameter, searchParameter);
     }
 
     @Override

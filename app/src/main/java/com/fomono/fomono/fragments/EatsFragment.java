@@ -44,8 +44,6 @@ public class EatsFragment extends MainListFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        searchParamDispText.setVisibility(View.GONE);
-
         if(internetAlertDialogue.checkForInternet()) {
             int offset = fomonoEvents.size();
             populateEats(offset, null, searchParameter);
@@ -60,12 +58,6 @@ public class EatsFragment extends MainListFragment {
             }
         });
 
-        searchParamDispText.setOnClickListener(v -> {
-            clear();
-            searchParameter = null;
-            populateEats(0, null, searchParameter);
-            searchParamDispText.setVisibility(View.GONE);
-        });
         return view;
     }
 
@@ -84,13 +76,6 @@ public class EatsFragment extends MainListFragment {
     public void populateEats(int offset, String sortParameter, String searchQuery) {
 
         if(internetAlertDialogue.checkForInternet()) {
-            if (searchQuery != null) {
-                searchParamDispText.setVisibility(View.VISIBLE);
-                searchParamDispText.setText("" + searchQuery + " X");
-            } else {
-                searchParamDispText.setVisibility(View.GONE);
-            }
-
             smoothProgressBar.setVisibility(ProgressBar.VISIBLE);
             try {
                 //get user filters for yelp
@@ -177,6 +162,16 @@ public class EatsFragment extends MainListFragment {
                 smoothProgressBar.setVisibility(ProgressBar.GONE);
             }
         });
+    }
+
+    @Override
+    public void clearSearch() {
+        if (searchParameter == null) {
+            return;
+        }
+        clear();
+        searchParameter = null;
+        populateEats(0, null, searchParameter);
     }
 
     @Override

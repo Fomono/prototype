@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.fomono.fomono.R;
 import com.fomono.fomono.adapters.FomonoAdapter;
@@ -48,7 +47,6 @@ public abstract class MainListFragment extends Fragment {
     public EventBriteClientRetrofit eventBriteClientRetrofit;
     public YelpClientRetrofit yelpClientRetrofit;
     MovieDBClientRetrofit movieDBClientRetrofit;
-    public TextView searchParamDispText;
     InternetAlertDialogue internetAlertDialogue;
 
 
@@ -103,7 +101,6 @@ public abstract class MainListFragment extends Fragment {
         rvList = binding.fomonoMainFragRvId;
         progressBar = binding.fomonoMainFragProgressId;
         smoothProgressBar = binding.fomonoMainFragSmoothBarId;
-        searchParamDispText = binding.SearchParamDisplayTextId;
     }
 
     public void clear() {
@@ -113,6 +110,8 @@ public abstract class MainListFragment extends Fragment {
     }
 
     public abstract String getFragmentName();
+
+    public abstract void clearSearch();
 
     public void updateFomonoEvent(FomonoEvent fEvent, int position) {
         if (position < 0) {
