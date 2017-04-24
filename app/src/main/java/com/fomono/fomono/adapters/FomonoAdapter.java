@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.net.Uri;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -24,7 +24,6 @@ import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
 import com.fomono.fomono.activities.FomonoActivity;
 import com.fomono.fomono.activities.FomonoDetailActivity;
-import com.fomono.fomono.activities.FomonoTrailerActivity;
 import com.fomono.fomono.databinding.EventListItemBinding;
 import com.fomono.fomono.models.FomonoEvent;
 import com.fomono.fomono.models.eats.Business;
@@ -38,8 +37,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
-import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 /**
  * Created by Saranu on 4/6/17.
@@ -412,7 +409,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
         TextView eventType;
         ImageButton eventUrl;
         ImageButton eventFavorited;
-        MaterialRatingBar eventRatingBar;
+        RatingBar eventRatingBar;
         TextView tvRatingCount;
 
         public ViewHolderEventsItem(EventListItemBinding binding) {
