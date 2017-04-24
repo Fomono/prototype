@@ -92,14 +92,23 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true" />
 
-                <me.zhanghai.android.materialratingbar.MaterialRatingBar
+
+                <RatingBar
+                    android:id="@+id/EventRatingBarId"
+                    style="?android:attr/ratingBarStyleIndicator"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/EventRatingBarId"
                     android:layout_below="@id/EventNameId"
+                    android:numStars="5"
+                    android:progressTint="@color/colorFomono"
+                    android:scaleX="0.4"
+                    android:scaleY="0.4"
+                    android:transformPivotX="0dp"
+                    android:transformPivotY="0dp"
                     android:layout_marginStart="@dimen/event_list_main_rel_padding"
                     android:layout_marginBottom="5dp"
-                    style="@style/Widget.MaterialRatingBar.RatingBar.Small" />
+
+                    />
 
                 <TextView
                     android:id="@+id/tvRatingCount"

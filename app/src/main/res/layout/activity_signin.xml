@@ -35,7 +35,7 @@
         android:id="@+id/ivSignin"
         android:layout_width="70dp"
         android:layout_height="70dp"
+        android:layout_marginLeft="230dp"
         android:layout_below="@id/etPassword"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_login_circle" />
+        android:src="@drawable/ic_login_arrows" />
 </RelativeLayout>
