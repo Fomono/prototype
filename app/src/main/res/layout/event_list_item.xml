@@ -149,12 +149,12 @@
 
                     <ImageButton
                         android:id="@+id/ImageLogoButtonId"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/ic_link"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:background="@drawable/ic_share"
+                        android:backgroundTint="@color/colorFomono"
                         android:layout_centerVertical="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true" />
+                        android:layout_alignParentEnd="true" />
 
                     <View
                         android:layout_width="@dimen/event_list_divider_param"
