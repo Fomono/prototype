@@ -157,9 +157,10 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
             if (event.getStart() != null) {
                 if (!TextUtils.isEmpty(event.getStart().getLocal())) {
                     String localDateTime = event.getStart().getLocal();
-                    holder.eventDateTime.setText(DateUtils.convertEventDateListItemDisplayFormat(localDateTime));
-
-                    DateViewSet = 1;
+                    if(DateUtils.convertEventDateListItemDisplayFormat(localDateTime) != null) {
+                        holder.eventDateTime.setText(DateUtils.convertEventDateListItemDisplayFormat(localDateTime));
+                        DateViewSet = 1;
+                    }
                 }
             }
             if (DateViewSet == 0) {

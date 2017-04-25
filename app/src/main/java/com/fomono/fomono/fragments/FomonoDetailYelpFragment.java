@@ -342,20 +342,24 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
                 String startDate = DateUtils.convertMilitarytoStandard(open.getStart());
                 String endDate = DateUtils.convertMilitarytoStandard(open.getEnd());
 
-                if (open.getDay() == ZERO) {
-                    hoursOpen += "Monday: " + startDate + " - " + endDate + "\n";
-                } else if (open.getDay() == 1) {
-                    hoursOpen += "Tuesday: " + startDate + " - " + endDate + "\n";
-                } else if (open.getDay() == 2) {
-                    hoursOpen += "Wednesday: " + startDate + " - " + endDate + "\n";
-                } else if (open.getDay() == 3) {
-                    hoursOpen += "Thursday: " + startDate + " - " + endDate + "\n";
-                } else if (open.getDay() == 4) {
-                    hoursOpen += "Friday: " + startDate + " - " + endDate + "\n";
-                } else if (open.getDay() == 5) {
-                    hoursOpen += "Saturday: " + startDate + " - " + endDate + "\n";
-                } else if (open.getDay() == 6) {
-                    hoursOpen += "Sunday: " + startDate + " - " + endDate + "\n";
+                if ((startDate != null) && (endDate != null)) {
+                    if (open.getDay() == ZERO) {
+                        hoursOpen += "Monday:        " + startDate + " - " + endDate + "\n";
+                    } else if (open.getDay() == 1) {
+                        hoursOpen += "Tuesday:       " + startDate + " - " + endDate + "\n";
+                    } else if (open.getDay() == 2) {
+                        hoursOpen += "Wednesday: " + startDate + " - " + endDate + "\n";
+                    } else if (open.getDay() == 3) {
+                        hoursOpen += "Thursday:     " + startDate + " - " + endDate + "\n";
+                    } else if (open.getDay() == 4) {
+                        hoursOpen += "Friday:           " + startDate + " - " + endDate + "\n";
+                    } else if (open.getDay() == 5) {
+                        hoursOpen += "Saturday:      " + startDate + " - " + endDate + "\n";
+                    } else if (open.getDay() == 6) {
+                        hoursOpen += "Sunday:         " + startDate + " - " + endDate + "\n";
+                    }
+                } else {
+                    hoursOpen = UNAVAILABLE;
                 }
             }
         } else{
