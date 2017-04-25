@@ -139,6 +139,8 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
 
     private void setAddToCalendarListener() {
         fragmentBinding.tvCalendar.setOnClickListener(v -> addToCalendar());
+        fragmentBinding.ivCalendar.setOnClickListener(v -> addToCalendar());
+
     }
 
 

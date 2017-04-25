@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -58,6 +59,7 @@ public class LoginUserActivity extends AppCompatActivity {
     EditText etUserId;
     EditText etPassword;
     Button btnGuestLogin;
+    TextView tvWelcome;
 
     String name = null, email = null;
 
@@ -79,6 +81,12 @@ public class LoginUserActivity extends AppCompatActivity {
         etUserId = (EditText) findViewById(R.id.etUserId);
         etPassword = (EditText) findViewById(R.id.etPassword);
         btnGuestLogin =(Button) findViewById(R.id.btnGuestLogin);
+        tvWelcome= (TextView) findViewById(R.id.tvWelcome);
+
+
+        Typeface typeface=Typeface.createFromAsset(getAssets(), "fonts/Gothic.ttf");
+        tvWelcome.setTypeface(typeface);
+
 
         //  Use this to output your Facebook Key Hash to Logs
         try {
@@ -180,8 +188,8 @@ public class LoginUserActivity extends AppCompatActivity {
                     @Override
                     public void done(ParseException e) {
                         if(e == null) {
-                                getUserDetailsFromFB();
-                                Log.d("Login", "Current User logged in with Facebook!");
+                            getUserDetailsFromFB();
+                            Log.d("Login", "Current User logged in with Facebook!");
                         }else{
                             Toast.makeText(LoginUserActivity.this,"Linking to FB Failed" +e.getMessage(), Toast.LENGTH_LONG).show();
 

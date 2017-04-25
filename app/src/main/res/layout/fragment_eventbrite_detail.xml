@@ -140,6 +140,7 @@
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:layout_below="@id/spView01"
+            android:layout_marginRight="2dp"
             android:layout_toRightOf="@id/tvClockEventDate"
             app:srcCompat="@drawable/ic_date_range" />
 

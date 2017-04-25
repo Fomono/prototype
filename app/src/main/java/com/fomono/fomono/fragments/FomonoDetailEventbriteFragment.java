@@ -153,6 +153,8 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
 
     private void setAddToCalendarListener() {
         fragmentBinding.tvCalendar.setOnClickListener(v -> addToCalendar());
+        fragmentBinding.ivCalendar.setOnClickListener(v -> addToCalendar());
+
     }
 
     private void initializeMap(View view, Bundle savedInstanceState) {

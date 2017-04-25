@@ -13,9 +13,10 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
-        android:text="@string/welcome"
+        android:fontFamily=""
+        android:text="@string/app_name"
         android:textColor="@color/colorFomono"
-        android:textSize="30sp"
+        android:textSize="50sp"
         android:textStyle="bold" />
 
     <Button
@@ -24,8 +25,8 @@
         android:layout_height="50dp"
         android:layout_below="@+id/tvWelcome"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/facebook_login"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/fb_login"
         android:foreground="?android:attr/selectableItemBackground"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
