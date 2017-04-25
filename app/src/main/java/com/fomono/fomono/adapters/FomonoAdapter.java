@@ -26,6 +26,7 @@ import com.fomono.fomono.models.FomonoEvent;
 import com.fomono.fomono.models.eats.Business;
 import com.fomono.fomono.models.events.events.Event;
 import com.fomono.fomono.models.movies.Movie;
+import com.fomono.fomono.utils.AnimationUtil;
 import com.fomono.fomono.utils.ConfigUtil;
 import com.fomono.fomono.utils.DateUtils;
 import com.fomono.fomono.utils.FavoritesUtil;
@@ -167,6 +168,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
             }
 
             holder.eventUrl.setOnClickListener(v -> {
+                AnimationUtil.playInteractionAnimation(holder.eventUrl);
                 callShareIntent(event);
             });
 
@@ -273,6 +275,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
             }
 
             holder.eventUrl.setOnClickListener(v -> {
+                AnimationUtil.playInteractionAnimation(holder.eventUrl);
                 callShareIntent(business);
             });
         }
@@ -342,6 +345,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
             setMovieCategories(movie, holder);
 
             holder.eventUrl.setOnClickListener(v -> {
+                AnimationUtil.playInteractionAnimation(holder.eventUrl);
                 callShareIntent(movie);
             });
         }
@@ -382,6 +386,7 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
 
         holder.eventFavorited.setOnClickListener(view -> {
             favsUtil.isFavorited(fEvent, isFavorited -> {
+                AnimationUtil.playInteractionAnimation(holder.eventFavorited);
                 if (isFavorited) {
                     holder.eventFavorited.setImageResource(R.drawable.ic_favorite_grey);
                     favsUtil.removeFromFavorites(fEvent);

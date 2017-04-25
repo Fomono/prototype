@@ -206,6 +206,15 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_detail, menu);
 
+//        MenuItem shareItem = menu.findItem(R.id.menuShare);
+//        ImageButton button = (ImageButton) MenuItemCompat.getActionView(shareItem);
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                AnimationUtil.playInteractionAnimation(view);
+//            }
+//        });
+
         return true;
     }
 
