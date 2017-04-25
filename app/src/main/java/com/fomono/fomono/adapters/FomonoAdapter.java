@@ -166,15 +166,9 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
                 holder.eventDateTime.setVisibility(View.GONE);
             }
 
-            if (event.getUrl() != null) {
-                holder.eventUrl.setBackgroundResource(R.drawable.ic_link);
-                holder.eventUrl.setOnClickListener(v -> {
-                    callShareIntent(event);
-                    });
-            } else {
-                holder.eventUrl.setBackgroundResource(R.drawable.ic_image_placeholder);
-             //   holder.eventUrl.setVisibility(View.GONE);
-            }
+            holder.eventUrl.setOnClickListener(v -> {
+                callShareIntent(event);
+            });
 
             holder.eventDistance.setVisibility(View.GONE);
             holder.eventType.setVisibility(View.GONE);
@@ -195,40 +189,39 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
 
     private void callShareIntent(FomonoEvent fEvent) {
 
-            Intent sharingIntent = null;
-            Event e = null;
-            Business b = null;
-            Movie m = null;
-            String subjectShare = "";
-            String bodyShare = "";
+        Intent sharingIntent = null;
+        Event e = null;
+        Business b = null;
+        Movie m = null;
+        String subjectShare = "";
+        String bodyShare = "";
 
-            if (fEvent != null) {
-                if (fEvent instanceof Event) {
-                    e = (Event) fEvent;
-                    if (e.getName() != null && e.getDescription() != null) {
-                        subjectShare = e.getName().getText();
-                        bodyShare = e.getDescription().getText().toString();
-                    }
-                } else if (fEvent instanceof Business) {
-                    b = (Business) fEvent;
-                    if (b.getName() != null && b.getUrl() != null) {
-                        subjectShare = b.getName();
-                        bodyShare = b.getUrl();
-                    }
-                } else if (fEvent instanceof Movie) {
-                    m = (Movie) fEvent;
-                    if (m.getTitle() != null && m.getOverview() != null) {
-                        subjectShare = m.getTitle();
-                        bodyShare = m.getOverview();
-                    }
+        if (fEvent != null) {
+            if (fEvent instanceof Event) {
+                e = (Event) fEvent;
+                if (e.getName() != null && e.getDescription() != null) {
+                    subjectShare = e.getName().getText();
+                    bodyShare = e.getDescription().getText().toString();
+                }
+            } else if (fEvent instanceof Business) {
+                b = (Business) fEvent;
+                if (b.getName() != null && b.getUrl() != null) {
+                    subjectShare = b.getName();
+                    bodyShare = b.getUrl();
+                }
+            } else if (fEvent instanceof Movie) {
+                m = (Movie) fEvent;
+                if (m.getTitle() != null && m.getOverview() != null) {
+                    subjectShare = m.getTitle();
+                    bodyShare = m.getOverview();
                 }
             }
-                sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-                sharingIntent.setType("text/plain");
-                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subjectShare);
-                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, bodyShare);
-                fomonoAdapterObjectListener.onOpenLink(Intent.createChooser(sharingIntent, "Share via"));
-
+        }
+        sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subjectShare);
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, bodyShare);
+        fomonoAdapterObjectListener.onOpenLink(Intent.createChooser(sharingIntent, "Share via"));
     }
 
     private void populateWithBusinesses(ViewHolderEventsItem holder, int position) {
@@ -279,14 +272,9 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
                 holder.tvRatingCount.setVisibility(View.GONE);
             }
 
-            if (business.getUrl() != null) {
-                holder.eventUrl.setBackgroundResource(R.drawable.ic_link);
-                holder.eventUrl.setOnClickListener(v -> {
-                    callShareIntent(business);
-                });
-            } else {
-                holder.eventUrl.setBackgroundResource(R.drawable.ic_image_placeholder);
-            }
+            holder.eventUrl.setOnClickListener(v -> {
+                callShareIntent(business);
+            });
         }
 
         setEventFavorited(holder, business);
@@ -353,14 +341,9 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
             holder.eventType.setVisibility(View.GONE);
             setMovieCategories(movie, holder);
 
-            if(movie.getId() != -1) {
-                holder.eventUrl.setBackgroundResource(R.drawable.ic_link);
-                holder.eventUrl.setOnClickListener(v -> {
-                    callShareIntent(movie);
-                });
-            } else {
-                holder.eventUrl.setBackgroundResource(R.drawable.ic_image_placeholder);
-            }
+            holder.eventUrl.setOnClickListener(v -> {
+                callShareIntent(movie);
+            });
         }
 
         setEventFavorited(holder, movie);
