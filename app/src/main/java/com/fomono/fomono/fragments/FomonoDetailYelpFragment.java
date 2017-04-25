@@ -157,15 +157,7 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
     }
 
     private void setSourceSiteLinkIntentListener() {
-        fragmentBinding.ivSiteLink.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_VIEW);
-            intent.addCategory(Intent.CATEGORY_BROWSABLE);
-            if(business.getUrl()!=null) {
-                intent.setData(Uri.parse(business.getUrl()));
-            }
-            startActivity(intent);
-        });
+
     }
 
     private void setFavoriteIconListener() {

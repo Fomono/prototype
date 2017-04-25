@@ -214,35 +214,13 @@
         <View
             android:id="@+id/spView02"
             android:layout_width="match_parent"
-            android:layout_height="3dp"
+            android:layout_height="2dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="-10dp"
             android:layout_below="@id/tvLanguage"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="20dp"
             android:layout_marginTop="15dp"
             android:background="@color/veryLightGrey" />
-
-
-
-        <TextView
-            android:id="@+id/tvSiteLinkLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/spView02"
-            android:text="MOVIEDB "
-            android:textColor="@color/black"
-            android:textSize="13sp" />
-
-
-        <ImageView
-            android:id="@+id/ivSiteLink"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_alignTop="@id/tvSiteLinkLabel"
-            android:layout_below="@id/spView02"
-            android:layout_toEndOf="@id/tvSiteLinkLabel"
-            android:layout_marginBottom="20dp"
-            android:clickable="true"
-            app:srcCompat="@drawable/ic_globe" />
 
 
 

@@ -14,6 +14,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -84,7 +86,8 @@ public class FomonoActivity extends AppCompatActivity implements BaseSortFragmen
     public static final String ACTION_DETAIL = "launch_detail";
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Transition a = TransitionInflater.from(this).inflateTransition(R.transition.slide_top);
+        getWindow().setEnterTransition(a);
         ActivityFomonoBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_fomono);
         toolbar = binding.fomonoToolbarId;
         nvView = binding.fomonoNavViewId;
