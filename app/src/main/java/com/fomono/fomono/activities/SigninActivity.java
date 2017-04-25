@@ -40,7 +40,7 @@ public class SigninActivity extends AppCompatActivity {
     private void loginWithFomono(String userId, String password) {
         ParseUser.logInInBackground(userId, password, (user, e) -> {
             if (user != null) {
-                FavoritesUtil.getInstance();
+                FavoritesUtil.getInstance().initialize(ParseUser.getCurrentUser());
                 homePageIntent();
             } else {
                 Toast.makeText(SigninActivity.this,"Login Failed" +e.getMessage(), Toast.LENGTH_LONG).show();

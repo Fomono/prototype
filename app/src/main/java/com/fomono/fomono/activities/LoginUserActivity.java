@@ -98,7 +98,7 @@ public class LoginUserActivity extends AppCompatActivity {
         btnGuestLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FavoritesUtil.getInstance();
+                FavoritesUtil.getInstance().initialize(ParseUser.getCurrentUser());
                 homePageIntent();
             }
         });
@@ -140,7 +140,7 @@ public class LoginUserActivity extends AppCompatActivity {
         ParseUser.logInInBackground(userId, password, new LogInCallback() {
             public void done(ParseUser user, ParseException e) {
                 if (user != null) {
-                    FavoritesUtil.getInstance();
+                    FavoritesUtil.getInstance().initialize(ParseUser.getCurrentUser());
                     homePageIntent();
                 } else {
                     Toast.makeText(LoginUserActivity.this,"Login Failed" +e.getMessage(), Toast.LENGTH_LONG).show();
@@ -161,12 +161,12 @@ public class LoginUserActivity extends AppCompatActivity {
                     Log.d("Login", "Facebook Login Successful");
                     getUserDetailsFromFB();
                     //linkCurrentUsertoFB();
-                    FavoritesUtil.getInstance();
+                    FavoritesUtil.getInstance().initialize(ParseUser.getCurrentUser());
                     homePageIntent();
                 } else {
                     Log.d("Login", "User logged in through Facebook!");
                     getUserDetailsFromParse();
-                    FavoritesUtil.getInstance();
+                    FavoritesUtil.getInstance().initialize(ParseUser.getCurrentUser());
                     homePageIntent();
                 }
             }

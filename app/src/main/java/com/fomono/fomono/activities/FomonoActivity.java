@@ -328,13 +328,13 @@ public class FomonoActivity extends AppCompatActivity implements BaseSortFragmen
             //setup current user
             ParseUser currentUser = ParseUser.getCurrentUser();
             if (ParseAnonymousUtils.isLinked(currentUser)) {
-                FavoritesUtil.getInstance();
+                FavoritesUtil.getInstance().initialize(ParseUser.getCurrentUser());
                 handleLaunchDetailView(apiName, id);
             } else {
                 currentUser.fetchInBackground(new GetCallback<ParseObject>() {
                     @Override
                     public void done(ParseObject object, ParseException e) {
-                        FavoritesUtil.getInstance();
+                        FavoritesUtil.getInstance().initialize(ParseUser.getCurrentUser());
                         handleLaunchDetailView(apiName, id);
                     }
                 });
