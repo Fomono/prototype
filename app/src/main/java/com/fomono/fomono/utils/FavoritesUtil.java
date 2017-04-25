@@ -39,9 +39,9 @@ public class FavoritesUtil {
     private List<Pair<FomonoEvent, IsFavoritedListener>> isFavoritedListeners; //list of temporary listeners for one time callbacks
 
     private FavoritesUtil() {
-        loaded = false;
         listeners = new ArrayList<>();
         isFavoritedListeners = new ArrayList<>();
+        loaded = true;  //start off true but will be set to false in initialize()
         initialize(ParseUser.getCurrentUser());
     }
 
@@ -54,6 +54,10 @@ public class FavoritesUtil {
     }
 
     public void initialize(ParseUser user) {
+        //don't initialize again if already initializing
+        if (!loaded) {
+            return;
+        }
         this.user = user;
         this.favoritesMap = new HashMap<>();
         loaded = false;

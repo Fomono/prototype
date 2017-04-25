@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.fomono.fomono.R;
@@ -14,7 +14,7 @@ import com.parse.ParseUser;
 
 
 public class SigninActivity extends AppCompatActivity {
-    ImageView ivSignin;
+    Button btnSignin;
     EditText etUserId;
     EditText etPassword;
 
@@ -22,13 +22,13 @@ public class SigninActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
-        ivSignin = (ImageView)  findViewById(R.id.ivSignin);
+        btnSignin = (Button) findViewById(R.id.btnSignin);
         etUserId = (EditText) findViewById(R.id.etUserId);
         etPassword = (EditText) findViewById(R.id.etPassword);
 
 
         //Fomono Login
-        ivSignin.setOnClickListener(new View.OnClickListener() {
+        btnSignin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loginWithFomono(etUserId.getText().toString(), etPassword.getText().toString() );
@@ -40,7 +40,7 @@ public class SigninActivity extends AppCompatActivity {
     private void loginWithFomono(String userId, String password) {
         ParseUser.logInInBackground(userId, password, (user, e) -> {
             if (user != null) {
-                FavoritesUtil.getInstance();
+                FavoritesUtil.getInstance().initialize(ParseUser.getCurrentUser());
                 homePageIntent();
             } else {
                 Toast.makeText(SigninActivity.this,"Login Failed" +e.getMessage(), Toast.LENGTH_LONG).show();
