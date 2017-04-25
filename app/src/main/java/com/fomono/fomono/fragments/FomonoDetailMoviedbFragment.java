@@ -180,7 +180,9 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
         long calID = 3;
         long startMillis = 0;
         long endMillis = 0;
-        startMillis = DateUtils.convertMovieDatetoMilliSeconds(startDate);
+        if(DateUtils.convertMovieDatetoMilliSeconds(startDate) != -1) {
+            startMillis = DateUtils.convertMovieDatetoMilliSeconds(startDate);
+        }
 
         ContentResolver cr = getActivity().getContentResolver();
         ContentValues values = new ContentValues();
