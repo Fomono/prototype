@@ -34,6 +34,7 @@ import com.fomono.fomono.models.eats.Location;
 import com.fomono.fomono.models.eats.Open;
 import com.fomono.fomono.models.user.User;
 import com.fomono.fomono.network.client.YelpClientRetrofit;
+import com.fomono.fomono.utils.AnimationUtil;
 import com.fomono.fomono.utils.DateUtils;
 import com.fomono.fomono.utils.FavoritesUtil;
 import com.fomono.fomono.utils.RoundedTransformation;
@@ -170,6 +171,7 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
         });
 
         ibFavorite.setOnClickListener(view -> {
+            AnimationUtil.playInteractionAnimation(ibFavorite);
             favsUtil.isFavorited(business, isFavorited -> {
                 if (isFavorited) {
                     ibFavorite.setImageResource(R.drawable.ic_favorite_grey);

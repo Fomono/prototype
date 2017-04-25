@@ -29,6 +29,7 @@ import com.fomono.fomono.models.events.events.Start;
 import com.fomono.fomono.models.events.events.Venue;
 import com.fomono.fomono.models.user.User;
 import com.fomono.fomono.network.client.EventBriteClientRetrofit;
+import com.fomono.fomono.utils.AnimationUtil;
 import com.fomono.fomono.utils.DateUtils;
 import com.fomono.fomono.utils.FavoritesUtil;
 import com.fomono.fomono.utils.StringUtil;
@@ -136,6 +137,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
         });
 
         ibFavorite.setOnClickListener(view -> {
+            AnimationUtil.playInteractionAnimation(ibFavorite);
             favsUtil.isFavorited(event, isFavorited -> {
                 if (isFavorited) {
                     ibFavorite.setImageResource(R.drawable.ic_favorite_grey);

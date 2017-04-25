@@ -20,6 +20,7 @@ import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
 import com.fomono.fomono.databinding.FragmentMoviedbDetailBinding;
 import com.fomono.fomono.models.movies.Movie;
+import com.fomono.fomono.utils.AnimationUtil;
 import com.fomono.fomono.utils.ConfigUtil;
 import com.fomono.fomono.utils.DateUtils;
 import com.fomono.fomono.utils.FavoritesUtil;
@@ -121,6 +122,7 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
         });
 
         ibFavorite.setOnClickListener(view1 -> {
+            AnimationUtil.playInteractionAnimation(ibFavorite);
             favsUtil.isFavorited(movie, isFavorited -> {
                 if (isFavorited) {
                     ibFavorite.setImageResource(R.drawable.ic_favorite_grey);
