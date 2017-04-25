@@ -447,8 +447,11 @@ public class FomonoAdapter extends RecyclerView.Adapter<FomonoAdapter.ViewHolder
                 showDetails.putExtra("FOM_OBJ", mFomonoEvents.get(position));
                 ActivityOptionsCompat options = ActivityOptionsCompat.
                         makeSceneTransitionAnimation((Activity) mContext, eventMediaImage, "main_image");
+                ActivityOptionsCompat optionSlide = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext);
+
 //                ((AppCompatActivity) mContext).startActivityForResult(showDetails, FomonoActivity.REQUEST_CODE_DETAILS, options.toBundle());
-                ((AppCompatActivity) mContext).startActivityForResult(showDetails, FomonoActivity.REQUEST_CODE_DETAILS);
+                ((AppCompatActivity) mContext).startActivityForResult(showDetails, FomonoActivity.REQUEST_CODE_DETAILS,optionSlide.toBundle());
+
             });
         }
     }

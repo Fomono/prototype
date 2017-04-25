@@ -100,32 +100,11 @@
 
 
         <ImageView
-            android:id="@+id/ivLocationIcon"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/spView01"
-            android:layout_marginTop="15dp"
-            app:srcCompat="@drawable/ic_location_pin" />
-
-        <TextView
-            android:id="@+id/tvLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/ivLocationIcon"
-            android:layout_below="@id/spView01"
-            android:layout_toRightOf="@id/ivLocationIcon"
-            android:text="Golden Gate Park, San Francisco, CA"
-            android:textColor="@color/colorBlack"
-            android:textSize="13sp" />
-
-
-        <ImageView
             android:id="@+id/ivPhone"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/tvLocation"
+            android:layout_below="@id/spView01"
             android:layout_marginTop="15dp"
             app:srcCompat="@drawable/ic_phone" />
 
@@ -134,18 +113,42 @@
             android:id="@+id/tvPhone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvLocation"
-            android:layout_marginTop="10dp"
+            android:layout_below="@id/spView01"
+            android:layout_marginTop="12dp"
             android:layout_toRightOf="@id/ivPhone"
+            android:textColor="@color/colorBlack"
             android:text='@{business.phone}'
             android:textSize="13sp" />
+
+
+
+        <ImageView
+            android:id="@+id/ivLocationIcon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/ivPhone"
+            android:layout_marginTop="15dp"
+            app:srcCompat="@drawable/ic_location_pin" />
+
+        <TextView
+            android:id="@+id/tvLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/ivLocationIcon"
+            android:layout_below="@id/ivPhone"
+            android:layout_toRightOf="@id/ivLocationIcon"
+            android:text="Golden Gate Park, San Francisco, CA"
+            android:textColor="@color/colorBlack"
+            android:textSize="13sp" />
+
 
 
         <com.google.android.gms.maps.MapView
             android:id="@+id/mapView"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_below="@id/tvPhone"
+            android:layout_below="@id/ivLocationIcon"
             android:layout_marginBottom="15dp"
             android:layout_marginTop="15dp" />
 
@@ -189,7 +192,7 @@
             android:layout_marginBottom="15dp"
             android:layout_marginLeft="-10dp"
             android:layout_marginRight="-10dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:background="@color/veryLightGrey" />
 
         <HorizontalScrollView
@@ -212,35 +215,11 @@
             android:layout_width="match_parent"
             android:layout_height="8dp"
             android:layout_below="@id/hsvGallery"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="20dp"
             android:layout_marginLeft="-10dp"
             android:layout_marginRight="-10dp"
             android:layout_marginTop="15dp"
             android:background="@color/veryLightGrey" />
-
-
-        <TextView
-            android:id="@+id/tvSiteLinkLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/spView03"
-            android:text="YELP "
-            android:textColor="@color/black"
-            android:textSize="13sp" />
-
-
-        <ImageView
-            android:id="@+id/ivSiteLink"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_alignTop="@id/tvSiteLinkLabel"
-            android:layout_below="@id/spView03"
-            android:layout_toEndOf="@id/tvSiteLinkLabel"
-            android:layout_marginBottom="20dp"
-            android:clickable="true"
-            app:srcCompat="@drawable/ic_globe" />
-
 
     </RelativeLayout>
 </layout>

@@ -10,12 +10,15 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
@@ -59,7 +62,8 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fomono_detail);
         Intent i = getIntent();
-
+        Transition a = TransitionInflater.from(this).inflateTransition(R.transition.slide_bottom);
+        getWindow().setEnterTransition(a);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeAsUpIndicator
@@ -71,6 +75,8 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         screenWidth = calculateScreenWidth();
+        findViewById(R.id.youtube_fragment).setVisibility(View.GONE);
+
 
         fEvent = i.getParcelableExtra("FOM_OBJ");
         position = i.getIntExtra("position", -1);
@@ -83,7 +89,6 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.fragmentDetail, fomonoDetailEventbriteFragment);
             ft.commit();
-            findViewById(R.id.youtube_fragment).setVisibility(View.GONE);
         } else if (savedInstanceState == null && fEvent instanceof Business) {
             Business b = (Business) fEvent;
             loadImage(b);
@@ -91,7 +96,6 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.fragmentDetail, fomonoDetailYelpFragment);
             ft.commit();
-            findViewById(R.id.youtube_fragment).setVisibility(View.GONE);
 
         } else if (savedInstanceState == null && fEvent instanceof Movie) {
             Movie m = (Movie) fEvent;
@@ -100,8 +104,6 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.fragmentDetail, fomonoDetailMoviedbFragment);
             ft.commit();
-
-
             playYouTubeVideo(m.getId());
 
 
@@ -273,7 +275,8 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
             @Override
             public void onResponse(retrofit2.Call<VideoResponse> call, retrofit2.Response<VideoResponse> response) {
                 VideoResponse vResponse = response.body();
-                if (vResponse.getResults() != null && !vResponse.getResults().isEmpty() && vResponse.getResults().get(0) != null) {
+                if (vResponse.getResults() != null && vResponse.getResults().isEmpty() && vResponse.getResults().get(0) != null) {
+                    findViewById(R.id.youtube_fragment).setVisibility(View.VISIBLE);
                     String videoKey = vResponse.getResults().get(0).getKey();
                     cueYouTubeTrailer(videoKey);
                 }
@@ -302,6 +305,7 @@ public class FomonoDetailActivity extends AppCompatActivity implements ActivityC
                     @Override
                     public void onInitializationFailure(YouTubePlayer.Provider provider,
                                                         YouTubeInitializationResult youTubeInitializationResult) {
+                        Toast.makeText(FomonoDetailActivity.this,"Youtube load failed" + youTubeInitializationResult.toString(), Toast.LENGTH_LONG).show();
 
                     }
 

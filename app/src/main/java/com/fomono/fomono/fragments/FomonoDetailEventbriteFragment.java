@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.location.Criteria;
@@ -182,15 +181,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
     }
 
     private void setSourceSiteLinkIntentListener() {
-        fragmentBinding.ivSiteLink.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_VIEW);
-            intent.addCategory(Intent.CATEGORY_BROWSABLE);
-            if(event.getUrl() !=null) {
-                intent.setData(Uri.parse(event.getUrl()));
-            }
-            startActivity(intent);
-        });
+
     }
 
 
