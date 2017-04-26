@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -82,10 +81,6 @@ public class LoginUserActivity extends AppCompatActivity {
         etPassword = (EditText) findViewById(R.id.etPassword);
         btnGuestLogin =(Button) findViewById(R.id.btnGuestLogin);
         tvWelcome= (TextView) findViewById(R.id.tvWelcome);
-
-
-        Typeface typeface=Typeface.createFromAsset(getAssets(), "fonts/Gothic.ttf");
-        tvWelcome.setTypeface(typeface);
 
 
         //  Use this to output your Facebook Key Hash to Logs
