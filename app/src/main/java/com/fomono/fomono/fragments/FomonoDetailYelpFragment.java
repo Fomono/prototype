@@ -34,7 +34,6 @@ import com.fomono.fomono.models.eats.Location;
 import com.fomono.fomono.models.eats.Open;
 import com.fomono.fomono.models.user.User;
 import com.fomono.fomono.network.client.YelpClientRetrofit;
-import com.fomono.fomono.utils.AnimationUtil;
 import com.fomono.fomono.utils.DateUtils;
 import com.fomono.fomono.utils.FavoritesUtil;
 import com.fomono.fomono.utils.RoundedTransformation;
@@ -42,7 +41,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -125,7 +123,7 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
         //SetupListeners
         setSourceSiteLinkIntentListener();
         setPhoneCallIntentListener();
-        setFavoriteIconListener();
+        setRedirectIconListener();
 
 
         calculateScreenDimensions();
@@ -161,30 +159,16 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
 
     }
 
-    private void setFavoriteIconListener() {
 
-        ibFavorite = fragmentBinding.ivFavoriteIcon;
-        favsUtil.isFavorited(business, isFavorited -> {
-            if (isFavorited) {
-                ibFavorite.setImageResource(R.drawable.ic_favorite);
+    private void setRedirectIconListener() {
+        fragmentBinding.ivRedirect.setOnClickListener(v -> {
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.addCategory(Intent.CATEGORY_BROWSABLE);
+            if (business.getUrl() != null) {
+                intent.setData(Uri.parse(business.getUrl()));
             }
-        });
-
-        ibFavorite.setOnClickListener(view -> {
-            AnimationUtil.playInteractionAnimation(ibFavorite);
-            favsUtil.isFavorited(business, isFavorited -> {
-                if (isFavorited) {
-                    ibFavorite.setImageResource(R.drawable.ic_favorite_grey);
-                    favsUtil.removeFromFavorites(business);
-                } else {
-                    ibFavorite.setImageResource(R.drawable.ic_favorite);
-                    favsUtil.addToFavorites(business);
-                }
-            });
-
-            if (getActivity() instanceof FomonoEventUpdateListener) {
-                ((FomonoEventUpdateListener) getActivity()).onFomonoEventUpdated();
-            }
+            startActivity(intent);
         });
     }
 

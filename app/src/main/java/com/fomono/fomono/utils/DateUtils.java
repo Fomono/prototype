@@ -110,4 +110,18 @@ public class DateUtils {
             return null;
         }
     }
+
+    public static String convertEventDateFormatNoTime(String strDate) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdfDisplay = new SimpleDateFormat("EEE, MMM dd");
+
+        Date date = null;
+        try {
+            date = sdf.parse(strDate);
+            return sdfDisplay.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
