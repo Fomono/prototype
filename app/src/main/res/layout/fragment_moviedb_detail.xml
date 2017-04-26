@@ -40,13 +40,13 @@
 
 
             <ImageButton
-                android:id="@+id/ivFavoriteIcon"
+                android:id="@+id/ivRedirect"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="5dp"
                 android:layout_weight="0.5"
                 android:background="@color/colorWhite"
-                app:srcCompat="@drawable/ic_favorite_grey" />
+                app:srcCompat="@drawable/ic_link" />
 
         </LinearLayout>
 
@@ -62,6 +62,27 @@
             android:scaleY="0.7"
             android:transformPivotX="0dp"
             android:transformPivotY="0dp" />
+
+        <ImageView
+            android:id="@+id/ivPlayIcon"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="60dp"
+            android:layout_toRightOf="@id/rbRating"
+            android:layout_below="@id/llHeader"
+            app:srcCompat="@drawable/ic_play" />
+
+        <TextView
+            android:id="@+id/tvPlay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:text="Play Trailer"
+            android:layout_toRightOf="@id/ivPlayIcon"
+            android:layout_marginTop="3dp"
+            android:layout_below="@id/llHeader"
+            android:textColor="@color/twitterBlue"
+            app:srcCompat="@drawable/ic_play" />
 
 
         <View
