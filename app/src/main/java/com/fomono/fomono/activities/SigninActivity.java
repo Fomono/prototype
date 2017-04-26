@@ -1,22 +1,28 @@
 package com.fomono.fomono.activities;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fomono.fomono.R;
 import com.fomono.fomono.utils.FavoritesUtil;
 import com.parse.ParseUser;
 
+import static android.R.attr.typeface;
+import static com.fomono.fomono.R.id.tvWelcome;
+
 
 public class SigninActivity extends AppCompatActivity {
     Button btnSignin;
     EditText etUserId;
     EditText etPassword;
+    TextView tvSignInWelcome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,15 +31,15 @@ public class SigninActivity extends AppCompatActivity {
         btnSignin = (Button) findViewById(R.id.btnSignin);
         etUserId = (EditText) findViewById(R.id.etUserId);
         etPassword = (EditText) findViewById(R.id.etPassword);
+        tvSignInWelcome = (TextView) findViewById(R.id.tvSignInWelcome);
 
+
+
+        Typeface typeface=Typeface.createFromAsset(getAssets(), "fonts/Gothic.ttf");
+        tvSignInWelcome.setTypeface(typeface);
 
         //Fomono Login
-        btnSignin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loginWithFomono(etUserId.getText().toString(), etPassword.getText().toString() );
-            }
-        });
+        btnSignin.setOnClickListener(v -> loginWithFomono(etUserId.getText().toString(), etPassword.getText().toString() ));
 
     }
 

@@ -344,20 +344,24 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
                 String startDate = DateUtils.convertMilitarytoStandard(open.getStart());
                 String endDate = DateUtils.convertMilitarytoStandard(open.getEnd());
 
-                if (open.getDay() == ZERO) {
-                    hoursOpen += "Monday: " + startDate + " - " + endDate + "\n";
-                } else if (open.getDay() == 1) {
-                    hoursOpen += "Tuesday: " + startDate + " - " + endDate + "\n";
-                } else if (open.getDay() == 2) {
-                    hoursOpen += "Wednesday: " + startDate + " - " + endDate + "\n";
-                } else if (open.getDay() == 3) {
-                    hoursOpen += "Thursday: " + startDate + " - " + endDate + "\n";
-                } else if (open.getDay() == 4) {
-                    hoursOpen += "Friday: " + startDate + " - " + endDate + "\n";
-                } else if (open.getDay() == 5) {
-                    hoursOpen += "Saturday: " + startDate + " - " + endDate + "\n";
-                } else if (open.getDay() == 6) {
-                    hoursOpen += "Sunday: " + startDate + " - " + endDate + "\n";
+                if ((startDate != null) && (endDate != null)) {
+                    if (open.getDay() == ZERO) {
+                        hoursOpen += "Monday:        " + startDate + " - " + endDate + "\n";
+                    } else if (open.getDay() == 1) {
+                        hoursOpen += "Tuesday:       " + startDate + " - " + endDate + "\n";
+                    } else if (open.getDay() == 2) {
+                        hoursOpen += "Wednesday: " + startDate + " - " + endDate + "\n";
+                    } else if (open.getDay() == 3) {
+                        hoursOpen += "Thursday:     " + startDate + " - " + endDate + "\n";
+                    } else if (open.getDay() == 4) {
+                        hoursOpen += "Friday:           " + startDate + " - " + endDate + "\n";
+                    } else if (open.getDay() == 5) {
+                        hoursOpen += "Saturday:      " + startDate + " - " + endDate + "\n";
+                    } else if (open.getDay() == 6) {
+                        hoursOpen += "Sunday:         " + startDate + " - " + endDate + "\n";
+                    }
+                } else {
+                    hoursOpen = UNAVAILABLE;
                 }
             }
         } else{
@@ -368,49 +372,46 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
 
     protected void populateAddressOnMap() {
         //reset fragment's databinding
-        mMapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap mMap) {
-                googleMap = mMap;
+        mMapView.getMapAsync(mMap -> {
+            googleMap = mMap;
 
-                LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+            LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
 
-                Criteria locationCritera = new Criteria();
-                locationCritera.setAccuracy(Criteria.ACCURACY_COARSE);
-                locationCritera.setAltitudeRequired(false);
-                locationCritera.setBearingRequired(false);
-                locationCritera.setCostAllowed(true);
-                locationCritera.setPowerRequirement(Criteria.NO_REQUIREMENT);
+            Criteria locationCritera = new Criteria();
+            locationCritera.setAccuracy(Criteria.ACCURACY_COARSE);
+            locationCritera.setAltitudeRequired(false);
+            locationCritera.setBearingRequired(false);
+            locationCritera.setCostAllowed(true);
+            locationCritera.setPowerRequirement(Criteria.NO_REQUIREMENT);
 
-                // For showing a move to my location button
-                int fineLocationPerm = ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION);
-                int coarseLocationPerm = ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
-                if (fineLocationPerm != PackageManager.PERMISSION_GRANTED && coarseLocationPerm != PackageManager.PERMISSION_GRANTED) {
-                    ParseUser user = ParseUser.getCurrentUser();
-                    if (!user.getBoolean(User.LOC_PERM_SEEN)) {
-                        Toast.makeText(getContext(), getString(R.string.pref_turn_on_location), Toast.LENGTH_LONG).show();
-                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, FomonoApplication.PERM_LOC_EVENT_REQ_CODE);
-                    }
-                } else {
-                    googleMap.setMyLocationEnabled(true);
+            // For showing a move to my location button
+            int fineLocationPerm = ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION);
+            int coarseLocationPerm = ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
+            if (fineLocationPerm != PackageManager.PERMISSION_GRANTED && coarseLocationPerm != PackageManager.PERMISSION_GRANTED) {
+                ParseUser user = ParseUser.getCurrentUser();
+                if (!user.getBoolean(User.LOC_PERM_SEEN)) {
+                    Toast.makeText(getContext(), getString(R.string.pref_turn_on_location), Toast.LENGTH_LONG).show();
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, FomonoApplication.PERM_LOC_EVENT_REQ_CODE);
                 }
-                Coordinates coordinates;
-                LatLng ltlg;
-                // For dropping a marker at a point on the Map
-                if (business.getCoordinates() != null && business.getName()!=null ) {
-                    coordinates = business.getCoordinates();
-                    ltlg = new LatLng(coordinates.getLatitude(), coordinates.getLongitude());
-                    googleMap.addMarker(new MarkerOptions().position(ltlg).title(business.getName()).snippet(getLocationAddress()));
-
-                    // For zooming automatically to the location of the marker
-                    CameraPosition cameraPosition = new CameraPosition.Builder().target(ltlg).zoom(11).build();
-                    googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                } else {
-                    coordinates = null;
-                    ltlg = null;
-                }
-
+            } else {
+                googleMap.setMyLocationEnabled(true);
             }
+            Coordinates coordinates;
+            LatLng ltlg;
+            // For dropping a marker at a point on the Map
+            if (business.getCoordinates() != null && business.getName()!=null ) {
+                coordinates = business.getCoordinates();
+                ltlg = new LatLng(coordinates.getLatitude(), coordinates.getLongitude());
+                googleMap.addMarker(new MarkerOptions().position(ltlg).title(business.getName()).snippet(getLocationAddress()));
+
+                // For zooming automatically to the location of the marker
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(ltlg).zoom(11).build();
+                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            } else {
+                coordinates = null;
+                ltlg = null;
+            }
+
         });
     }
 
