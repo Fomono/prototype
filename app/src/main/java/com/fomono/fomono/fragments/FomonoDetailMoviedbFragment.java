@@ -3,6 +3,7 @@ package com.fomono.fomono.fragments;
 import android.Manifest;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
+import com.fomono.fomono.activities.FomonoTrailerActivity;
 import com.fomono.fomono.databinding.FragmentMoviedbDetailBinding;
 import com.fomono.fomono.models.movies.Movie;
 import com.fomono.fomono.utils.AnimationUtil;
@@ -94,7 +96,7 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
         //setListeners
         setAddToCalendarListener();
         setFavoriteIconListener();
-
+        setPlayMovieTrailer();
 
         setAdultValue();
         setEventDateTime();
@@ -107,7 +109,7 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
     private void setEventDateTime() {
         if (movie.getReleaseDate() != null) {
             if (DateUtils.convertEventDateFormatNoTime(movie.getReleaseDate()) != null) {
-                fragmentBinding.tvClockEventDate.setText(DateUtils.convertEventDateFormatNoTime(movie.getReleaseDate()));
+                fragmentBinding.tvClockEventDate.setText("Release Date: " + DateUtils.convertEventDateFormatNoTime(movie.getReleaseDate()));
 
             }
 
@@ -157,7 +159,14 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
 
     }
 
-
+    private void setPlayMovieTrailer() {
+        fragmentBinding.ivPlayIcon.setOnClickListener(v -> {
+            AnimationUtil.playInteractionAnimation(v);
+            Intent movTrail = new Intent(getActivity(), FomonoTrailerActivity.class);
+            movTrail.putExtra(getActivity().getResources().getString(R.string.MovieId), movie.getId());
+            startActivity(movTrail);
+        });
+    }
 
     private String getGenres() {
         String genres ="";
