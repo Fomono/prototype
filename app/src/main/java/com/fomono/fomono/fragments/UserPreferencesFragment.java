@@ -29,6 +29,7 @@ import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
 import com.fomono.fomono.databinding.FragmentUserPreferencesBinding;
 import com.fomono.fomono.models.db.Filter;
+import com.fomono.fomono.utils.AnimationUtil;
 import com.fomono.fomono.utils.FilterUtil;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -99,6 +100,7 @@ public class UserPreferencesFragment extends Fragment {
         ibUseMyLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                AnimationUtil.playInteractionAnimation(view);
                 int fineLocationPerm = ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION);
                 int coarseLocationPerm = ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
                 if (fineLocationPerm != PackageManager.PERMISSION_GRANTED && coarseLocationPerm != PackageManager.PERMISSION_GRANTED) {
