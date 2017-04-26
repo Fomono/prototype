@@ -85,6 +85,12 @@
     <string name="welcome">Welcome to Fomono</string>
     <string name="login_agreement">By continuing, I agree to Fomono\'s Terms of service and Privacy Policy</string>
 
+    <string name="profile_first_name">First Name</string>
+    <string name="profile_last_name">Last Name</string>
+    <string name="profile_phone">Phone</string>
+    <string name="profile_email">Email</string>
+    <string name="profile_about">About Me</string>
+
 
     <string-array name="FilterEventSortArray">
         <item>best_match</item>
