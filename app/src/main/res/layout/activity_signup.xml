@@ -30,8 +30,8 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:background="@color/colorWhite"
             android:layout_marginTop="40dp"
+            android:background="@drawable/relative_layout_border"
             android:layout_below="@id/tvSignUpWelcome"
             android:id="@+id/activity_signup_internal_layout"
             android:layout_height="wrap_content">
@@ -42,10 +42,18 @@
                 android:textAlignment="center"
                 android:inputType="textPersonName"
                 android:hint="@string/signup_firstname"
+                android:background="@android:color/transparent"
                 android:id="@+id/etFirstName"
                 android:layout_marginTop="@dimen/sign_up_edt_text_margin_top"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/event_list_divider_param"
+                android:id="@+id/EventLine1Id"
+                android:layout_below="@id/etFirstName"
+                android:background="@color/colorGrey"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -53,10 +61,18 @@
                 android:textAlignment="center"
                 android:inputType="textPersonName"
                 android:id="@+id/etLastName"
+                android:background="@android:color/transparent"
                 android:hint="@string/signup_lastname"
                 android:layout_marginTop="@dimen/sign_up_edt_text_margin_top"
-                android:layout_below="@+id/etFirstName"
+                android:layout_below="@+id/EventLine1Id"
                 android:layout_centerHorizontal="true" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/event_list_divider_param"
+                android:id="@+id/EventLine2Id"
+                android:layout_below="@id/etLastName"
+                android:background="@color/colorGrey"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -64,10 +80,18 @@
                 android:textAlignment="center"
                 android:inputType="textEmailAddress"
                 android:id="@+id/etEmail"
+                android:background="@android:color/transparent"
                 android:hint="@string/signup_email"
                 android:layout_marginTop="@dimen/sign_up_edt_text_margin_top"
-                android:layout_below="@+id/etLastName"
+                android:layout_below="@+id/EventLine2Id"
                 android:layout_centerHorizontal="true" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/event_list_divider_param"
+                android:id="@+id/EventLine3Id"
+                android:layout_below="@+id/etEmail"
+                android:background="@color/colorGrey"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -76,27 +100,43 @@
                 android:inputType="text"
                 android:id="@+id/etUserId"
                 android:hint="@string/login_username"
-                android:layout_below="@+id/etEmail"
+                android:layout_below="@+id/EventLine3Id"
                 android:layout_centerHorizontal="true"
+                android:background="@android:color/transparent"
                 android:layout_marginTop="@dimen/sign_up_edt_text_margin_top" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/event_list_divider_param"
+                android:id="@+id/EventLine4Id"
+                android:layout_below="@+id/etUserId"
+                android:background="@color/colorGrey"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
+                android:background="@android:color/transparent"
                 android:inputType="textPassword"
                 android:id="@+id/etPassword"
+                android:layout_below="@+id/EventLine4Id"
                 android:hint="@string/login_password"
                 android:layout_marginTop="@dimen/sign_up_edt_text_margin_top"
-                android:layout_below="@+id/etUserId"
                 android:layout_centerHorizontal="true" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/event_list_divider_param"
+                android:id="@+id/EventLine5Id"
+                android:layout_below="@id/etUserId"
+                android:background="@color/colorGrey"/>
 
         </RelativeLayout>
 
         <Button
             android:id="@+id/btnSignup"
-            android:layout_width="200dp"
-            android:layout_height="60dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/signup_signup"
             android:background="@color/colorFomono"
             android:textColor="@color/colorWhite"

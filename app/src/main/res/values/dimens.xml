@@ -18,5 +18,5 @@
     <dimen name="event_list_divider_param">0.5dp</dimen>
     <dimen name="filter_item_spacing">6dp</dimen>
     <dimen name="detail_top_bar_height">200dp</dimen>
-    <dimen name="sign_up_edt_text_margin_top">10dp</dimen>
+    <dimen name="sign_up_edt_text_margin_top">20dp</dimen>
 </resources>

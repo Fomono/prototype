@@ -22,7 +22,6 @@ public class SigninActivity extends AppCompatActivity {
     Button btnSignin;
     EditText etUserId;
     EditText etPassword;
-    TextView tvSignInWelcome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +30,7 @@ public class SigninActivity extends AppCompatActivity {
         btnSignin = (Button) findViewById(R.id.btnSignin);
         etUserId = (EditText) findViewById(R.id.etUserId);
         etPassword = (EditText) findViewById(R.id.etPassword);
-        tvSignInWelcome = (TextView) findViewById(R.id.tvSignInWelcome);
 
-
-
-        Typeface typeface=Typeface.createFromAsset(getAssets(), "fonts/Gothic.ttf");
-        tvSignInWelcome.setTypeface(typeface);
 
         //Fomono Login
         btnSignin.setOnClickListener(v -> loginWithFomono(etUserId.getText().toString(), etPassword.getText().toString() ));
@@ -49,7 +43,7 @@ public class SigninActivity extends AppCompatActivity {
                 FavoritesUtil.getInstance().initialize(ParseUser.getCurrentUser());
                 homePageIntent();
             } else {
-                Toast.makeText(SigninActivity.this,"Login Failed" +e.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(SigninActivity.this,"Login Failed " +e.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
