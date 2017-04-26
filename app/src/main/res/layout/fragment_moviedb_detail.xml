@@ -119,7 +119,7 @@
             android:layout_marginRight="10dp"
             android:layout_toRightOf="@id/ivClockIcon"
             android:textColor="@color/colorBlack"
-            android:text='@{" In Theatres: " + movie.releaseDate }'
+            android:text=''
             android:textSize="13sp" />
 
 

@@ -174,9 +174,9 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
     private void setEventDateTime() {
         Start start = event.getStart();
         if (start != null && start.getLocal() != null) {
-            if(DateUtils.convertEventDatetoDisplayFormat(start.getLocal()) != null) {
+            if(DateUtils.convertEventDateListItemDisplayFormat(start.getLocal()) != null) {
                 fragmentBinding.tvClockEventDate.
-                        setText(DateUtils.convertEventDatetoDisplayFormat(start.getLocal()));
+                        setText(DateUtils.convertEventDateListItemDisplayFormat(start.getLocal()));
             }
             if(DateUtils.getFormattedMonthForHeader(start.getLocal()) != null) {
                 fragmentBinding.tvEventMonth.setText(DateUtils.

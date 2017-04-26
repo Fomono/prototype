@@ -97,9 +97,21 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
 
 
         setAdultValue();
+        setEventDateTime();
 
         return fragmentBinding.getRoot();
 
+    }
+
+
+    private void setEventDateTime() {
+        if (movie.getReleaseDate() != null) {
+            if (DateUtils.convertEventDateFormatNoTime(movie.getReleaseDate()) != null) {
+                fragmentBinding.tvClockEventDate.setText(DateUtils.convertEventDateFormatNoTime(movie.getReleaseDate()));
+
+            }
+
+        }
     }
 
     private void setAdultValue() {
