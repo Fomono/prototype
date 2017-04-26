@@ -101,7 +101,8 @@
             android:id="@+id/ivClockIcon"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginEnd="5dp"
             android:layout_below="@id/spView01"
             android:layout_marginTop="20dp"
             app:srcCompat="@drawable/ic_clock" />
@@ -113,8 +114,8 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/ivClockIcon"
             android:layout_below="@id/spView01"
-            android:layout_marginRight="10dp"
-            android:layout_toRightOf="@id/ivClockIcon"
+            android:layout_marginEnd="10dp"
+            android:layout_toEndOf="@id/ivClockIcon"
             android:textColor="@color/colorBlack"
             android:text=''
             android:textSize="13sp" />
@@ -124,7 +125,7 @@
             android:id="@+id/ivCalendar"
             android:layout_width="18dp"
             android:layout_height="18dp"
-            android:layout_marginRight="2dp"
+            android:layout_marginRight="3dp"
             android:layout_alignTop="@id/tvClockEventDate"
             android:layout_below="@id/spView01"
             android:layout_toRightOf="@id/tvClockEventDate"

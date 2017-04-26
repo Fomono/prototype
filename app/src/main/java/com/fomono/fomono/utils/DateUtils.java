@@ -113,7 +113,7 @@ public class DateUtils {
 
     public static String convertEventDateFormatNoTime(String strDate) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat sdfDisplay = new SimpleDateFormat("EEE, MMM dd");
+        SimpleDateFormat sdfDisplay = new SimpleDateFormat("EEE, MMM dd, yyyy");
 
         Date date = null;
         try {

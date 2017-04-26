@@ -42,7 +42,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -126,7 +125,7 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
         setSourceSiteLinkIntentListener();
         setPhoneCallIntentListener();
         setFavoriteIconListener();
-
+        setRedirectIconListener();
 
         calculateScreenDimensions();
         populateBindingDetail();
@@ -185,6 +184,19 @@ public class FomonoDetailYelpFragment extends android.support.v4.app.Fragment {
             if (getActivity() instanceof FomonoEventUpdateListener) {
                 ((FomonoEventUpdateListener) getActivity()).onFomonoEventUpdated();
             }
+        });
+    }
+
+    private void setRedirectIconListener() {
+        fragmentBinding.ivRedirect.setOnClickListener(v -> {
+            AnimationUtil.playInteractionAnimation(v);
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.addCategory(Intent.CATEGORY_BROWSABLE);
+            if (business.getUrl() != null) {
+                intent.setData(Uri.parse(business.getUrl()));
+            }
+            startActivity(intent);
         });
     }
 
