@@ -3,6 +3,7 @@ package com.fomono.fomono.fragments;
 import android.Manifest;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
@@ -18,9 +19,9 @@ import android.widget.Toast;
 
 import com.fomono.fomono.FomonoApplication;
 import com.fomono.fomono.R;
+import com.fomono.fomono.activities.FomonoTrailerActivity;
 import com.fomono.fomono.databinding.FragmentMoviedbDetailBinding;
 import com.fomono.fomono.models.movies.Movie;
-import com.fomono.fomono.utils.AnimationUtil;
 import com.fomono.fomono.utils.ConfigUtil;
 import com.fomono.fomono.utils.DateUtils;
 import com.fomono.fomono.utils.FavoritesUtil;
@@ -93,13 +94,41 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
 
         //setListeners
         setAddToCalendarListener();
-        setFavoriteIconListener();
+        setRedirectIconListener();
+        playMovieTrailer();
 
 
         setAdultValue();
+        setEventDateTime();
 
         return fragmentBinding.getRoot();
 
+    }
+
+    private void playMovieTrailer() {
+
+        fragmentBinding.ivPlayIcon.setOnClickListener(v -> {
+            Intent movTrail = new Intent(getActivity(), FomonoTrailerActivity.class);
+            movTrail.putExtra(getActivity().getResources().getString(R.string.MovieId), movie.getId());
+            startActivity(movTrail);
+        });
+            fragmentBinding.tvPlay.setOnClickListener(v -> {
+            Intent movTrail = new Intent(getActivity(), FomonoTrailerActivity.class);
+            movTrail.putExtra(getActivity().getResources().getString(R.string.MovieId), movie.getId());
+            startActivity(movTrail);
+        });
+
+    }
+
+
+    private void setEventDateTime() {
+        if (movie.getReleaseDate() != null) {
+            if (DateUtils.convertEventDateFormatNoTime(movie.getReleaseDate()) != null) {
+                fragmentBinding.tvClockEventDate.setText("Release Date: " + DateUtils.convertEventDateFormatNoTime(movie.getReleaseDate()));
+
+            }
+
+        }
     }
 
     private void setAdultValue() {
@@ -112,30 +141,14 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
     }
 
 
-    private void setFavoriteIconListener() {
 
-        ibFavorite = fragmentBinding.ivFavoriteIcon;
-        favsUtil.isFavorited(movie, isFavorited -> {
-            if (isFavorited) {
-                ibFavorite.setImageResource(R.drawable.ic_favorite);
-            }
-        });
-
-        ibFavorite.setOnClickListener(view1 -> {
-            AnimationUtil.playInteractionAnimation(ibFavorite);
-            favsUtil.isFavorited(movie, isFavorited -> {
-                if (isFavorited) {
-                    ibFavorite.setImageResource(R.drawable.ic_favorite_grey);
-                    favsUtil.removeFromFavorites(movie);
-                } else {
-                    ibFavorite.setImageResource(R.drawable.ic_favorite);
-                    favsUtil.addToFavorites(movie);
-                }
-            });
-
-            if (getActivity() instanceof FomonoEventUpdateListener) {
-                ((FomonoEventUpdateListener) getActivity()).onFomonoEventUpdated();
-            }
+    private void setRedirectIconListener() {
+        fragmentBinding.ivRedirect.setOnClickListener(v -> {
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.addCategory(Intent.CATEGORY_BROWSABLE);
+            intent.setData(Uri.parse("https://www.themoviedb.org"));
+            startActivity(intent);
         });
     }
 

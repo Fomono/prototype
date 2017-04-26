@@ -40,13 +40,13 @@
 
 
             <ImageButton
-                android:id="@+id/ivFavoriteIcon"
+                android:id="@+id/ivRedirect"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="5dp"
                 android:layout_weight="0.5"
                 android:background="@color/colorWhite"
-                app:srcCompat="@drawable/ic_favorite_grey" />
+                app:srcCompat="@drawable/ic_link" />
 
         </LinearLayout>
 

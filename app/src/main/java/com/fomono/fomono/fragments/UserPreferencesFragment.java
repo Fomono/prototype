@@ -97,25 +97,23 @@ public class UserPreferencesFragment extends Fragment {
         rlFilters = binding.rlFilters;
 
         //set use my location
-        ibUseMyLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AnimationUtil.playInteractionAnimation(view);
-                int fineLocationPerm = ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION);
-                int coarseLocationPerm = ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
-                if (fineLocationPerm != PackageManager.PERMISSION_GRANTED && coarseLocationPerm != PackageManager.PERMISSION_GRANTED) {
-                    //don't check user for flag here since user is taking an action to use current location
-                    Toast.makeText(getContext(), getString(R.string.pref_turn_on_location), Toast.LENGTH_LONG).show();
-                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, FomonoApplication.PERM_LOC_FILTER_REQ_CODE);
-                } else {
-                    useCurrentLocation();
-                }
+        ibUseMyLocation.setOnClickListener(view -> {
+            AnimationUtil.playInteractionAnimation(view);
+            int fineLocationPerm = ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION);
+            int coarseLocationPerm = ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
+            if (fineLocationPerm != PackageManager.PERMISSION_GRANTED && coarseLocationPerm != PackageManager.PERMISSION_GRANTED) {
+                //don't check user for flag here since user is taking an action to use current location
+                Toast.makeText(getContext(), getString(R.string.pref_turn_on_location), Toast.LENGTH_LONG).show();
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, FomonoApplication.PERM_LOC_FILTER_REQ_CODE);
+            } else {
+                useCurrentLocation();
             }
         });
 
         String location = user.getString("location");
         if (!TextUtils.isEmpty(location)) {
             etLocation.setText(location);
+            etLocation.setSelection(etLocation.getText().length());
         }
 
         //set location listener
