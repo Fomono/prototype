@@ -8,66 +8,90 @@
         android:id="@+id/activity_signup"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/fomono_blur_bkground"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:paddingStart="@dimen/activity_horizontal_margin"
         android:paddingEnd="@dimen/activity_horizontal_margin"
-         tools:context="com.fomono.fomono.activities.SignupActivity">
+        tools:context="com.fomono.fomono.activities.SignupActivity">
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:inputType="textPersonName"
-            android:hint="@string/signup_firstname"
-            android:id="@+id/etFirstName"
-            android:layout_marginTop="30dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
 
-        <EditText
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tvSignUpWelcome"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:inputType="textPersonName"
-            android:id="@+id/etLastName"
-            android:hint="@string/signup_lastname"
-            android:layout_marginTop="30dp"
-            android:layout_below="@+id/etFirstName"
-            android:layout_centerHorizontal="true" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:inputType="textEmailAddress"
-            android:id="@+id/etEmail"
-            android:hint="@string/signup_email"
-            android:layout_marginTop="30dp"
-            android:layout_below="@+id/etLastName"
-            android:layout_centerHorizontal="true" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:inputType="text"
-            android:id="@+id/etUserId"
-            android:hint="@string/login_username"
-            android:layout_below="@+id/etEmail"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp" />
+            android:layout_marginTop="20dp"
+            android:fontFamily=""
+            android:text="@string/app_name"
+            android:textColor="@color/colorFomono"
+            android:textSize="50sp"
+            android:textStyle="bold" />
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:inputType="textPassword"
-            android:id="@+id/etPassword"
-            android:hint="@string/login_password"
-            android:layout_marginTop="30dp"
-            android:layout_below="@+id/etUserId"
-            android:layout_centerHorizontal="true" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:background="@color/colorWhite"
+            android:layout_marginTop="40dp"
+            android:layout_below="@id/tvSignUpWelcome"
+            android:id="@+id/activity_signup_internal_layout"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:inputType="textPersonName"
+                android:hint="@string/signup_firstname"
+                android:id="@+id/etFirstName"
+                android:layout_marginTop="@dimen/sign_up_edt_text_margin_top"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:inputType="textPersonName"
+                android:id="@+id/etLastName"
+                android:hint="@string/signup_lastname"
+                android:layout_marginTop="@dimen/sign_up_edt_text_margin_top"
+                android:layout_below="@+id/etFirstName"
+                android:layout_centerHorizontal="true" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:inputType="textEmailAddress"
+                android:id="@+id/etEmail"
+                android:hint="@string/signup_email"
+                android:layout_marginTop="@dimen/sign_up_edt_text_margin_top"
+                android:layout_below="@+id/etLastName"
+                android:layout_centerHorizontal="true" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:inputType="text"
+                android:id="@+id/etUserId"
+                android:hint="@string/login_username"
+                android:layout_below="@+id/etEmail"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/sign_up_edt_text_margin_top" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:inputType="textPassword"
+                android:id="@+id/etPassword"
+                android:hint="@string/login_password"
+                android:layout_marginTop="@dimen/sign_up_edt_text_margin_top"
+                android:layout_below="@+id/etUserId"
+                android:layout_centerHorizontal="true" />
+
+        </RelativeLayout>
 
         <Button
             android:id="@+id/btnSignup"
@@ -77,10 +101,11 @@
             android:background="@color/colorFomono"
             android:textColor="@color/colorWhite"
             android:foreground="?android:attr/selectableItemBackground"
-            android:layout_below="@+id/etPassword"
+            android:layout_below="@+id/activity_signup_internal_layout"
+            android:layout_alignStart="@+id/activity_signup_internal_layout"
+            android:layout_alignEnd="@+id/activity_signup_internal_layout"
             android:layout_marginTop="40dp"
             android:layout_centerHorizontal="true" />
-
     </RelativeLayout>
 
 </android.support.v4.widget.NestedScrollView>

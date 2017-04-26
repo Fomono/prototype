@@ -44,15 +44,16 @@
 
                 <com.astuetz.PagerSlidingTabStrip
                     android:id="@+id/fomonoTabsId"
-                    app:pstsShouldExpand="false"
+                    app:pstsShouldExpand="true"
                     app:pstsTextAllCaps="true"
                     app:pstsDividerColor="@color/colorFomono"
-                    android:textColor="@color/colorWhite"
-                    android:background="@color/colorFomono"
                     app:pstsUnderlineColor="@color/colorFomono"
                     app:pstsIndicatorColor="@color/colorWhite"
                     app:pstsUnderlineHeight="0dp"
                     app:pstsIndicatorHeight="3dp"
+                    app:pstsTabPaddingLeftRight="1dp"
+                    android:textColor="@color/colorWhite"
+                    android:background="@color/colorFomono"
                     android:layout_width="match_parent"
                     android:layout_height="48dp" />
 

@@ -1,11 +1,13 @@
 package com.fomono.fomono.activities;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fomono.fomono.R;
@@ -15,6 +17,8 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
+import static android.R.attr.typeface;
+
 public class SignupActivity extends AppCompatActivity {
     Button btnSignup;
     EditText etFirstName;
@@ -22,6 +26,7 @@ public class SignupActivity extends AppCompatActivity {
     EditText etEmail;
     EditText etUserId;
     EditText etPassword;
+    TextView tvSignUpWelcome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,16 +38,17 @@ public class SignupActivity extends AppCompatActivity {
         etEmail = (EditText) findViewById(R.id.etEmail);
         etUserId = (EditText) findViewById(R.id.etUserId);
         etPassword = (EditText) findViewById(R.id.etPassword);
+        tvSignUpWelcome = (TextView) findViewById(R.id.tvSignUpWelcome);
 
 
-        btnSignup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ParseUser p = ParseUser.getCurrentUser();
-                if (ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser())) {
-                    setupFomonoLogin(etUserId.getText().toString(), etPassword.getText().toString(), etEmail.getText().toString(),
-                            etFirstName.getText().toString(), etLastName.getText().toString());
-                }
+        Typeface typeface=Typeface.createFromAsset(getAssets(), "fonts/Gothic.ttf");
+        tvSignUpWelcome.setTypeface(typeface);
+
+        btnSignup.setOnClickListener(v -> {
+            ParseUser p = ParseUser.getCurrentUser();
+            if (ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser())) {
+                setupFomonoLogin(etUserId.getText().toString(), etPassword.getText().toString(), etEmail.getText().toString(),
+                        etFirstName.getText().toString(), etLastName.getText().toString());
             }
         });
 
@@ -57,15 +63,13 @@ public class SignupActivity extends AppCompatActivity {
         user.put("firstName", firstName);
         user.put("lastName", lastName);
 
-        user.signUpInBackground(new SignUpCallback() {
-            public void done(ParseException e) {
-                if (e == null) {
-                    FavoritesUtil.getInstance().initialize(ParseUser.getCurrentUser());
-                    homePageIntent();
-                } else {
-                    Toast.makeText(SignupActivity.this,"Signup failed"+e.getMessage(), Toast.LENGTH_LONG).show();
+        user.signUpInBackground(e -> {
+            if (e == null) {
+                FavoritesUtil.getInstance().initialize(ParseUser.getCurrentUser());
+                homePageIntent();
+            } else {
+                Toast.makeText(SignupActivity.this,"Signup failed"+e.getMessage(), Toast.LENGTH_LONG).show();
 
-                }
             }
         });
 

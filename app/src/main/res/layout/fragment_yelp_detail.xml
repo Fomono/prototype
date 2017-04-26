@@ -95,7 +95,7 @@
             android:layout_below="@id/rbRating"
             android:layout_marginEnd="-10dp"
             android:layout_marginStart="-10dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="8dp"
             android:background="@color/veryLightGrey" />
 
 
@@ -117,6 +117,7 @@
             android:layout_marginTop="12dp"
             android:layout_toRightOf="@id/ivPhone"
             android:textColor="@color/colorBlack"
+            android:textStyle="italic"
             android:text='@{business.phone}'
             android:textSize="13sp" />
 
