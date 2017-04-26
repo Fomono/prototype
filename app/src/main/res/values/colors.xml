@@ -13,6 +13,11 @@
     <color name="colorTransparent">#00555555</color>
     <color name="placeholder_bg">#363A3E</color>
 
+
+    <color name="BgGradientStartColor">#FF5722</color>
+    <color name="BgGradientCenterColor">#f9b8a3</color>
+    <color name="BgGradientEndColor">#FF5722</color>
+
     <color name="gplus_color_1">#3e802f</color>
     <color name="gplus_color_2">#f4b400</color>
     <color name="gplus_color_3">#427fed</color>

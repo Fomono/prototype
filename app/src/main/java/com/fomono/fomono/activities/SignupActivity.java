@@ -41,9 +41,6 @@ public class SignupActivity extends AppCompatActivity {
         tvSignUpWelcome = (TextView) findViewById(R.id.tvSignUpWelcome);
 
 
-        Typeface typeface=Typeface.createFromAsset(getAssets(), "fonts/Gothic.ttf");
-        tvSignUpWelcome.setTypeface(typeface);
-
         btnSignup.setOnClickListener(v -> {
             ParseUser p = ParseUser.getCurrentUser();
             if (ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser())) {
