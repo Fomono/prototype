@@ -16,6 +16,7 @@ import com.fomono.fomono.databinding.ItemCategoryBinding;
 import com.fomono.fomono.fragments.FomonoFilterFragment;
 import com.fomono.fomono.models.ICategory;
 import com.fomono.fomono.models.db.Filter;
+import com.fomono.fomono.utils.AnimationUtil;
 import com.fomono.fomono.utils.FilterUtil;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -103,6 +104,7 @@ public class FiltersAdapter extends RecyclerView.Adapter<FiltersAdapter.ViewHold
 
         //attach listener
         viewHolder.tbCategory.setOnCheckedChangeListener((compoundButton, b) -> {
+            AnimationUtil.playInteractionAnimation(viewHolder.tbCategory);
             //update user's selected filters
             if (b) {
                 setToggleOn(viewHolder.tbCategory);
