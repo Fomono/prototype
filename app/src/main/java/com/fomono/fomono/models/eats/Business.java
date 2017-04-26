@@ -87,6 +87,9 @@ public class Business extends ParseObject implements Parcelable, FomonoEvent
         if (instance.id != null) {
             instance.put("id", String.valueOf(instance.id));
         }
+        if (instance.phone != null) {
+            instance.put("phone", instance.phone);
+        }
         if (instance.categories != null) {
             for (Category c : instance.categories) {
                 c.initializeForParse();
@@ -196,6 +199,9 @@ public class Business extends ParseObject implements Parcelable, FomonoEvent
         if (instance.id != null) {
             this.put("id", String.valueOf(instance.id));
         }
+        if (instance.phone != null) {
+            this.put("phone", instance.phone);
+        }
         if (instance.categories != null) {
             this.mergeCategoriesForParse(instance.categories);
         }
@@ -263,6 +269,9 @@ public class Business extends ParseObject implements Parcelable, FomonoEvent
         if (has("id")) {
             this.id = getString("id");
         }
+        if (has("phone")) {
+            this.phone = getString("phone");
+        }
         if (has("categories")) {
             this.categories = (ArrayList<Category>) (List<?>) getList("categories");
             for (Category c : categories) {
@@ -317,6 +326,9 @@ public class Business extends ParseObject implements Parcelable, FomonoEvent
     }
 
     public String getPhone() {
+        if (phone == null) {
+            phone = getString("phone");
+        }
         return phone;
     }
 
@@ -464,6 +476,8 @@ public class Business extends ParseObject implements Parcelable, FomonoEvent
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        initializeFromParse();
+
         dest.writeDouble(this.rating);
         dest.writeString(this.price);
         dest.writeString(this.phone);
@@ -500,6 +514,8 @@ public class Business extends ParseObject implements Parcelable, FomonoEvent
         this.distance = (Double) in.readValue(Double.class.getClassLoader());
         this.transactions = in.createStringArrayList();
         this.businessDetail = in.readParcelable(BusinessDetail.class.getClassLoader());
+
+        initializeForParse(this);
     }
 
     public static final Creator<Business> CREATOR = new Creator<Business>() {

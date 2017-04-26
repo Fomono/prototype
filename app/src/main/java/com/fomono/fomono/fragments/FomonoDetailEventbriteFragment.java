@@ -30,6 +30,7 @@ import com.fomono.fomono.models.events.events.Start;
 import com.fomono.fomono.models.events.events.Venue;
 import com.fomono.fomono.models.user.User;
 import com.fomono.fomono.network.client.EventBriteClientRetrofit;
+import com.fomono.fomono.utils.AnimationUtil;
 import com.fomono.fomono.utils.DateUtils;
 import com.fomono.fomono.utils.FavoritesUtil;
 import com.fomono.fomono.utils.StringUtil;
@@ -110,6 +111,7 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
         //SetUp Listeners
         setSourceSiteLinkIntentListener();
         setAddToCalendarListener();
+        setFavoriteIconListener();
         setRedirectIconListener();
 
         setEventDateTime();
@@ -120,15 +122,9 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
         return view;
     }
 
-
-
-
-    protected void populateBindingDetail(Event e) {
-        fragmentBinding.setEvent(e);
-    }
-
     private void setRedirectIconListener() {
         fragmentBinding.ivRedirect.setOnClickListener(v -> {
+            AnimationUtil.playInteractionAnimation(v);
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_VIEW);
             intent.addCategory(Intent.CATEGORY_BROWSABLE);
@@ -136,6 +132,37 @@ public class FomonoDetailEventbriteFragment extends android.support.v4.app.Fragm
                 intent.setData(Uri.parse(event.getUrl()));
             }
             startActivity(intent);
+        });
+    }
+
+
+    protected void populateBindingDetail(Event e) {
+        fragmentBinding.setEvent(e);
+    }
+
+    private void setFavoriteIconListener() {
+
+        ibFavorite = fragmentBinding.ivFavoriteIcon;
+        favsUtil.isFavorited(event, isFavorited -> {
+            if (isFavorited) {
+                ibFavorite.setImageResource(R.drawable.ic_favorite);
+            }
+        });
+
+        ibFavorite.setOnClickListener(view -> {
+            AnimationUtil.playInteractionAnimation(ibFavorite);
+            favsUtil.isFavorited(event, isFavorited -> {
+                if (isFavorited) {
+                    ibFavorite.setImageResource(R.drawable.ic_favorite_grey);
+                    favsUtil.removeFromFavorites(event);
+                } else {
+                    ibFavorite.setImageResource(R.drawable.ic_favorite);
+                    favsUtil.addToFavorites(event);
+                }
+            });
+            if (getActivity() instanceof FomonoEventUpdateListener) {
+                ((FomonoEventUpdateListener) getActivity()).onFomonoEventUpdated();
+            }
         });
     }
 

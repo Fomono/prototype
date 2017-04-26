@@ -1,4 +1,4 @@
 <slide xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:duration="100"
+    android:duration="150"
     android:slideEdge="bottom" />

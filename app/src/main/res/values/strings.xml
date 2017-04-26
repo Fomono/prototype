@@ -43,8 +43,8 @@
     <string name="drawer_menu_timeline">Timeline</string>
     <string name="menu_sort">Sort</string>
     <string name="menu_filter">Filter</string>
-    <string name="FilterSortText">Sort by:</string>
-    <string name="MovieSortFilterText">Pick a preference:</string>
+    <string name="FilterSortText">Sort By:</string>
+    <string name="MovieSortFilterText">Show:</string>
     <string name="FilterEventSortButtonText">Search</string>
     <string name="FilterEatsSortButtonText">Sort</string>
     <string name="FilterMovieSortButtonText">Sort</string>

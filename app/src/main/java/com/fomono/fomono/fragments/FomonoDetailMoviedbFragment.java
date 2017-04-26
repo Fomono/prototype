@@ -22,6 +22,7 @@ import com.fomono.fomono.R;
 import com.fomono.fomono.activities.FomonoTrailerActivity;
 import com.fomono.fomono.databinding.FragmentMoviedbDetailBinding;
 import com.fomono.fomono.models.movies.Movie;
+import com.fomono.fomono.utils.AnimationUtil;
 import com.fomono.fomono.utils.ConfigUtil;
 import com.fomono.fomono.utils.DateUtils;
 import com.fomono.fomono.utils.FavoritesUtil;
@@ -94,29 +95,13 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
 
         //setListeners
         setAddToCalendarListener();
-        setRedirectIconListener();
-        playMovieTrailer();
-
+        setFavoriteIconListener();
+        setPlayMovieTrailer();
 
         setAdultValue();
         setEventDateTime();
 
         return fragmentBinding.getRoot();
-
-    }
-
-    private void playMovieTrailer() {
-
-        fragmentBinding.ivPlayIcon.setOnClickListener(v -> {
-            Intent movTrail = new Intent(getActivity(), FomonoTrailerActivity.class);
-            movTrail.putExtra(getActivity().getResources().getString(R.string.MovieId), movie.getId());
-            startActivity(movTrail);
-        });
-            fragmentBinding.tvPlay.setOnClickListener(v -> {
-            Intent movTrail = new Intent(getActivity(), FomonoTrailerActivity.class);
-            movTrail.putExtra(getActivity().getResources().getString(R.string.MovieId), movie.getId());
-            startActivity(movTrail);
-        });
 
     }
 
@@ -141,14 +126,30 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
     }
 
 
+    private void setFavoriteIconListener() {
 
-    private void setRedirectIconListener() {
-        fragmentBinding.ivRedirect.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_VIEW);
-            intent.addCategory(Intent.CATEGORY_BROWSABLE);
-            intent.setData(Uri.parse("https://www.themoviedb.org"));
-            startActivity(intent);
+        ibFavorite = fragmentBinding.ivFavoriteIcon;
+        favsUtil.isFavorited(movie, isFavorited -> {
+            if (isFavorited) {
+                ibFavorite.setImageResource(R.drawable.ic_favorite);
+            }
+        });
+
+        ibFavorite.setOnClickListener(view1 -> {
+            AnimationUtil.playInteractionAnimation(ibFavorite);
+            favsUtil.isFavorited(movie, isFavorited -> {
+                if (isFavorited) {
+                    ibFavorite.setImageResource(R.drawable.ic_favorite_grey);
+                    favsUtil.removeFromFavorites(movie);
+                } else {
+                    ibFavorite.setImageResource(R.drawable.ic_favorite);
+                    favsUtil.addToFavorites(movie);
+                }
+            });
+
+            if (getActivity() instanceof FomonoEventUpdateListener) {
+                ((FomonoEventUpdateListener) getActivity()).onFomonoEventUpdated();
+            }
         });
     }
 
@@ -158,7 +159,14 @@ public class FomonoDetailMoviedbFragment extends android.support.v4.app.Fragment
 
     }
 
-
+    private void setPlayMovieTrailer() {
+        fragmentBinding.ivPlayIcon.setOnClickListener(v -> {
+            AnimationUtil.playInteractionAnimation(v);
+            Intent movTrail = new Intent(getActivity(), FomonoTrailerActivity.class);
+            movTrail.putExtra(getActivity().getResources().getString(R.string.MovieId), movie.getId());
+            startActivity(movTrail);
+        });
+    }
 
     private String getGenres() {
         String genres ="";

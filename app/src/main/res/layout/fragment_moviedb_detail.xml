@@ -18,45 +18,35 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 
-        <LinearLayout
-            android:id="@+id/llHeader"
+        <TextView
+            android:id="@+id/tvEventName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="5">
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toStartOf="@+id/ivFavoriteIcon"
+            android:text='@{movie.title ?? ""}'
+            android:textColor="@color/colorBlack"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-
-            <TextView
-                android:id="@+id/tvEventName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_weight="4.5"
-                android:text='@{movie.title ?? ""}'
-                android:textColor="@color/colorBlack"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-
-            <ImageButton
-                android:id="@+id/ivRedirect"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="5dp"
-                android:layout_weight="0.5"
-                android:background="@color/colorWhite"
-                app:srcCompat="@drawable/ic_link" />
-
-        </LinearLayout>
+        <ImageButton
+            android:id="@+id/ivFavoriteIcon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="8dp"
+            android:layout_alignParentEnd="true"
+            android:background="@color/colorWhite"
+            app:srcCompat="@drawable/ic_favorite_grey" />
 
         <RatingBar
             android:id="@+id/rbRating"
             style="?android:attr/ratingBarStyleIndicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/llHeader"
+            android:layout_below="@id/tvEventName"
             android:numStars="5"
+            android:layout_marginTop="5dp"
             android:progressTint="@color/colorFomono"
             android:scaleX="0.7"
             android:scaleY="0.7"
@@ -67,23 +57,11 @@
             android:id="@+id/ivPlayIcon"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_marginLeft="60dp"
-            android:layout_toRightOf="@id/rbRating"
-            android:layout_below="@id/llHeader"
-            app:srcCompat="@drawable/ic_play" />
-
-        <TextView
-            android:id="@+id/tvPlay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="1dp"
-            android:text="Play Trailer"
-            android:layout_toRightOf="@id/ivPlayIcon"
+            android:layout_below="@+id/ivFavoriteIcon"
+            android:layout_marginEnd="2.5dp"
             android:layout_marginTop="3dp"
-            android:layout_below="@id/llHeader"
-            android:textColor="@color/twitterBlue"
+            android:layout_alignParentEnd="true"
             app:srcCompat="@drawable/ic_play" />
-
 
         <View
             android:id="@+id/spView00"
@@ -92,10 +70,8 @@
             android:layout_below="@id/rbRating"
             android:layout_marginEnd="-10dp"
             android:layout_marginStart="-10dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="2dp"
             android:background="@color/veryLightGrey" />
-
-
 
         <com.fomono.fomono.supportclasses.ExpandableTextView
             android:id="@+id/tvDescription"
@@ -125,7 +101,8 @@
             android:id="@+id/ivClockIcon"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginEnd="5dp"
             android:layout_below="@id/spView01"
             android:layout_marginTop="20dp"
             app:srcCompat="@drawable/ic_clock" />
@@ -137,8 +114,8 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/ivClockIcon"
             android:layout_below="@id/spView01"
-            android:layout_marginRight="10dp"
-            android:layout_toRightOf="@id/ivClockIcon"
+            android:layout_marginEnd="10dp"
+            android:layout_toEndOf="@id/ivClockIcon"
             android:textColor="@color/colorBlack"
             android:text=''
             android:textSize="13sp" />
@@ -148,7 +125,7 @@
             android:id="@+id/ivCalendar"
             android:layout_width="18dp"
             android:layout_height="18dp"
-            android:layout_marginRight="2dp"
+            android:layout_marginRight="3dp"
             android:layout_alignTop="@id/tvClockEventDate"
             android:layout_below="@id/spView01"
             android:layout_toRightOf="@id/tvClockEventDate"
