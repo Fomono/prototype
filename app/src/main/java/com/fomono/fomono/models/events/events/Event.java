@@ -741,6 +741,8 @@ public class Event extends ParseObject implements Parcelable, FomonoEvent
     }
 
     public void writeToParcel(Parcel dest, int flags) {
+        initializeFromParse();
+
         dest.writeValue(name);
         dest.writeValue(description);
         dest.writeValue(id);

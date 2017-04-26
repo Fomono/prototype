@@ -157,7 +157,7 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
         if (has("overview")) {
             this.overview = getString("overview");
         }
-        if (has("releaseDate")) {
+        if (has("release_date")) {
             this.releaseDate = getString("release_date");
         }
         if (has("id")) {
@@ -406,6 +406,8 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        initializeFromParse();
+
         dest.writeString(this.posterPath);
         dest.writeByte(this.adult ? (byte) 1 : (byte) 0);
         dest.writeString(this.overview);
@@ -438,6 +440,8 @@ public class Movie extends ParseObject implements Parcelable, FomonoEvent{
         this.voteCount = in.readLong();
         this.video = in.readByte() != 0;
         this.voteAverage = in.readDouble();
+
+        initializeForParse(this);
     }
 
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
